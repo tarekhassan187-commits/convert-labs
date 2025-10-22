@@ -1,13 +1,16 @@
 /* === Convert Labs JavaScript === */
 
 /* === Loading Screen Fade === */
-window.addEventListener("load", () => {
+window.addEventListener("load", function() {
   const loading = document.getElementById("loading-screen");
   setTimeout(() => {
     loading.classList.add("fade-out");
-    setTimeout(() => (loading.style.display = "none"), 1000);
-  }, 800);
+    setTimeout(() => {
+      loading.style.display = "none";
+    }, 1000); // matches the CSS fade duration
+  }, 500); // small delay to ensure smooth fade
 });
+
 
 /* === Tab Switching === */
 const buttons = document.querySelectorAll(".tab-button");
@@ -214,3 +217,4 @@ function convertKitchen() {
     1
   )} g`;
 }
+
