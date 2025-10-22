@@ -1,0 +1,191 @@
+/* === Global Styles === */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f7fa;
+  color: #222;
+  transition: background-color 0.4s, color 0.4s;
+}
+
+/* === Loading Screen === */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0d47a1;
+  color: white;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}
+#loading-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* === Header === */
+header {
+  text-align: center;
+  background-color: #1976d2;
+  color: white;
+  padding: 1.2rem 0;
+  position: relative;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+header .tagline {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* === Mode Toggle === */
+#mode-toggle {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.3s;
+}
+#mode-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* === Navigation Buttons === */
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: #e3f2fd;
+  padding: 0.5rem;
+}
+.tab-button {
+  background-color: #1976d2;
+  border: none;
+  color: white;
+  padding: 0.6rem 1rem;
+  margin: 0.3rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.tab-button:hover {
+  background-color: #0d47a1;
+}
+
+/* === Converter Sections === */
+main {
+  max-width: 700px;
+  margin: 1.5rem auto;
+  padding: 1rem;
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.6s ease;
+}
+.tab-content.active {
+  display: block;
+}
+
+.converter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.converter input,
+.converter select,
+.converter button {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.converter button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.converter button:hover {
+  background-color: #0d47a1;
+}
+
+.converter p {
+  margin: 0.6rem 0;
+  font-weight: bold;
+}
+
+/* === Footer === */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #e3f2fd;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+/* === Dark Mode === */
+body.dark {
+  background-color: #121212;
+  color: #f4f4f4;
+}
+body.dark header {
+  background-color: #0d47a1;
+}
+body.dark nav {
+  background-color: #1e1e1e;
+}
+body.dark .tab-button {
+  background-color: #1e88e5;
+}
+body.dark .converter input,
+body.dark .converter select {
+  background-color: #1e1e1e;
+  color: #f4f4f4;
+  border-color: #333;
+}
+body.dark footer {
+  background-color: #1e1e1e;
+  color: #ccc;
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Responsive === */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+  nav {
+    flex-direction: column;
+    align-items: center;
+  }
+}
