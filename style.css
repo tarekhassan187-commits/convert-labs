@@ -1,82 +1,59 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
-  background-color: #f8f9fa;
-  color: #222;
+  background: #f0f8ff;
+  color: #333;
   text-align: center;
 }
 
 header {
-  background: #1a1a1a;
+  background-color: #2196f3;
   color: white;
-  padding: 25px 10px;
+  padding: 1rem;
 }
 
 header h1 {
-  margin: 0;
-  font-size: 2em;
-}
-
-.tagline {
-  margin-top: 8px;
-  font-size: 1em;
-  opacity: 0.9;
-}
-
-nav {
-  background: #333;
-  padding: 10px;
+  animation: fadeIn 2s ease-in;
 }
 
 nav button {
-  background: #555;
-  color: white;
-  border: none;
-  margin: 0 5px;
-  padding: 10px 16px;
-  border-radius: 6px;
+  margin: 0.3rem;
+  padding: 0.5rem 1rem;
+  background-color: white;
+  color: #2196f3;
+  border: 1px solid #2196f3;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 1em;
-  transition: background 0.3s, transform 0.1s;
+  transition: 0.3s;
 }
-
 nav button:hover {
-  background: #777;
+  background-color: #1976d2;
+  color: white;
 }
 
-nav button.active {
-  background: #2196f3;
-  transform: scale(1.05);
-}
-
-main {
+.converter-section {
+  display: none;
   padding: 20px;
 }
-
-.content-section {
-  max-width: 700px;
-  margin: auto;
-  display: none;
-  opacity: 0;
-  transition: opacity 0.6s ease-in-out;
+.converter-section.active {
+  display: block;
 }
 
-.content-section.visible {
-  display: block;
-  opacity: 1;
+input, select, button {
+  margin: 5px;
+  padding: 8px;
 }
 
 footer {
-  background: #1a1a1a;
+  background-color: #2196f3;
   color: white;
-  padding: 15px;
-  font-size: 0.9em;
+  padding: 10px;
   position: relative;
   bottom: 0;
   width: 100%;
 }
 
-#visitor-counter {
-  margin-bottom: 8px;
-  font-weight: bold;
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
