@@ -20,16 +20,20 @@ nav button {
   margin: 0.3rem;
   padding: 0.5rem 1rem;
   background-color: white;
-  color: #2196f3;
-  border: 1px solid #2196f3;
-  border-radius: 5px;
+  color: #0d47a1; /* darker blue text for better contrast */
+  border: 2px solid #2196f3;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background-color 0.3s, color 0.3s;
+  font-weight: 600;
 }
-nav button:hover {
-  background-color: #1976d2;
+
+nav button:hover,
+nav button.active {
+  background-color: #2196f3;
   color: white;
 }
+
 
 .converter-section {
   display: none;
@@ -57,3 +61,4 @@ footer {
   from {opacity: 0;}
   to {opacity: 1;}
 }
+
