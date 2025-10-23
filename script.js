@@ -1,258 +1,86 @@
-// ----------------------
-// Section Toggle System
-// ----------------------
 function showSection(id) {
-  document.querySelectorAll('.content-section').forEach(sec => sec.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
+  document.querySelectorAll(".converter-section").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
-// ----------------------
-// Converter Tabs System
-// ----------------------
-function showConverter(type) {
-  let content = document.getElementById("converter-content");
-  let html = "";
-
-  if (type === "length") {
-    html = `
-      <h3>Length Converter</h3>
-      <input type="number" id="lengthValue" placeholder="Enter value">
-      <select id="fromLength">
-        <option>Meter</option>
-        <option>Kilometer</option>
-        <option>Centimeter</option>
-        <option>Millimeter</option>
-        <option>Micrometer</option>
-        <option>Nanometer</option>
-        <option>Yard</option>
-        <option>Foot</option>
-        <option>Inch</option>
-        <option>Lightyear</option>
-      </select>
-      <select id="toLength">
-        <option>Meter</option>
-        <option>Kilometer</option>
-        <option>Centimeter</option>
-        <option>Millimeter</option>
-        <option>Micrometer</option>
-        <option>Nanometer</option>
-        <option>Yard</option>
-        <option>Foot</option>
-        <option>Inch</option>
-        <option>Lightyear</option>
-      </select>
-      <button onclick="convertLength()">Convert</button>
-      <p id="lengthResult"></p>
-    `;
-  }
-
-  else if (type === "temperature") {
-    html = `
-      <h3>Temperature Converter</h3>
-      <input type="number" id="tempValue" placeholder="Enter value">
-      <select id="fromTemp">
-        <option>Celsius</option>
-        <option>Fahrenheit</option>
-        <option>Kelvin</option>
-      </select>
-      <select id="toTemp">
-        <option>Celsius</option>
-        <option>Fahrenheit</option>
-        <option>Kelvin</option>
-      </select>
-      <button onclick="convertTemperature()">Convert</button>
-      <p id="tempResult"></p>
-    `;
-  }
-
-  else if (type === "volume") {
-    html = `
-      <h3>Volume Converter</h3>
-      <input type="number" id="volumeValue" placeholder="Enter value">
-      <select id="fromVolume">
-        <option>Liter</option>
-        <option>Milliliter</option>
-        <option>Cubic meter</option>
-        <option>Cubic centimeter</option>
-      </select>
-      <select id="toVolume">
-        <option>Liter</option>
-        <option>Milliliter</option>
-        <option>Cubic meter</option>
-        <option>Cubic centimeter</option>
-      </select>
-      <button onclick="convertVolume()">Convert</button>
-      <p id="volumeResult"></p>
-    `;
-  }
-
-  else if (type === "container") {
-    html = `
-      <h3>Container Volume Calculator</h3>
-      <label><input type="radio" name="shape" id="rect" checked> Rectangular</label>
-      <label><input type="radio" name="shape" id="cyl"> Cylindrical</label><br><br>
-      <input type="number" id="length" placeholder="Length (cm)">
-      <input type="number" id="width" placeholder="Width (cm)">
-      <input type="number" id="height" placeholder="Height (cm)"><br><br>
-      <select id="liquid" onchange="toggleCustomDensity()">
-        <option value="1">Water (1 g/cm³)</option>
-        <option value="0.92">Oil (0.92 g/cm³)</option>
-        <option value="1.03">Milk (1.03 g/cm³)</option>
-        <option value="1.2">Honey (1.2 g/cm³)</option>
-        <option value="custom">Custom</option>
-      </select>
-      <input type="number" id="customDensity" placeholder="Custom density" style="display:none;">
-      <button onclick="calculateContainer()">Calculate</button>
-      <p id="containerResult"></p>
-    `;
-  }
-
-  else if (type === "kitchen") {
-    html = `
-      <h3>Kitchen Converter</h3>
-      <input type="number" id="kitchenValue" placeholder="Enter value">
-      <select id="fromKitchen">
-        <option>Teaspoon</option>
-        <option>Tablespoon</option>
-        <option>Cup</option>
-      </select>
-      <select id="ingredient">
-        <option>Flour</option>
-        <option>Sugar</option>
-        <option>Salt</option>
-        <option>Oil</option>
-        <option>Milk</option>
-        <option>Water</option>
-        <option>Rice</option>
-        <option>Butter</option>
-        <option>Honey</option>
-        <option>Ground Spices</option>
-      </select>
-      <button onclick="convertKitchen()">Convert</button>
-      <p id="kitchenResult"></p>
-    `;
-  }
-
-  content.innerHTML = html;
-}
-
-// ----------------------
-// Conversion Functions
-// ----------------------
+// LENGTH
+const lengthFactors = {
+  km: 1000, m: 1, cm: 0.01, mm: 0.001, um: 1e-6, nm: 1e-9,
+  yd: 0.9144, ft: 0.3048, in: 0.0254, ly: 9.461e15
+};
 function convertLength() {
-  const value = parseFloat(document.getElementById("lengthValue").value);
-  const from = document.getElementById("fromLength").value;
-  const to = document.getElementById("toLength").value;
-
-  const units = {
-    Meter: 1,
-    Kilometer: 1000,
-    Centimeter: 0.01,
-    Millimeter: 0.001,
-    Micrometer: 1e-6,
-    Nanometer: 1e-9,
-    Yard: 0.9144,
-    Foot: 0.3048,
-    Inch: 0.0254,
-    Lightyear: 9.461e15
-  };
-
-  const result = (value * units[from]) / units[to];
-  document.getElementById("lengthResult").textContent = `${result.toLocaleString()} ${to}`;
+  const val = parseFloat(lengthInput.value);
+  const result = val * lengthFactors[lengthFrom.value] / lengthFactors[lengthTo.value];
+  lengthResult.textContent = `${val} ${lengthFrom.value} = ${result.toLocaleString()} ${lengthTo.value}`;
 }
 
+// TEMPERATURE
 function convertTemperature() {
-  const value = parseFloat(document.getElementById("tempValue").value);
-  const from = document.getElementById("fromTemp").value;
-  const to = document.getElementById("toTemp").value;
-  let result = value;
-
-  if (from === "Celsius" && to === "Fahrenheit") result = value * 9/5 + 32;
-  else if (from === "Celsius" && to === "Kelvin") result = value + 273.15;
-  else if (from === "Fahrenheit" && to === "Celsius") result = (value - 32) * 5/9;
-  else if (from === "Fahrenheit" && to === "Kelvin") result = (value - 32) * 5/9 + 273.15;
-  else if (from === "Kelvin" && to === "Celsius") result = value - 273.15;
-  else if (from === "Kelvin" && to === "Fahrenheit") result = (value - 273.15) * 9/5 + 32;
-
-  document.getElementById("tempResult").textContent = `${result.toFixed(2)} ${to}`;
+  let val = parseFloat(tempInput.value);
+  let from = tempFrom.value, to = tempTo.value, result = val;
+  if (from === "C" && to === "F") result = val * 9/5 + 32;
+  else if (from === "F" && to === "C") result = (val - 32) * 5/9;
+  else if (from === "C" && to === "K") result = val + 273.15;
+  else if (from === "K" && to === "C") result = val - 273.15;
+  else if (from === "F" && to === "K") result = (val - 32) * 5/9 + 273.15;
+  else if (from === "K" && to === "F") result = (val - 273.15) * 9/5 + 32;
+  tempResult.textContent = `${val}°${from} = ${result.toFixed(2)}°${to}`;
 }
 
+// VOLUME
+const volumeFactors = { L: 1, mL: 0.001, m3: 1000 };
 function convertVolume() {
-  const value = parseFloat(document.getElementById("volumeValue").value);
-  const from = document.getElementById("fromVolume").value;
-  const to = document.getElementById("toVolume").value;
-
-  const units = {
-    "Liter": 1,
-    "Milliliter": 0.001,
-    "Cubic meter": 1000,
-    "Cubic centimeter": 0.001
-  };
-
-  const result = (value * units[from]) / units[to];
-  document.getElementById("volumeResult").textContent = `${result.toLocaleString()} ${to}`;
+  const val = parseFloat(volumeInput.value);
+  const result = val * volumeFactors[volumeFrom.value] / volumeFactors[volumeTo.value];
+  volumeResult.textContent = `${val} ${volumeFrom.value} = ${result.toLocaleString()} ${volumeTo.value}`;
 }
 
-// ----------------------
-// Container Volume
-// ----------------------
+// CONTAINER
+function toggleShapeInputs() {
+  document.getElementById("rectangularInputs").style.display =
+    containerShape.value === "rectangular" ? "block" : "none";
+  document.getElementById("cylinderInputs").style.display =
+    containerShape.value === "cylindrical" ? "block" : "none";
+}
 function toggleCustomDensity() {
-  const liquid = document.getElementById("liquid").value;
-  const customInput = document.getElementById("customDensity");
-  customInput.style.display = (liquid === "custom") ? "inline-block" : "none";
+  document.getElementById("customDensity").style.display =
+    liquidType.value === "custom" ? "inline-block" : "none";
 }
-
-function calculateContainer() {
-  const isRect = document.getElementById("rect").checked;
-  const length = parseFloat(document.getElementById("length").value);
-  const width = parseFloat(document.getElementById("width").value);
-  const height = parseFloat(document.getElementById("height").value);
-  const liquidSelect = document.getElementById("liquid").value;
-  const density = (liquidSelect === "custom") ? parseFloat(document.getElementById("customDensity").value) : parseFloat(liquidSelect);
-
-  let volume_cm3;
-  if (isRect) {
-    volume_cm3 = length * width * height;
+function calculateContainerVolume() {
+  let volume = 0;
+  if (containerShape.value === "rectangular") {
+    let L = +lengthBox.value, W = +widthBox.value, H = +heightBox.value;
+    volume = L * W * H; // cm³
   } else {
-    volume_cm3 = Math.PI * Math.pow(width / 2, 2) * height;
+    let r = +radius.value, h = +heightCylinder.value;
+    volume = Math.PI * r * r * h;
   }
-
-  const volume_liters = volume_cm3 / 1000;
-  const weight_grams = volume_cm3 * density;
-
-  document.getElementById("containerResult").textContent = 
-    `Volume: ${volume_liters.toFixed(3)} L — Weight: ${weight_grams.toFixed(1)} g`;
+  let density = {
+    water: 1, milk: 1.03, oil: 0.92, honey: 1.4
+  }[liquidType.value] || parseFloat(customDensity.value) || 1;
+  const mass = volume * density;
+  containerResult.textContent = `Volume: ${volume.toFixed(2)} cm³ | Mass: ${mass.toFixed(2)} g`;
 }
 
-// ----------------------
-// Kitchen Converter
-// ----------------------
+// KITCHEN
+const kitchenData = {
+  flour: { cup: 120, tbsp: 7.5, tsp: 2.5 },
+  sugar: { cup: 200, tbsp: 12.5, tsp: 4.2 },
+  salt: { cup: 273, tbsp: 18, tsp: 6 },
+  oil: { cup: 220, tbsp: 14, tsp: 4.6 },
+  milk: { cup: 240, tbsp: 15, tsp: 5 },
+  water: { cup: 240, tbsp: 15, tsp: 5 },
+  spices: { cup: 80, tbsp: 5, tsp: 1.6 }
+};
 function convertKitchen() {
-  const value = parseFloat(document.getElementById("kitchenValue").value);
-  const from = document.getElementById("fromKitchen").value;
-  const ingredient = document.getElementById("ingredient").value;
-
-  const toMl = { Teaspoon: 5, Tablespoon: 15, Cup: 240 };
-  const densities = {
-    Flour: 0.53, Sugar: 0.85, Salt: 1.2, Oil: 0.92, Milk: 1.03,
-    Water: 1, Rice: 0.85, Butter: 0.96, Honey: 1.4, "Ground Spices": 0.56
-  };
-
-  const ml = value * toMl[from];
-  const grams = ml * densities[ingredient];
-
-  document.getElementById("kitchenResult").textContent = 
-    `${grams.toFixed(1)} grams of ${ingredient}`;
+  const val = parseFloat(kitchenInput.value);
+  const unit = kitchenUnit.value;
+  const ingr = ingredient.value;
+  const grams = val * kitchenData[ingr][unit];
+  kitchenResult.textContent = `${val} ${unit}(s) of ${ingr} = ${grams.toFixed(1)} g`;
 }
 
-// ----------------------
-// Visitor Counter
-// ----------------------
-fetch('https://api.countapi.xyz/hit/convertlabs.online/visits')
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById('visit-count').textContent = data.value.toLocaleString();
-  })
-  .catch(() => {
-    document.getElementById('visit-count').textContent = 'N/A';
-  });
+// VISITOR COUNTER (CountAPI)
+fetch("https://api.countapi.xyz/hit/convertlabs.online/visits")
+  .then(res => res.json())
+  .then(data => document.getElementById("visitorCount").textContent = data.value.toLocaleString());
