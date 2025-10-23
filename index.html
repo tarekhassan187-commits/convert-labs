@@ -1,417 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Smart Unit Converter (with Kitchen)</title>
-<style>
-  :root{
-    --bg:#f7f9fc; --card:#fff; --text:#222; --btn:#007bff; --btn-hover:#0056b3;
-    --back:#6c757d; --back-hover:#5a6268;
-  }
-  body.dark{
-    --bg:#121212; --card:#1e1e1e; --text:#f3f3f3; --btn:#0d6efd; --btn-hover:#1a75ff;
-    --back:#555; --back-hover:#666;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text);
-    padding:28px; transition:background .25s,color .25s;
-  }
-  h1{margin:0 0 18px 0}
-  .top-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .toggle-container{position:relative}
-  .toggle-label{display:flex;align-items:center;cursor:pointer}
-  .toggle-label input{display:none}
-  .slider{width:50px;height:26px;background:#ccc;border-radius:13px;position:relative; transition:.25s}
-  .slider::before{content:"";position:absolute;width:22px;height:22px;background:#fff;border-radius:50%;top:2px;left:2px;transition:.25s}
-  input:checked + .slider{background:var(--btn)}
-  input:checked + .slider::before{transform:translateX(24px)}
-
-  .home{margin-top:16px}
-  .home button{margin:6px;padding:10px 16px;border-radius:8px;border:none;background:var(--btn);color:#fff;cursor:pointer}
-  .home button:hover{background:var(--btn-hover)}
-  section{display:none;background:var(--card);padding:18px;margin-top:18px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-  section.active{display:block}
-  input,select{padding:8px;margin:6px;border-radius:8px;border:1px solid #bbb;width:calc(100% - 28px);max-width:360px}
-  .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-  .small{width:auto;padding:8px 12px}
-  button.small{padding:8px 12px}
-  .back-btn{background:var(--back)}
-  .back-btn:hover{background:var(--back-hover)}
-  p.result{font-weight:600;margin-top:12px}
-  @media(min-width:720px){ input,select{width:320px} }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Convert Labs</title>
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">Loading Convert Labs...</div>
 
-<div class="top-row">
-  <h1>Smart Unit Converter</h1>
-  <div class="toggle-container">
-    <label class="toggle-label">
-      <input type="checkbox" id="themeToggle">
-      <span class="slider"></span>
-    </label>
-  </div>
-</div>
+  <!-- Header -->
+  <header>
+    <h1>Convert Labs</h1>
+    <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
+    <button id="mode-toggle">🌙</button>
+  </header>
 
-<div id="home" class="home">
-  <button onclick="openSection('length')">Length</button>
-  <button onclick="openSection('temperature')">Temperature</button>
-  <button onclick="openSection('volume')">Volume</button>
-  <button onclick="openSection('containerVolume')">Container Volume</button>
-  <button onclick="openSection('kitchen')">Kitchen Converter 🍳</button>
-</div>
+  <!-- Converter Buttons -->
+  <nav>
+    <button class="tab-button" data-tab="length">Length</button>
+    <button class="tab-button" data-tab="temperature">Temperature</button>
+    <button class="tab-button" data-tab="volume">Volume</button>
+    <button class="tab-button" data-tab="container">Container Volume</button>
+    <button class="tab-button" data-tab="kitchen">Kitchen</button>
+  </nav>
 
-<!-- Length -->
-<section id="length" class="converter-section">
-  <h2>Length Converter</h2>
-  <div class="row">
-    <input id="lengthInput" type="number" placeholder="Enter value">
-    <select id="fromLength">
-      <option value="meter">Meter (m)</option>
-      <option value="kilometer">Kilometer (km)</option>
-      <option value="centimeter">Centimeter (cm)</option>
-      <option value="millimeter">Millimeter (mm)</option>
-      <option value="micrometer">Micrometer (µm)</option>
-      <option value="nanometer">Nanometer (nm)</option>
-      <option value="mile">Mile (mi)</option>
-      <option value="yard">Yard (yd)</option>
-      <option value="foot">Foot (ft)</option>
-      <option value="inch">Inch (in)</option>
-      <option value="lightyear">Light Year (ly)</option>
-    </select>
-    <button class="small" onclick="swapUnits('fromLength','toLength')">⇄ Swap</button>
-    <select id="toLength">
-      <option value="meter">Meter (m)</option>
-      <option value="kilometer">Kilometer (km)</option>
-      <option value="centimeter">Centimeter (cm)</option>
-      <option value="millimeter">Millimeter (mm)</option>
-      <option value="micrometer">Micrometer (µm)</option>
-      <option value="nanometer">Nanometer (nm)</option>
-      <option value="mile">Mile (mi)</option>
-      <option value="yard">Yard (yd)</option>
-      <option value="foot">Foot (ft)</option>
-      <option value="inch">Inch (in)</option>
-      <option value="lightyear">Light Year (ly)</option>
-    </select>
-    <button class="small" onclick="convertLength()">Convert</button>
-  </div>
-  <p id="lengthResult" class="result"></p>
-  <button class="back-btn small" onclick="goHome()">← Back</button>
-</section>
+  <!-- === Converters === -->
+  <main>
+    <!-- Length Converter -->
+    <section id="length" class="tab-content active">
+      <h2>Length Converter</h2>
+      <div class="converter">
+        <input type="number" id="lengthInput" placeholder="Enter value">
+        <select id="lengthFrom">
+          <option value="meter">Meter</option>
+          <option value="centimeter">Centimeter</option>
+          <option value="millimeter">Millimeter</option>
+          <option value="micrometer">Micrometer</option>
+          <option value="nanometer">Nanometer</option>
+          <option value="kilometer">Kilometer</option>
+          <option value="yard">Yard</option>
+          <option value="foot">Foot</option>
+          <option value="inch">Inch</option>
+          <option value="mile">Mile</option>
+          <option value="lightyear">Lightyear</option>
+        </select>
+        <select id="lengthTo">
+          <option value="meter">Meter</option>
+          <option value="centimeter">Centimeter</option>
+          <option value="millimeter">Millimeter</option>
+          <option value="micrometer">Micrometer</option>
+          <option value="nanometer">Nanometer</option>
+          <option value="kilometer">Kilometer</option>
+          <option value="yard">Yard</option>
+          <option value="foot">Foot</option>
+          <option value="inch">Inch</option>
+          <option value="mile">Mile</option>
+          <option value="lightyear">Lightyear</option>
+        </select>
+        <button onclick="convertLength()">Convert</button>
+        <p id="lengthResult"></p>
+      </div>
+    </section>
 
-<!-- Temperature -->
-<section id="temperature" class="converter-section">
-  <h2>Temperature Converter</h2>
-  <div class="row">
-    <input id="tempInput" type="number" placeholder="Enter value">
-    <select id="fromTemp">
-      <option value="C">Celsius (°C)</option>
-      <option value="F">Fahrenheit (°F)</option>
-      <option value="K">Kelvin (K)</option>
-    </select>
-    <button class="small" onclick="swapUnits('fromTemp','toTemp')">⇄ Swap</button>
-    <select id="toTemp">
-      <option value="C">Celsius (°C)</option>
-      <option value="F">Fahrenheit (°F)</option>
-      <option value="K">Kelvin (K)</option>
-    </select>
-    <button class="small" onclick="convertTemperature()">Convert</button>
-  </div>
-  <p id="tempResult" class="result"></p>
-  <button class="back-btn small" onclick="goHome()">← Back</button>
-</section>
+    <!-- Temperature Converter -->
+    <section id="temperature" class="tab-content">
+      <h2>Temperature Converter</h2>
+      <div class="converter">
+        <input type="number" id="tempInput" placeholder="Enter value">
+        <select id="tempFrom">
+          <option value="C">Celsius</option>
+          <option value="F">Fahrenheit</option>
+          <option value="K">Kelvin</option>
+        </select>
+        <select id="tempTo">
+          <option value="C">Celsius</option>
+          <option value="F">Fahrenheit</option>
+          <option value="K">Kelvin</option>
+        </select>
+        <button onclick="convertTemperature()">Convert</button>
+        <p id="tempResult"></p>
+      </div>
+    </section>
 
-<!-- Volume -->
-<section id="volume" class="converter-section">
-  <h2>Volume Converter</h2>
-  <div class="row">
-    <input id="volumeInput" type="number" placeholder="Enter value">
-    <select id="fromVolume">
-      <option value="milliliter">Milliliter (mL)</option>
-      <option value="liter">Liter (L)</option>
-      <option value="teaspoon">Teaspoon (tsp)</option>
-      <option value="tablespoon">Tablespoon (tbsp)</option>
-      <option value="cup">Cup</option>
-      <option value="gallon">Gallon (US)</option>
-      <option value="cubiccentimeter">Cubic Centimeter (cm³)</option>
-      <option value="cubicmeter">Cubic Meter (m³)</option>
-    </select>
-    <button class="small" onclick="swapUnits('fromVolume','toVolume')">⇄ Swap</button>
-    <select id="toVolume">
-      <option value="milliliter">Milliliter (mL)</option>
-      <option value="liter">Liter (L)</option>
-      <option value="teaspoon">Teaspoon (tsp)</option>
-      <option value="tablespoon">Tablespoon (tbsp)</option>
-      <option value="cup">Cup</option>
-      <option value="gallon">Gallon (US)</option>
-      <option value="cubiccentimeter">Cubic Centimeter (cm³)</option>
-      <option value="cubicmeter">Cubic Meter (m³)</option>
-    </select>
-    <button class="small" onclick="convertVolume()">Convert</button>
-  </div>
-  <p id="volumeResult" class="result"></p>
-  <button class="back-btn small" onclick="goHome()">← Back</button>
-</section>
+    <!-- Volume Converter -->
+    <section id="volume" class="tab-content">
+      <h2>Volume Converter</h2>
+      <div class="converter">
+        <input type="number" id="volInput" placeholder="Enter value">
+        <select id="volFrom">
+          <option value="liter">Liter</option>
+          <option value="milliliter">Milliliter</option>
+          <option value="gallon">Gallon</option>
+          <option value="quart">Quart</option>
+          <option value="pint">Pint</option>
+          <option value="cup">Cup</option>
+        </select>
+        <select id="volTo">
+          <option value="liter">Liter</option>
+          <option value="milliliter">Milliliter</option>
+          <option value="gallon">Gallon</option>
+          <option value="quart">Quart</option>
+          <option value="pint">Pint</option>
+          <option value="cup">Cup</option>
+        </select>
+        <button onclick="convertVolume()">Convert</button>
+        <p id="volResult"></p>
+      </div>
+    </section>
 
-<!-- Container Volume -->
-<section id="containerVolume" class="converter-section">
-  <h2>Container Volume Calculator</h2>
-  <div class="row">
-    <label>Type:</label>
-    <select id="containerType" onchange="updateContainerInputs()">
-      <option value="box">Box (L × W × H)</option>
-      <option value="cylinder">Cylinder (π × r² × H)</option>
-    </select>
-  </div>
+    <!-- Container Volume -->
+    <section id="container" class="tab-content">
+      <h2>Container Volume Calculator</h2>
+      <div class="converter">
+        <label><input type="radio" name="shape" value="rectangular" checked> Rectangular</label>
+        <label><input type="radio" name="shape" value="cylindrical"> Cylindrical</label>
+        <div id="rectInputs">
+          <input type="number" id="lengthDim" placeholder="Length (cm)">
+          <input type="number" id="widthDim" placeholder="Width (cm)">
+          <input type="number" id="heightDim" placeholder="Height (cm)">
+        </div>
+        <div id="cylInputs" style="display:none;">
+          <input type="number" id="radiusDim" placeholder="Radius (cm)">
+          <input type="number" id="heightCyl" placeholder="Height (cm)">
+        </div>
+        <select id="liquidType">
+          <option value="water">Water (1 g/cm³)</option>
+          <option value="milk">Milk (1.03 g/cm³)</option>
+          <option value="oil">Oil (0.92 g/cm³)</option>
+          <option value="honey">Honey (1.42 g/cm³)</option>
+          <option value="custom">Custom...</option>
+        </select>
+        <input type="number" id="customDensity" placeholder="Custom density (g/cm³)" style="display:none;">
+        <button onclick="calculateContainerVolume()">Calculate</button>
+        <p id="containerResult"></p>
+      </div>
+    </section>
 
-  <div id="boxInputs" class="row">
-    <input id="lengthBox" type="number" placeholder="Length (cm)">
-    <input id="widthBox" type="number" placeholder="Width (cm)">
-    <input id="heightBox" type="number" placeholder="Height (cm)">
-  </div>
+    <!-- Kitchen Converter -->
+    <section id="kitchen" class="tab-content">
+      <h2>Kitchen Converter</h2>
+      <div class="converter">
+        <input type="number" id="kitchenInput" placeholder="Enter value">
+        <select id="kitchenUnit">
+          <option value="teaspoon">Teaspoon</option>
+          <option value="tablespoon">Tablespoon</option>
+          <option value="cup">Cup</option>
+          <option value="ml">Milliliter</option>
+        </select>
+        <select id="ingredient">
+          <option value="flour">Flour</option>
+          <option value="sugar">Sugar</option>
+          <option value="salt">Salt</option>
+          <option value="oil">Oil</option>
+          <option value="milk">Milk</option>
+          <option value="water">Water</option>
+          <option value="butter">Butter</option>
+          <option value="rice">Rice</option>
+          <option value="honey">Honey</option>
+          <option value="spices">Ground Spices</option>
+        </select>
+        <button onclick="convertKitchen()">Convert</button>
+        <p id="kitchenResult"></p>
+      </div>
+    </section>
+  </main>
 
-  <div id="cylinderInputs" class="row" style="display:none">
-    <input id="radiusCyl" type="number" placeholder="Radius (cm)">
-    <input id="heightCyl" type="number" placeholder="Height (cm)">
-  </div>
-
-  <div class="row">
-    <label>Liquid:</label>
-    <select id="containerLiquid">
-      <option value="1">Water (1.00 g/cm³)</option>
-      <option value="0.92">Oil (0.92 g/cm³)</option>
-      <option value="1.03">Milk (1.03 g/cm³)</option>
-      <option value="0.79">Alcohol (0.79 g/cm³)</option>
-      <option value="1.42">Honey (1.42 g/cm³)</option>
-      <option value="1.01">Vinegar (1.01 g/cm³)</option>
-      <option value="1.03">Lemon juice (1.03 g/cm³)</option>
-      <option value="1.10">Soy sauce (1.10 g/cm³)</option>
-    </select>
-  </div>
-
-  <div class="row">
-    <button class="small" onclick="calculateContainerVolume()">Calculate</button>
-  </div>
-
-  <p id="containerResult" class="result"></p>
-  <button class="back-btn small" onclick="goHome()">← Back</button>
-</section>
-
-<!-- Kitchen Converter -->
-<section id="kitchen" class="converter-section">
-  <h2>Kitchen Converter 🍳</h2>
-
-  <div class="row">
-    <input id="kInput" type="number" placeholder="Enter value (e.g. 1)">
-    <select id="kFrom">
-      <!-- volume -->
-      <option value="tsp">teaspoon (tsp)</option>
-      <option value="tbsp">tablespoon (tbsp)</option>
-      <option value="cup">cup (US)</option>
-      <option value="milliliter">milliliter (mL)</option>
-      <option value="liter">liter (L)</option>
-      <!-- weight -->
-      <option value="gram">gram (g)</option>
-      <option value="kilogram">kilogram (kg)</option>
-    </select>
-
-    <select id="kIngredient">
-      <!-- full ingredient list (25) with densities in g/ml -->
-      <option value="1.00">Water</option>
-      <option value="1.03">Milk</option>
-      <option value="0.92">Oil (vegetable)</option>
-      <option value="0.91">Olive oil</option>
-      <option value="1.42">Honey</option>
-      <option value="1.01">Vinegar</option>
-      <option value="1.03">Lemon juice</option>
-      <option value="1.10">Soy sauce</option>
-      <option value="0.85">Sugar (granulated)</option>
-      <option value="0.93">Brown sugar</option>
-      <option value="1.20">Salt</option>
-      <option value="0.53">Flour (all-purpose)</option>
-      <option value="0.54">Cornstarch</option>
-      <option value="0.72">Baking powder</option>
-      <option value="1.00">Baking soda</option>
-      <option value="0.85">Rice (uncooked)</option>
-      <option value="0.43">Oats</option>
-      <option value="0.52">Cocoa powder</option>
-      <option value="0.35">Coffee (ground)</option>
-      <option value="0.40">Breadcrumbs</option>
-      <option value="0.55">Nuts (chopped)</option>
-      <option value="0.96">Butter</option>
-      <option value="1.03">Yogurt</option>
-      <option value="0.56">Ground spices (avg)</option>
-      <option value="1.10">Peanut butter</option>
-    </select>
-  </div>
-
-  <div class="row">
-    <button class="small" onclick="swapUnits('kFrom','kFrom')"> </button>
-    <button class="small" onclick="convertKitchen()">Convert → show grams</button>
-  </div>
-
-  <p id="kResult" class="result"></p>
-  <button class="back-btn small" onclick="goHome()">← Back</button>
-</section>
-
-<script>
-/* THEME */
-const themeToggle = document.getElementById('themeToggle');
-themeToggle.addEventListener('change', () => document.body.classList.toggle('dark', themeToggle.checked));
-
-/* NAVIGATION */
-function openSection(id){
-  document.querySelectorAll('.converter-section').forEach(s=>s.classList.remove('active'));
-  document.getElementById('home').style.display='none';
-  document.getElementById(id).classList.add('active');
-}
-function goHome(){
-  document.querySelectorAll('.converter-section').forEach(s=>s.classList.remove('active'));
-  document.getElementById('home').style.display='block';
-}
-
-/* SWAP UTILS */
-function swapUnits(a,b){
-  const A=document.getElementById(a), B=document.getElementById(b);
-  const t=A.value; A.value=B.value; B.value=t;
-}
-
-/* FORMAT NUMBERS */
-function formatNumber(num){
-  if (!isFinite(num)) return String(num);
-  if (Math.abs(num) >= 0.0001 && Math.abs(num) < 1e6) return Number(num.toFixed(6)).toLocaleString();
-  return num.toExponential(3);
-}
-
-/* UNIT ABBREVS (for display) */
-const abbr = {
-  meter:'m', kilometer:'km', centimeter:'cm', millimeter:'mm', micrometer:'µm', nanometer:'nm',
-  mile:'mi', yard:'yd', foot:'ft', inch:'in', lightyear:'ly',
-  milliliter:'mL', liter:'L', teaspoon:'tsp', tablespoon:'tbsp', cup:'cup',
-  gram:'g', kilogram:'kg', cubiccentimeter:'cm³', cubicmeter:'m³'
-};
-
-/* LENGTH */
-const lengthRates = { meter:1, kilometer:0.001, centimeter:100, millimeter:1000, micrometer:1e6, nanometer:1e9, mile:0.000621371, yard:1.09361, foot:3.28084, inch:39.3701, lightyear:1.057e-16};
-function convertLength(){
-  const v= parseFloat(document.getElementById('lengthInput').value);
-  if (isNaN(v)) return document.getElementById('lengthResult').textContent='Please enter a number.';
-  const from=document.getElementById('fromLength').value;
-  const to=document.getElementById('toLength').value;
-  const res = v * (lengthRates[to]/lengthRates[from]);
-  document.getElementById('lengthResult').textContent = `${formatNumber(v)} ${abbr[from]||from} = ${formatNumber(res)} ${abbr[to]||to}`;
-}
-
-/* TEMPERATURE */
-function convertTemperature(){
-  const v=parseFloat(document.getElementById('tempInput').value);
-  if (isNaN(v)) return document.getElementById('tempResult').textContent='Please enter a number.';
-  const from=document.getElementById('fromTemp').value;
-  const to=document.getElementById('toTemp').value;
-  let c;
-  if (from==='C') c=v;
-  else if (from==='F') c=(v-32)*5/9;
-  else c=v-273.15;
-  let out;
-  if (to==='C') out=c;
-  else if (to==='F') out=c*9/5+32;
-  else out=c+273.15;
-  document.getElementById('tempResult').textContent = `${formatNumber(v)}°${from} = ${formatNumber(out)}°${to}`;
-}
-
-/* VOLUME */
-const volRates = { milliliter:1, liter:0.001, teaspoon:1*4.92892, tablespoon:1*14.7868, cup:240, gallon:3785.41, cubiccentimeter:1, cubicmeter:1e6 };
-function convertVolume(){
-  const v=parseFloat(document.getElementById('volumeInput').value);
-  if (isNaN(v)) return document.getElementById('volumeResult').textContent='Please enter a number.';
-  const from=document.getElementById('fromVolume').value;
-  const to=document.getElementById('toVolume').value;
-  // convert input to mL (milliliter basis), then to target
-  const inMl = v * (volRates[from] / volRates['milliliter']);
-  const out = inMl / (volRates[to] / volRates['milliliter']);
-  document.getElementById('volumeResult').textContent = `${formatNumber(v)} ${abbr[from]||from} = ${formatNumber(out)} ${abbr[to]||to}`;
-}
-
-/* CONTAINER VOLUME */
-function updateContainerInputs(){
-  const t=document.getElementById('containerType').value;
-  document.getElementById('boxInputs').style.display = t==='box' ? 'flex' : 'none';
-  document.getElementById('cylinderInputs').style.display = t==='cylinder' ? 'flex' : 'none';
-}
-function calculateContainerVolume(){
-  const t=document.getElementById('containerType').value;
-  let volCm3=0;
-  if (t==='box'){
-    const L=parseFloat(document.getElementById('lengthBox').value);
-    const W=parseFloat(document.getElementById('widthBox').value);
-    const H=parseFloat(document.getElementById('heightBox').value);
-    if (isNaN(L)||isNaN(W)||isNaN(H)) return document.getElementById('containerResult').textContent='Please fill all dimensions.';
-    volCm3 = L*W*H;
-  } else {
-    const R=parseFloat(document.getElementById('radiusCyl').value);
-    const H=parseFloat(document.getElementById('heightCyl').value);
-    if (isNaN(R)||isNaN(H)) return document.getElementById('containerResult').textContent='Please fill all dimensions.';
-    volCm3 = Math.PI * R * R * H;
-  }
-  const density = parseFloat(document.getElementById('containerLiquid').value); // g/cm3
-  if (isNaN(density)) return document.getElementById('containerResult').textContent='Please select liquid.';
-  const liters = volCm3/1000;
-  const massKg = (volCm3 * density)/1000;
-  document.getElementById('containerResult').textContent = `Volume: ${formatNumber(liters)} L | Mass: ${formatNumber(massKg)} kg`;
-}
-updateContainerInputs();
-
-/* KITCHEN CONVERTER */
-/* volume units -> milliliters mapping (ml per unit)
-   teaspoon (tsp) = 4.92892 ml
-   tablespoon (tbsp) = 14.7868 ml
-   cup (US) = 240 ml (common cooking cup)
-   milliliter (mL)
-   liter = 1000 ml
-*/
-const kitchenVolToMl = {
-  tsp: 4.92892,
-  tbsp: 14.7868,
-  cup: 240,
-  milliliter: 1,
-  liter: 1000
-};
-
-function convertKitchen(){
-  const val = parseFloat(document.getElementById('kInput').value);
-  if (isNaN(val)) return document.getElementById('kResult').textContent = 'Please enter a number.';
-  const from = document.getElementById('kFrom').value;
-  const ingredientDensity = parseFloat(document.getElementById('kIngredient').value); // g/ml
-  if (isNaN(ingredientDensity)) return document.getElementById('kResult').textContent = 'Please choose ingredient.';
-  let grams = 0;
-
-  if (from === 'gram'){
-    grams = val;
-  } else if (from === 'kilogram'){
-    grams = val * 1000;
-  } else {
-    // volume unit -> ml -> grams via density (g/ml)
-    // from can be 'tsp','tbsp','cup','milliliter','liter'
-    const mlPerUnit = kitchenVolToMl[from];
-    if (mlPerUnit === undefined) return document.getElementById('kResult').textContent = 'Unsupported unit.';
-    const ml = val * mlPerUnit;
-    grams = ml * ingredientDensity;
-  }
-
-  // Show single result: grams
-  // Also show a readable message with ingredient name (we need ingredient name text)
-  const ingrSelect = document.getElementById('kIngredient');
-  const ingrName = ingrSelect.options[ingrSelect.selectedIndex].text;
-
-  document.getElementById('kResult').textContent = `${formatNumber(val)} ${from} of ${ingrName} = ${formatNumber(grams)} g`;
-}
-
-/* initialize theme if user prefers dark (optional)
-   Not persisting preference to localStorage to keep code simple.
-*/
-document.getElementById('themeToggle').checked = false;
-</script>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+  </footer>
 </body>
 </html>
