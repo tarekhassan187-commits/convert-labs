@@ -9,18 +9,17 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      background-color: #f4f4f4;
-      color: #000;
-      transition: background-color 0.3s, color 0.3s;
+      background-color: #ffffff;
+      color: #222;
     }
     header {
-      background: #222;
+      background: #1976d2;
       color: white;
       text-align: center;
       padding: 1rem 0;
     }
     nav {
-      background: #444;
+      background: #e3f2fd;
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
@@ -28,7 +27,7 @@
       padding: 0.5rem;
     }
     nav button {
-      background: #555;
+      background: #1976d2;
       border: none;
       color: white;
       padding: 0.5rem 1rem;
@@ -36,15 +35,30 @@
       cursor: pointer;
     }
     nav button:hover {
-      background: #777;
+      background: #0d47a1;
     }
     .converter {
       display: none;
       text-align: center;
       margin-top: 1rem;
     }
+    input, select {
+      padding: 0.4rem;
+      margin: 0.3rem;
+    }
+    button.convert {
+      background: #1976d2;
+      border: none;
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button.convert:hover {
+      background: #0d47a1;
+    }
     footer {
-      background: #222;
+      background: #1976d2;
       color: white;
       text-align: center;
       padding: 1rem 0;
@@ -72,16 +86,17 @@
   <section id="home" class="converter" style="display:block;">
     <h2>Unit Converters</h2>
     <p>Select a conversion tool to get started!</p>
+    <p><strong>Visits:</strong> <span id="visitCount">Loading...</span></p>
   </section>
 
   <section id="about" class="converter">
     <h2>About Convert Labs</h2>
-    <p>Convert Labs is your smart, all-in-one unit conversion tool — designed to help you convert anything from temperature to kitchen measures effortlessly.</p>
+    <p>Convert Labs helps you make fast, accurate conversions for measurements, containers, and kitchen ingredients — all in one easy interface.</p>
   </section>
 
   <section id="contact" class="converter">
     <h2>Contact Us</h2>
-    <p>We’d love to hear from you! Reach us at: <strong>support@convertlabs.online</strong></p>
+    <p>Email: <strong>support@convertlabs.online</strong></p>
   </section>
 
   <section id="length" class="converter">
@@ -89,11 +104,13 @@
     <input type="number" id="lengthInput" placeholder="Enter value">
     <select id="lengthFrom">
       <option>Meter</option><option>Kilometer</option><option>Centimeter</option><option>Millimeter</option>
+      <option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option>
     </select>
     <select id="lengthTo">
       <option>Meter</option><option>Kilometer</option><option>Centimeter</option><option>Millimeter</option>
+      <option>Mile</option><option>Yard</option><option>Foot</option><option>Inch</option>
     </select>
-    <button onclick="convertLength()">Convert</button>
+    <button class="convert" onclick="convertLength()">Convert</button>
     <p id="lengthResult"></p>
   </section>
 
@@ -102,35 +119,63 @@
     <input type="number" id="tempInput" placeholder="Enter value">
     <select id="tempFrom"><option>Celsius</option><option>Fahrenheit</option><option>Kelvin</option></select>
     <select id="tempTo"><option>Celsius</option><option>Fahrenheit</option><option>Kelvin</option></select>
-    <button onclick="convertTemp()">Convert</button>
+    <button class="convert" onclick="convertTemp()">Convert</button>
     <p id="tempResult"></p>
   </section>
 
   <section id="volume" class="converter">
     <h2>Volume Converter</h2>
     <input type="number" id="volInput" placeholder="Enter value">
-    <select id="volFrom"><option>Liter</option><option>Milliliter</option><option>Cubic Meter</option></select>
-    <select id="volTo"><option>Liter</option><option>Milliliter</option><option>Cubic Meter</option></select>
-    <button onclick="convertVol()">Convert</button>
+    <select id="volFrom">
+      <option>Liter</option><option>Milliliter</option><option>Cubic Meter</option>
+      <option>Cubic Centimeter</option><option>Gallon</option><option>Pint</option><option>Quart</option>
+    </select>
+    <select id="volTo">
+      <option>Liter</option><option>Milliliter</option><option>Cubic Meter</option>
+      <option>Cubic Centimeter</option><option>Gallon</option><option>Pint</option><option>Quart</option>
+    </select>
+    <button class="convert" onclick="convertVol()">Convert</button>
     <p id="volResult"></p>
   </section>
 
   <section id="container" class="converter">
     <h2>Container Volume Calculator</h2>
-    <label><input type="radio" name="shape" checked>Rectangular</label>
-    <label><input type="radio" name="shape">Cylindrical</label><br><br>
-    <input type="number" placeholder="Length (cm)"> 
-    <input type="number" placeholder="Width (cm)"> 
-    <input type="number" placeholder="Height (cm)">
-    <button>Calculate</button>
+    <label><input type="radio" name="shape" value="rect" checked onchange="toggleShape()"> Rectangular</label>
+    <label><input type="radio" name="shape" value="cyl" onchange="toggleShape()"> Cylindrical</label><br><br>
+    <div id="rectInputs">
+      <input type="number" id="lengthCm" placeholder="Length (cm)"> 
+      <input type="number" id="widthCm" placeholder="Width (cm)"> 
+      <input type="number" id="heightCm" placeholder="Height (cm)">
+    </div>
+    <div id="cylInputs" style="display:none;">
+      <input type="number" id="radiusCm" placeholder="Radius (cm)"> 
+      <input type="number" id="heightCyl" placeholder="Height (cm)">
+    </div>
+    <br>
+    <select id="liquidType">
+      <option>Water (1 g/cm³)</option>
+      <option>Oil (0.9 g/cm³)</option>
+      <option>Milk (1.03 g/cm³)</option>
+      <option>Honey (1.4 g/cm³)</option>
+    </select>
+    <button class="convert" onclick="calculateContainer()">Calculate</button>
+    <p id="containerResult"></p>
   </section>
 
   <section id="kitchen" class="converter">
     <h2>Kitchen Converter</h2>
-    <input type="number" placeholder="Enter value">
-    <select><option>Teaspoon</option><option>Tablespoon</option></select>
-    <select><option>Flour</option><option>Sugar</option></select>
-    <button>Convert</button>
+    <input type="number" id="kitchenInput" placeholder="Enter value">
+    <select id="kitchenFrom">
+      <option>Cup</option><option>Tablespoon</option><option>Teaspoon</option><option>Milliliter</option>
+    </select>
+    <select id="kitchenTo">
+      <option>Cup</option><option>Tablespoon</option><option>Teaspoon</option><option>Milliliter</option>
+    </select>
+    <select id="ingredient">
+      <option>Water</option><option>Flour</option><option>Sugar</option><option>Butter</option><option>Honey</option>
+    </select>
+    <button class="convert" onclick="convertKitchen()">Convert</button>
+    <p id="kitchenResult"></p>
   </section>
 
   <footer>
@@ -143,37 +188,100 @@
       document.getElementById(id).style.display = 'block';
     }
 
+    // Length Conversion
     function convertLength() {
-      const input = parseFloat(document.getElementById('lengthInput').value);
-      const from = document.getElementById('lengthFrom').value;
-      const to = document.getElementById('lengthTo').value;
-      let result = input;
-      if (from === 'Meter' && to === 'Kilometer') result = input / 1000;
-      if (from === 'Kilometer' && to === 'Meter') result = input * 1000;
-      if (from === 'Meter' && to === 'Centimeter') result = input * 100;
-      document.getElementById('lengthResult').textContent = `Result: ${result}`;
+      const v = parseFloat(document.getElementById('lengthInput').value);
+      const f = document.getElementById('lengthFrom').value;
+      const t = document.getElementById('lengthTo').value;
+      const m = {
+        'Meter': 1,
+        'Kilometer': 1000,
+        'Centimeter': 0.01,
+        'Millimeter': 0.001,
+        'Mile': 1609.34,
+        'Yard': 0.9144,
+        'Foot': 0.3048,
+        'Inch': 0.0254
+      };
+      const result = (v * m[f]) / m[t];
+      document.getElementById('lengthResult').textContent = `Result: ${result.toFixed(4)} ${t}`;
     }
 
+    // Temperature
     function convertTemp() {
       const val = parseFloat(document.getElementById('tempInput').value);
-      const from = document.getElementById('tempFrom').value;
-      const to = document.getElementById('tempTo').value;
-      let res = val;
-      if (from === 'Celsius' && to === 'Fahrenheit') res = val * 9/5 + 32;
-      else if (from === 'Fahrenheit' && to === 'Celsius') res = (val - 32) * 5/9;
-      else if (from === 'Celsius' && to === 'Kelvin') res = val + 273.15;
-      document.getElementById('tempResult').textContent = `Result: ${res.toFixed(2)}`;
+      const f = document.getElementById('tempFrom').value;
+      const t = document.getElementById('tempTo').value;
+      let c;
+      if (f === 'Celsius') c = val;
+      if (f === 'Fahrenheit') c = (val - 32) * 5 / 9;
+      if (f === 'Kelvin') c = val - 273.15;
+      let r = c;
+      if (t === 'Fahrenheit') r = c * 9 / 5 + 32;
+      if (t === 'Kelvin') r = c + 273.15;
+      document.getElementById('tempResult').textContent = `Result: ${r.toFixed(2)} ${t}`;
     }
 
+    // Volume
     function convertVol() {
       const val = parseFloat(document.getElementById('volInput').value);
-      const from = document.getElementById('volFrom').value;
-      const to = document.getElementById('volTo').value;
-      let res = val;
-      if (from === 'Liter' && to === 'Milliliter') res = val * 1000;
-      if (from === 'Milliliter' && to === 'Liter') res = val / 1000;
-      document.getElementById('volResult').textContent = `Result: ${res}`;
+      const f = document.getElementById('volFrom').value;
+      const t = document.getElementById('volTo').value;
+      const L = {
+        'Liter': 1,
+        'Milliliter': 0.001,
+        'Cubic Meter': 1000,
+        'Cubic Centimeter': 0.001,
+        'Gallon': 3.785,
+        'Quart': 0.946,
+        'Pint': 0.473
+      };
+      const res = (val * L[f]) / L[t];
+      document.getElementById('volResult').textContent = `Result: ${res.toFixed(4)} ${t}`;
     }
+
+    // Container
+    function toggleShape() {
+      const shape = document.querySelector('input[name="shape"]:checked').value;
+      document.getElementById('rectInputs').style.display = shape === 'rect' ? 'block' : 'none';
+      document.getElementById('cylInputs').style.display = shape === 'cyl' ? 'block' : 'none';
+    }
+
+    function calculateContainer() {
+      const shape = document.querySelector('input[name="shape"]:checked').value;
+      const density = parseFloat(document.getElementById('liquidType').value.match(/\d+(\.\d+)?/));
+      let vol = 0;
+      if (shape === 'rect') {
+        const l = +document.getElementById('lengthCm').value;
+        const w = +document.getElementById('widthCm').value;
+        const h = +document.getElementById('heightCm').value;
+        vol = l * w * h;
+      } else {
+        const r = +document.getElementById('radiusCm').value;
+        const h = +document.getElementById('heightCyl').value;
+        vol = Math.PI * r * r * h;
+      }
+      const ml = vol;
+      const kg = (ml * density) / 1000;
+      document.getElementById('containerResult').textContent = `Volume: ${ml.toFixed(2)} mL, Weight: ${kg.toFixed(2)} kg`;
+    }
+
+    // Kitchen
+    function convertKitchen() {
+      const val = +document.getElementById('kitchenInput').value;
+      const f = document.getElementById('kitchenFrom').value;
+      const t = document.getElementById('kitchenTo').value;
+      const factor = { Cup: 240, Tablespoon: 15, Teaspoon: 5, Milliliter: 1 };
+      const res = (val * factor[f]) / factor[t];
+      document.getElementById('kitchenResult').textContent = `Result: ${res.toFixed(2)} ${t}`;
+    }
+
+    // Visitor counter (local)
+    let count = localStorage.getItem('visits');
+    if (!count) count = 0;
+    count++;
+    localStorage.setItem('visits', count);
+    document.getElementById('visitCount').textContent = count;
   </script>
 </body>
 </html>
