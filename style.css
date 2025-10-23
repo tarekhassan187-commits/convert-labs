@@ -142,3 +142,10 @@ body.dark-mode .tabs { background: #2d2d33; }
 body.dark-mode .tabs button { background: #374151; }
 body.dark-mode footer { background: #202020; color: #ccc; }
 
+/* 🔹 Force tagline color fix */
+header .tagline {
+  color: #ffffff !important;        /* Force white color */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  opacity: 1;
+}
+
