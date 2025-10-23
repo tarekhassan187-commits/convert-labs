@@ -51,6 +51,14 @@ main {
 .content-section {
   max-width: 700px;
   margin: auto;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.content-section.visible {
+  display: block;
+  opacity: 1;
 }
 
 footer {
