@@ -87,7 +87,8 @@ function convertKitchen() {
 }
 
 // VISITOR COUNTER (CountAPI)
-fetch("https://api.countapi.xyz/hit/convertlabs.online/visits")
+fetch("https://api.countapi.xyz/update/convertlabs.online/visits/?amount=1")
   .then(res => res.json())
   .then(data => document.getElementById("visitorCount").textContent = data.value.toLocaleString());
+
 
