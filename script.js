@@ -2,6 +2,12 @@ function showSection(id) {
   document.querySelectorAll(".converter-section").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
+function showSection(id) {
+  document.querySelectorAll(".converter-section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  event.target.classList.add("active");
+}
 
 // LENGTH
 const lengthFactors = {
@@ -84,3 +90,4 @@ function convertKitchen() {
 fetch("https://api.countapi.xyz/hit/convertlabs.online/visits")
   .then(res => res.json())
   .then(data => document.getElementById("visitorCount").textContent = data.value.toLocaleString());
+
