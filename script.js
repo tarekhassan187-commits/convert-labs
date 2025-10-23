@@ -34,16 +34,51 @@ function convertTemperature() {
 }
 
 // VOLUME
-const volumeUnits = {
-  "Liter (L)": 1,
-  "Milliliter (mL)": 0.001,
-  "Cubic meter (m³)": 1000,
-  "Cubic centimeter (cm³)": 0.001,
-  "Cubic inch (in³)": 0.0163871,
-  "Cubic foot (ft³)": 28.3168,
-  "US gallon (gal US)": 3.78541,
-  "UK gallon (gal UK)": 4.54609
+// Helper - format results nicely
+function formatNumber(n) {
+  if (!isFinite(n)) return String(n);
+  if (Math.abs(n) < 1e-6) return n.toExponential(3);
+  // show up to 6 decimal places but trim trailing zeros
+  return Number(n.toFixed(6)).toLocaleString();
+}
+
+/* Volume conversion factors => liters per unit */
+const volumeToLiters = {
+  L: 1,                // liter
+  mL: 0.001,           // milliliter
+  m3: 1000,            // cubic meter
+  cm3: 0.001,          // cubic centimeter
+  in3: 0.016387064,    // cubic inch
+  ft3: 28.316846592,   // cubic foot
+  gal_us: 3.785411784, // US gallon
+  gal_uk: 4.54609      // UK gallon (imperial)
 };
+
+function convertVolume() {
+  const raw = document.getElementById('volumeInput').value;
+  const v = parseFloat(raw);
+  if (isNaN(v)) {
+    document.getElementById('volumeResult').textContent = 'Please enter a number.';
+    return;
+  }
+
+  const from = document.getElementById('volumeFrom').value;
+  const to = document.getElementById('volumeTo').value;
+
+  // sanity check keys exist
+  if (!volumeToLiters[from] || !volumeToLiters[to]) {
+    document.getElementById('volumeResult').textContent = 'Unsupported unit selected.';
+    return;
+  }
+
+  // convert input to liters, then to target unit
+  const liters = v * volumeToLiters[from];
+  const result = liters / volumeToLiters[to];
+
+  document.getElementById('volumeResult').textContent =
+    `${formatNumber(v)} ${from} = ${formatNumber(result)} ${to}`;
+}
+
 // CONTAINER
 function toggleShapeInputs() {
   document.getElementById("rectangularInputs").style.display =
@@ -93,6 +128,7 @@ function convertKitchen() {
 fetch("https://api.countapi.xyz/update/convertlabs.online/visits/?amount=1")
   .then(res => res.json())
   .then(data => document.getElementById("visitorCount").textContent = data.value.toLocaleString());
+
 
 
 
