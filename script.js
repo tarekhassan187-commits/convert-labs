@@ -233,14 +233,18 @@ function convertKitchen() {
     `${val} ${unit}(s) of ${ingredient} = ${grams.toFixed(1)} grams`;
 }
 
-// =======================================================
-// 🔹 Visitor Counter (CountAPI)
-// =======================================================
+// 🔹 Visitor Counter (HTTPS)
 fetch('https://api.countapi.xyz/hit/convertlabs.online/visits')
   .then(res => res.json())
-  .then(res => {
-    document.getElementById('visitorCount').textContent = res.value.toLocaleString();
+  .then(data => {
+    const visitorSpan = document.getElementById('visitorCount');
+    if (visitorSpan) visitorSpan.textContent = data.value.toLocaleString();
+  })
+  .catch(() => {
+    const visitorSpan = document.getElementById('visitorCount');
+    if (visitorSpan) visitorSpan.textContent = "N/A";
   });
+
 
 // =======================================================
 // 🔹 Favicon helper (ico/png fallback fade)
@@ -251,3 +255,4 @@ if (fav) {
   fav.style.opacity = 0.3;
   setTimeout(() => fav.style.opacity = 1, 800);
 }
+
