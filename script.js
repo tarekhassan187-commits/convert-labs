@@ -1,7 +1,16 @@
-// Section toggle
+// Section toggle with fade animation
 function showSection(id) {
-  document.querySelectorAll('.content-section').forEach(sec => sec.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
+  const sections = document.querySelectorAll('.content-section');
+  sections.forEach(sec => {
+    sec.classList.remove('visible');
+    setTimeout(() => (sec.style.display = 'none'), 600); // fade out delay
+  });
+
+  const target = document.getElementById(id);
+  setTimeout(() => {
+    target.style.display = 'block';
+    setTimeout(() => target.classList.add('visible'), 50);
+  }, 600);
 }
 
 // Visitor counter
