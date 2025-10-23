@@ -1,9 +1,9 @@
-// Section toggle with fade animation
-function showSection(id) {
+// Section toggle with fade animation and active nav button
+function showSection(id, btn) {
   const sections = document.querySelectorAll('.content-section');
   sections.forEach(sec => {
     sec.classList.remove('visible');
-    setTimeout(() => (sec.style.display = 'none'), 600); // fade out delay
+    setTimeout(() => (sec.style.display = 'none'), 600);
   });
 
   const target = document.getElementById(id);
@@ -11,6 +11,10 @@ function showSection(id) {
     target.style.display = 'block';
     setTimeout(() => target.classList.add('visible'), 50);
   }, 600);
+
+  // Highlight the active nav button
+  document.querySelectorAll('#nav-buttons button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
 // Visitor counter
