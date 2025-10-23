@@ -1,64 +1,113 @@
+/* 🔹 General Layout */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  background: #f0f8ff;
-  color: #333;
+  background: #f9fafc;
+  color: #222;
   text-align: center;
 }
 
+/* 🔹 Splash Screen */
+#loading-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  z-index: 999;
+  animation: fadeOut 1s ease 1s forwards;
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* 🔹 Header */
 header {
-  background-color: #2196f3;
+  background: #3b82f6;
   color: white;
-  padding: 1rem;
+  padding: 1.2rem 0;
+}
+.tagline {
+  font-size: 1rem;
+  opacity: 0;
+  animation: fadeIn 2s ease forwards 1s;
 }
 
-header h1 {
-  animation: fadeIn 2s ease-in;
+/* 🔹 Tabs */
+.tabs {
+  background: #e5e7eb;
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  padding: 0.6rem;
 }
-
-nav button {
-  margin: 0.3rem;
-  padding: 0.5rem 1rem;
-  background-color: white;
-  color: #0d47a1; /* darker blue text for better contrast */
-  border: 2px solid #2196f3;
-  border-radius: 6px;
+.tabs button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-  font-weight: 600;
+  transition: 0.3s;
+  font-weight: bold;
+}
+.tabs button:hover {
+  background: #2563eb;
 }
 
-nav button:hover,
-nav button.active {
-  background-color: #2196f3;
-  color: white;
-}
-
-
-.converter-section {
+/* 🔹 Converters */
+.converter {
   display: none;
-  padding: 20px;
+  padding: 2rem 1rem;
 }
-.converter-section.active {
+.converter.active {
   display: block;
 }
-
-input, select, button {
-  margin: 5px;
-  padding: 8px;
+input, select, button.convert {
+  padding: 0.6rem;
+  margin: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
 }
-
-footer {
-  background-color: #2196f3;
+button.convert {
+  background: #3b82f6;
   color: white;
-  padding: 10px;
-  position: relative;
-  bottom: 0;
-  width: 100%;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button.convert:hover {
+  background: #2563eb;
 }
 
+/* 🔹 Footer */
+footer {
+  background: #f3f4f6;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 2rem;
+}
+.footer-links a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* 🔹 Animations */
 @keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-
+.fade-in {
+  animation: fadeIn 1.5s ease forwards;
+}
