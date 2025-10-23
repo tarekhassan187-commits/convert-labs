@@ -34,13 +34,16 @@ function convertTemperature() {
 }
 
 // VOLUME
-const volumeFactors = { L: 1, mL: 0.001, m3: 1000 };
-function convertVolume() {
-  const val = parseFloat(volumeInput.value);
-  const result = val * volumeFactors[volumeFrom.value] / volumeFactors[volumeTo.value];
-  volumeResult.textContent = `${val} ${volumeFrom.value} = ${result.toLocaleString()} ${volumeTo.value}`;
-}
-
+const volumeUnits = {
+  "Liter (L)": 1,
+  "Milliliter (mL)": 0.001,
+  "Cubic meter (m³)": 1000,
+  "Cubic centimeter (cm³)": 0.001,
+  "Cubic inch (in³)": 0.0163871,
+  "Cubic foot (ft³)": 28.3168,
+  "US gallon (gal US)": 3.78541,
+  "UK gallon (gal UK)": 4.54609
+};
 // CONTAINER
 function toggleShapeInputs() {
   document.getElementById("rectangularInputs").style.display =
@@ -90,5 +93,6 @@ function convertKitchen() {
 fetch("https://api.countapi.xyz/update/convertlabs.online/visits/?amount=1")
   .then(res => res.json())
   .then(data => document.getElementById("visitorCount").textContent = data.value.toLocaleString());
+
 
 
