@@ -310,6 +310,29 @@ if (aboutLink && aboutModal && closeAbout) {
     if (e.target === aboutModal) aboutModal.style.display = "none";
   });
 }
+// 🔹 About Modal Logic (always runs after DOM is ready)
+document.addEventListener("DOMContentLoaded", () => {
+  const aboutLink = document.getElementById("aboutLink");
+  const aboutModal = document.getElementById("aboutModal");
+  const closeAbout = document.getElementById("closeAbout");
+
+  if (aboutLink && aboutModal && closeAbout) {
+    aboutLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      aboutModal.style.display = "block";
+    });
+
+    closeAbout.addEventListener("click", () => {
+      aboutModal.style.display = "none";
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === aboutModal) aboutModal.style.display = "none";
+    });
+  }
+});
+
+
 
 
 
