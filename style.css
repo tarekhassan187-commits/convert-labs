@@ -37,11 +37,16 @@ nav button {
   border-radius: 6px;
   cursor: pointer;
   font-size: 1em;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.1s;
 }
 
 nav button:hover {
   background: #777;
+}
+
+nav button.active {
+  background: #2196f3;
+  transform: scale(1.05);
 }
 
 main {
