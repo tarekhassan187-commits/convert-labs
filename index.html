@@ -1,59 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Convert Labs — Smart Unit Converter</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P');
-  </script>
-
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Convert Labs</title>
+  <link rel="icon" type="image/png" href="icon.png" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+      color: #000;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    header {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    nav {
+      background: #444;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem;
+    }
+    nav button {
+      background: #555;
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    nav button:hover {
+      background: #777;
+    }
+    .converter {
+      display: none;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: 2rem;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>Convert Labs</h1>
-    <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
+    <p>Welcome to Convert Labs — your smart all-in-one unit converter</p>
   </header>
 
-  <nav id="nav-buttons">
-    <button onclick="showSection('home', this)" class="active">Home</button>
-    <button onclick="showSection('about', this)">About</button>
-    <button onclick="showSection('contact', this)">Contact Us</button>
+  <nav>
+    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('about')">About</button>
+    <button onclick="showSection('contact')">Contact Us</button>
+    <button onclick="showSection('length')">Length</button>
+    <button onclick="showSection('temperature')">Temperature</button>
+    <button onclick="showSection('volume')">Volume</button>
+    <button onclick="showSection('container')">Container Volume</button>
+    <button onclick="showSection('kitchen')">Kitchen</button>
   </nav>
 
-  <main>
-    <section id="home" class="content-section visible">
-      <h2>Unit Converters</h2>
-      <div id="converter-container">
-        <p>Select a conversion tool to get started!</p>
-      </div>
-    </section>
+  <section id="home" class="converter" style="display:block;">
+    <h2>Unit Converters</h2>
+    <p>Select a conversion tool to get started!</p>
+  </section>
 
-    <section id="about" class="content-section">
-      <h2>About Convert Labs</h2>
-      <p>Convert Labs is your all-in-one smart unit converter for everyday use — whether you’re calculating kitchen measures, converting scientific units, or exploring new conversion categories, it’s all here in one clean and simple tool.</p>
-    </section>
+  <section id="about" class="converter">
+    <h2>About Convert Labs</h2>
+    <p>Convert Labs is your smart, all-in-one unit conversion tool — designed to help you convert anything from temperature to kitchen measures effortlessly.</p>
+  </section>
 
-    <section id="contact" class="content-section">
-      <h2>Contact Us</h2>
-      <p>We’d love to hear from you! If you have ideas, feedback, or found a bug, please reach out.</p>
-      <p>Email: <a href="mailto:info@convertlabs.online">info@convertlabs.online</a></p>
-    </section>
-  </main>
+  <section id="contact" class="converter">
+    <h2>Contact Us</h2>
+    <p>We’d love to hear from you! Reach us at: <strong>support@convertlabs.online</strong></p>
+  </section>
+
+  <section id="length" class="converter">
+    <h2>Length Converter</h2>
+    <input type="number" id="lengthInput" placeholder="Enter value">
+    <select id="lengthFrom">
+      <option>Meter</option><option>Kilometer</option><option>Centimeter</option><option>Millimeter</option>
+    </select>
+    <select id="lengthTo">
+      <option>Meter</option><option>Kilometer</option><option>Centimeter</option><option>Millimeter</option>
+    </select>
+    <button onclick="convertLength()">Convert</button>
+    <p id="lengthResult"></p>
+  </section>
+
+  <section id="temperature" class="converter">
+    <h2>Temperature Converter</h2>
+    <input type="number" id="tempInput" placeholder="Enter value">
+    <select id="tempFrom"><option>Celsius</option><option>Fahrenheit</option><option>Kelvin</option></select>
+    <select id="tempTo"><option>Celsius</option><option>Fahrenheit</option><option>Kelvin</option></select>
+    <button onclick="convertTemp()">Convert</button>
+    <p id="tempResult"></p>
+  </section>
+
+  <section id="volume" class="converter">
+    <h2>Volume Converter</h2>
+    <input type="number" id="volInput" placeholder="Enter value">
+    <select id="volFrom"><option>Liter</option><option>Milliliter</option><option>Cubic Meter</option></select>
+    <select id="volTo"><option>Liter</option><option>Milliliter</option><option>Cubic Meter</option></select>
+    <button onclick="convertVol()">Convert</button>
+    <p id="volResult"></p>
+  </section>
+
+  <section id="container" class="converter">
+    <h2>Container Volume Calculator</h2>
+    <label><input type="radio" name="shape" checked>Rectangular</label>
+    <label><input type="radio" name="shape">Cylindrical</label><br><br>
+    <input type="number" placeholder="Length (cm)"> 
+    <input type="number" placeholder="Width (cm)"> 
+    <input type="number" placeholder="Height (cm)">
+    <button>Calculate</button>
+  </section>
+
+  <section id="kitchen" class="converter">
+    <h2>Kitchen Converter</h2>
+    <input type="number" placeholder="Enter value">
+    <select><option>Teaspoon</option><option>Tablespoon</option></select>
+    <select><option>Flour</option><option>Sugar</option></select>
+    <button>Convert</button>
+  </section>
 
   <footer>
-    <div id="visitor-counter">Visits: <span id="visit-count">Loading...</span></div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.converter').forEach(sec => sec.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+    function convertLength() {
+      const input = parseFloat(document.getElementById('lengthInput').value);
+      const from = document.getElementById('lengthFrom').value;
+      const to = document.getElementById('lengthTo').value;
+      let result = input;
+      if (from === 'Meter' && to === 'Kilometer') result = input / 1000;
+      if (from === 'Kilometer' && to === 'Meter') result = input * 1000;
+      if (from === 'Meter' && to === 'Centimeter') result = input * 100;
+      document.getElementById('lengthResult').textContent = `Result: ${result}`;
+    }
+
+    function convertTemp() {
+      const val = parseFloat(document.getElementById('tempInput').value);
+      const from = document.getElementById('tempFrom').value;
+      const to = document.getElementById('tempTo').value;
+      let res = val;
+      if (from === 'Celsius' && to === 'Fahrenheit') res = val * 9/5 + 32;
+      else if (from === 'Fahrenheit' && to === 'Celsius') res = (val - 32) * 5/9;
+      else if (from === 'Celsius' && to === 'Kelvin') res = val + 273.15;
+      document.getElementById('tempResult').textContent = `Result: ${res.toFixed(2)}`;
+    }
+
+    function convertVol() {
+      const val = parseFloat(document.getElementById('volInput').value);
+      const from = document.getElementById('volFrom').value;
+      const to = document.getElementById('volTo').value;
+      let res = val;
+      if (from === 'Liter' && to === 'Milliliter') res = val * 1000;
+      if (from === 'Milliliter' && to === 'Liter') res = val / 1000;
+      document.getElementById('volResult').textContent = `Result: ${res}`;
+    }
+  </script>
 </body>
 </html>
