@@ -81,26 +81,38 @@
     </section>
 
     <!-- VOLUME -->
-    <section id="volume" class="converter-section">
-      <h2>Volume Converter</h2>
-      <input type="number" id="volumeInput" placeholder="Enter value" />
-      <select id="volumeFrom">
-        <option value="L">Liter</option>
-        <option value="mL">Milliliter</option>
-        <option value="m3">Cubic Meter</option>
-      </select>
-      <select id="volumeTo">
-        <option value="L">Liter</option>
-        <option value="mL">Milliliter</option>
-        <option value="m3">Cubic Meter</option>
-        <option value="gal">UK gallons</option>
-        <option value="gal">US gallons</option>
-        <option value="inch3">Cubic inches</option>
-        <option value="ft3">Cubic feet</option>
-      </select>
-      <button onclick="convertVolume()">Convert</button>
-      <p id="volumeResult"></p>
-    </section>
+<section id="volume" class="converter-section">
+  <h2>Volume Converter</h2>
+
+  <input type="number" id="volumeInput" placeholder="Enter value" />
+
+  <select id="volumeFrom">
+    <option value="L">Liter (L)</option>
+    <option value="mL">Milliliter (mL)</option>
+    <option value="m3">Cubic meter (m³)</option>
+    <option value="cm3">Cubic centimeter (cm³)</option>
+    <option value="in3">Cubic inch (in³)</option>
+    <option value="ft3">Cubic foot (ft³)</option>
+    <option value="gal_us">US gallon (gal US)</option>
+    <option value="gal_uk">UK gallon (gal UK)</option>
+  </select>
+
+  <select id="volumeTo">
+    <option value="L">Liter (L)</option>
+    <option value="mL">Milliliter (mL)</option>
+    <option value="m3">Cubic meter (m³)</option>
+    <option value="cm3">Cubic centimeter (cm³)</option>
+    <option value="in3">Cubic inch (in³)</option>
+    <option value="ft3">Cubic foot (ft³)</option>
+    <option value="gal_us">US gallon (gal US)</option>
+    <option value="gal_uk">UK gallon (gal UK)</option>
+  </select>
+
+  <button class="convert" onclick="convertVolume()">Convert</button>
+
+  <p id="volumeResult"></p>
+</section>
+
 
     <!-- CONTAINER -->
     <section id="container" class="converter-section">
@@ -172,6 +184,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
