@@ -3,130 +3,172 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Convert Labs — Smart All-in-One Converter</title>
-  
-  <!-- ✅ Favicon -->
-  <link rel="icon" type="image/x-icon" href="./favicon.ico" />
-  
-  <!-- ✅ Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P');
-  </script>
-
-  <link rel="stylesheet" href="style.css" />
+  <title>Convert Labs</title>
 </head>
 <body>
-  <div id="loading-screen">
-    <h1>Welcome to Convert Labs — your smart all-in-one unit converter</h1>
-  </div>
+  <!-- Loading Screen -->
+  <div id="loading-screen">Loading Convert Labs...</div>
 
-  <div id="app" style="display:none;">
-    <header>
-      <img src="./favicon.ico" alt="Convert Labs Logo" class="logo" />
-      <h1>Convert Labs</h1>
-      <nav>
-        <a href="#length">Length</a>
-        <a href="#volume">Volume</a>
-        <a href="#container">Container Volume</a>
-        <a href="#kitchen">Kitchen</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+  <!-- Header -->
+  <header>
+    <h1>Convert Labs</h1>
+    <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
+    <button id="mode-toggle">🌙</button>
+  </header>
 
-    <main>
-      <section id="length">
-        <h2>Length Converter</h2>
-        <select id="fromLength">
-          <option>Kilometer</option>
-          <option>Meter</option>
-          <option>Centimeter</option>
-          <option>Millimeter</option>
-          <option>Mile</option>
-          <option>Yard</option>
-          <option>Foot</option>
-          <option>Inch</option>
+  <!-- Converter Buttons -->
+  <nav>
+    <button class="tab-button" data-tab="length">Length</button>
+    <button class="tab-button" data-tab="temperature">Temperature</button>
+    <button class="tab-button" data-tab="volume">Volume</button>
+    <button class="tab-button" data-tab="container">Container Volume</button>
+    <button class="tab-button" data-tab="kitchen">Kitchen</button>
+  </nav>
+
+  <!-- === Converters === -->
+  <main>
+    <!-- Length Converter -->
+    <section id="length" class="tab-content active">
+      <h2>Length Converter</h2>
+      <div class="converter">
+        <input type="number" id="lengthInput" placeholder="Enter value">
+        <select id="lengthFrom">
+          <option value="meter">Meter</option>
+          <option value="centimeter">Centimeter</option>
+          <option value="millimeter">Millimeter</option>
+          <option value="micrometer">Micrometer</option>
+          <option value="nanometer">Nanometer</option>
+          <option value="kilometer">Kilometer</option>
+          <option value="yard">Yard</option>
+          <option value="foot">Foot</option>
+          <option value="inch">Inch</option>
+          <option value="mile">Mile</option>
+          <option value="lightyear">Lightyear</option>
         </select>
-        <select id="toLength">
-          <option>Kilometer</option>
-          <option>Meter</option>
-          <option>Centimeter</option>
-          <option>Millimeter</option>
-          <option>Mile</option>
-          <option>Yard</option>
-          <option>Foot</option>
-          <option>Inch</option>
+        <select id="lengthTo">
+          <option value="meter">Meter</option>
+          <option value="centimeter">Centimeter</option>
+          <option value="millimeter">Millimeter</option>
+          <option value="micrometer">Micrometer</option>
+          <option value="nanometer">Nanometer</option>
+          <option value="kilometer">Kilometer</option>
+          <option value="yard">Yard</option>
+          <option value="foot">Foot</option>
+          <option value="inch">Inch</option>
+          <option value="mile">Mile</option>
+          <option value="lightyear">Lightyear</option>
         </select>
-        <input id="lengthInput" type="number" placeholder="Enter value" />
         <button onclick="convertLength()">Convert</button>
         <p id="lengthResult"></p>
-      </section>
+      </div>
+    </section>
 
-      <section id="volume">
-        <h2>Volume Converter</h2>
-        <select id="fromVolume">
-          <option>Liter</option>
-          <option>Milliliter</option>
-          <option>Cubic Meter</option>
-          <option>UK Gallon</option>
-          <option>US Gallon</option>
-          <option>Cubic Centimeter</option>
-          <option>Cubic Inch</option>
-          <option>Cubic Foot</option>
+    <!-- Temperature Converter -->
+    <section id="temperature" class="tab-content">
+      <h2>Temperature Converter</h2>
+      <div class="converter">
+        <input type="number" id="tempInput" placeholder="Enter value">
+        <select id="tempFrom">
+          <option value="C">Celsius</option>
+          <option value="F">Fahrenheit</option>
+          <option value="K">Kelvin</option>
         </select>
-        <select id="toVolume">
-          <option>Liter</option>
-          <option>Milliliter</option>
-          <option>Cubic Meter</option>
-          <option>UK Gallon</option>
-          <option>US Gallon</option>
-          <option>Cubic Centimeter</option>
-          <option>Cubic Inch</option>
-          <option>Cubic Foot</option>
+        <select id="tempTo">
+          <option value="C">Celsius</option>
+          <option value="F">Fahrenheit</option>
+          <option value="K">Kelvin</option>
         </select>
-        <input id="volumeInput" type="number" placeholder="Enter value" />
+        <button onclick="convertTemperature()">Convert</button>
+        <p id="tempResult"></p>
+      </div>
+    </section>
+
+    <!-- Volume Converter -->
+    <section id="volume" class="tab-content">
+      <h2>Volume Converter</h2>
+      <div class="converter">
+        <input type="number" id="volInput" placeholder="Enter value">
+        <select id="volFrom">
+          <option value="liter">Liter</option>
+          <option value="milliliter">Milliliter</option>
+          <option value="gallon">Gallon</option>
+          <option value="quart">Quart</option>
+          <option value="pint">Pint</option>
+          <option value="cup">Cup</option>
+        </select>
+        <select id="volTo">
+          <option value="liter">Liter</option>
+          <option value="milliliter">Milliliter</option>
+          <option value="gallon">Gallon</option>
+          <option value="quart">Quart</option>
+          <option value="pint">Pint</option>
+          <option value="cup">Cup</option>
+        </select>
         <button onclick="convertVolume()">Convert</button>
-        <p id="volumeResult"></p>
-      </section>
+        <p id="volResult"></p>
+      </div>
+    </section>
 
-      <section id="about">
-        <h2>About Convert Labs</h2>
-        <p>Convert Labs is your all-in-one smart unit converter for daily use — designed for simplicity, accuracy, and speed.</p>
-      </section>
+    <!-- Container Volume -->
+    <section id="container" class="tab-content">
+      <h2>Container Volume Calculator</h2>
+      <div class="converter">
+        <label><input type="radio" name="shape" value="rectangular" checked> Rectangular</label>
+        <label><input type="radio" name="shape" value="cylindrical"> Cylindrical</label>
+        <div id="rectInputs">
+          <input type="number" id="lengthDim" placeholder="Length (cm)">
+          <input type="number" id="widthDim" placeholder="Width (cm)">
+          <input type="number" id="heightDim" placeholder="Height (cm)">
+        </div>
+        <div id="cylInputs" style="display:none;">
+          <input type="number" id="radiusDim" placeholder="Radius (cm)">
+          <input type="number" id="heightCyl" placeholder="Height (cm)">
+        </div>
+        <select id="liquidType">
+          <option value="water">Water (1 g/cm³)</option>
+          <option value="milk">Milk (1.03 g/cm³)</option>
+          <option value="oil">Oil (0.92 g/cm³)</option>
+          <option value="honey">Honey (1.42 g/cm³)</option>
+          <option value="custom">Custom...</option>
+        </select>
+        <input type="number" id="customDensity" placeholder="Custom density (g/cm³)" style="display:none;">
+        <button onclick="calculateContainerVolume()">Calculate</button>
+        <p id="containerResult"></p>
+      </div>
+    </section>
 
-      <section id="contact">
-        <h2>Contact Us</h2>
-        <p>Email us at: <a href="mailto:support@convertlabs.online">support@convertlabs.online</a></p>
-      </section>
-    </main>
+    <!-- Kitchen Converter -->
+    <section id="kitchen" class="tab-content">
+      <h2>Kitchen Converter</h2>
+      <div class="converter">
+        <input type="number" id="kitchenInput" placeholder="Enter value">
+        <select id="kitchenUnit">
+          <option value="teaspoon">Teaspoon</option>
+          <option value="tablespoon">Tablespoon</option>
+          <option value="cup">Cup</option>
+          <option value="ml">Milliliter</option>
+        </select>
+        <select id="ingredient">
+          <option value="flour">Flour</option>
+          <option value="sugar">Sugar</option>
+          <option value="salt">Salt</option>
+          <option value="oil">Oil</option>
+          <option value="milk">Milk</option>
+          <option value="water">Water</option>
+          <option value="butter">Butter</option>
+          <option value="rice">Rice</option>
+          <option value="honey">Honey</option>
+          <option value="spices">Ground Spices</option>
+        </select>
+        <button onclick="convertKitchen()">Convert</button>
+        <p id="kitchenResult"></p>
+      </div>
+    </section>
+  </main>
 
-    <footer>
-      <p>© 2025 Convert Labs | All rights reserved.</p>
-      <p id="visitorCount">Visitors: Loading...</p>
-    </footer>
-  </div>
-
-  <script>
-    // Loading Screen Fade
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('loading-screen').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-      }, 1000);
-    });
-
-    // Visitor Counter using CountAPI
-    fetch('https://api.countapi.xyz/hit/convertlabs.online/visits')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('visitorCount').innerText = "Visitors: " + data.value;
-      });
-  </script>
-
-  <script src="script.js"></script>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+  </footer>
 </body>
 </html>
