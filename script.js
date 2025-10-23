@@ -254,5 +254,24 @@ if (fav) {
   fav.style.transition = 'opacity 0.8s';
   fav.style.opacity = 0.3;
   setTimeout(() => fav.style.opacity = 1, 800);
+   // 🔹 Theme Toggle
+const themeToggle = document.getElementById('themeToggle');
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    themeToggle.textContent = '☀️';
+  }
 }
+
+}
+
 
