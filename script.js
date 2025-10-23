@@ -254,87 +254,143 @@ if (fav) {
   fav.style.transition = 'opacity 0.8s';
   fav.style.opacity = 0.3;
   setTimeout(() => fav.style.opacity = 1, 800);
-   // 🔹 Theme Toggle
-const themeToggle = document.getElementById('themeToggle');
-if (themeToggle) {
-  themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    themeToggle.textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
 
-  // Load saved theme
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    themeToggle.textContent = '☀️';
-  }
-}
+   // ===================================================================
+// Robust setup: theme toggle, About modal, favicon helper
+// Safe to paste at the end of script.js (idempotent)
+// ===================================================================
+(function () {
+  if (window.__convertlabs_init) return;
+  window.__convertlabs_init = true;
 
-}
-// 🌙 Day/Night Theme Toggle
-document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('themeToggle');
-  if (!btn) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    // --- 1) Ensure header has position relative so absolute toggle can align ---
+    const header = document.querySelector('header');
+    if (header) header.style.position = header.style.position || 'relative';
 
-  // Load saved preference
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    btn.textContent = '☀️';
-  }
+    // --- 2) Favicon helper: try PNG first then ICO ---
+    (function setFavicon() {
+      const prefer = ['favicon.png', 'favicon.ico'];
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      // try list until one loads (browsers may cache but this helps)
+      (function tryNext(i) {
+        if (i >= prefer.length) return;
+        const url = prefer[i];
+        // quick HEAD probe by loading an Image
+        const img = new Image();
+        img.onload = () => { link.href = url; };
+        img.onerror = () => tryNext(i + 1);
+        img.src = url + '?v=' + Date.now(); // bypass cache probe
+      })(0);
+    })();
 
-  // Toggle on click
-  btn.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const dark = document.body.classList.contains('dark-mode');
-    btn.textContent = dark ? '☀️' : '🌙';
-    localStorage.setItem('theme', dark ? 'dark' : 'light');
-     // 🔹 About Modal Logic
-const aboutLink = document.getElementById("aboutLink");
-const aboutModal = document.getElementById("aboutModal");
-const closeAbout = document.getElementById("closeAbout");
+    // --- 3) Create or find theme toggle button ---
+    let themeBtn = document.getElementById('themeToggle');
+    if (!themeBtn) {
+      themeBtn = document.createElement('button');
+      themeBtn.id = 'themeToggle';
+      themeBtn.title = 'Switch theme';
+      themeBtn.type = 'button';
+      themeBtn.style.cursor = 'pointer';
+      themeBtn.textContent = '🌙';
+      // append to header (right side). If header has .header-content, append there; otherwise append to header.
+      const headerContent = document.querySelector('.header-content') || header;
+      if (headerContent) headerContent.appendChild(themeBtn);
+      else if (header) header.appendChild(themeBtn);
+    }
 
-if (aboutLink && aboutModal && closeAbout) {
-  aboutLink.addEventListener("click", (e) => {
-    e.preventDefault();
-    aboutModal.style.display = "block";
-  });
+    // small CSS fallback to ensure toggle is on the right if missing CSS
+    const sheet = document.createElement('style');
+    sheet.innerHTML = `
+      #themeToggle { position: absolute; right: 1rem; top: 1rem; background:none;border:none;font-size:1.6rem;color:inherit; }
+      body { transition: background-color .35s ease, color .35s ease; }
+    `;
+    document.head.appendChild(sheet);
 
-  closeAbout.addEventListener("click", () => {
-    aboutModal.style.display = "none";
-  });
+    // --- 4) Apply saved theme and add handler ---
+    const applyTheme = (dark) => {
+      if (dark) document.body.classList.add('dark-mode');
+      else document.body.classList.remove('dark-mode');
+      themeBtn.textContent = dark ? '☀️' : '🌙';
+    };
 
-  window.addEventListener("click", (e) => {
-    if (e.target === aboutModal) aboutModal.style.display = "none";
-  });
-}
-// 🔹 About Modal Logic (always runs after DOM is ready)
-document.addEventListener("DOMContentLoaded", () => {
-  const aboutLink = document.getElementById("aboutLink");
-  const aboutModal = document.getElementById("aboutModal");
-  const closeAbout = document.getElementById("closeAbout");
+    const saved = localStorage.getItem('convertlabs_theme');
+    applyTheme(saved === 'dark');
 
-  if (aboutLink && aboutModal && closeAbout) {
-    aboutLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      aboutModal.style.display = "block";
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('convertlabs_theme', isDark ? 'dark' : 'light');
+      themeBtn.textContent = isDark ? '☀️' : '🌙';
     });
 
-    closeAbout.addEventListener("click", () => {
-      aboutModal.style.display = "none";
+    // --- 5) About modal: create if missing, and wire up open/close ---
+    let aboutModal = document.getElementById('aboutModal');
+    if (!aboutModal) {
+      aboutModal = document.createElement('div');
+      aboutModal.id = 'aboutModal';
+      aboutModal.className = 'modal';
+      aboutModal.innerHTML = `
+        <div class="modal-content">
+          <span class="close" id="closeAbout">&times;</span>
+          <h2>About Convert Labs</h2>
+          <p>
+            Convert Labs is a modern, responsive, all-in-one unit converter built with pure HTML, CSS, and JavaScript.
+            It includes converters for Length, Temperature, Volume, Container Volume (with density-based mass calculation),
+            and Kitchen measurements.
+          </p>
+        </div>
+      `;
+      document.body.appendChild(aboutModal);
+    }
+
+    // CSS for modal if not already present
+    const modalStyleId = 'convertlabs-modal-style';
+    if (!document.getElementById(modalStyleId)) {
+      const s = document.createElement('style');
+      s.id = modalStyleId;
+      s.innerHTML = `
+        .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); }
+        .modal-content { background:#fff; color:#222; margin:10% auto; padding:1.5rem; border-radius:10px; width:90%; max-width:520px; box-shadow:0 6px 20px rgba(0,0,0,0.3); }
+        .modal-content h2{ color:#3b82f6; margin-top:0; }
+        .modal .close { float:right; font-size:1.4rem; cursor:pointer; color:#555; }
+      `;
+      document.head.appendChild(s);
+    }
+
+    const aboutLink = document.getElementById('aboutLink');
+    const closeAbout = document.getElementById('closeAbout') || aboutModal.querySelector('.close');
+
+    if (aboutLink) {
+      aboutLink.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        aboutModal.style.display = 'block';
+      });
+    }
+
+    if (closeAbout) {
+      closeAbout.addEventListener('click', () => aboutModal.style.display = 'none');
+    }
+
+    window.addEventListener('click', (ev) => {
+      if (ev.target === aboutModal) aboutModal.style.display = 'none';
     });
 
-    window.addEventListener("click", (e) => {
-      if (e.target === aboutModal) aboutModal.style.display = "none";
-    });
-  }
-});
+    // --- 6) If CountAPI visitor span exists, (re)load it ---
+    const visitorSpan = document.getElementById('visitorCount');
+    if (visitorSpan) {
+      fetch('https://api.countapi.xyz/hit/convertlabs.online/visits')
+        .then(r => r.json())
+        .then(d => { visitorSpan.textContent = d.value.toLocaleString(); })
+        .catch(() => { /* ignore */ });
+    }
 
-
-
-
+  }); // DOMContentLoaded end
+})(); 
 
 
 
