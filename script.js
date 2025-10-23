@@ -291,8 +291,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const dark = document.body.classList.contains('dark-mode');
     btn.textContent = dark ? '☀️' : '🌙';
     localStorage.setItem('theme', dark ? 'dark' : 'light');
+     // 🔹 About Modal Logic
+const aboutLink = document.getElementById("aboutLink");
+const aboutModal = document.getElementById("aboutModal");
+const closeAbout = document.getElementById("closeAbout");
+
+if (aboutLink && aboutModal && closeAbout) {
+  aboutLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    aboutModal.style.display = "block";
+  });
+
+  closeAbout.addEventListener("click", () => {
+    aboutModal.style.display = "none";
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === aboutModal) aboutModal.style.display = "none";
+  });
+}
+
   });
 });
+
 
 
 
