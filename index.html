@@ -1,132 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Convert Labs — Smart All-in-One Converter</title>
-  
-  <!-- ✅ Favicon -->
-  <link rel="icon" type="image/x-icon" href="./favicon.ico" />
-  
-  <!-- ✅ Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P');
-  </script>
+/* 🔹 General Layout */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f9fafc;
+  color: #222;
+  text-align: center;
+}
 
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div id="loading-screen">
-    <h1>Welcome to Convert Labs — your smart all-in-one unit converter</h1>
-  </div>
+/* 🔹 Splash Screen */
+#loading-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  z-index: 999;
+  animation: fadeOut 1s ease 1s forwards;
+}
 
-  <div id="app" style="display:none;">
-    <header>
-      <img src="./favicon.ico" alt="Convert Labs Logo" class="logo" />
-      <h1>Convert Labs</h1>
-      <nav>
-        <a href="#length">Length</a>
-        <a href="#volume">Volume</a>
-        <a href="#container">Container Volume</a>
-        <a href="#kitchen">Kitchen</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
 
-    <main>
-      <section id="length">
-        <h2>Length Converter</h2>
-        <select id="fromLength">
-          <option>Kilometer</option>
-          <option>Meter</option>
-          <option>Centimeter</option>
-          <option>Millimeter</option>
-          <option>Mile</option>
-          <option>Yard</option>
-          <option>Foot</option>
-          <option>Inch</option>
-        </select>
-        <select id="toLength">
-          <option>Kilometer</option>
-          <option>Meter</option>
-          <option>Centimeter</option>
-          <option>Millimeter</option>
-          <option>Mile</option>
-          <option>Yard</option>
-          <option>Foot</option>
-          <option>Inch</option>
-        </select>
-        <input id="lengthInput" type="number" placeholder="Enter value" />
-        <button onclick="convertLength()">Convert</button>
-        <p id="lengthResult"></p>
-      </section>
+/* 🔹 Header */
+header {
+  background: #3b82f6;
+  color: white;
+  padding: 1.2rem 0;
+}
+.tagline {
+  font-size: 1rem;
+  opacity: 0;
+  animation: fadeIn 2s ease forwards 1s;
+}
 
-      <section id="volume">
-        <h2>Volume Converter</h2>
-        <select id="fromVolume">
-          <option>Liter</option>
-          <option>Milliliter</option>
-          <option>Cubic Meter</option>
-          <option>UK Gallon</option>
-          <option>US Gallon</option>
-          <option>Cubic Centimeter</option>
-          <option>Cubic Inch</option>
-          <option>Cubic Foot</option>
-        </select>
-        <select id="toVolume">
-          <option>Liter</option>
-          <option>Milliliter</option>
-          <option>Cubic Meter</option>
-          <option>UK Gallon</option>
-          <option>US Gallon</option>
-          <option>Cubic Centimeter</option>
-          <option>Cubic Inch</option>
-          <option>Cubic Foot</option>
-        </select>
-        <input id="volumeInput" type="number" placeholder="Enter value" />
-        <button onclick="convertVolume()">Convert</button>
-        <p id="volumeResult"></p>
-      </section>
+/* 🔹 Tabs */
+.tabs {
+  background: #e5e7eb;
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  padding: 0.6rem;
+}
+.tabs button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+.tabs button:hover {
+  background: #2563eb;
+}
 
-      <section id="about">
-        <h2>About Convert Labs</h2>
-        <p>Convert Labs is your all-in-one smart unit converter for daily use — designed for simplicity, accuracy, and speed.</p>
-      </section>
+/* 🔹 Converters */
+.converter {
+  display: none;
+  padding: 2rem 1rem;
+}
+.converter.active {
+  display: block;
+}
+input, select, button.convert {
+  padding: 0.6rem;
+  margin: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+button.convert {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button.convert:hover {
+  background: #2563eb;
+}
 
-      <section id="contact">
-        <h2>Contact Us</h2>
-        <p>Email us at: <a href="mailto:support@convertlabs.online">support@convertlabs.online</a></p>
-      </section>
-    </main>
+/* 🔹 Footer */
+footer {
+  background: #f3f4f6;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 2rem;
+}
+.footer-links a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
 
-    <footer>
-      <p>© 2025 Convert Labs | All rights reserved.</p>
-      <p id="visitorCount">Visitors: Loading...</p>
-    </footer>
-  </div>
-
-  <script>
-    // Loading Screen Fade
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('loading-screen').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-      }, 1000);
-    });
-
-    // Visitor Counter using CountAPI
-    fetch('https://api.countapi.xyz/hit/convertlabs.online/visits')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('visitorCount').innerText = "Visitors: " + data.value;
-      });
-  </script>
-
-  <script src="script.js"></script>
-</body>
-</html>
+/* 🔹 Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in {
+  animation: fadeIn 1.5s ease forwards;
+}
