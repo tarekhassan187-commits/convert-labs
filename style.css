@@ -39,10 +39,13 @@ header {
   position: relative;
 }
 .tagline {
+  color: #ffffff;
+  opacity: 0.95;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   font-size: 1rem;
-  opacity: 0;
   animation: fadeIn 2s ease forwards 1s;
 }
+
 
 /* Theme Toggle */
 #themeToggle {
@@ -138,3 +141,4 @@ body.dark-mode header { background: #111827; }
 body.dark-mode .tabs { background: #2d2d33; }
 body.dark-mode .tabs button { background: #374151; }
 body.dark-mode footer { background: #202020; color: #ccc; }
+
