@@ -1,60 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<header>
-  <div class="header-content">
-    <h1>Convert Labs</h1>
-    <button id="themeToggle" title="Switch Theme">🌙</button>
-  </div>
-  <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
-</header>
-
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convert Labs — Smart Unit Converter</title>
 
   <!-- ✅ Favicon -->
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="shortcut icon" type="image/png" href="favicon.png">
+  <link rel="icon" href="favicon.png" type="image/png">
 
+  <!-- ✅ Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P');
+  </script>
 
-
-
- <!-- 🔹 Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-Z88B03WV7P');
-</script>
-
-
-  <!-- 🔹 Styles -->
+  <!-- ✅ Styles -->
   <link rel="stylesheet" href="style.css">
 </head>
-  <!-- 🔹 About Popup -->
-<div id="aboutModal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="closeAbout">&times;</span>
-    <h2>About Convert Labs</h2>
-    <p>
-      Convert Labs is a modern, responsive, all-in-one unit converter built with pure HTML, CSS, and JavaScript.
-      It includes converters for Length, Temperature, Volume, Container Volume (with density-based mass calculation),
-      and Kitchen measurements.
-    </p>
-  </div>
-</div>
-
 <body>
-
   <!-- 🔹 Splash Screen -->
   <div id="loading-screen">
     <h1>Loading Convert Labs...</h1>
   </div>
 
-  <!-- 🔹 App Container -->
-  <div id="app" class="fade-in">
+  <!-- 🔹 Main App -->
+  <div id="app" style="display:none;">
+    <header>
+      <div class="header-content">
+        <h1>Convert Labs</h1>
+        <button id="themeToggle" title="Switch Theme">🌙</button>
+      </div>
+      <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
+    </header>
 
-    
-
-    <!-- 🔹 Tab Buttons -->
+    <!-- 🔹 Tabs -->
     <div class="tabs">
       <button onclick="showConverter('length')">Length</button>
       <button onclick="showConverter('temperature')">Temperature</button>
@@ -65,10 +47,9 @@
 
     <!-- 🔹 Converters -->
     <main>
-      <!-- 🔹 LENGTH -->
       <section id="length" class="converter active">
         <h2>Length Converter</h2>
-        <input type="number" id="lengthInput" placeholder="Enter value" />
+        <input type="number" id="lengthInput" placeholder="Enter value">
         <select id="lengthFrom">
           <option value="m">Meter</option>
           <option value="km">Kilometer</option>
@@ -81,7 +62,7 @@
           <option value="in">Inch</option>
           <option value="ly">Lightyear</option>
         </select>
-        <select id="lengthTo" aria-label="to length unit">
+        <select id="lengthTo">
           <option value="m">Meter</option>
           <option value="km">Kilometer</option>
           <option value="cm">Centimeter</option>
@@ -93,14 +74,13 @@
           <option value="in">Inch</option>
           <option value="ly">Lightyear</option>
         </select>
-        <button class="convert" onclick="convertLength()">Convert</button>
+        <button onclick="convertLength()">Convert</button>
         <p id="lengthResult"></p>
       </section>
 
-      <!-- 🔹 TEMPERATURE -->
       <section id="temperature" class="converter">
         <h2>Temperature Converter</h2>
-        <input type="number" id="tempInput" placeholder="Enter value" />
+        <input type="number" id="tempInput" placeholder="Enter value">
         <select id="tempFrom">
           <option value="C">Celsius</option>
           <option value="F">Fahrenheit</option>
@@ -111,21 +91,19 @@
           <option value="F">Fahrenheit</option>
           <option value="K">Kelvin</option>
         </select>
-        <button class="convert" onclick="convertTemperature()">Convert</button>
+        <button onclick="convertTemperature()">Convert</button>
         <p id="tempResult"></p>
       </section>
 
-      <!-- 🔹 VOLUME -->
       <section id="volume" class="converter">
         <h2>Volume Converter</h2>
-        <input type="number" id="volumeInput" placeholder="Enter value" />
+        <input type="number" id="volumeInput" placeholder="Enter value">
         <select id="volumeFrom"></select>
         <select id="volumeTo"></select>
-        <button class="convert" onclick="convertVolume()">Convert</button>
+        <button onclick="convertVolume()">Convert</button>
         <p id="volumeResult"></p>
       </section>
 
-      <!-- 🔹 CONTAINER VOLUME -->
       <section id="container" class="converter">
         <h2>Container Volume Calculator</h2>
         <select id="containerType">
@@ -133,13 +111,13 @@
           <option value="cylinder">Cylinder (r×h)</option>
         </select>
         <div id="boxInputs">
-          <input type="number" id="lengthBox" placeholder="Length (cm)" />
-          <input type="number" id="widthBox" placeholder="Width (cm)" />
-          <input type="number" id="heightBox" placeholder="Height (cm)" />
+          <input type="number" id="lengthBox" placeholder="Length (cm)">
+          <input type="number" id="widthBox" placeholder="Width (cm)">
+          <input type="number" id="heightBox" placeholder="Height (cm)">
         </div>
         <div id="cylinderInputs" style="display:none;">
-          <input type="number" id="radiusCylinder" placeholder="Radius (cm)" />
-          <input type="number" id="heightCylinder" placeholder="Height (cm)" />
+          <input type="number" id="radiusCylinder" placeholder="Radius (cm)">
+          <input type="number" id="heightCylinder" placeholder="Height (cm)">
         </div>
         <select id="liquidType">
           <option value="water">Water</option>
@@ -148,69 +126,48 @@
           <option value="honey">Honey</option>
           <option value="custom">Custom (enter density)</option>
         </select>
-        <input type="number" id="customDensity" placeholder="Custom density (g/cm³)" style="display:none;" />
-        <button class="convert" onclick="calculateContainerVolume()">Calculate</button>
+        <input type="number" id="customDensity" placeholder="Custom density (g/cm³)" style="display:none;">
+        <button onclick="calculateContainerVolume()">Calculate</button>
         <p id="containerResult"></p>
       </section>
 
-      <!-- 🔹 KITCHEN -->
       <section id="kitchen" class="converter">
         <h2>Kitchen Converter</h2>
-        <input type="number" id="kitchenInput" placeholder="Enter amount" />
+        <input type="number" id="kitchenInput" placeholder="Enter amount">
         <select id="kitchenUnit">
           <option value="cup">Cup</option>
           <option value="tbsp">Tablespoon</option>
           <option value="tsp">Teaspoon</option>
         </select>
-
-        <select id="kitchenIngredient">
-          <!-- Groups will be dynamically generated by JS -->
-        </select>
-        <button class="convert" onclick="convertKitchen()">Convert</button>
+        <select id="kitchenIngredient"></select>
+        <button onclick="convertKitchen()">Convert</button>
         <p id="kitchenResult"></p>
       </section>
     </main>
 
-   <footer>
-  <p>© 2025 Convert Labs | Visitors: <span id="visitorCount">0</span></p>
-  <div class="footer-links">
-    <a href="#" id="aboutLink">About</a> | 
-    <a href="#" id="contactLink">Contact Us</a>
+    <!-- 🔹 Footer -->
+    <footer>
+      <p>© 2025 Convert Labs | Visitors: <span id="visitorCount">0</span></p>
+      <div class="footer-links">
+        <a href="#" id="aboutLink">About</a> | 
+        <a href="#" id="contactLink">Contact Us</a>
+      </div>
+    </footer>
   </div>
-</footer>
 
-
-
-
-<!-- 🔹 About Modal -->
-<div id="aboutModal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="closeAbout">&times;</span>
-    <h2>About Convert Labs</h2>
-    <p>
-      Convert Labs is a modern, responsive, all-in-one unit converter built with pure HTML, CSS, and JavaScript.
-      It includes converters for Length, Temperature, Volume, Container Volume (with density-based mass calculation),
-      and Kitchen measurements.
-    </p>
+  <!-- 🔹 About Modal -->
+  <div id="aboutModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeAbout">&times;</span>
+      <h2>About Convert Labs</h2>
+      <p>
+        Convert Labs is a modern, responsive, all-in-one unit converter built with pure HTML, CSS, and JavaScript.
+        It includes converters for Length, Temperature, Volume, Container Volume (with density-based mass calculation),
+        and Kitchen measurements.
+      </p>
+    </div>
   </div>
-</div>
-  <!-- 🔹 Script -->
+
   <script src="script.js"></script>
 </body>
 </html>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
