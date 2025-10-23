@@ -311,8 +311,6 @@ if (aboutLink && aboutModal && closeAbout) {
   });
 }
 
-  });
-});
 
 
 
