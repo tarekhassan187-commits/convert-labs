@@ -15,6 +15,20 @@
   <header class="site-header">
     <a href="/" class="logo">
       <img src="/assets/convert-labs-horizontal.png" alt="Convert Labs Logo">
+      /* ✅ Balanced header logo fix */
+.logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+@media (max-width: 600px) {
+  .logo {
+    width: 28px;
+    height: 28px;
+  }
+}
+
     </a>
     <p class="tagline">Smart, simple, and reliable unit conversions</p>
   </header>
