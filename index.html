@@ -6,6 +6,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Convert Labs — Smart Unit Converter</title> 
+
   <!-- ✅ Google AdSense verification script -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
        crossorigin="anonymous"></script>
@@ -35,7 +36,9 @@
   <meta name="twitter:image" content="https://convertlabs.online/assets/convert-labs-logo.png" />
 
   <!-- ✅ Favicon -->
-  <link rel="icon" type="image/png" href="/assets/convert-labs-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/convert-labs-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/convert-labs-icon.png">
+  <link rel="shortcut icon" href="/assets/convert-labs-icon.png" type="image/png">
   <meta name="theme-color" content="#0033A0">
 
   <!-- ✅ Structured Data -->
@@ -83,12 +86,14 @@
 
   <!-- 🔹 Main App -->
   <div id="app" style="display:none;">
-    
-    <!-- ✅ FIXED NEW HEADER -->
+
+    <!-- ✅ HEADER WITH TOGGLE BUTTON -->
     <header class="site-header">
-      <a href="/" class="logo" aria-label="Convert Labs homepage">
-        <img src="/assets/convert-labs-logo.png" alt="Convert Labs Logo">
-      </a>
+      <div class="header-content">
+        <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo" class="logo" />
+        <h1>Convert Labs</h1>
+        <button id="themeToggle" title="Switch Theme">🌙</button>
+      </div>
       <p class="tagline">Your smart all-in-one unit converter</p>
     </header>
 
@@ -168,25 +173,22 @@
       </section>
     </main>
 
-    <!-- ✅ NEW BRANDED FOOTER -->
+    <!-- ✅ FOOTER -->
     <footer class="site-footer">
-  <div class="footer-logo">
-    <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon">
-    <h3>Convert Labs</h3>
-  </div>
-  <p class="footer-text">Smart, fast, and reliable online unit converter</p>
-
-  <div class="footer-links">
-    <a href="/about.html">About</a>
-    <a href="/how-to.html">Guides</a>
-    <a href="/privacy.html">Privacy Policy</a>
-    <a href="/terms.html">Terms of Use</a>
-    <a href="/">Home</a>
-  </div>
-
-  <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
-</footer>
-
+      <div class="footer-logo">
+        <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon">
+        <h3>Convert Labs</h3>
+      </div>
+      <p class="footer-text">Smart, fast, and reliable online unit converter</p>
+      <div class="footer-links">
+        <a href="/about.html">About</a>
+        <a href="/how-to.html">Guides</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Use</a>
+        <a href="/">Home</a>
+      </div>
+      <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
+    </footer>
 
   </div>
 
@@ -219,8 +221,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
