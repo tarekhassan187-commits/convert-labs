@@ -41,6 +41,9 @@
       font-size: 1.5rem;
       cursor: pointer;
     }
+    main {
+      min-height: 70vh;
+    }
     .converter-box {
       background: white;
       display: inline-block;
@@ -78,6 +81,26 @@
     #downloadLink:hover {
       background: #15803d;
     }
+    footer {
+      background: #1e40af;
+      color: white;
+      padding: 1rem 0;
+      margin-top: 3rem;
+    }
+    footer img {
+      width: 38px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    .footer-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 0.4rem;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
     body.dark-mode {
       background: #121212;
       color: #f5f5f5;
@@ -88,6 +111,9 @@
     body.dark-mode .converter-box {
       background: #1e1e1e;
       color: #fff;
+    }
+    body.dark-mode footer {
+      background: #0f172a;
     }
   </style>
 </head>
@@ -112,8 +138,19 @@
     </div>
   </main>
 
+  <footer>
+    <img src="convert-labs-icon.png" alt="Convert Labs Icon">
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="about.html">About</a> |
+      <a href="how-to.html">Guides</a> |
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms of Use</a> |
+      <a href="index.html">Home</a>
+    </div>
+  </footer>
+
   <script>
-    // ✅ Your CloudConvert API Token
     const API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjA3ZDA3N2E3NzQzMTQ0YzFkYWE2OWI5NzM5NDg5NmExNTI5NzYxMWU2MGMzMDc1ZWQxOTIwYWIwMDkwMGU4YTM5YTJiYmNlYzNjYTAxMDMiLCJpYXQiOjE3NjE0NzY1NTcuMzExMzg0LCJuYmYiOjE3NjE0NzY1NTcuMzExMzg2LCJleHAiOjQ5MTcxNTAxNTcuMzA3NzQxLCJzdWIiOiI3MzI5MzQyOCIsInNjb3BlcyI6WyJ0YXNrLnJlYWQiLCJ0YXNrLndyaXRlIl19.W4JR69t4p6StMrZyC8B3PpJzTO6Dw-X1jtXb6V_-Uz62tWLtdOP5-snkInbOlEkdMO2A4Ph9pVNhgJu8-oMbyvOkcXYMmJbL-VznoCLcDfJuaexVZjC07LTJxTzAP1RP5NA2MSRZF1lNRMeuWGlun5ljXzCb5kERmFD-eLczE7878w8F2cff7vDKQAB3lt8Enk3tK0i6_HdcttxI749HbobZ28afEmXOgXHIeXYKUo-0vpMB1VPUgB1U6HDfRX29oF_li-6KjqwnGHQZ3VgD525BGY6o5IFZHsDEhaJO79sQaFMzAQ1jMN8OVDNbfkCPtfPg71Adkp4ofMuEd6fKh6qkwv2_xDttbItsmLSn-G1SyrTHYAa00M5ko1au-2o8YU9eBIiDmXOgHTSwash35FpnGNuXvSEbtpwdUaZYmfENCQgemkkZgvuMMoB9WBHfShbKdcGyNgGh7Z1aVli0_Cxi2G_wjhBp-OWqulpLJbqIrlQZftJEc-a97Eo2GcZiUYdIIz_UGHBfnBBDg0ahHxpJ-isQOmtmwUItwCj3uwHsrJ43RA-Nw2Yc4hVxDaCV8wfMiywuP6YYTKoubdkEC6J2GLCTl2sychQNC4N6IMHXFLVZ5Mq9XQp2QD221_-5Mdaw5Uy_ZXPMLGfIRYJyVpNwf05jWBrSV3mbayHUtlQ";
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -146,7 +183,7 @@
       download.style.display = "none";
 
       try {
-        // 1️⃣ Create conversion job
+        // Create conversion job
         const jobResponse = await fetch("https://api.cloudconvert.com/v2/jobs", {
           method: "POST",
           headers: {
@@ -156,15 +193,8 @@
           body: JSON.stringify({
             tasks: {
               "import-1": { operation: "import/upload" },
-              "convert-1": {
-                operation: "convert",
-                input: ["import-1"],
-                output_format: "pdf",
-              },
-              "export-1": {
-                operation: "export/url",
-                input: ["convert-1"],
-              },
+              "convert-1": { operation: "convert", input: ["import-1"], output_format: "pdf" },
+              "export-1": { operation: "export/url", input: ["convert-1"] },
             },
           }),
         });
@@ -173,13 +203,13 @@
         const uploadUrl = jobData.data.tasks[0].result.form.url;
         const uploadParams = jobData.data.tasks[0].result.form.parameters;
 
-        // 2️⃣ Upload file
+        // Upload file
         const formData = new FormData();
         for (const key in uploadParams) formData.append(key, uploadParams[key]);
         formData.append("file", file);
         await fetch(uploadUrl, { method: "POST", body: formData });
 
-        // 3️⃣ Wait for job to finish
+        // Wait for job to finish
         let completedJob;
         for (let i = 0; i < 30; i++) {
           const check = await fetch(`https://api.cloudconvert.com/v2/jobs/${jobData.data.id}`, {
