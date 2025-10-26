@@ -8,7 +8,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Currency Converter | Convert Labs</title>
-  <meta name="description" content="Free, fast, and accurate currency converter by Convert Labs. Convert between USD, EUR, GBP, JPY, and more in real-time using up-to-date exchange rates." />
+  <meta name="description" content="Free, fast, and accurate currency converter by Convert Labs. Convert between USD, EUR, GBP, JPY, EGP, and more in real-time using live exchange rates." />
   <link rel="icon" type="image/png" href="/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
   <link rel="stylesheet" href="style.css" />
@@ -78,7 +78,6 @@
       <a href="/privacy.html">Privacy Policy</a>
       <a href="/terms.html">Terms</a>
       <a href="/currency-converter.html">Currency Converter</a>
-
     </div>
 
     <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
@@ -112,8 +111,8 @@
       fromSelect.add(new Option(cur, cur));
       toSelect.add(new Option(cur, cur));
     });
-    fromSelect.value = "USD";
-    toSelect.value = "EUR";
+    fromSelect.value = "EGP";
+    toSelect.value = "USD";
 
     async function convertCurrency() {
       const amount = parseFloat(document.getElementById("amount").value);
@@ -125,14 +124,21 @@
       }
 
       try {
-        const res = await fetch(`https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`);
+        const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
         const data = await res.json();
-        if (data.result) {
-          result.textContent = `${amount} ${from} = ${data.result.toFixed(2)} ${to}`;
+
+        if (data && data.result === "success") {
+          const rate = data.rates[to];
+          if (rate) {
+            const converted = (amount * rate).toFixed(2);
+            result.textContent = `${amount} ${from} = ${converted} ${to}`;
+          } else {
+            result.textContent = "⚠️ Currency not supported.";
+          }
         } else {
           result.textContent = "⚠️ Unable to fetch exchange rates.";
         }
-      } catch {
+      } catch (err) {
         result.textContent = "⚠️ Network error. Try again later.";
       }
     }
