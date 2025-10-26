@@ -105,9 +105,14 @@
     const toSelect = document.getElementById("toCurrency");
     const result = document.getElementById("result");
 
-    // Common currencies
-    const currencies = ["USD", "EUR", "GBP", "JPY", "CAD", "AUD", "INR", "CNY", "SAR", "EGP"];
-    currencies.forEach(cur => {
+    // 🌍 Extended currency list (covers major global & regional currencies)
+const currencies = [
+  "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "NZD", "CHF", "CNY", "HKD", "SGD",
+  "AED", "SAR", "KWD", "BHD", "OMR", "QAR", "EGP", "INR", "PKR", "BDT", "THB",
+  "MYR", "IDR", "ZAR", "NGN", "KES", "TRY", "SEK", "NOK", "DKK", "PLN", "CZK",
+  "HUF", "ILS", "MXN", "BRL", "ARS", "COP", "CLP", "PEN", "VND", "PHP"
+];
+
       fromSelect.add(new Option(cur, cur));
       toSelect.add(new Option(cur, cur));
     });
