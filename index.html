@@ -125,66 +125,73 @@
       <section id="kitchen" class="converter">
         <h2>Kitchen Converter</h2>
         <input type="number" id="kitchenInput" placeholder="Enter amount" />
-        <select id="kitchenFrom"></select>
-        <select id="kitchenTo"></select>
 
-        <!-- ✅ Long Ingredient List -->
-        <select id="kitchenIngredient">
-          <optgroup label="Dry Ingredients">
-            <option>Flour</option>
-            <option>Sugar</option>
-            <option>Brown Sugar</option>
-            <option>Powdered Sugar</option>
-            <option>Salt</option>
-            <option>Baking Powder</option>
-            <option>Cocoa Powder</option>
-            <option>Rice</option>
-            <option>Oats</option>
-            <option>Corn Starch</option>
-            <option>Breadcrumbs</option>
-            <option>Pasta</option>
-            <option>Dry Milk</option>
-          </optgroup>
+<select id="kitchenFrom">
+  <option value="" disabled selected>Select from unit</option>
+</select>
 
-          <optgroup label="Wet Ingredients">
-            <option>Water</option>
-            <option>Milk</option>
-            <option>Oil</option>
-            <option>Butter</option>
-            <option>Honey</option>
-            <option>Soya Sauce</option>
-            <option>Vanilla</option>
-            <option>Yogurt</option>
-            <option>Cream</option>
-            <option>Vinegar</option>
-            <option>Lemon Juice</option>
-          </optgroup>
+<select id="kitchenTo">
+  <option value="" disabled selected>Select to unit</option>
+</select>
 
-          <optgroup label="Nuts & Seeds">
-            <option>Almonds</option>
-            <option>Walnuts</option>
-            <option>Peanuts</option>
-            <option>Sunflower Seeds</option>
-            <option>Sesame</option>
-            <option>Cashew</option>
-            <option>Pistachio</option>
-            <option>Hazelnuts</option>
-          </optgroup>
+<select id="kitchenIngredient">
+  <option value="" disabled selected>Select ingredient</option>
+  <optgroup label="Dry Ingredients">
+    <option>Flour</option>
+    <option>Sugar</option>
+    <option>Brown Sugar</option>
+    <option>Powdered Sugar</option>
+    <option>Salt</option>
+    <option>Baking Powder</option>
+    <option>Cocoa Powder</option>
+    <option>Rice</option>
+    <option>Oats</option>
+    <option>Corn Starch</option>
+    <option>Breadcrumbs</option>
+    <option>Pasta</option>
+    <option>Dry Milk</option>
+  </optgroup>
 
-          <optgroup label="Special Ingredients">
-            <option>Yeast</option>
-            <option>Chocolate Chips</option>
-            <option>Peanut Butter</option>
-            <option>Tomato Paste</option>
-            <option>Coconut Flakes</option>
-            <option>Ground Coffee</option>
-            <option>Cocoa Nibs</option>
-            <option>Bread Crumbs</option>
-          </optgroup>
-        </select>
+  <optgroup label="Wet Ingredients">
+    <option>Water</option>
+    <option>Milk</option>
+    <option>Oil</option>
+    <option>Butter</option>
+    <option>Honey</option>
+    <option>Soya Sauce</option>
+    <option>Vanilla</option>
+    <option>Yogurt</option>
+    <option>Cream</option>
+    <option>Vinegar</option>
+    <option>Lemon Juice</option>
+  </optgroup>
 
-        <button onclick="convertKitchen()">Convert</button>
-        <p id="kitchenResult"></p>
+  <optgroup label="Nuts & Seeds">
+    <option>Almonds</option>
+    <option>Walnuts</option>
+    <option>Peanuts</option>
+    <option>Sunflower Seeds</option>
+    <option>Sesame</option>
+    <option>Cashew</option>
+    <option>Pistachio</option>
+    <option>Hazelnuts</option>
+  </optgroup>
+
+  <optgroup label="Special Ingredients">
+    <option>Yeast</option>
+    <option>Chocolate Chips</option>
+    <option>Peanut Butter</option>
+    <option>Tomato Paste</option>
+    <option>Coconut Flakes</option>
+    <option>Ground Coffee</option>
+    <option>Cocoa Nibs</option>
+    <option>Bread Crumbs</option>
+  </optgroup>
+</select>
+
+<button onclick="convertKitchen()">Convert</button>
+<p id="kitchenResult"></p>
+
       </section>
     </main>
 
@@ -207,3 +214,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
