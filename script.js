@@ -133,3 +133,42 @@ function convertKitchen() {
   const result = val * unitToCup[from] * cupToUnit[to];
   kitchenResult.textContent = `${val} ${from} of ${ingr} = ${result.toFixed(2)} ${to}`;
 }
+
+// Populate kitchen unit dropdowns
+const kitchenUnits = ["cup", "tbsp", "tsp", "g", "oz", "lb", "ml"];
+kitchenUnits.forEach(u => {
+  kitchenFrom.add(new Option(u, u));
+  kitchenTo.add(new Option(u, u));
+});
+
+// 🔹 Kitchen Converter (uses your HTML ingredient list)
+function convertKitchen() {
+  const val = parseFloat(kitchenInput.value);
+  if (isNaN(val)) return alert("Please enter an amount");
+
+  const from = kitchenFrom.value;
+  const to = kitchenTo.value;
+  const ingr = kitchenIngredient.value;
+
+  if (!from || !to) return alert("Please select both units");
+  if (!ingr) return alert("Please select an ingredient");
+
+  // Grams per cup mapping for known ingredients
+  const weightMap = {
+    Flour: 120, Sugar: 200, "Brown Sugar": 220, "Powdered Sugar": 120,
+    Salt: 292, "Baking Powder": 230, "Cocoa Powder": 100, Rice: 195,
+    Oats: 90, "Corn Starch": 128, Water: 240, Milk: 245, Oil: 218,
+    Butter: 227, Honey: 340, "Soya Sauce": 230, Vanilla: 208, Yogurt: 250,
+    Cream: 240, Almonds: 95, Walnuts: 100, Peanuts: 145, "Sunflower Seeds": 140,
+    Sesame: 135, Cashew: 120, Yeast: 90, "Chocolate Chips": 170,
+    "Peanut Butter": 270, "Tomato Paste": 260, "Coconut Flakes": 100,
+    "Ground Coffee": 90
+  };
+
+  const gPerCup = weightMap[ingr] || 240; // Default if unknown
+  const unitToCup = { cup: 1, tbsp: 1 / 16, tsp: 1 / 48, g: 1 / gPerCup, oz: 1 / (gPerCup / 8), lb: 1 / (gPerCup / 454), ml: 1 / 240 };
+  const cupToUnit = { cup: 1, tbsp: 16, tsp: 48, g: gPerCup, oz: gPerCup / 8, lb: gPerCup / 454, ml: 240 };
+
+  const result = val * unitToCup[from] * cupToUnit[to];
+  kitchenResult.textContent = `${val} ${from} of ${ingr} = ${result.toFixed(2)} ${to}`;
+}
