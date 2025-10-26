@@ -1,29 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-     crossorigin="anonymous"></script>
+  <!-- ✅ AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document to PDF Converter | Convert Labs</title>
-  <meta name="description" content="Convert your Word, Excel, PowerPoint, or image files to PDF easily and securely with Convert Labs — free and online, no software required." />
+  <meta name="description" content="Convert Word, Excel, PowerPoint, or image files to PDF easily and securely with Convert Labs — free and online, no software required." />
   <link rel="icon" type="image/png" href="/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
   <link rel="stylesheet" href="style.css" />
-
-  <!-- ✅ Breadcrumb Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://convertlabs.online/" },
-      { "@type": "ListItem", "position": 2, "name": "Document to PDF Converter", "item": "https://convertlabs.online/document-to-pdf.html" }
-    ]
-  }
-  </script>
 </head>
 
 <body>
@@ -34,13 +21,13 @@
       <h1>Convert Labs</h1>
       <button id="themeToggle" title="Switch Theme">🌙</button>
     </div>
-    <p class="tagline">Convert Word, Excel, and PowerPoint files to PDF securely and fast</p>
+    <p class="tagline">Convert Word, Excel, and image files to PDF — safely and fast</p>
   </header>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <main style="padding:2rem 1rem; max-width:600px; margin:auto;">
     <h2>Document to PDF Converter</h2>
-    <p>Upload your Word, Excel, PowerPoint, or image file to convert it instantly to PDF. All processing happens securely in your browser — your files are never uploaded to a server.</p>
+    <p>Upload a document (Word, Excel, Text, or Image) to instantly convert it into a PDF file directly in your browser.</p>
 
     <div id="converterBox" style="margin-top:1rem; border:1px solid #ccc; padding:1.5rem; border-radius:10px; background:#fff;">
       <input type="file" id="fileInput" accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.txt,.html,.csv" />
@@ -71,7 +58,8 @@
     <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
   </footer>
 
-  <!-- ✅ Stable Libraries -->
+  <!-- ✅ Required Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
 
@@ -91,7 +79,7 @@
       localStorage.setItem("theme", dark ? "dark" : "light");
     });
 
-    // 📄 Document Converter
+    // 📄 Convert Function
     window.convertToPDF = async function() {
       const input = document.getElementById("fileInput");
       const file = input.files[0];
@@ -120,63 +108,55 @@
           reader.readAsDataURL(file);
         }
 
-        // 📄 DOCX FILES (preserve formatting)
-else if (file.name.endsWith(".docx")) {
-  const arrayBuffer = await file.arrayBuffer();
-  const result = await window.mammoth.convertToHtml({ arrayBuffer });
-  const html = result.value.trim() || "<p>⚠️ No readable content found.</p>";
+        // 📄 DOCX FILES (with formatting)
+        else if (file.name.endsWith(".docx")) {
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await window.mammoth.convertToHtml({ arrayBuffer });
+          const html = result.value.trim() || "<p>⚠️ No readable content found.</p>";
 
-  // Create a hidden iframe to render the HTML visually before adding to PDF
-  const iframe = document.createElement("iframe");
-  iframe.style.display = "none";
-  document.body.appendChild(iframe);
-  iframe.contentDocument.open();
-  iframe.contentDocument.write(html);
-  iframe.contentDocument.close();
+          const iframe = document.createElement("iframe");
+          iframe.style.display = "none";
+          document.body.appendChild(iframe);
+          iframe.contentDocument.open();
+          iframe.contentDocument.write(html);
+          iframe.contentDocument.close();
 
-  // Wait a bit for rendering
-  setTimeout(() => {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("p", "pt", "a4");
+          setTimeout(() => {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF("p", "pt", "a4");
 
-    pdf.html(iframe.contentDocument.body, {
-      callback: function (pdf) {
-        finalizePDF(pdf, download, status);
-        document.body.removeChild(iframe);
-      },
-      margin: [20, 20, 20, 20],
-      autoPaging: "text",
-      x: 10,
-      y: 10,
-      html2canvas: { scale: 0.6 }
-    });
-  }, 500);
-}
+            pdf.html(iframe.contentDocument.body, {
+              callback: function(pdf) {
+                finalizePDF(pdf, download, status);
+                document.body.removeChild(iframe);
+              },
+              margin: [20, 20, 20, 20],
+              autoPaging: "text",
+              html2canvas: { scale: 0.6 }
+            });
+          }, 800);
+        }
 
-
-        // 🧾 TEXT or HTML FILES
+        // 🧾 TEXT / HTML / CSV
         else if (file.name.endsWith(".txt") || file.name.endsWith(".html") || file.name.endsWith(".csv")) {
           const text = await file.text();
-          addTextToPDF(pdf, text);
+          pdf.setFont("helvetica", "normal");
+          pdf.setFontSize(12);
+          const lines = pdf.splitTextToSize(text, 180);
+          pdf.text(lines, 15, 20);
           finalizePDF(pdf, download, status);
         }
 
-        // ⚙️ Unsupported
+        // ⚙️ Unsupported file
         else {
           status.textContent = "⚠️ Unsupported file type. Please use .docx, .txt, .html, .csv, or image files.";
         }
+
       } catch (err) {
         console.error(err);
         status.textContent = "❌ Conversion failed. Please try again.";
       }
     };
-
-    function addTextToPDF(pdf, text) {
-      pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(12);
-      const lines = pdf.splitTextToSize(text, 180);
-      pdf.text(lines, 15, 20);
-    }
 
     function finalizePDF(pdf, download, status) {
       const pdfBlob = pdf.output("blob");
