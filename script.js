@@ -203,6 +203,149 @@ function initApp() {
       }
     });
   }
+  const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjA3ZDA3N2E3NzQzMTQ0YzFkYWE2OWI5NzM5NDg5NmExNTI5NzYxMWU2MGMzMDc1ZWQxOTIwYWIwMDkwMGU4YTM5YTJiYmNlYzNjYTAxMDMiLCJpYXQiOjE3NjE0NzY1NTcuMzExMzg0LCJuYmYiOjE3NjE0NzY1NTcuMzExMzg2LCJleHAiOjQ5MTcxNTAxNTcuMzA3NzQxLCJzdWIiOiI3MzI5MzQyOCIsInNjb3BlcyI6WyJ0YXNrLnJlYWQiLCJ0YXNrLndyaXRlIl19.W4JR69t4p6StMrZyC8B3PpJzTO6Dw-X1jtXb6V_-Uz62tWLtdOP5-snkInbOlEkdMO2A4Ph9pVNhgJu8-oMbyvOkcXYMmJbL-VznoCLcDfJuaexVZjC07LTJxTzAP1RP5NA2MSRZF1lNRMeuWGlun5ljXzCb5kERmFD-eLczE7878w8F2cff7vDKQAB3lt8Enk3tK0i6_HdcttxI749HbobZ28afEmXOgXHIeXYKUo-0vpMB1VPUgB1U6HDfRX29oF_li-6KjqwnGHQZ3VgD525BGY6o5IFZHsDEhaJO79sQaFMzAQ1jMN8OVDNbfkCPtfPg71Adkp4ofMuEd6fKh6qkwv2_xDttbItsmLSn-G1SyrTHYAa00M5ko1au-2o8YU9eBIiDmXOgHTSwash35FpnGNuXvSEbtpwdUaZYmfENCQgemkkZgvuMMoB9WBHfShbKdcGyNgGh7Z1aVli0_Cxi2G_wjhBp-OWqulpLJbqIrlQZftJEc-a97Eo2GcZiUYdIIz_UGHBfnBBDg0ahHxpJ-isQOmtmwUItwCj3uwHsrJ43RA-Nw2Yc4hVxDaCV8wfMiywuP6YYTKoubdkEC6J2GLCTl2sychQNC4N6IMHXFLVZ5Mq9XQp2QD221_-5Mdaw5Uy_ZXPMLGfIRYJyVpNwf05jWBrSV3mbayHUtlQ";
+
+// 🔹 Image Converter
+function convertImage() {
+  const file = document.getElementById("imageFile").files[0];
+  const format = document.getElementById("imageFormat").value;
+  const result = document.getElementById("imageResult");
+
+  if (!file) return alert("Please select an image first.");
+  result.textContent = "⏳ Converting...";
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  fetch("https://api.cloudconvert.com/v2/import/upload", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + apiKey },
+  })
+    .then(res => res.json())
+    .then(uploadData => {
+      const uploadUrl = uploadData.data.result.form.url;
+      const uploadParams = uploadData.data.result.form.parameters;
+      const uploadForm = new FormData();
+      for (const [k, v] of Object.entries(uploadParams)) uploadForm.append(k, v);
+      uploadForm.append("file", file);
+
+      return fetch(uploadUrl, { method: "POST", body: uploadForm });
+    })
+    .then(() =>
+      fetch("https://api.cloudconvert.com/v2/jobs", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + apiKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tasks: {
+            "import-my-file": { operation: "import/upload" },
+            "convert-my-file": {
+              operation: "convert",
+              input: "import-my-file",
+              input_format: file.name.split(".").pop(),
+              output_format: format,
+            },
+            "export-my-file": { operation: "export/url", input: "convert-my-file" },
+          },
+        }),
+      })
+    )
+    .then(res => res.json())
+    .then(job => {
+      const jobId = job.data.id;
+      const checkJob = () => {
+        fetch(`https://api.cloudconvert.com/v2/jobs/${jobId}`, {
+          headers: { Authorization: "Bearer " + apiKey },
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.data.status === "finished") {
+              const url = data.data.tasks.find(t => t.operation === "export/url").result.files[0].url;
+              result.innerHTML = `✅ Conversion complete! <a href="${url}" target="_blank">Download Image</a>`;
+            } else if (data.data.status === "error") {
+              result.textContent = "❌ Conversion failed.";
+            } else setTimeout(checkJob, 3000);
+          });
+      };
+      checkJob();
+    })
+    .catch(() => (result.textContent = "❌ Error during conversion."));
+}
+
+// 🔹 Document → PDF Converter
+function convertDocToPDF() {
+  const file = document.getElementById("docFile").files[0];
+  const result = document.getElementById("docToPdfResult");
+  if (!file) return alert("Please select a file.");
+  result.textContent = "⏳ Converting...";
+  // identical upload/convert logic with output_format: "pdf"
+}
+
+// 🔹 PDF → Document Converter
+function convertPdfToDoc() {
+  const file = document.getElementById("pdfFile").files[0];
+  const format = document.getElementById("pdfOutputFormat").value;
+  const result = document.getElementById("pdfToDocResult");
+  if (!file) return alert("Please select a PDF.");
+  result.textContent = "⏳ Converting...";
+  // identical upload/convert logic with input_format: "pdf", output_format: format
+}
+
+// 🌍 Currency Converter
+document.addEventListener("DOMContentLoaded", () => {
+  const fromCurrency = document.getElementById("fromCurrency");
+  const toCurrency = document.getElementById("toCurrency");
+  const currencyResult = document.getElementById("currencyResult");
+
+  // Supported currencies — expanded list (includes EGP, KWD, AED, SGD)
+  const currencies = [
+    "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", "INR", "EGP",
+    "AED", "SAR", "KWD", "QAR", "BHD", "OMR", "SGD", "ZAR"
+  ];
+
+  // Fill dropdowns
+  currencies.forEach(code => {
+    const opt1 = new Option(code, code);
+    const opt2 = new Option(code, code);
+    fromCurrency.add(opt1);
+    toCurrency.add(opt2);
+  });
+
+  // Set defaults
+  fromCurrency.value = "EGP";
+  toCurrency.value = "USD";
+
+  document.getElementById("convertCurrencyBtn").addEventListener("click", async () => {
+    const amount = parseFloat(document.getElementById("currencyAmount").value);
+    const from = fromCurrency.value;
+    const to = toCurrency.value;
+
+    if (isNaN(amount) || amount <= 0) {
+      currencyResult.textContent = "⚠️ Enter a valid amount.";
+      return;
+    }
+
+    currencyResult.textContent = "⏳ Fetching latest rates...";
+
+    try {
+      // Use a free API for real-time currency rates
+      const response = await fetch(`https://api.exchangerate.host/convert?from=${from}&to=${to}`);
+      const data = await response.json();
+
+      if (!data.result) {
+        throw new Error("No conversion data found");
+      }
+
+      const converted = (amount * data.result).toFixed(3);
+      currencyResult.innerHTML = `💱 ${amount} ${from} = <strong>${converted} ${to}</strong>`;
+    } catch (error) {
+      console.error(error);
+      currencyResult.textContent = "❌ Unable to fetch exchange rates.";
+    }
+  });
+});
 
   // 🔹 Visitor Counter
   fetch("https://api.countapi.xyz/hit/convertlabs.online/visits")
@@ -214,3 +357,4 @@ function initApp() {
       if (window.visitorCount) visitorCount.textContent = "N/A";
     });
 }
+
