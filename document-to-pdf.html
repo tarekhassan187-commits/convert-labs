@@ -1,169 +1,123 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
+<!-- ✅ Required Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx-preview@0.4.1/dist/docx-preview.min.js"></script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document to PDF Converter | Convert Labs</title>
-  <meta name="description" content="Convert Word, Excel, PowerPoint, or image files to PDF easily and securely with Convert Labs — free and online, no software required." />
-  <link rel="icon" type="image/png" href="/assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-  <link rel="stylesheet" href="style.css" />
-</head>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("themeToggle");
+  const saved = localStorage.getItem("theme");
+  if (saved === "dark") {
+    document.body.classList.add("dark-mode");
+    toggle.textContent = "☀️";
+  }
+  toggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    const dark = document.body.classList.contains("dark-mode");
+    toggle.textContent = dark ? "☀️" : "🌙";
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  });
 
-<body>
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-content">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo" class="logo" />
-      <h1>Convert Labs</h1>
-      <button id="themeToggle" title="Switch Theme">🌙</button>
-    </div>
-    <p class="tagline">Convert Word, Excel, and image files to PDF — safely and fast</p>
-  </header>
+  // ⚙️ Converter Function
+  window.convertToPDF = async function() {
+    const input = document.getElementById("fileInput");
+    const file = input.files[0];
+    const status = document.getElementById("status");
+    const download = document.getElementById("downloadLink");
 
-  <!-- MAIN -->
-  <main style="padding:2rem 1rem; max-width:600px; margin:auto;">
-    <h2>Document to PDF Converter</h2>
-    <p>Upload a document (Word, Excel, Text, or Image) to instantly convert it into a PDF file directly in your browser.</p>
-
-    <div id="converterBox" style="margin-top:1rem; border:1px solid #ccc; padding:1.5rem; border-radius:10px; background:#fff;">
-      <input type="file" id="fileInput" accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.txt,.html,.csv" />
-      <br />
-      <button onclick="convertToPDF()">Convert to PDF</button>
-      <p id="status" style="margin-top:1rem; font-weight:600;"></p>
-      <a id="downloadLink" style="display:none; margin-top:1rem; font-weight:bold; color:#1e40af;" download="converted.pdf">⬇️ Download PDF</a>
-    </div>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-logo">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" />
-      <h3>Convert Labs</h3>
-    </div>
-
-    <div class="footer-links">
-      <a href="/">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/how-to.html">Guides</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/terms.html">Terms</a>
-      <a href="/currency-converter.html">Currency Converter</a>
-      <a href="/document-to-pdf.html">Document to PDF</a>
-    </div>
-
-    <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
-  </footer>
-
-  <!-- ✅ Required Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.4.1/dist/docx-preview.min.js"></script>
-
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // 🌙 Theme Toggle
-    const toggle = document.getElementById("themeToggle");
-    const saved = localStorage.getItem("theme");
-    if (saved === "dark") {
-      document.body.classList.add("dark-mode");
-      toggle.textContent = "☀️";
+    if (!file) {
+      status.textContent = "⚠️ Please select a file to convert.";
+      return;
     }
-    toggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-      const dark = document.body.classList.contains("dark-mode");
-      toggle.textContent = dark ? "☀️" : "🌙";
-      localStorage.setItem("theme", dark ? "dark" : "light");
-    });
 
-    // 📄 Converter Function
-    window.convertToPDF = async function() {
-      const input = document.getElementById("fileInput");
-      const file = input.files[0];
-      const status = document.getElementById("status");
-      const download = document.getElementById("downloadLink");
+    status.textContent = "⏳ Converting...";
+    download.style.display = "none";
 
-      if (!file) {
-        status.textContent = "⚠️ Please select a file to convert.";
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+
+    try {
+      // 📷 Image Conversion
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          pdf.addImage(e.target.result, "JPEG", 10, 10, 180, 160);
+          finalizePDF(pdf, download, status);
+        };
+        reader.readAsDataURL(file);
         return;
       }
 
-      status.textContent = "⏳ Converting...";
-      download.style.display = "none";
+      // 📄 DOCX Conversion (layout preserved)
+      if (file.name.endsWith(".docx")) {
+        const arrayBuffer = await file.arrayBuffer();
+        const container = document.createElement("div");
+        container.style.width = "900px";
+        container.style.padding = "20px";
+        container.style.background = "#fff";
+        container.style.color = "#000";
+        container.style.fontFamily = "Arial, sans-serif";
+        container.style.fontSize = "12px";
+        container.style.lineHeight = "1.4";
+        document.body.appendChild(container);
 
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-
-      try {
-        // 📷 IMAGE FILES
-        if (file.type.startsWith("image/")) {
-          const reader = new FileReader();
-          reader.onload = e => {
-            pdf.addImage(e.target.result, "JPEG", 10, 10, 180, 160);
-            finalizePDF(pdf, download, status);
-          };
-          reader.readAsDataURL(file);
+        try {
+          await window.docx.renderAsync(arrayBuffer, container, null, {
+            className: "docx",
+            useBase64URL: true,
+            breakPages: true
+          });
+        } catch (renderError) {
+          console.error("DOCX render error:", renderError);
+          throw new Error("Unable to render .docx properly.");
         }
 
-        // 📄 DOCX FILES (preserve layout & tables)
-        else if (file.name.endsWith(".docx")) {
-          const arrayBuffer = await file.arrayBuffer();
-          const container = document.createElement("div");
-          container.style.width = "800px";
-          container.style.background = "#fff";
-          container.style.padding = "20px";
-          container.style.color = "#000";
-          container.style.fontFamily = "Arial, sans-serif";
-          container.style.fontSize = "12px";
-          document.body.appendChild(container);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for layout
 
-          await window.docx.renderAsync(arrayBuffer, container, null, { className: "docx" });
-
+        try {
           const pdf = new jsPDF("p", "pt", "a4");
-          pdf.html(container, {
-            callback: function(pdf) {
+          await pdf.html(container, {
+            callback: function (pdf) {
               finalizePDF(pdf, download, status);
               document.body.removeChild(container);
             },
             margin: [20, 20, 20, 20],
-            html2canvas: { scale: 0.6 }
+            html2canvas: { scale: 0.7, useCORS: true, allowTaint: true }
           });
+        } catch (renderToPDFError) {
+          console.error("PDF render error:", renderToPDFError);
+          throw new Error("PDF conversion failed during rendering.");
         }
 
-        // 🧾 TEXT / HTML / CSV
-        else if (file.name.endsWith(".txt") || file.name.endsWith(".html") || file.name.endsWith(".csv")) {
-          const text = await file.text();
-          pdf.setFont("helvetica", "normal");
-          pdf.setFontSize(12);
-          const lines = pdf.splitTextToSize(text, 180);
-          pdf.text(lines, 15, 20);
-          finalizePDF(pdf, download, status);
-        }
-
-        // ⚙️ Unsupported
-        else {
-          status.textContent = "⚠️ Unsupported file type. Please use .docx, .txt, .html, .csv, or image files.";
-        }
-
-      } catch (err) {
-        console.error(err);
-        status.textContent = "❌ Conversion failed. Please try again.";
+        return;
       }
-    };
 
-    // 🧾 Finalize & Download
-    function finalizePDF(pdf, download, status) {
-      const pdfBlob = pdf.output("blob");
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      download.href = pdfUrl;
-      download.style.display = "inline-block";
-      download.textContent = "⬇️ Download PDF";
-      status.textContent = "✅ Conversion complete!";
+      // 🧾 Simple Text/HTML/CSV
+      if (file.name.endsWith(".txt") || file.name.endsWith(".html") || file.name.endsWith(".csv")) {
+        const text = await file.text();
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(12);
+        const lines = pdf.splitTextToSize(text, 180);
+        pdf.text(lines, 15, 20);
+        finalizePDF(pdf, download, status);
+        return;
+      }
+
+      status.textContent = "⚠️ Unsupported file type.";
+    } catch (err) {
+      console.error("General conversion error:", err);
+      status.innerHTML = "❌ Conversion failed. Please try again or use a simpler document.";
     }
-  });
-  </script>
-</body>
-</html>
+  };
+
+  // ✅ Save and show download
+  function finalizePDF(pdf, download, status) {
+    const blob = pdf.output("blob");
+    const url = URL.createObjectURL(blob);
+    download.href = url;
+    download.style.display = "inline-block";
+    download.textContent = "⬇️ Download PDF";
+    status.textContent = "✅ Conversion complete!";
+  }
+});
+</script>
