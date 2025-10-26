@@ -2,9 +2,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.4.1/dist/docx-preview.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  // 🌙 Theme toggle
   const toggle = document.getElementById("themeToggle");
   const saved = localStorage.getItem("theme");
   if (saved === "dark") {
@@ -18,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("theme", dark ? "dark" : "light");
   });
 
-  // ⚙️ Converter Function
+  // ⚙️ Converter
   window.convertToPDF = async function() {
     const input = document.getElementById("fileInput");
     const file = input.files[0];
@@ -26,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const download = document.getElementById("downloadLink");
 
     if (!file) {
-      status.textContent = "⚠️ Please select a file to convert.";
+      status.textContent = "⚠️ Please select a file.";
       return;
     }
 
@@ -37,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pdf = new jsPDF();
 
     try {
-      // 📷 Image Conversion
+      // 📷 Image conversion
       if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = e => {
@@ -48,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // 📄 DOCX Conversion (layout preserved)
+      // 📄 DOCX (try visual mode first)
       if (file.name.endsWith(".docx")) {
         const arrayBuffer = await file.arrayBuffer();
         const container = document.createElement("div");
@@ -57,9 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
         container.style.background = "#fff";
         container.style.color = "#000";
         container.style.fontFamily = "Arial, sans-serif";
-        container.style.fontSize = "12px";
-        container.style.lineHeight = "1.4";
         document.body.appendChild(container);
+
+        let rendered = false;
 
         try {
           await window.docx.renderAsync(arrayBuffer, container, null, {
@@ -67,14 +69,13 @@ document.addEventListener("DOMContentLoaded", () => {
             useBase64URL: true,
             breakPages: true
           });
-        } catch (renderError) {
-          console.error("DOCX render error:", renderError);
-          throw new Error("Unable to render .docx properly.");
+          rendered = true;
+        } catch (err) {
+          console.warn("⚠️ Visual rendering failed, switching to text mode.");
         }
 
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for layout
-
-        try {
+        if (rendered) {
+          await new Promise(r => setTimeout(r, 1000));
           const pdf = new jsPDF("p", "pt", "a4");
           await pdf.html(container, {
             callback: function (pdf) {
@@ -84,15 +85,38 @@ document.addEventListener("DOMContentLoaded", () => {
             margin: [20, 20, 20, 20],
             html2canvas: { scale: 0.7, useCORS: true, allowTaint: true }
           });
-        } catch (renderToPDFError) {
-          console.error("PDF render error:", renderToPDFError);
-          throw new Error("PDF conversion failed during rendering.");
+          return;
+        }
+
+        // 🧾 Fallback: text-based conversion using Mammoth
+        try {
+          const result = await window.mammoth.convertToHtml({ arrayBuffer });
+          const html = result.value;
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = html;
+          tempDiv.style.width = "750px";
+          tempDiv.style.background = "#fff";
+          tempDiv.style.padding = "20px";
+          tempDiv.style.color = "#000";
+          document.body.appendChild(tempDiv);
+
+          const pdf = new jsPDF("p", "pt", "a4");
+          await pdf.html(tempDiv, {
+            callback: function (pdf) {
+              finalizePDF(pdf, download, status);
+              document.body.removeChild(tempDiv);
+            },
+            margin: [20, 20, 20, 20],
+            html2canvas: { scale: 0.7 }
+          });
+        } catch (fallbackError) {
+          throw new Error("Both rendering modes failed.");
         }
 
         return;
       }
 
-      // 🧾 Simple Text/HTML/CSV
+      // 🧾 Text / HTML / CSV
       if (file.name.endsWith(".txt") || file.name.endsWith(".html") || file.name.endsWith(".csv")) {
         const text = await file.text();
         pdf.setFont("helvetica", "normal");
@@ -105,12 +129,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       status.textContent = "⚠️ Unsupported file type.";
     } catch (err) {
-      console.error("General conversion error:", err);
-      status.innerHTML = "❌ Conversion failed. Please try again or use a simpler document.";
+      console.error("❌ Conversion error:", err);
+      status.innerHTML = "❌ Conversion failed. Please try again or use a simpler file.";
     }
   };
 
-  // ✅ Save and show download
   function finalizePDF(pdf, download, status) {
     const blob = pdf.output("blob");
     const url = URL.createObjectURL(blob);
