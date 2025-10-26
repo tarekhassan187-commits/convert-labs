@@ -55,6 +55,27 @@ h1 {
   font-weight: 700;
 }
 
+#currency input, #currency select, #currency button {
+  margin: 0.4rem;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#currency button {
+  background: #1e40af;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#currency button:hover {
+  background: #1e3a8a;
+}
+
+
 /* ✅ Theme Toggle (fixed and visible) */
 #themeToggle {
   position: absolute;
@@ -277,4 +298,5 @@ body.dark-mode .modal-content {
     height: 28px;
   }
 }
+
 
