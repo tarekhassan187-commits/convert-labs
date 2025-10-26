@@ -3,22 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Convert Labs — All-in-One Smart Converter</title>
+  <title>Convert Labs — Smart All-in-One Converter</title>
 
-  <!-- SEO -->
-  <meta name="description" content="Convert Labs — free, all-in-one converter for units, currencies, images, and documents. Fast, accurate, and easy to use." />
-  <meta name="keywords" content="unit converter, image converter, pdf to doc, doc to pdf, currency converter, online converter, Convert Labs" />
+  <!-- ✅ SEO Meta -->
+  <meta name="description" content="Convert Labs — free, all-in-one online converter for units, currencies, images, and documents. Fast, accurate, and easy to use." />
+  <meta name="keywords" content="unit converter, currency converter, pdf to doc, doc to pdf, image converter, online converter, Convert Labs" />
   <link rel="canonical" href="https://convertlabs.online" />
 
-  <!-- Favicon -->
+  <!-- ✅ Favicon -->
   <link rel="icon" type="image/png" href="assets/convert-labs-logo.png" />
   <meta name="theme-color" content="#1e40af" />
 
-  <!-- Styles -->
+  <!-- ✅ Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
+    crossorigin="anonymous"></script>
+
+  <!-- ✅ Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P');
+  </script>
+
+  <!-- ✅ CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
 
+<body>
   <!-- Splash Screen -->
   <div id="loading-screen">
     <h1>Loading Convert Labs...</h1>
@@ -26,8 +39,6 @@
 
   <!-- Main App -->
   <div id="app" style="display:none;">
-
-    <!-- Header -->
     <header>
       <div class="header-content">
         <img src="assets/convert-labs-logo.png" alt="Convert Labs Logo" class="logo" />
@@ -49,10 +60,8 @@
       <button onclick="showConverter('pdfdoc')">PDF ⇄ DOC</button>
     </div>
 
-    <!-- Converters -->
     <main>
-
-      <!-- Length -->
+      <!-- LENGTH -->
       <section id="length" class="converter active">
         <h2>Length Converter</h2>
         <input type="number" id="lengthInput" placeholder="Enter value" />
@@ -62,7 +71,7 @@
         <p id="lengthResult"></p>
       </section>
 
-      <!-- Temperature -->
+      <!-- TEMPERATURE -->
       <section id="temperature" class="converter">
         <h2>Temperature Converter</h2>
         <input type="number" id="tempInput" placeholder="Enter value" />
@@ -72,7 +81,7 @@
         <p id="tempResult"></p>
       </section>
 
-      <!-- Volume -->
+      <!-- VOLUME -->
       <section id="volume" class="converter">
         <h2>Volume Converter</h2>
         <input type="number" id="volumeInput" placeholder="Enter value" />
@@ -82,7 +91,7 @@
         <p id="volumeResult"></p>
       </section>
 
-      <!-- Container Volume -->
+      <!-- CONTAINER VOLUME -->
       <section id="container" class="converter">
         <h2>Container Volume Calculator</h2>
         <select id="containerType">
@@ -114,7 +123,7 @@
         <p id="containerResult"></p>
       </section>
 
-      <!-- Kitchen -->
+      <!-- KITCHEN -->
       <section id="kitchen" class="converter">
         <h2>Kitchen Converter</h2>
         <input type="number" id="kitchenInput" placeholder="Enter amount" />
@@ -125,7 +134,7 @@
         <p id="kitchenResult"></p>
       </section>
 
-      <!-- Currency -->
+      <!-- CURRENCY -->
       <section id="currency" class="converter">
         <h2>Currency Converter</h2>
         <input type="number" id="currencyAmount" placeholder="Enter amount" />
@@ -135,7 +144,7 @@
         <p id="currencyResult"></p>
       </section>
 
-      <!-- Image Converter -->
+      <!-- IMAGE -->
       <section id="image" class="converter">
         <h2>Image Converter</h2>
         <input type="file" id="imageFile" accept="image/*" />
@@ -163,10 +172,9 @@
         </div>
         <p id="conversionStatus"></p>
       </section>
-
     </main>
 
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer>
       <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <p>© 2025 Convert Labs. All rights reserved.</p>
@@ -178,11 +186,9 @@
         <a href="index.html">Home</a>
       </div>
     </footer>
-
   </div>
 
-  <!-- Script -->
+  <!-- ✅ JavaScript -->
   <script src="script.js"></script>
-
 </body>
 </html>
