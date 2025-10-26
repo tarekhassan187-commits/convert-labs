@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Convert Labs — Smart All-in-One Converter</title>
+  <title>Convert Labs — Smart Unit Converter</title>
 
-  <!-- ✅ SEO Meta -->
-  <meta name="description" content="Convert Labs — free, all-in-one online converter for units, currencies, images, and documents. Fast, accurate, and easy to use." />
-  <meta name="keywords" content="unit converter, currency converter, pdf to doc, doc to pdf, image converter, online converter, Convert Labs" />
+  <!-- ✅ SEO -->
+  <meta name="description" content="Convert Labs is your free, all-in-one online unit converter for length, temperature, volume, container, and kitchen measurements. Fast, accurate, and easy to use." />
+  <meta name="keywords" content="unit converter, online converter, length converter, temperature converter, kitchen converter, volume calculator, Convert Labs" />
+  <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://convertlabs.online" />
 
   <!-- ✅ Favicon -->
@@ -18,16 +19,15 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
     crossorigin="anonymous"></script>
 
-  <!-- ✅ Google Analytics (GA4) -->
+  <!-- ✅ Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- ✅ CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -41,11 +41,16 @@
   <div id="app" style="display:none;">
     <header>
       <div class="header-content">
-        <img src="assets/convert-labs-logo.png" alt="Convert Labs Logo" class="logo" />
+        <img src="assets/convert-labs-logo.png" alt="Logo" class="logo" />
         <h1>Convert Labs</h1>
         <button id="themeToggle" title="Switch Theme">🌙</button>
       </div>
-      <p class="tagline">Your all-in-one free converter — Units, Files, and More!</p>
+      <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
+      <p class="intro-text">
+        Convert Labs is a modern, free, and easy-to-use online unit converter that helps you quickly convert 
+        between length, temperature, volume, container measurements, and kitchen ingredients. 
+        Whether you’re a student, engineer, cook, or just curious, Convert Labs makes every conversion fast, accurate, and simple — all in one place.
+      </p>
     </header>
 
     <!-- Tabs -->
@@ -55,13 +60,10 @@
       <button onclick="showConverter('volume')">Volume</button>
       <button onclick="showConverter('container')">Container Volume</button>
       <button onclick="showConverter('kitchen')">Kitchen</button>
-      <button onclick="showConverter('currency')">Currency</button>
-      <button onclick="showConverter('image')">Image</button>
-      <button onclick="showConverter('pdfdoc')">PDF ⇄ DOC</button>
     </div>
 
+    <!-- Converters -->
     <main>
-      <!-- LENGTH -->
       <section id="length" class="converter active">
         <h2>Length Converter</h2>
         <input type="number" id="lengthInput" placeholder="Enter value" />
@@ -71,7 +73,6 @@
         <p id="lengthResult"></p>
       </section>
 
-      <!-- TEMPERATURE -->
       <section id="temperature" class="converter">
         <h2>Temperature Converter</h2>
         <input type="number" id="tempInput" placeholder="Enter value" />
@@ -81,7 +82,6 @@
         <p id="tempResult"></p>
       </section>
 
-      <!-- VOLUME -->
       <section id="volume" class="converter">
         <h2>Volume Converter</h2>
         <input type="number" id="volumeInput" placeholder="Enter value" />
@@ -91,7 +91,6 @@
         <p id="volumeResult"></p>
       </section>
 
-      <!-- CONTAINER VOLUME -->
       <section id="container" class="converter">
         <h2>Container Volume Calculator</h2>
         <select id="containerType">
@@ -123,7 +122,6 @@
         <p id="containerResult"></p>
       </section>
 
-      <!-- KITCHEN -->
       <section id="kitchen" class="converter">
         <h2>Kitchen Converter</h2>
         <input type="number" id="kitchenInput" placeholder="Enter amount" />
@@ -133,48 +131,8 @@
         <button onclick="convertKitchen()">Convert</button>
         <p id="kitchenResult"></p>
       </section>
-
-      <!-- CURRENCY -->
-      <section id="currency" class="converter">
-        <h2>Currency Converter</h2>
-        <input type="number" id="currencyAmount" placeholder="Enter amount" />
-        <select id="currencyFrom"></select>
-        <select id="currencyTo"></select>
-        <button onclick="convertCurrency()">Convert</button>
-        <p id="currencyResult"></p>
-      </section>
-
-      <!-- IMAGE -->
-      <section id="image" class="converter">
-        <h2>Image Converter</h2>
-        <input type="file" id="imageFile" accept="image/*" />
-        <select id="imageFormat">
-          <option value="png">PNG</option>
-          <option value="jpg">JPG</option>
-          <option value="webp">WEBP</option>
-        </select>
-        <button id="imageConvertBtn">Convert Image</button>
-        <p id="conversionStatus"></p>
-      </section>
-
-      <!-- PDF ⇄ DOC -->
-      <section id="pdfdoc" class="converter">
-        <h2>Document Converter (PDF ⇄ DOC)</h2>
-        <div>
-          <h3>DOCX → PDF</h3>
-          <input type="file" id="docFile" accept=".doc,.docx" />
-          <button id="docToPdfBtn">Convert to PDF</button>
-        </div>
-        <div>
-          <h3>PDF → DOCX</h3>
-          <input type="file" id="pdfFile" accept=".pdf" />
-          <button id="pdfToDocBtn">Convert to DOCX</button>
-        </div>
-        <p id="conversionStatus"></p>
-      </section>
     </main>
 
-    <!-- FOOTER -->
     <footer>
       <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <p>© 2025 Convert Labs. All rights reserved.</p>
@@ -188,7 +146,6 @@
     </footer>
   </div>
 
-  <!-- ✅ JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
