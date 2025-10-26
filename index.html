@@ -127,14 +127,57 @@
         <input type="number" id="kitchenInput" placeholder="Enter amount" />
         <select id="kitchenFrom"></select>
         <select id="kitchenTo"></select>
-        <select id="kitchenIngredient"></select>
+        <select id="kitchenIngredient">
+          <optgroup label="Dry Ingredients">
+            <option>Flour</option>
+            <option>Sugar</option>
+            <option>Brown Sugar</option>
+            <option>Powdered Sugar</option>
+            <option>Salt</option>
+            <option>Baking Powder</option>
+            <option>Cocoa Powder</option>
+            <option>Rice</option>
+            <option>Oats</option>
+            <option>Corn Starch</option>
+          </optgroup>
+          <optgroup label="Wet Ingredients">
+            <option>Water</option>
+            <option>Milk</option>
+            <option>Oil</option>
+            <option>Butter</option>
+            <option>Honey</option>
+            <option>Soya Sauce</option>
+            <option>Vanilla</option>
+            <option>Yogurt</option>
+            <option>Cream</option>
+          </optgroup>
+          <optgroup label="Nuts & Seeds">
+            <option>Almonds</option>
+            <option>Walnuts</option>
+            <option>Peanuts</option>
+            <option>Sunflower Seeds</option>
+            <option>Sesame</option>
+            <option>Cashew</option>
+          </optgroup>
+          <optgroup label="Special Ingredients">
+            <option>Yeast</option>
+            <option>Chocolate Chips</option>
+            <option>Peanut Butter</option>
+            <option>Tomato Paste</option>
+            <option>Coconut Flakes</option>
+            <option>Ground Coffee</option>
+          </optgroup>
+        </select>
         <button onclick="convertKitchen()">Convert</button>
         <p id="kitchenResult"></p>
       </section>
     </main>
 
     <footer>
-      <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <div class="footer-brand">
+        <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+        <span class="footer-text">Convert Labs</span>
+      </div>
       <p>© 2025 Convert Labs. All rights reserved.</p>
       <div class="footer-links">
         <a href="about.html">About</a> |
@@ -149,5 +192,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
