@@ -295,3 +295,18 @@ body.dark-mode .modal-content {
   background: #2c2c2c;
   color: #f0f0f0;
 }
+
+/* ✅ Balanced logo size for all pages */
+.logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  vertical-align: middle;
+  object-fit: contain;
+}
+@media (max-width: 600px) {
+  .logo {
+    width: 28px;
+    height: 28px;
+  }
+}
