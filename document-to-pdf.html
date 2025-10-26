@@ -120,14 +120,39 @@
           reader.readAsDataURL(file);
         }
 
-        // 📄 DOCX FILES
-        else if (file.name.endsWith(".docx")) {
-          const arrayBuffer = await file.arrayBuffer();
-          const result = await window.mammoth.extractRawText({ arrayBuffer });
-          const text = result.value.trim() || "⚠️ No readable text found.";
-          addTextToPDF(pdf, text);
-          finalizePDF(pdf, download, status);
-        }
+        // 📄 DOCX FILES (preserve formatting)
+else if (file.name.endsWith(".docx")) {
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await window.mammoth.convertToHtml({ arrayBuffer });
+  const html = result.value.trim() || "<p>⚠️ No readable content found.</p>";
+
+  // Create a hidden iframe to render the HTML visually before adding to PDF
+  const iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  document.body.appendChild(iframe);
+  iframe.contentDocument.open();
+  iframe.contentDocument.write(html);
+  iframe.contentDocument.close();
+
+  // Wait a bit for rendering
+  setTimeout(() => {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "pt", "a4");
+
+    pdf.html(iframe.contentDocument.body, {
+      callback: function (pdf) {
+        finalizePDF(pdf, download, status);
+        document.body.removeChild(iframe);
+      },
+      margin: [20, 20, 20, 20],
+      autoPaging: "text",
+      x: 10,
+      y: 10,
+      html2canvas: { scale: 0.6 }
+    });
+  }, 500);
+}
+
 
         // 🧾 TEXT or HTML FILES
         else if (file.name.endsWith(".txt") || file.name.endsWith(".html") || file.name.endsWith(".csv")) {
