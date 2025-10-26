@@ -293,13 +293,17 @@ function convertPdfToDoc() {
   // identical upload/convert logic with input_format: "pdf", output_format: format
 }
 
-// 🌍 Currency Converter
-document.addEventListener("DOMContentLoaded", () => {
+// 🌍 Currency Converter (auto initializes when tab is clicked)
+let currencyInitialized = false;
+
+async function initCurrencyConverter() {
+  if (currencyInitialized) return; // Prevent double initialization
+  currencyInitialized = true;
+
   const fromCurrency = document.getElementById("fromCurrency");
   const toCurrency = document.getElementById("toCurrency");
   const currencyResult = document.getElementById("currencyResult");
 
-  // Supported currencies — expanded list (includes EGP, KWD, AED, SGD)
   const currencies = [
     "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", "INR", "EGP",
     "AED", "SAR", "KWD", "QAR", "BHD", "OMR", "SGD", "ZAR"
@@ -307,16 +311,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Fill dropdowns
   currencies.forEach(code => {
-    const opt1 = new Option(code, code);
-    const opt2 = new Option(code, code);
-    fromCurrency.add(opt1);
-    toCurrency.add(opt2);
+    fromCurrency.add(new Option(code, code));
+    toCurrency.add(new Option(code, code));
   });
 
-  // Set defaults
+  // Default values
   fromCurrency.value = "EGP";
   toCurrency.value = "USD";
 
+  // Button click event
   document.getElementById("convertCurrencyBtn").addEventListener("click", async () => {
     const amount = parseFloat(document.getElementById("currencyAmount").value);
     const from = fromCurrency.value;
@@ -330,20 +333,18 @@ document.addEventListener("DOMContentLoaded", () => {
     currencyResult.textContent = "⏳ Fetching latest rates...";
 
     try {
-      // Use a free API for real-time currency rates
       const response = await fetch(`https://api.exchangerate.host/convert?from=${from}&to=${to}`);
       const data = await response.json();
 
-      if (!data.result) {
-        throw new Error("No conversion data found");
-      }
+      if (!data.result) throw new Error("Invalid conversion data");
 
       const converted = (amount * data.result).toFixed(3);
       currencyResult.innerHTML = `💱 ${amount} ${from} = <strong>${converted} ${to}</strong>`;
-    } catch (error) {
-      console.error(error);
-      currencyResult.textContent = "❌ Unable to fetch exchange rates.";
+    } catch (err) {
+      currencyResult.textContent = "❌ Failed to get exchange rate.";
     }
+  });
+}
   });
 });
 
@@ -357,4 +358,5 @@ document.addEventListener("DOMContentLoaded", () => {
       if (window.visitorCount) visitorCount.textContent = "N/A";
     });
 }
+
 
