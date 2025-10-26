@@ -143,6 +143,26 @@ footer {
   font-weight: 600;
   color: white;
 }
+/* === Footer Brand Standardization === */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.footer-logo {
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+}
+
+.footer-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
 
 
 /* Dark Mode */
@@ -154,4 +174,5 @@ body.dark-mode {
 body.dark-mode header { background: #111827; }
 body.dark-mode .tabs { background: #2d2d33; }
 body.dark-mode footer { background: #111827; }
+
 
