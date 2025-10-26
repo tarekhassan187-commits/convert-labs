@@ -3,24 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Convert Labs — Smart Unit Converter</title>
+  <title>Convert Labs — Smart Online Converter</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Convert Labs — free, fast, and smart online converters for units, currency, documents, and images. All tools in one place!" />
+  <meta name="keywords" content="unit converter, online converter, document to pdf, pdf to word, currency converter, image converter" />
+
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
 </head>
 
 <body>
-  <div id="loading-screen"><h1>Loading Convert Labs...</h1></div>
+  <!-- Splash Screen -->
+  <div id="loading-screen">
+    <h1>Loading Convert Labs...</h1>
+  </div>
 
+  <!-- Main App -->
   <div id="app" style="display:none;">
     <header>
       <div class="header-content">
-        <img src="assets/convert-labs-icon.png" class="logo" alt="Convert Labs Logo">
+        <img src="assets/convert-labs-icon.png" alt="Convert Labs Logo" class="logo" />
         <h1>Convert Labs</h1>
-        <button id="themeToggle">🌙</button>
+        <button id="themeToggle" title="Switch Theme">🌙</button>
       </div>
-      <p class="tagline">Your all-in-one unit converter</p>
+      <p class="tagline">Your all-in-one smart conversion tools</p>
     </header>
 
+    <!-- Navigation Tabs -->
     <div class="tabs">
       <button onclick="showConverter('length')">Length</button>
       <button onclick="showConverter('temperature')">Temperature</button>
@@ -33,7 +43,9 @@
       <button onclick="showConverter('pdfToDoc')">PDF → Doc</button>
     </div>
 
+    <!-- Converters -->
     <main>
+
       <!-- Length -->
       <section id="length" class="converter active">
         <h2>Length Converter</h2>
@@ -117,7 +129,7 @@
         <p id="currencyResult"></p>
       </section>
 
-      <!-- Image -->
+      <!-- Image Converter -->
       <section id="imageConverter" class="converter">
         <h2>Image Converter</h2>
         <input id="imageFile" type="file" accept="image/*" />
@@ -132,7 +144,7 @@
 
       <!-- Doc to PDF -->
       <section id="docToPdf" class="converter">
-        <h2>Document to PDF</h2>
+        <h2>Document to PDF Converter</h2>
         <input id="docFile" type="file" accept=".doc,.docx,.xls,.xlsx,.txt" />
         <button onclick="convertDocToPDF()">Convert</button>
         <p id="docToPdfResult"></p>
@@ -140,7 +152,7 @@
 
       <!-- PDF to Doc -->
       <section id="pdfToDoc" class="converter">
-        <h2>PDF to Document</h2>
+        <h2>PDF to Document Converter</h2>
         <input id="pdfFile" type="file" accept=".pdf" />
         <select id="pdfOutputFormat">
           <option value="docx">Word (.docx)</option>
@@ -152,12 +164,19 @@
       </section>
     </main>
 
+    <!-- Footer -->
     <footer>
       <div class="footer-logo">
         <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon">
         <span>Convert Labs</span>
       </div>
       <p>© 2025 Convert Labs — All rights reserved.</p>
+      <div class="footer-links">
+        <a href="about.html">About</a> |
+        <a href="how-to.html">How-To</a> |
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="terms.html">Terms of Use</a>
+      </div>
     </footer>
   </div>
 
