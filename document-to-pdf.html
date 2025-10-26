@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ✅ AdSense -->
+  <!-- ✅ Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
 
   <meta charset="UTF-8" />
@@ -61,7 +61,7 @@
   <!-- ✅ Required Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.4.1/dist/docx-preview.min.js"></script>
 
   <script>
   document.addEventListener("DOMContentLoaded", () => {
@@ -79,7 +79,7 @@
       localStorage.setItem("theme", dark ? "dark" : "light");
     });
 
-    // 📄 Convert Function
+    // 📄 Converter Function
     window.convertToPDF = async function() {
       const input = document.getElementById("fileInput");
       const file = input.files[0];
@@ -108,33 +108,29 @@
           reader.readAsDataURL(file);
         }
 
-        // 📄 DOCX FILES (with formatting)
+        // 📄 DOCX FILES (preserve layout & tables)
         else if (file.name.endsWith(".docx")) {
           const arrayBuffer = await file.arrayBuffer();
-          const result = await window.mammoth.convertToHtml({ arrayBuffer });
-          const html = result.value.trim() || "<p>⚠️ No readable content found.</p>";
+          const container = document.createElement("div");
+          container.style.width = "800px";
+          container.style.background = "#fff";
+          container.style.padding = "20px";
+          container.style.color = "#000";
+          container.style.fontFamily = "Arial, sans-serif";
+          container.style.fontSize = "12px";
+          document.body.appendChild(container);
 
-          const iframe = document.createElement("iframe");
-          iframe.style.display = "none";
-          document.body.appendChild(iframe);
-          iframe.contentDocument.open();
-          iframe.contentDocument.write(html);
-          iframe.contentDocument.close();
+          await window.docx.renderAsync(arrayBuffer, container, null, { className: "docx" });
 
-          setTimeout(() => {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF("p", "pt", "a4");
-
-            pdf.html(iframe.contentDocument.body, {
-              callback: function(pdf) {
-                finalizePDF(pdf, download, status);
-                document.body.removeChild(iframe);
-              },
-              margin: [20, 20, 20, 20],
-              autoPaging: "text",
-              html2canvas: { scale: 0.6 }
-            });
-          }, 800);
+          const pdf = new jsPDF("p", "pt", "a4");
+          pdf.html(container, {
+            callback: function(pdf) {
+              finalizePDF(pdf, download, status);
+              document.body.removeChild(container);
+            },
+            margin: [20, 20, 20, 20],
+            html2canvas: { scale: 0.6 }
+          });
         }
 
         // 🧾 TEXT / HTML / CSV
@@ -147,7 +143,7 @@
           finalizePDF(pdf, download, status);
         }
 
-        // ⚙️ Unsupported file
+        // ⚙️ Unsupported
         else {
           status.textContent = "⚠️ Unsupported file type. Please use .docx, .txt, .html, .csv, or image files.";
         }
@@ -158,6 +154,7 @@
       }
     };
 
+    // 🧾 Finalize & Download
     function finalizePDF(pdf, download, status) {
       const pdfBlob = pdf.output("blob");
       const pdfUrl = URL.createObjectURL(pdfBlob);
