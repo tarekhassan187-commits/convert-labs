@@ -1,146 +1,285 @@
-<!-- ✅ Required Libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/docx-preview@0.4.1/dist/docx-preview.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document to PDF Converter | Convert Labs</title>
+  <meta name="description" content="Free online Document to PDF converter by Convert Labs. Upload Word, Excel, Text, or Image files and instantly convert them into PDF format." />
+  <link rel="icon" type="image/png" href="convert-labs-logo.png" />
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  // 🌙 Theme toggle
-  const toggle = document.getElementById("themeToggle");
-  const saved = localStorage.getItem("theme");
-  if (saved === "dark") {
-    document.body.classList.add("dark-mode");
-    toggle.textContent = "☀️";
-  }
-  toggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-    const dark = document.body.classList.contains("dark-mode");
-    toggle.textContent = dark ? "☀️" : "🌙";
-    localStorage.setItem("theme", dark ? "dark" : "light");
-  });
-
-  // ⚙️ Converter
-  window.convertToPDF = async function() {
-    const input = document.getElementById("fileInput");
-    const file = input.files[0];
-    const status = document.getElementById("status");
-    const download = document.getElementById("downloadLink");
-
-    if (!file) {
-      status.textContent = "⚠️ Please select a file.";
-      return;
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f9fafc;
+      color: #222;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      background: #1e40af;
+      color: white;
+      padding: 1rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    header img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    #themeToggle {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    main {
+      padding: 2rem 1rem;
+    }
+    .converter-box {
+      background: white;
+      display: inline-block;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      margin-top: 1rem;
+    }
+    input[type="file"] {
+      margin: 1rem 0;
+    }
+    button {
+      background: #1e40af;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background: #1e3a8a;
+    }
+    #status {
+      margin-top: 1rem;
+      font-weight: 500;
+    }
+    #downloadLink {
+      display: none;
+      margin-top: 1rem;
+      text-decoration: none;
+      color: white;
+      background: #16a34a;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+    }
+    #downloadLink:hover {
+      background: #15803d;
+    }
+    footer {
+      background: #1e40af;
+      color: white;
+      padding: 1rem;
+      margin-top: 2rem;
     }
 
-    status.textContent = "⏳ Converting...";
-    download.style.display = "none";
+    /* 🌙 Dark Mode */
+    body.dark-mode {
+      background: #121212;
+      color: #f5f5f5;
+    }
+    body.dark-mode header {
+      background: #0f172a;
+    }
+    body.dark-mode .converter-box {
+      background: #1e1e1e;
+      color: #fff;
+    }
+    body.dark-mode footer {
+      background: #0f172a;
+    }
+  </style>
+</head>
 
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
+<body>
+  <header>
+    <img src="convert-labs-logo.png" alt="Convert Labs Logo" />
+    <h1>Convert Labs</h1>
+    <button id="themeToggle" title="Switch Theme">🌙</button>
+  </header>
 
-    try {
-      // 📷 Image conversion
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          pdf.addImage(e.target.result, "JPEG", 10, 10, 180, 160);
-          finalizePDF(pdf, download, status);
-        };
-        reader.readAsDataURL(file);
+  <main>
+    <h2>Document to PDF Converter</h2>
+    <p>Upload a document (Word, Excel, Text, or Image) to instantly convert it into a PDF file directly in your browser.</p>
+
+    <div class="converter-box">
+      <input type="file" id="fileInput" accept=".docx,.txt,.csv,.html,.jpg,.jpeg,.png,.gif" />
+      <br />
+      <button onclick="convertToPDF()">Convert to PDF</button>
+      <p id="status"></p>
+      <a id="downloadLink" download="converted.pdf">⬇️ Download PDF</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+  </footer>
+
+  <!-- ✅ Required Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.4.1/dist/docx-preview.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+  <!-- ✅ Hybrid Converter Script -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("themeToggle");
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark") {
+      document.body.classList.add("dark-mode");
+      toggle.textContent = "☀️";
+    }
+    toggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const dark = document.body.classList.contains("dark-mode");
+      toggle.textContent = dark ? "☀️" : "🌙";
+      localStorage.setItem("theme", dark ? "dark" : "light");
+    });
+
+    window.convertToPDF = async function () {
+      const input = document.getElementById("fileInput");
+      const file = input.files[0];
+      const status = document.getElementById("status");
+      const download = document.getElementById("downloadLink");
+
+      if (!file) {
+        status.textContent = "⚠️ Please select a file.";
         return;
       }
 
-      // 📄 DOCX (try visual mode first)
-      if (file.name.endsWith(".docx")) {
-        const arrayBuffer = await file.arrayBuffer();
-        const container = document.createElement("div");
-        container.style.width = "900px";
-        container.style.padding = "20px";
-        container.style.background = "#fff";
-        container.style.color = "#000";
-        container.style.fontFamily = "Arial, sans-serif";
-        document.body.appendChild(container);
+      status.textContent = "⏳ Converting...";
+      download.style.display = "none";
 
-        let rendered = false;
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
 
-        try {
-          await window.docx.renderAsync(arrayBuffer, container, null, {
-            className: "docx",
-            useBase64URL: true,
-            breakPages: true
-          });
-          rendered = true;
-        } catch (err) {
-          console.warn("⚠️ Visual rendering failed, switching to text mode.");
-        }
-
-        if (rendered) {
-          await new Promise(r => setTimeout(r, 1000));
-          const pdf = new jsPDF("p", "pt", "a4");
-          await pdf.html(container, {
-            callback: function (pdf) {
-              finalizePDF(pdf, download, status);
-              document.body.removeChild(container);
-            },
-            margin: [20, 20, 20, 20],
-            html2canvas: { scale: 0.7, useCORS: true, allowTaint: true }
-          });
+      try {
+        // 🖼 Image conversion
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            pdf.addImage(e.target.result, "JPEG", 10, 10, 180, 160);
+            finalizePDF(pdf, download, status);
+          };
+          reader.readAsDataURL(file);
           return;
         }
 
-        // 🧾 Fallback: text-based conversion using Mammoth
-        try {
-          const result = await window.mammoth.convertToHtml({ arrayBuffer });
-          const html = result.value;
-          const tempDiv = document.createElement("div");
-          tempDiv.innerHTML = html;
-          tempDiv.style.width = "750px";
-          tempDiv.style.background = "#fff";
-          tempDiv.style.padding = "20px";
-          tempDiv.style.color = "#000";
-          document.body.appendChild(tempDiv);
+        // 📝 DOCX conversion with fallback
+        if (file.name.endsWith(".docx")) {
+          const arrayBuffer = await file.arrayBuffer();
+          const container = document.createElement("div");
+          container.style.width = "900px";
+          container.style.padding = "20px";
+          container.style.background = "#fff";
+          container.style.color = "#000";
+          container.style.fontFamily = "Arial, sans-serif";
+          document.body.appendChild(container);
 
-          const pdf = new jsPDF("p", "pt", "a4");
-          await pdf.html(tempDiv, {
-            callback: function (pdf) {
-              finalizePDF(pdf, download, status);
-              document.body.removeChild(tempDiv);
-            },
-            margin: [20, 20, 20, 20],
-            html2canvas: { scale: 0.7 }
-          });
-        } catch (fallbackError) {
-          throw new Error("Both rendering modes failed.");
+          let rendered = false;
+          try {
+            await window.docx.renderAsync(arrayBuffer, container, null, {
+              className: "docx",
+              useBase64URL: true,
+              breakPages: true
+            });
+            rendered = true;
+          } catch (err) {
+            console.warn("⚠️ Visual render failed, switching to text fallback.");
+          }
+
+          if (rendered) {
+            await new Promise(r => setTimeout(r, 1000));
+            const pdf = new jsPDF("p", "pt", "a4");
+            await pdf.html(container, {
+              callback: function (pdf) {
+                finalizePDF(pdf, download, status);
+                document.body.removeChild(container);
+              },
+              margin: [20, 20, 20, 20],
+              html2canvas: { scale: 0.7, useCORS: true, allowTaint: true }
+            });
+            return;
+          }
+
+          // Fallback: text extraction mode
+          try {
+            const result = await window.mammoth.convertToHtml({ arrayBuffer });
+            const html = result.value;
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+            tempDiv.style.width = "750px";
+            tempDiv.style.background = "#fff";
+            tempDiv.style.padding = "20px";
+            tempDiv.style.color = "#000";
+            document.body.appendChild(tempDiv);
+
+            const pdf = new jsPDF("p", "pt", "a4");
+            await pdf.html(tempDiv, {
+              callback: function (pdf) {
+                finalizePDF(pdf, download, status);
+                document.body.removeChild(tempDiv);
+              },
+              margin: [20, 20, 20, 20],
+              html2canvas: { scale: 0.7 }
+            });
+          } catch (fallbackError) {
+            throw new Error("Both render modes failed.");
+          }
+
+          return;
         }
 
-        return;
-      }
+        // 📄 Text / HTML / CSV
+        if (file.name.endsWith(".txt") || file.name.endsWith(".html") || file.name.endsWith(".csv")) {
+          const text = await file.text();
+          pdf.setFont("helvetica", "normal");
+          pdf.setFontSize(12);
+          const lines = pdf.splitTextToSize(text, 180);
+          pdf.text(lines, 15, 20);
+          finalizePDF(pdf, download, status);
+          return;
+        }
 
-      // 🧾 Text / HTML / CSV
-      if (file.name.endsWith(".txt") || file.name.endsWith(".html") || file.name.endsWith(".csv")) {
-        const text = await file.text();
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(12);
-        const lines = pdf.splitTextToSize(text, 180);
-        pdf.text(lines, 15, 20);
-        finalizePDF(pdf, download, status);
-        return;
+        status.textContent = "⚠️ Unsupported file type.";
+      } catch (err) {
+        console.error("❌ Conversion error:", err);
+        status.innerHTML = "❌ Conversion failed. Please try again or use a simpler file.";
       }
+    };
 
-      status.textContent = "⚠️ Unsupported file type.";
-    } catch (err) {
-      console.error("❌ Conversion error:", err);
-      status.innerHTML = "❌ Conversion failed. Please try again or use a simpler file.";
+    function finalizePDF(pdf, download, status) {
+      const blob = pdf.output("blob");
+      const url = URL.createObjectURL(blob);
+      download.href = url;
+      download.style.display = "inline-block";
+      download.textContent = "⬇️ Download PDF";
+      status.textContent = "✅ Conversion complete!";
     }
-  };
-
-  function finalizePDF(pdf, download, status) {
-    const blob = pdf.output("blob");
-    const url = URL.createObjectURL(blob);
-    download.href = url;
-    download.style.display = "inline-block";
-    download.textContent = "⬇️ Download PDF";
-    status.textContent = "✅ Conversion complete!";
-  }
-});
-</script>
+  });
+  </script>
+</body>
+</html>
