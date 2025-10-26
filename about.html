@@ -13,22 +13,8 @@
 </head>
 <body>
   <header class="site-header">
-    <a href="/" class="logo">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo">
-      /* ✅ Balanced header logo fix */
-.logo {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: contain;
-}
-@media (max-width: 600px) {
-  .logo {
-    width: 28px;
-    height: 28px;
-  }
-}
-
+    <a href="/" class="logo" aria-label="Convert Labs homepage">
+      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo" />
     </a>
     <p class="tagline">Smart, simple, and reliable unit conversions</p>
   </header>
@@ -42,7 +28,7 @@
     </p>
     <p>
       Built with pure HTML, CSS, and JavaScript, Convert Labs runs entirely in your browser — 
-      no ads, no downloads, and no sign-ups. We focus on performance, simplicity, and precision.
+      no downloads and no sign-ups. We focus on performance, simplicity, and precision.
     </p>
     <h2>Our Mission</h2>
     <p>
@@ -54,20 +40,27 @@
     <ul style="text-align:left;">
       <li>Scientific and engineering unit sets</li>
       <li>Custom user-defined conversions</li>
-      <li>Dark/light theme memory and mobile optimization</li>
+      <li>Improved mobile UI and PWA support</li>
     </ul>
   </main>
 
   <footer class="site-footer">
-    <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon">
-    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <div class="footer-logo">
+      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" />
+      <h3>Convert Labs</h3>
+    </div>
+
+    <p class="footer-text">Smart, fast, and reliable online unit converter</p>
+
     <div class="footer-links">
-      <a href="/about.html">About</a> |
-      <a href="/how-to.html">Guides</a> |
-      <a href="/privacy.html">Privacy Policy</a> |
-     <a href="/terms.html">Terms of Use</a> |
+      <a href="/about.html">About</a>
+      <a href="/how-to.html">Guides</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Use</a>
       <a href="/">Home</a>
     </div>
+
+    <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
   </footer>
 </body>
 </html>
