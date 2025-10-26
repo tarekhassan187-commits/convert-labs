@@ -113,7 +113,7 @@
     </header>
 
     <!-- 🔹 Tabs -->
-    <div class="tabs">
+  <div class="tabs">
   <button onclick="showConverter('length')">Length</button>
   <button onclick="showConverter('temperature')">Temperature</button>
   <button onclick="showConverter('volume')">Volume</button>
@@ -123,6 +123,7 @@
   <button onclick="showConverter('docToPdf')">Doc → PDF</button>
   <button onclick="showConverter('pdfToDoc')">PDF → Doc</button>
 </div>
+
 
 
     <!-- 🔹 Converters -->
@@ -204,6 +205,18 @@
   <p id="imageResult"></p>
 </section>
 
+      <section id="currency" class="converter">
+  <h2>Currency Converter</h2>
+  <p>Convert currencies in real-time using accurate exchange rates.</p>
+
+  <input type="number" id="currencyAmount" placeholder="Enter amount" value="1">
+  <select id="fromCurrency"></select>
+  <select id="toCurrency"></select>
+  <button id="convertCurrencyBtn">Convert</button>
+
+  <p id="currencyResult"></p>
+</section>
+
       <section id="docToPdf" class="converter">
   <h2>Document to PDF Converter</h2>
   <p>Upload a Word, Excel, or Text file and convert it to PDF.</p>
@@ -275,6 +288,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
