@@ -1,13 +1,15 @@
 // 🌐 Splash Screen
 window.addEventListener("load", () => {
   setTimeout(() => {
-    document.getElementById("loading-screen").style.display = "none";
-    document.getElementById("app").style.display = "block";
+    const loading = document.getElementById("loading-screen");
+    const app = document.getElementById("app");
+    if (loading) loading.style.display = "none";
+    if (app) app.style.display = "block";
   }, 800);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 🔹 Theme Toggle
+  // 🌙 Theme Toggle
   const toggle = document.getElementById("themeToggle");
   if (toggle) {
     const saved = localStorage.getItem("theme");
@@ -32,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (id === "currency") initCurrencyConverter();
   };
 
-  // ✅ Initialize only if elements exist
+  // Initialize default converters
   if (document.getElementById("lengthFrom")) initBaseConverters();
 });
 
@@ -138,7 +140,7 @@ function initBaseConverters() {
   };
 }
 
-// 🔹 Currency Converter (auto-init)
+// 🌍 Currency Converter
 let currencyInitialized = false;
 async function initCurrencyConverter() {
   if (currencyInitialized) return;
@@ -173,8 +175,7 @@ async function initCurrencyConverter() {
       return;
     }
 
-    currencyResult.textContent = "⏳ Fetching latest rates...";
-
+    currencyResult.textContent = "⏳ Fetching rates...";
     try {
       const response = await fetch(`https://api.exchangerate.host/convert?from=${from}&to=${to}`);
       const data = await response.json();
@@ -186,4 +187,96 @@ async function initCurrencyConverter() {
       currencyResult.textContent = "❌ Failed to get exchange rate.";
     }
   });
+}
+
+// 🔹 CloudConvert API Key
+const apiKey = "YOUR_API_KEY_HERE"; // replace with your CloudConvert key
+
+// 🔹 Image Converter
+function convertImage() {
+  const file = document.getElementById("imageFile")?.files[0];
+  const format = document.getElementById("imageFormat")?.value;
+  const result = document.getElementById("imageResult");
+  if (!file || !format || !result) return;
+
+  result.textContent = "⏳ Uploading & converting...";
+
+  fetch("https://api.cloudconvert.com/v2/import/upload", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + apiKey },
+  })
+    .then(res => res.json())
+    .then(data => {
+      const uploadUrl = data.data.result.form.url;
+      const params = data.data.result.form.parameters;
+      const form = new FormData();
+      for (const [k, v] of Object.entries(params)) form.append(k, v);
+      form.append("file", file);
+      return fetch(uploadUrl, { method: "POST", body: form });
+    })
+    .then(() => startCloudConvertJob(file, file.name.split(".").pop(), format, result))
+    .catch(() => (result.textContent = "❌ Conversion failed."));
+}
+
+// 🔹 Document → PDF
+function convertDocToPDF() {
+  const file = document.getElementById("docFile")?.files[0];
+  const result = document.getElementById("docToPdfResult");
+  if (!file || !result) return;
+  result.textContent = "⏳ Uploading & converting...";
+  startCloudConvertJob(file, file.name.split(".").pop(), "pdf", result);
+}
+
+// 🔹 PDF → Document
+function convertPdfToDoc() {
+  const file = document.getElementById("pdfFile")?.files[0];
+  const format = document.getElementById("pdfOutputFormat")?.value;
+  const result = document.getElementById("pdfToDocResult");
+  if (!file || !result) return;
+  result.textContent = "⏳ Uploading & converting...";
+  startCloudConvertJob(file, "pdf", format, result);
+}
+
+// 🔹 Generic CloudConvert Function
+function startCloudConvertJob(file, inputFormat, outputFormat, resultElement) {
+  fetch("https://api.cloudconvert.com/v2/jobs", {
+    method: "POST",
+    headers: {
+      "Authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjA3ZDA3N2E3NzQzMTQ0YzFkYWE2OWI5NzM5NDg5NmExNTI5NzYxMWU2MGMzMDc1ZWQxOTIwYWIwMDkwMGU4YTM5YTJiYmNlYzNjYTAxMDMiLCJpYXQiOjE3NjE0NzY1NTcuMzExMzg0LCJuYmYiOjE3NjE0NzY1NTcuMzExMzg2LCJleHAiOjQ5MTcxNTAxNTcuMzA3NzQxLCJzdWIiOiI3MzI5MzQyOCIsInNjb3BlcyI6WyJ0YXNrLnJlYWQiLCJ0YXNrLndyaXRlIl19.W4JR69t4p6StMrZyC8B3PpJzTO6Dw-X1jtXb6V_-Uz62tWLtdOP5-snkInbOlEkdMO2A4Ph9pVNhgJu8-oMbyvOkcXYMmJbL-VznoCLcDfJuaexVZjC07LTJxTzAP1RP5NA2MSRZF1lNRMeuWGlun5ljXzCb5kERmFD-eLczE7878w8F2cff7vDKQAB3lt8Enk3tK0i6_HdcttxI749HbobZ28afEmXOgXHIeXYKUo-0vpMB1VPUgB1U6HDfRX29oF_li-6KjqwnGHQZ3VgD525BGY6o5IFZHsDEhaJO79sQaFMzAQ1jMN8OVDNbfkCPtfPg71Adkp4ofMuEd6fKh6qkwv2_xDttbItsmLSn-G1SyrTHYAa00M5ko1au-2o8YU9eBIiDmXOgHTSwash35FpnGNuXvSEbtpwdUaZYmfENCQgemkkZgvuMMoB9WBHfShbKdcGyNgGh7Z1aVli0_Cxi2G_wjhBp-OWqulpLJbqIrlQZftJEc-a97Eo2GcZiUYdIIz_UGHBfnBBDg0ahHxpJ-isQOmtmwUItwCj3uwHsrJ43RA-Nw2Yc4hVxDaCV8wfMiywuP6YYTKoubdkEC6J2GLCTl2sychQNC4N6IMHXFLVZ5Mq9XQp2QD221_-5Mdaw5Uy_ZXPMLGfIRYJyVpNwf05jWBrSV3mbayHUtlQ,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      tasks: {
+        "import-my-file": { operation: "import/upload" },
+        "convert-my-file": {
+          operation: "convert",
+          input: "import-my-file",
+          input_format: inputFormat,
+          output_format: outputFormat,
+        },
+        "export-my-file": { operation: "export/url", input: "convert-my-file" },
+      },
+    }),
+  })
+    .then(res => res.json())
+    .then(job => checkJobStatus(job.data.id, resultElement))
+    .catch(() => (resultElement.textContent = "❌ Error creating job."));
+}
+
+function checkJobStatus(jobId, resultElement) {
+  fetch(`https://api.cloudconvert.com/v2/jobs/${jobId}`, {
+    headers: { Authorization: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjA3ZDA3N2E3NzQzMTQ0YzFkYWE2OWI5NzM5NDg5NmExNTI5NzYxMWU2MGMzMDc1ZWQxOTIwYWIwMDkwMGU4YTM5YTJiYmNlYzNjYTAxMDMiLCJpYXQiOjE3NjE0NzY1NTcuMzExMzg0LCJuYmYiOjE3NjE0NzY1NTcuMzExMzg2LCJleHAiOjQ5MTcxNTAxNTcuMzA3NzQxLCJzdWIiOiI3MzI5MzQyOCIsInNjb3BlcyI6WyJ0YXNrLnJlYWQiLCJ0YXNrLndyaXRlIl19.W4JR69t4p6StMrZyC8B3PpJzTO6Dw-X1jtXb6V_-Uz62tWLtdOP5-snkInbOlEkdMO2A4Ph9pVNhgJu8-oMbyvOkcXYMmJbL-VznoCLcDfJuaexVZjC07LTJxTzAP1RP5NA2MSRZF1lNRMeuWGlun5ljXzCb5kERmFD-eLczE7878w8F2cff7vDKQAB3lt8Enk3tK0i6_HdcttxI749HbobZ28afEmXOgXHIeXYKUo-0vpMB1VPUgB1U6HDfRX29oF_li-6KjqwnGHQZ3VgD525BGY6o5IFZHsDEhaJO79sQaFMzAQ1jMN8OVDNbfkCPtfPg71Adkp4ofMuEd6fKh6qkwv2_xDttbItsmLSn-G1SyrTHYAa00M5ko1au-2o8YU9eBIiDmXOgHTSwash35FpnGNuXvSEbtpwdUaZYmfENCQgemkkZgvuMMoB9WBHfShbKdcGyNgGh7Z1aVli0_Cxi2G_wjhBp-OWqulpLJbqIrlQZftJEc-a97Eo2GcZiUYdIIz_UGHBfnBBDg0ahHxpJ-isQOmtmwUItwCj3uwHsrJ43RA-Nw2Yc4hVxDaCV8wfMiywuP6YYTKoubdkEC6J2GLCTl2sychQNC4N6IMHXFLVZ5Mq9XQp2QD221_-5Mdaw5Uy_ZXPMLGfIRYJyVpNwf05jWBrSV3mbayHUtlQ},
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.data.status === "finished") {
+        const url = data.data.tasks.find(t => t.operation === "export/url").result.files[0].url;
+        resultElement.innerHTML = `✅ Conversion complete! <a href="${url}" target="_blank">Download</a>`;
+      } else if (data.data.status === "error") {
+        resultElement.textContent = "❌ Conversion failed.";
+      } else {
+        setTimeout(() => checkJobStatus(jobId, resultElement), 3000);
+      }
+    })
+    .catch(() => (resultElement.textContent = "❌ Error checking status."));
 }
