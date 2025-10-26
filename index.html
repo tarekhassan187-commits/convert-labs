@@ -1,191 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="google-adsense-account" content="ca-pub-2490597435056272">
-  <meta name="msvalidate.01" content="C649791C97CAC48F858B29B101C85D59" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Convert Labs — Smart Unit Converter</title> 
-
-  <!-- ✅ Google AdSense verification script -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-       crossorigin="anonymous"></script>
-
-  <!-- ✅ SEO & Social Metadata -->
-  <meta name="title" content="Convert Labs — Fast & Smart Online Unit Converter" />
-  <meta name="description" content="Convert Labs is your free, all-in-one online unit converter for length, temperature, volume, container, and kitchen measurements. Fast, accurate, and easy to use." />
-  <meta name="keywords" content="unit converter, online converter, length converter, temperature converter, kitchen converter, volume calculator, Convert Labs, convert units" />
-  <meta name="author" content="Convert Labs Team" />
-  <meta name="robots" content="index, follow" />
-  <meta name="language" content="English" />
-  <link rel="canonical" href="https://convertlabs.online" />
-
-  <!-- ✅ Open Graph -->
-  <meta property="og:title" content="Convert Labs — Fast & Smart Online Unit Converter" />
-  <meta property="og:description" content="Convert Labs is a free, all-in-one online unit converter for length, temperature, volume, and kitchen measurements. Simple, accurate, and mobile-friendly." />
-  <meta property="og:image" content="https://convertlabs.online/assets/convert-labs-logo.png" />
-  <meta property="og:url" content="https://convertlabs.online" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Convert Labs" />
-  <meta property="og:locale" content="en_US" />
-
-  <!-- ✅ Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Convert Labs — Fast & Smart Online Unit Converter" />
-  <meta name="twitter:description" content="Convert Labs makes conversions simple: Length, Volume, Temperature, and Kitchen units all in one place." />
-  <meta name="twitter:image" content="https://convertlabs.online/assets/convert-labs-logo.png" />
-
-  <!-- ✅ Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/convert-labs-icon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/convert-labs-icon.png">
-  <link rel="shortcut icon" href="/assets/convert-labs-icon.png" type="image/png">
-  <meta name="theme-color" content="#0033A0">
-
-  <!-- ✅ Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Convert Labs",
-    "operatingSystem": "Any",
-    "applicationCategory": "WebApplication",
-    "url": "https://convertlabs.online",
-    "image": "https://convertlabs.online/assets/convert-labs-logo.png",
-    "description": "Convert Labs is a free, all-in-one online unit converter for length, temperature, volume, container volume, and kitchen measurements. Simple, accurate, and beautifully designed.",
-    "softwareVersion": "1.0",
-    "creator": {
-      "@type": "Organization",
-      "name": "Convert Labs Team",
-      "url": "https://convertlabs.online"
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
-
-  <!-- ✅ Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P');
-  </script>
-
-  <link rel="stylesheet" href="style.css" /> 
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://convertlabs.online/"
-    }
-  ]
-}
-</script>
-
+  <title>Convert Labs — Smart Unit Converter</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
 </head>
 
 <body>
-  <!-- 🔹 Splash Screen -->
-  <div id="loading-screen">
-    <h1>Loading Convert Labs...</h1>
-  </div>
+  <div id="loading-screen"><h1>Loading Convert Labs...</h1></div>
 
-  <!-- 🔹 Main App -->
   <div id="app" style="display:none;">
-
-    <!-- ✅ HEADER WITH TOGGLE BUTTON -->
-    <header class="site-header">
+    <header>
       <div class="header-content">
-        <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo" class="logo" />
+        <img src="assets/convert-labs-icon.png" class="logo" alt="Convert Labs Logo">
         <h1>Convert Labs</h1>
-        <button id="themeToggle" title="Switch Theme">🌙</button>
+        <button id="themeToggle">🌙</button>
       </div>
-      <p class="tagline">Your smart all-in-one unit converter</p>
+      <p class="tagline">Your all-in-one unit converter</p>
     </header>
 
-    <!-- 🔹 Tabs -->
-  <div class="tabs">
-  <button onclick="showConverter('length')">Length</button>
-  <button onclick="showConverter('temperature')">Temperature</button>
-  <button onclick="showConverter('volume')">Volume</button>
-   <button onclick="showConverter('volume')">Container Volume</button>
-  <button onclick="showConverter('kitchen')">Kitchen</button>
-  <button onclick="showConverter('currency')">Currency</button>
-  <button onclick="showConverter('imageConverter')">Image</button>
-  <button onclick="showConverter('docToPdf')">Doc → PDF</button>
-  <button onclick="showConverter('pdfToDoc')">PDF → Doc</button>
-</div>
+    <div class="tabs">
+      <button onclick="showConverter('length')">Length</button>
+      <button onclick="showConverter('temperature')">Temperature</button>
+      <button onclick="showConverter('volume')">Volume</button>
+      <button onclick="showConverter('container')">Container Volume</button>
+      <button onclick="showConverter('kitchen')">Kitchen</button>
+      <button onclick="showConverter('currency')">Currency</button>
+      <button onclick="showConverter('imageConverter')">Image</button>
+      <button onclick="showConverter('docToPdf')">Doc → PDF</button>
+      <button onclick="showConverter('pdfToDoc')">PDF → Doc</button>
+    </div>
 
-
-
-    <!-- 🔹 Converters -->
     <main>
+      <!-- Length -->
       <section id="length" class="converter active">
         <h2>Length Converter</h2>
-        <input type="number" id="lengthInput" placeholder="Enter value" />
+        <input id="lengthInput" type="number" placeholder="Enter value" />
         <select id="lengthFrom"></select>
         <select id="lengthTo"></select>
         <button onclick="convertLength()">Convert</button>
         <p id="lengthResult"></p>
       </section>
 
+      <!-- Temperature -->
       <section id="temperature" class="converter">
         <h2>Temperature Converter</h2>
-        <input type="number" id="tempInput" placeholder="Enter value" />
+        <input id="tempInput" type="number" placeholder="Enter value" />
         <select id="tempFrom"></select>
         <select id="tempTo"></select>
         <button onclick="convertTemperature()">Convert</button>
         <p id="tempResult"></p>
       </section>
 
+      <!-- Volume -->
       <section id="volume" class="converter">
         <h2>Volume Converter</h2>
-        <input type="number" id="volumeInput" placeholder="Enter value" />
+        <input id="volumeInput" type="number" placeholder="Enter value" />
         <select id="volumeFrom"></select>
         <select id="volumeTo"></select>
         <button onclick="convertVolume()">Convert</button>
         <p id="volumeResult"></p>
       </section>
 
+      <!-- Container Volume -->
       <section id="container" class="converter">
         <h2>Container Volume Calculator</h2>
         <select id="containerType">
           <option value="box">Box (L×W×H)</option>
           <option value="cylinder">Cylinder (r×h)</option>
         </select>
+
         <div id="boxInputs">
-          <input type="number" id="lengthBox" placeholder="Length (cm)" />
-          <input type="number" id="widthBox" placeholder="Width (cm)" />
-          <input type="number" id="heightBox" placeholder="Height (cm)" />
+          <input id="lengthBox" type="number" placeholder="Length (cm)" />
+          <input id="widthBox" type="number" placeholder="Width (cm)" />
+          <input id="heightBox" type="number" placeholder="Height (cm)" />
         </div>
+
         <div id="cylinderInputs" style="display:none;">
-          <input type="number" id="radiusCylinder" placeholder="Radius (cm)" />
-          <input type="number" id="heightCylinder" placeholder="Height (cm)" />
+          <input id="radiusCylinder" type="number" placeholder="Radius (cm)" />
+          <input id="heightCylinder" type="number" placeholder="Height (cm)" />
         </div>
+
         <select id="liquidType">
           <option value="water">Water</option>
           <option value="milk">Milk</option>
           <option value="oil">Oil</option>
           <option value="honey">Honey</option>
-          <option value="custom">Custom (enter density)</option>
+          <option value="custom">Custom</option>
         </select>
-        <input type="number" id="customDensity" placeholder="Custom density (g/cm³)" style="display:none;" />
+
+        <input id="customDensity" type="number" placeholder="Custom density (g/cm³)" style="display:none;" />
         <button onclick="calculateContainerVolume()">Calculate</button>
         <p id="containerResult"></p>
       </section>
 
+      <!-- Kitchen -->
       <section id="kitchen" class="converter">
         <h2>Kitchen Converter</h2>
-        <input type="number" id="kitchenInput" placeholder="Enter amount" />
+        <input id="kitchenInput" type="number" placeholder="Enter amount" />
         <select id="kitchenFrom"></select>
         <select id="kitchenTo"></select>
         <select id="kitchenIngredient"></select>
@@ -193,105 +107,60 @@
         <p id="kitchenResult"></p>
       </section>
 
-      <section id="imageConverter" class="converter">
-  <h2>Image Converter</h2>
-  <p>Convert images between formats (JPG, PNG, WEBP, etc.) directly in your browser.</p>
-  <input type="file" id="imageFile" accept="image/*">
-  <select id="imageFormat">
-    <option value="png">PNG</option>
-    <option value="jpg">JPG</option>
-    <option value="webp">WEBP</option>
-  </select>
-  <button onclick="convertImage()">Convert</button>
-  <p id="imageResult"></p>
-</section>
-
+      <!-- Currency -->
       <section id="currency" class="converter">
-  <h2>Currency Converter</h2>
-  <p>Convert currencies in real-time using accurate exchange rates.</p>
+        <h2>Currency Converter</h2>
+        <input id="currencyAmount" type="number" placeholder="Enter amount" />
+        <select id="fromCurrency"></select>
+        <select id="toCurrency"></select>
+        <button id="convertCurrencyBtn">Convert</button>
+        <p id="currencyResult"></p>
+      </section>
 
-  <input type="number" id="currencyAmount" placeholder="Enter amount" value="1">
-  <select id="fromCurrency"></select>
-  <select id="toCurrency"></select>
-  <button id="convertCurrencyBtn">Convert</button>
+      <!-- Image -->
+      <section id="imageConverter" class="converter">
+        <h2>Image Converter</h2>
+        <input id="imageFile" type="file" accept="image/*" />
+        <select id="imageFormat">
+          <option value="png">PNG</option>
+          <option value="jpg">JPG</option>
+          <option value="webp">WEBP</option>
+        </select>
+        <button onclick="convertImage()">Convert</button>
+        <p id="imageResult"></p>
+      </section>
 
-  <p id="currencyResult"></p>
-</section>
-
+      <!-- Doc to PDF -->
       <section id="docToPdf" class="converter">
-  <h2>Document to PDF Converter</h2>
-  <p>Upload a Word, Excel, or Text file and convert it to PDF.</p>
-  <input type="file" id="docFile" accept=".doc,.docx,.xls,.xlsx,.txt">
-  <button onclick="convertDocToPDF()">Convert</button>
-  <p id="docToPdfResult"></p>
-</section>
+        <h2>Document to PDF</h2>
+        <input id="docFile" type="file" accept=".doc,.docx,.xls,.xlsx,.txt" />
+        <button onclick="convertDocToPDF()">Convert</button>
+        <p id="docToPdfResult"></p>
+      </section>
 
-  <section id="pdfToDoc" class="converter">
-  <h2>PDF to Document Converter</h2>
-  <p>Upload a PDF and convert it into Word, Excel, or Text format.</p>
-  <input type="file" id="pdfFile" accept=".pdf">
-  <select id="pdfOutputFormat">
-    <option value="docx">Word (.docx)</option>
-    <option value="xlsx">Excel (.xlsx)</option>
-    <option value="txt">Text (.txt)</option>
-  </select>
-  <button onclick="convertPdfToDoc()">Convert</button>
-  <p id="pdfToDocResult"></p>
-</section>
-
+      <!-- PDF to Doc -->
+      <section id="pdfToDoc" class="converter">
+        <h2>PDF to Document</h2>
+        <input id="pdfFile" type="file" accept=".pdf" />
+        <select id="pdfOutputFormat">
+          <option value="docx">Word (.docx)</option>
+          <option value="xlsx">Excel (.xlsx)</option>
+          <option value="txt">Text (.txt)</option>
+        </select>
+        <button onclick="convertPdfToDoc()">Convert</button>
+        <p id="pdfToDocResult"></p>
+      </section>
     </main>
 
-    <!-- ✅ FOOTER -->
-    <footer class="site-footer">
+    <footer>
       <div class="footer-logo">
-        <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon">
-        <h3>Convert Labs</h3>
+        <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon">
+        <span>Convert Labs</span>
       </div>
-      <p class="footer-text">Smart, fast, and reliable online unit converter</p>
-      <div class="footer-links">
-        <a href="/about.html">About</a>
-        <a href="/how-to.html">Guides</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Use</a>
-        <a href="/">Home</a>
-      </div>
-      <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
+      <p>© 2025 Convert Labs — All rights reserved.</p>
     </footer>
-
-  </div>
-
-  <!-- 🔹 About Modal -->
-  <div id="aboutModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeAbout">&times;</span>
-      <h2>About Convert Labs</h2>
-      <p>
-        Convert Labs is a modern, responsive, all-in-one unit converter built with pure HTML, CSS, and JavaScript. It includes converters for Length, Temperature, Volume, Container Volume (with density-based mass calculation), and Kitchen measurements.
-      </p>
-    </div>
-  </div>
-
-  <!-- 🔹 Contact Modal -->
-  <div id="contactModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeContact">&times;</span>
-      <h2>Contact Us</h2>
-      <form id="contactForm" action="https://formspree.io/f/movkgjwq" method="POST">
-        <input type="text" name="name" placeholder="Your Name" required />
-        <input type="email" name="email" placeholder="Your Email" required />
-        <textarea name="message" placeholder="Your Message" required></textarea>
-        <button type="submit">Send</button>
-      </form>
-      <p id="formMessage"></p>
-    </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
