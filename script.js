@@ -196,5 +196,59 @@ function convertPdfToDoc() {
   startCloudConvertJob(file, "pdf", format, result);
 }
 
+// === CONTAINER VOLUME CONVERTER ===
+function initVolumeConverter() {
+  const from = document.getElementById("volumeFrom");
+  const to = document.getElementById("volumeTo");
+  const result = document.getElementById("volumeResult");
+  if (!from || !to || !result) return;
+
+  const volumeUnits = {
+    m3: 1,
+    liter: 0.001,
+    ml: 0.000001,
+    gallon: 0.00378541
+  };
+
+  Object.keys(volumeUnits).forEach(u => {
+    from.add(new Option(u, u));
+    to.add(new Option(u, u));
+  });
+
+  from.value = "liter";
+  to.value = "gallon";
+}
+
+function convertVolume() {
+  const input = parseFloat(document.getElementById("volumeInput")?.value || 0);
+  const from = document.getElementById("volumeFrom");
+  const to = document.getElementById("volumeTo");
+  const result = document.getElementById("volumeResult");
+  if (!from || !to || !result) return;
+  if (isNaN(input)) return alert("Enter a valid number");
+
+  const volumeUnits = {
+    m3: 1,
+    liter: 0.001,
+    ml: 0.000001,
+    gallon: 0.00378541
+  };
+
+  const converted = (input * volumeUnits[from.value]) / volumeUnits[to.value];
+  result.textContent = `${input} ${from.value} = ${converted.toFixed(3)} ${to.value}`;
+}
+
+// Activate volume converter when opened
+window.showConverter = function (id) {
+  document.querySelectorAll(".converter").forEach(el => el.classList.remove("active"));
+  const section = document.getElementById(id);
+  if (section) section.classList.add("active");
+
+  if (id === "currency") initCurrencyConverter();
+  if (id === "volume") initVolumeConverter();
+};
+
+
 console.log("✅ Script loaded complete");
+
 
