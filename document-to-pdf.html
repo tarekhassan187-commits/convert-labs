@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document to PDF Converter | Convert Labs</title>
-  <meta name="description" content="Free online DOCX to PDF converter by Convert Labs using CloudConvert API. Keeps original formatting and tables perfectly." />
+  <meta name="description" content="Free online Word, Excel, and Text to PDF converter by Convert Labs using CloudConvert API. Keeps formatting perfectly." />
   <link rel="icon" href="convert-labs-logo.png" />
 
   <style>
@@ -14,7 +14,6 @@
       color: #222;
       text-align: center;
       margin: 0;
-      padding: 0;
       transition: background 0.3s, color 0.3s;
     }
     header {
@@ -32,11 +31,6 @@
       height: 42px;
       border-radius: 50%;
     }
-    header h1 {
-      margin: 0;
-      font-size: 1.6rem;
-      font-weight: 700;
-    }
     #themeToggle {
       position: absolute;
       right: 1rem;
@@ -47,20 +41,14 @@
       font-size: 1.5rem;
       cursor: pointer;
     }
-    main {
-      padding: 2rem 1rem;
-    }
     .converter-box {
       background: white;
       display: inline-block;
       padding: 1.5rem;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      margin-top: 1rem;
+      margin-top: 2rem;
       max-width: 500px;
-    }
-    input[type="file"] {
-      margin: 1rem 0;
     }
     button {
       background: #1e40af;
@@ -90,14 +78,6 @@
     #downloadLink:hover {
       background: #15803d;
     }
-    footer {
-      background: #1e40af;
-      color: white;
-      padding: 1rem;
-      margin-top: 2rem;
-    }
-
-    /* 🌙 Dark Mode */
     body.dark-mode {
       background: #121212;
       color: #f5f5f5;
@@ -109,25 +89,22 @@
       background: #1e1e1e;
       color: #fff;
     }
-    body.dark-mode footer {
-      background: #0f172a;
-    }
   </style>
 </head>
 
 <body>
   <header>
-    <img src="convert-labs-logo.png" alt="Convert Labs Logo" />
+    <img src="convert-labs-logo.png" alt="Convert Labs Logo">
     <h1>Convert Labs</h1>
-    <button id="themeToggle" title="Switch Theme">🌙</button>
+    <button id="themeToggle">🌙</button>
   </header>
 
   <main>
     <h2>Document to PDF Converter</h2>
-    <p>Upload a document (Word, Excel, or Text) and instantly convert it to PDF with perfect formatting using CloudConvert.</p>
+    <p>Upload a document (Word, Excel, or Text) and convert it to PDF using CloudConvert’s accurate conversion API.</p>
 
     <div class="converter-box">
-      <input type="file" id="fileInput" accept=".docx,.xls,.xlsx,.txt,.pptx" />
+      <input type="file" id="fileInput" accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" />
       <br />
       <button onclick="convertToPDF()">Convert to PDF</button>
       <p id="status"></p>
@@ -135,11 +112,9 @@
     </div>
   </main>
 
-  <footer>
-    <p>© 2025 Convert Labs. All rights reserved.</p>
-  </footer>
-
   <script>
+    const API_KEY = "YOUR_API_KEY_HERE"; // replace with your real key
+
     document.addEventListener("DOMContentLoaded", () => {
       const toggle = document.getElementById("themeToggle");
       const saved = localStorage.getItem("theme");
@@ -169,38 +144,57 @@
       status.textContent = "⏳ Uploading and converting...";
       download.style.display = "none";
 
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("filename", file.name);
-      formData.append("input_format", file.name.split(".").pop());
-      formData.append("output_format", "pdf");
-
       try {
-        const response = await fetch("https://api.cloudconvert.com/v2/convert", {
+        // 1️⃣ Create conversion job
+        const jobResponse = await fetch("https://api.cloudconvert.com/v2/jobs", {
           method: "POST",
           headers: {
-            "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjA3ZDA3N2E3NzQzMTQ0YzFkYWE2OWI5NzM5NDg5NmExNTI5NzYxMWU2MGMzMDc1ZWQxOTIwYWIwMDkwMGU4YTM5YTJiYmNlYzNjYTAxMDMiLCJpYXQiOjE3NjE0NzY1NTcuMzExMzg0LCJuYmYiOjE3NjE0NzY1NTcuMzExMzg2LCJleHAiOjQ5MTcxNTAxNTcuMzA3NzQxLCJzdWIiOiI3MzI5MzQyOCIsInNjb3BlcyI6WyJ0YXNrLnJlYWQiLCJ0YXNrLndyaXRlIl19.W4JR69t4p6StMrZyC8B3PpJzTO6Dw-X1jtXb6V_-Uz62tWLtdOP5-snkInbOlEkdMO2A4Ph9pVNhgJu8-oMbyvOkcXYMmJbL-VznoCLcDfJuaexVZjC07LTJxTzAP1RP5NA2MSRZF1lNRMeuWGlun5ljXzCb5kERmFD-eLczE7878w8F2cff7vDKQAB3lt8Enk3tK0i6_HdcttxI749HbobZ28afEmXOgXHIeXYKUo-0vpMB1VPUgB1U6HDfRX29oF_li-6KjqwnGHQZ3VgD525BGY6o5IFZHsDEhaJO79sQaFMzAQ1jMN8OVDNbfkCPtfPg71Adkp4ofMuEd6fKh6qkwv2_xDttbItsmLSn-G1SyrTHYAa00M5ko1au-2o8YU9eBIiDmXOgHTSwash35FpnGNuXvSEbtpwdUaZYmfENCQgemkkZgvuMMoB9WBHfShbKdcGyNgGh7Z1aVli0_Cxi2G_wjhBp-OWqulpLJbqIrlQZftJEc-a97Eo2GcZiUYdIIz_UGHBfnBBDg0ahHxpJ-isQOmtmwUItwCj3uwHsrJ43RA-Nw2Yc4hVxDaCV8wfMiywuP6YYTKoubdkEC6J2GLCTl2sychQNC4N6IMHXFLVZ5Mq9XQp2QD221_-5Mdaw5Uy_ZXPMLGfIRYJyVpNwf05jWBrSV3mbayHUtlQ"
+            Authorization: "Bearer " + API_KEY,
+            "Content-Type": "application/json",
           },
-          body: formData
+          body: JSON.stringify({
+            tasks: {
+              "import-1": { operation: "import/upload" },
+              "convert-1": {
+                operation: "convert",
+                input: ["import-1"],
+                output_format: "pdf",
+              },
+              "export-1": {
+                operation: "export/url",
+                input: ["convert-1"],
+              },
+            },
+          }),
         });
 
-        const data = await response.json();
+        const jobData = await jobResponse.json();
+        const uploadUrl = jobData.data.tasks[0].result.form.url;
+        const uploadParams = jobData.data.tasks[0].result.form.parameters;
 
-        if (!data || !data.data) {
-          throw new Error("Conversion failed. Invalid API response.");
+        // 2️⃣ Upload file to import URL
+        const formData = new FormData();
+        for (const key in uploadParams) formData.append(key, uploadParams[key]);
+        formData.append("file", file);
+        await fetch(uploadUrl, { method: "POST", body: formData });
+
+        // 3️⃣ Wait for job completion
+        let completedJob;
+        for (let i = 0; i < 30; i++) {
+          const check = await fetch(`https://api.cloudconvert.com/v2/jobs/${jobData.data.id}`, {
+            headers: { Authorization: "Bearer " + eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZjA3ZDA3N2E3NzQzMTQ0YzFkYWE2OWI5NzM5NDg5NmExNTI5NzYxMWU2MGMzMDc1ZWQxOTIwYWIwMDkwMGU4YTM5YTJiYmNlYzNjYTAxMDMiLCJpYXQiOjE3NjE0NzY1NTcuMzExMzg0LCJuYmYiOjE3NjE0NzY1NTcuMzExMzg2LCJleHAiOjQ5MTcxNTAxNTcuMzA3NzQxLCJzdWIiOiI3MzI5MzQyOCIsInNjb3BlcyI6WyJ0YXNrLnJlYWQiLCJ0YXNrLndyaXRlIl19.W4JR69t4p6StMrZyC8B3PpJzTO6Dw-X1jtXb6V_-Uz62tWLtdOP5-snkInbOlEkdMO2A4Ph9pVNhgJu8-oMbyvOkcXYMmJbL-VznoCLcDfJuaexVZjC07LTJxTzAP1RP5NA2MSRZF1lNRMeuWGlun5ljXzCb5kERmFD-eLczE7878w8F2cff7vDKQAB3lt8Enk3tK0i6_HdcttxI749HbobZ28afEmXOgXHIeXYKUo-0vpMB1VPUgB1U6HDfRX29oF_li-6KjqwnGHQZ3VgD525BGY6o5IFZHsDEhaJO79sQaFMzAQ1jMN8OVDNbfkCPtfPg71Adkp4ofMuEd6fKh6qkwv2_xDttbItsmLSn-G1SyrTHYAa00M5ko1au-2o8YU9eBIiDmXOgHTSwash35FpnGNuXvSEbtpwdUaZYmfENCQgemkkZgvuMMoB9WBHfShbKdcGyNgGh7Z1aVli0_Cxi2G_wjhBp-OWqulpLJbqIrlQZftJEc-a97Eo2GcZiUYdIIz_UGHBfnBBDg0ahHxpJ-isQOmtmwUItwCj3uwHsrJ43RA-Nw2Yc4hVxDaCV8wfMiywuP6YYTKoubdkEC6J2GLCTl2sychQNC4N6IMHXFLVZ5Mq9XQp2QD221_-5Mdaw5Uy_ZXPMLGfIRYJyVpNwf05jWBrSV3mbayHUtlQ },
+          });
+          completedJob = await check.json();
+          if (completedJob.data.status === "finished") break;
+          await new Promise(r => setTimeout(r, 2000));
         }
 
-        const downloadUrl = data.data.result?.files?.[0]?.url;
-        if (!downloadUrl) {
-          status.textContent = "✅ Converted successfully! Click below to download.";
-          download.href = data.data.result?.files?.url || "#";
-        } else {
-          download.href = downloadUrl;
-        }
+        const exportTask = completedJob.data.tasks.find(t => t.name === "export-1");
+        const fileUrl = exportTask.result.files[0].url;
 
-        download.style.display = "inline-block";
-        download.textContent = "⬇️ Download PDF";
         status.textContent = "✅ Conversion complete!";
+        download.href = fileUrl;
+        download.style.display = "inline-block";
       } catch (error) {
         console.error(error);
         status.textContent = "❌ Conversion failed. Please try again.";
