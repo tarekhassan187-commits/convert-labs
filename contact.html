@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact Us – Convert Labs</title>
+  <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <img src="assets/convert-labs-icon.png" alt="Convert Labs Logo" class="logo" />
+      <h1>Contact Convert Labs</h1>
+      <button id="themeToggle" title="Switch Theme">🌙</button>
+      <!-- inside header .header-content -->
+<a href="contact.html" class="header-contact-btn" title="Contact us">Contact</a>
+
+    </div>
+  </header>
+
+  <main class="content-section" style="max-width:760px;margin:24px auto;">
+    <h2>Get in touch</h2>
+    <p>
+      Have feedback, a bug report, or a suggestion for a new converter? Send us a message and we’ll reply as soon as possible.
+    </p>
+
+    <!-- Formspree form (your existing endpoint) -->
+    <form id="contactForm" action="https://formspree.io/f/movkgjwq" method="POST">
+      <label for="name">Your name</label><br />
+      <input id="name" name="name" type="text" required placeholder="Your name" />
+
+      <label for="email">Your email</label><br />
+      <input id="email" name="email" type="email" required placeholder="you@example.com" />
+
+      <label for="message">Message</label><br />
+      <textarea id="message" name="message" required placeholder="Write your message here..." rows="6"></textarea>
+
+      <button type="submit">Send message</button>
+    </form>
+
+    <p id="formMessage" style="margin-top:12px;font-weight:600;"></p>
+
+    <hr style="margin:20px 0;" />
+
+    <h3>Other ways to reach us</h3>
+    <p>If you have a business inquiry or partnership proposal, please include “Business” in the subject line of your message.</p>
+  </main>
+
+  <footer>
+    <div class="footer-brand">
+      <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <span class="footer-text">Convert Labs</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Home</a> |
+      <a href="about.html">About</a> |
+      <a href="how-to.html">How To Use</a> |
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms of Use</a> |
+      <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Small client-side handler to show success/error message without changing global JS
+    const form = document.getElementById('contactForm');
+    const msg = document.getElementById('formMessage');
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      msg.textContent = 'Sending…';
+      try {
+        const resp = await fetch(form.action, {
+          method: form.method,
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (resp.ok) {
+          msg.textContent = '✅ Message sent — thanks!';
+          form.reset();
+        } else {
+          msg.textContent = '⚠️ Could not send message. Please try again later.';
+        }
+      } catch (err) {
+        msg.textContent = '⚠️ Network error. Please try again.';
+      }
+    });
+  </script>
+</body>
+</html>
