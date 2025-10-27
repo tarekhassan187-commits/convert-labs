@@ -22,58 +22,73 @@ body {
 }
 @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 
-/* === Header layout fixes === */
+/* === Header layout (fixed) === */
 header {
   background: #1e40af;
   color: white;
   padding: 1rem 0 1.2rem;
 }
+
 .header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 1rem;
 }
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+}
+
 .logo {
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
-h1 {
-  margin: 0;
-  font-size: 1.5rem;
+
+.brand-text {
+  font-size: 1.6rem;
   font-weight: 700;
-}
-.tagline {
-  text-align: center;
-  margin-top: 0.5rem;
-  font-size: 1rem;
   color: #fff;
 }
 
-/* === Header Buttons === */
+.tagline {
+  text-align: center;
+  font-size: 1rem;
+  color: #e5e7eb;
+  margin-top: 0.5rem;
+}
+
+/* --- Header Buttons --- */
 .header-controls {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.header-contact-btn {
-  padding: 6px 12px;
+
+.header-btn {
+  padding: 6px 14px;
   background-color: #ffffff;
   color: #1e40af;
   font-weight: 600;
-  border: none;
   border-radius: 8px;
   text-decoration: none;
   font-size: 0.95rem;
   transition: background 0.3s, transform 0.2s;
+  border: none;
 }
-.header-contact-btn:hover {
+
+.header-btn:hover {
   background-color: #f3f4f6;
   transform: scale(1.05);
 }
+
 #themeToggle {
   background: none;
   border: 2px solid white;
@@ -84,20 +99,27 @@ h1 {
   cursor: pointer;
   transition: transform 0.3s;
 }
+
 #themeToggle:hover {
   transform: scale(1.1);
 }
 
-/* Dark mode adjustments */
+/* --- Dark Mode Support --- */
 body.dark-mode header {
   background: #111827;
 }
-body.dark-mode .header-contact-btn {
+
+body.dark-mode .brand-text {
+  color: #f9fafb;
+}
+
+body.dark-mode .header-btn {
   background-color: #374151;
   color: #f9fafb;
   border: 1px solid #4b5563;
 }
-body.dark-mode .header-contact-btn:hover {
+
+body.dark-mode .header-btn:hover {
   background-color: #4b5563;
 }
 
@@ -228,6 +250,7 @@ body.dark-mode {
 body.dark-mode header { background: #111827; }
 body.dark-mode .tabs { background: #2d2d33; }
 body.dark-mode footer { background: #111827; }
+
 
 
 
