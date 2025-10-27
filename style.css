@@ -29,6 +29,96 @@ header {
   padding: 1rem 0 1.2rem;
   border-radius: 6px; /* optional rounded top look — safe */
 }
+/* Header layout */
+header {
+  background: #1e40af;
+  color: #fff;
+  padding: 1rem 0 1.2rem;
+  position: relative;
+}
+
+/* top row: brand + controls */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* brand left, controls right */
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  gap: 1rem;
+}
+
+/* brand with icon + text */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: white;
+}
+.logo {
+  width: 44px;           /* fixed small size so it won't blow up */
+  height: 44px;
+  border-radius: 50%;
+  object-fit: contain;
+  display: inline-block;
+}
+.brand-text {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+/* header right side controls */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.header-btn {
+  display:inline-block;
+  background:#fff;
+  color:#1e40af;
+  padding:0.45rem 0.8rem;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+}
+.header-btn:hover { opacity:0.95; }
+
+/* theme toggle button style */
+.theme-toggle {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* tagline below header row */
+.tagline {
+  margin: 0.6rem 0 0;
+  font-size: 0.95rem;
+  text-align: center;
+  color: #e6eefc;
+}
+
+/* page content max width and spacing */
+.page-content {
+  padding: 2rem 1rem;
+  max-width: 900px;
+  margin: 1.8rem auto 3rem;
+  background: transparent; /* ensure body background visible */
+}
+
+/* responsive: shrink brand text on small screens */
+@media (max-width:720px) {
+  .brand-text { font-size: 1rem; }
+  .logo { width:38px; height:38px; }
+  .header-content { padding: 0 0.6rem; }
+  .page-content { padding: 1.2rem; }
+  .header-controls .header-btn { padding: 0.3rem 0.6rem; font-size:0.9rem; }
+}
 
 .header-content{
   display: flex;
@@ -259,6 +349,7 @@ body.dark-mode {
 body.dark-mode header { background: #111827; }
 body.dark-mode .tabs { background: #2d2d33; }
 body.dark-mode footer { background: #111827; }
+
 
 
 
