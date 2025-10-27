@@ -32,18 +32,13 @@
     </p>
 
     <!-- Formspree form (your existing endpoint) -->
-    <form id="contactForm" action="https://formspree.io/f/movkgjwq" method="POST">
-      <label for="name">Your name</label><br />
-      <input id="name" name="name" type="text" required placeholder="Your name" />
+    <form action="https://formspree.io/f/yourformid" method="POST">
+  <input type="text" name="name" placeholder="Your Name" required>
+  <input type="email" name="email" placeholder="Your Email" required>
+  <textarea name="message" placeholder="Your Message" required></textarea>
+  <button type="submit">Send</button>
+</form>
 
-      <label for="email">Your email</label><br />
-      <input id="email" name="email" type="email" required placeholder="you@example.com" />
-
-      <label for="message">Message</label><br />
-      <textarea id="message" name="message" required placeholder="Write your message here..." rows="6"></textarea>
-
-      <button type="submit">Send message</button>
-    </form>
 
     <p id="formMessage" style="margin-top:12px;font-weight:600;"></p>
 
