@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Image Upscaler — Convert Labs</title>
-  <meta name="description" content="Upscale and enhance your images instantly online with Convert Labs — free, AI-powered image upscaler." />
+  <meta name="description" content="Free AI-powered image upscaler from Convert Labs — upscale your images up to 8× with side-by-side preview." />
 
   <link rel="stylesheet" href="../style.css" />
-  <meta name="theme-color" content="#1e40af">
+  <meta name="theme-color" content="#1e40af" />
 
-  <!-- Upscaler.js Library -->
+  <!-- UpscalerJS -->
   <script src="https://cdn.jsdelivr.net/npm/upscaler@1.1.6/dist/browser/upscaler.min.js"></script>
 
   <style>
     main {
-      max-width: 700px;
+      max-width: 900px;
       margin: 2rem auto;
       padding: 1rem;
     }
@@ -24,13 +24,25 @@
       border-radius: 10px;
       background: #f9fafc;
     }
-    input[type="file"] {
+    .upload-box input[type="file"],
+    .upload-box select,
+    .upload-box button {
       margin-top: 1rem;
     }
-    canvas {
+    .preview-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      gap: 1rem;
+    }
+    .preview {
+      text-align: center;
+    }
+    .preview img, canvas {
       max-width: 100%;
       border-radius: 10px;
-      margin-top: 1rem;
+      border: 1px solid #ccc;
     }
     #status {
       margin-top: 1rem;
@@ -50,6 +62,11 @@
     .download-btn:hover {
       background: #1e3a8a;
     }
+    .scale-select {
+      font-size: 1rem;
+      padding: 0.4rem;
+      border-radius: 6px;
+    }
   </style>
 </head>
 
@@ -57,7 +74,7 @@
   <header>
     <div class="header-content">
       <a href="../index.html" class="brand" aria-label="Convert Labs home">
-        <img src="../assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo">
+        <img src="../assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo" />
         <span class="brand-text">Convert Labs</span>
       </a>
 
@@ -69,14 +86,36 @@
   </header>
 
   <main>
-    <h1>✨ Image Upscaler</h1>
-    <p>Improve your image quality with AI — upscale up to 2× resolution instantly.</p>
+    <h1>✨ AI Image Upscaler</h1>
+    <p>Enhance your images up to <strong>8×</strong> resolution with side-by-side comparison. Free and fast.</p>
 
     <div class="upload-box">
-      <p><strong>Select an image to upscale:</strong></p>
-      <input type="file" id="imageInput" accept="image/*">
+      <label><strong>Select an image:</strong></label><br />
+      <input type="file" id="imageInput" accept="image/*" />
+
+      <div>
+        <label><strong>Upscale level:</strong></label><br />
+        <select id="scaleSelect" class="scale-select">
+          <option value="2">2×</option>
+          <option value="4">4×</option>
+          <option value="8">8×</option>
+        </select>
+      </div>
+
+      <button id="upscaleBtn">Upscale Now</button>
       <p id="status"></p>
-      <canvas id="resultCanvas"></canvas>
+
+      <div class="preview-container">
+        <div class="preview">
+          <p><strong>Before</strong></p>
+          <img id="originalImage" alt="Original preview" />
+        </div>
+        <div class="preview">
+          <p><strong>After</strong></p>
+          <canvas id="resultCanvas"></canvas>
+        </div>
+      </div>
+
       <button id="downloadBtn" class="download-btn">Download Upscaled Image</button>
     </div>
   </main>
@@ -107,47 +146,67 @@
       localStorage.setItem("theme", dark ? "dark" : "light");
     });
 
-    // UpscalerJS logic
+    // UpscalerJS setup
     const upscaler = new window.Upscaler({
-      model: 'https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json'
+      model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json",
     });
 
-    const imageInput = document.getElementById('imageInput');
-    const status = document.getElementById('status');
-    const canvas = document.getElementById('resultCanvas');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const ctx = canvas.getContext('2d');
+    const imageInput = document.getElementById("imageInput");
+    const upscaleBtn = document.getElementById("upscaleBtn");
+    const scaleSelect = document.getElementById("scaleSelect");
+    const status = document.getElementById("status");
+    const originalImage = document.getElementById("originalImage");
+    const canvas = document.getElementById("resultCanvas");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const ctx = canvas.getContext("2d");
+    let img = null;
 
-    imageInput.addEventListener('change', async (e) => {
+    imageInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      status.textContent = "Upscaling in progress... please wait ⏳";
+      img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = () => {
+        originalImage.src = img.src;
+        status.textContent = "Image loaded. Ready to upscale.";
+      };
+    });
+
+    upscaleBtn.addEventListener("click", async () => {
+      if (!img) {
+        alert("Please select an image first!");
+        return;
+      }
+      const scale = parseInt(scaleSelect.value);
+      status.textContent = `Upscaling ${scale}×... please wait ⏳`;
       downloadBtn.style.display = "none";
 
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      await img.decode();
-
       try {
-        const result = await upscaler.upscale(img);
-        canvas.width = result.width;
-        canvas.height = result.height;
-        ctx.drawImage(result, 0, 0);
+        const result = await upscaler.upscale(img, { patchSize: 128, padding: 2 });
+        const offCanvas = document.createElement("canvas");
+        offCanvas.width = result.width * (scale / 2);
+        offCanvas.height = result.height * (scale / 2);
+        const offCtx = offCanvas.getContext("2d");
+        offCtx.drawImage(result, 0, 0, offCanvas.width, offCanvas.height);
+
+        canvas.width = offCanvas.width;
+        canvas.height = offCanvas.height;
+        ctx.drawImage(offCanvas, 0, 0);
+
         status.textContent = "✅ Upscaling complete!";
         downloadBtn.style.display = "inline-block";
 
         downloadBtn.onclick = () => {
-          const link = document.createElement('a');
-          link.download = 'upscaled-image.png';
+          const link = document.createElement("a");
+          link.download = "upscaled-image.png";
           link.href = canvas.toDataURL();
           link.click();
         };
       } catch (err) {
         console.error(err);
-        status.textContent = "❌ Error during upscaling.";
+        status.textContent = "❌ Error during upscaling. Try a smaller image.";
       }
     });
   </script>
 </body>
 </html>
-
