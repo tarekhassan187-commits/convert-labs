@@ -25,28 +25,28 @@
 </header>
 
 
-  <main class="content-section" style="max-width:760px;margin:24px auto;">
-    <h2>Get in touch</h2>
-    <p>
-      Have feedback, a bug report, or a suggestion for a new converter? Send us a message and we’ll reply as soon as possible.
-    </p>
+  <main style="padding:2rem 1rem; max-width:800px; margin:auto;">
+  <h1>Contact Us</h1>
+  <p>Have a question, feedback, or suggestion? We'd love to hear from you.</p>
 
-    <!-- Formspree form (your existing endpoint) -->
-    <form action="https://formspree.io/f/yourformid" method="POST">
-  <input type="text" name="name" placeholder="Your Name" required>
-  <input type="email" name="email" placeholder="Your Email" required>
-  <textarea name="message" placeholder="Your Message" required></textarea>
-  <button type="submit">Send</button>
-</form>
+  <form action="https://formspree.io/f/yourformid" method="POST" class="contact-form">
+    <label for="name">Your Name</label>
+    <input type="text" id="name" name="name" placeholder="Enter your name" required>
 
+    <label for="email">Your Email</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
-    <p id="formMessage" style="margin-top:12px;font-weight:600;"></p>
+    <label for="message">Message</label>
+    <textarea id="message" name="message" placeholder="Type your message..." required></textarea>
 
-    <hr style="margin:20px 0;" />
+    <button type="submit">Send Message</button>
+  </form>
 
-    <h3>Other ways to reach us</h3>
-    <p>If you have a business inquiry or partnership proposal, please include “Business” in the subject line of your message.</p>
-  </main>
+  <!-- ✳️ Add this privacy reassurance line right below the form -->
+  <p class="privacy-note" style="margin-top:1rem; font-size:0.9rem; color:#444;">
+    We respect your privacy — your message is never shared with third parties.
+  </p>
+</main>
 
   <footer>
     <div class="footer-brand">
@@ -56,7 +56,7 @@
     <div class="footer-links">
       <a href="index.html">Home</a> |
       <a href="about.html">About</a> |
-      <a href="how-to.html">How To Use</a> |
+      <a href="how-to.html">Guides</a> |
       <a href="privacy.html">Privacy Policy</a> |
       <a href="terms.html">Terms of Use</a> |
       <a href="contact.html">Contact</a>
