@@ -155,6 +155,3 @@ function convertKitchen() {
   resultText.textContent = `${val} ${from} of ${ingr} = ${result.toFixed(2)} ${to}`;
 }
 
-// 🔹 Visitor Counter
-
-
