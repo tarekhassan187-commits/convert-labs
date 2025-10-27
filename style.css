@@ -22,109 +22,108 @@ body {
 }
 @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 
-/* === Consistent Header Styling === */
+/* === Unified header styles for all pages === */
 header {
   background: #1e40af;
   color: #ffffff;
   padding: 1rem 0 1.2rem;
+  border-radius: 6px; /* optional rounded top look — safe */
 }
 
-.header-content {
+.header-content{
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 1rem;
+  gap: 12px;
+  box-sizing: border-box;
 }
 
-/* Logo + text side by side */
-.brand {
+/* Brand (icon + text) */
+.brand{
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none;
-  color: #ffffff;
+  color: #ffffff !important;
 }
-
-.brand img.logo {
+.brand .logo{
   width: 42px;
   height: 42px;
   border-radius: 50%;
+  display: block;
 }
-
-.brand span {
+.brand .brand-text{
   font-size: 1.6rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #ffffff !important;
+  line-height: 1;
 }
 
-/* Fixes visited link color issue */
-.brand:visited span {
-  color: #ffffff;
+/* Ensure link color never turns red/purple */
+.brand,
+.brand a,
+.brand span {
+  color: #ffffff !important;
 }
 
-.tagline {
+/* Tagline centered under header */
+.tagline{
   text-align: center;
-  font-size: 1rem;
-  color: #e5e7eb;
-  margin-top: 0.4rem;
+  color: #e6eefc;
+  margin: 0.5rem 0 0;
+  font-size: 0.98rem;
 }
 
-/* Contact Button + Theme Toggle */
-.header-buttons {
+/* Controls on the right (Contact + Theme) */
+.header-controls{
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.contact-btn {
-  background: #ffffff;
+/* Contact button */
+.header-btn{
+  display: inline-block;
+  background: #fff;
   color: #1e40af;
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-radius: 8px;
-  font-weight: 600;
   text-decoration: none;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.contact-btn:hover {
-  background: #f3f4f6;
-  transform: scale(1.05);
-}
-
-#themeToggle {
-  background: none;
-  border: 2px solid white;
-  border-radius: 8px;
-  color: white;
-  font-size: 1.2rem;
-  padding: 5px 8px;
+  font-weight: 600;
+  border: none;
   cursor: pointer;
-  transition: transform 0.3s;
+  transition: transform 0.15s ease, background 0.15s;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
 }
+.header-btn:hover{ transform: translateY(-1px); background: #f3f4f6; }
 
-#themeToggle:hover {
-  transform: scale(1.1);
+/* Theme toggle */
+.theme-toggle{
+  background: none;
+  border: 2px solid rgba(255,255,255,0.9);
+  color: #fff;
+  padding: 6px 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
 }
+.theme-toggle:hover{ transform: scale(1.06); }
 
-/* Dark Mode Support */
-body.dark-mode header {
-  background: #111827;
-}
+/* Dark mode header override */
+body.dark-mode header{ background: #0f1724; }
+body.dark-mode .brand .brand-text{ color: #f8fafc !important; }
+body.dark-mode .header-btn{ background:#374151; color:#f8fafc; border:1px solid #4b5563; }
+body.dark-mode .theme-toggle{ border-color: rgba(255,255,255,0.85); color:#fff; }
 
-body.dark-mode .brand span {
-  color: #f9fafb;
-}
-
-body.dark-mode .contact-btn {
-  background: #374151;
-  color: #f9fafb;
-  border: 1px solid #4b5563;
-}
-
-body.dark-mode .contact-btn:hover {
-  background: #4b5563;
+/* Small screens */
+@media (max-width: 700px){
+  .header-content{ flex-direction: column; gap:8px; padding: 0.6rem 1rem; }
+  .header-controls{ gap:8px; align-self: center; }
+  .brand .brand-text{ font-size:1.2rem; }
+  .tagline{ font-size:0.92rem; padding:0 1rem; }
 }
 
 /* Tagline */
@@ -254,6 +253,7 @@ body.dark-mode {
 body.dark-mode header { background: #111827; }
 body.dark-mode .tabs { background: #2d2d33; }
 body.dark-mode footer { background: #111827; }
+
 
 
 
