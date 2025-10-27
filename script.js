@@ -156,7 +156,5 @@ function convertKitchen() {
 }
 
 // 🔹 Visitor Counter
-fetch("https://api.countapi.xyz/hit/convertlabs.online/visits")
-  .then(r => r.json())
-  .then(d => visitorCount.textContent = d.value.toLocaleString())
-  .catch(() => visitorCount.textContent = "N/A");
+
+
