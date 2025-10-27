@@ -41,6 +41,12 @@ header {
   box-sizing: border-box;
 }
 
+header img.logo {
+  max-width: 42px !important;
+  height: auto !important;
+}
+
+
 /* Brand (icon + text) */
 .brand{
   display: flex;
@@ -253,6 +259,7 @@ body.dark-mode {
 body.dark-mode header { background: #111827; }
 body.dark-mode .tabs { background: #2d2d33; }
 body.dark-mode footer { background: #111827; }
+
 
 
 
