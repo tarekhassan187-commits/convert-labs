@@ -22,10 +22,10 @@ body {
 }
 @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 
-/* === Header layout (fixed) === */
+/* === Consistent Header Styling === */
 header {
   background: #1e40af;
-  color: white;
+  color: #ffffff;
   padding: 1rem 0 1.2rem;
 }
 
@@ -33,59 +33,63 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
-.brand-link {
+/* Logo + text side by side */
+.brand {
   display: flex;
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #fff;
+  color: #ffffff;
 }
 
-.logo {
-  width: 40px;
-  height: 40px;
+.brand img.logo {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
 }
 
-.brand-text {
+.brand span {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
+}
+
+/* Fixes visited link color issue */
+.brand:visited span {
+  color: #ffffff;
 }
 
 .tagline {
   text-align: center;
   font-size: 1rem;
   color: #e5e7eb;
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
 }
 
-/* --- Header Buttons --- */
-.header-controls {
+/* Contact Button + Theme Toggle */
+.header-buttons {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-.header-btn {
-  padding: 6px 14px;
-  background-color: #ffffff;
+.contact-btn {
+  background: #ffffff;
   color: #1e40af;
-  font-weight: 600;
+  padding: 6px 14px;
   border-radius: 8px;
+  font-weight: 600;
   text-decoration: none;
-  font-size: 0.95rem;
   transition: background 0.3s, transform 0.2s;
-  border: none;
 }
 
-.header-btn:hover {
-  background-color: #f3f4f6;
+.contact-btn:hover {
+  background: #f3f4f6;
   transform: scale(1.05);
 }
 
@@ -104,23 +108,23 @@ header {
   transform: scale(1.1);
 }
 
-/* --- Dark Mode Support --- */
+/* Dark Mode Support */
 body.dark-mode header {
   background: #111827;
 }
 
-body.dark-mode .brand-text {
+body.dark-mode .brand span {
   color: #f9fafb;
 }
 
-body.dark-mode .header-btn {
-  background-color: #374151;
+body.dark-mode .contact-btn {
+  background: #374151;
   color: #f9fafb;
   border: 1px solid #4b5563;
 }
 
-body.dark-mode .header-btn:hover {
-  background-color: #4b5563;
+body.dark-mode .contact-btn:hover {
+  background: #4b5563;
 }
 
 /* Tagline */
@@ -250,6 +254,7 @@ body.dark-mode {
 body.dark-mode header { background: #111827; }
 body.dark-mode .tabs { background: #2d2d33; }
 body.dark-mode footer { background: #111827; }
+
 
 
 
