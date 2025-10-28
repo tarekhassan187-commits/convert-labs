@@ -118,10 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
     volumeUnits.forEach(u => { volumeFrom.add(new Option(u, u)); volumeTo.add(new Option(u, u)); });
   }
 
-  // --- Kitchen missing units fix ---
+   // --- Kitchen unit list fix (added g and ml) ---
   const kitchenFrom = $("#kitchenFrom"), kitchenTo = $("#kitchenTo");
   if (kitchenFrom && kitchenTo) {
-    const list = ["cup","tbsp","tsp","fl oz"];
+    const list = ["g", "ml", "cup", "tbsp", "tsp", "fl oz"];
     list.forEach(u => {
       if (![...kitchenFrom.options].some(o => o.value === u))
         kitchenFrom.add(new Option(u, u));
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         kitchenTo.add(new Option(u, u));
     });
   }
-});
+
 
 /* ============================================================
    CONVERTER FUNCTIONS
@@ -236,3 +236,4 @@ window.addEventListener("load", () => {
   }
   console.log("Convert Labs ready");
 });
+
