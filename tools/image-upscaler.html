@@ -3,31 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Image Upscaler | Convert Labs</title>
+  <title>AI Image Upscaler | Convert Labs</title>
   <link rel="stylesheet" href="../style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/upscaler@1.2.3/dist/browser/umd/upscaler.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/upscaler/dist/browser/umd/upscaler.min.js"></script>
   <style>
-    body { text-align: center; padding: 2rem; background: #f9fafc; }
+    body {
+      text-align: center;
+      background: #f9fafc;
+      color: #222;
+      padding: 2rem 1rem;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
     h1 { color: #1e40af; }
-    .preview-container {
-      display: flex; justify-content: center; flex-wrap: wrap;
-      gap: 1rem; margin-top: 1.5rem;
-    }
-    .preview-container img, canvas {
-      max-width: 300px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
     .controls { margin: 1rem 0; }
-    button {
-      background: #1e40af; color: #fff; border: none;
-      padding: 0.7rem 1.3rem; border-radius: 8px; cursor: pointer;
+    button, select, input[type=file] {
+      padding: 0.6rem 1rem;
+      margin: 0.4rem;
+      border-radius: 8px;
+      border: none;
       font-size: 1rem;
     }
+    button { background: #1e40af; color: white; cursor: pointer; }
     button:hover { background: #1e3a8a; }
-    select, input[type=file] { padding: 0.5rem; margin: 0.3rem; }
     #status { margin-top: 1rem; color: #1e40af; font-weight: bold; }
+
+    .split-container {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      margin: 2rem auto;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .split-container img {
+      width: 100%;
+      display: block;
+    }
+    .split-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .split-overlay img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .slider-handle {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 3px;
+      height: 100%;
+      background: #1e40af;
+      cursor: ew-resize;
+    }
     #downloadBtn {
-      display: none; margin-top: 1rem;
-      background: #22c55e; color: white;
+      display: none;
+      background: #22c55e;
+      color: white;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -46,7 +84,7 @@
   </header>
 
   <h1>AI Image Upscaler</h1>
-  <p>Upscale and enhance your images up to 8× resolution with AI — 100% free & private.</p>
+  <p>Upscale your images up to 8× resolution directly in your browser — free & private!</p>
 
   <div class="controls">
     <input type="file" id="imageInput" accept="image/*" />
@@ -58,26 +96,28 @@
     <button id="upscaleBtn">Upscale Now</button>
   </div>
 
-  <div class="preview-container">
-    <div>
-      <h3>Original</h3>
-      <img id="originalImage" alt="">
+  <div id="status"></div>
+
+  <div id="splitPreview" class="split-container" style="display:none;">
+    <img id="originalImage" alt="Original">
+    <div class="split-overlay">
+      <img id="upscaledImage" alt="Upscaled">
     </div>
-    <div>
-      <h3>Upscaled</h3>
-      <canvas id="resultCanvas"></canvas>
-    </div>
+    <div class="slider-handle" id="sliderHandle"></div>
   </div>
 
-  <p id="status"></p>
   <button id="downloadBtn">Download Upscaled Image</button>
+<button id="zoomToggleBtn" style="display:none; background:#0ea5e9; color:white;">🔍 Zoom View</button>
+<div id="zoomContainer" style="display:none; position:relative; margin:auto; width:90%; max-width:800px;">
+  <canvas id="zoomCanvas" style="width:100%; border-radius:10px; cursor:crosshair;"></canvas>
+</div>
 
   <footer style="margin-top:3rem;">
     <p>© 2025 Convert Labs | <a href="../index.html">Back to Home</a></p>
   </footer>
 
   <script>
-    // 🌓 Theme toggle
+    // Theme toggle 🌙☀️
     const toggle = document.getElementById("themeToggle");
     if (localStorage.getItem("theme") === "dark") {
       document.body.classList.add("dark-mode");
@@ -90,39 +130,37 @@
       localStorage.setItem("theme", dark ? "dark" : "light");
     });
 
-    // 🧠 Upscaler logic
-    const { Upscaler } = window;
-const upscaler = new Upscaler({
-  model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json",
-});
-
+    // Upscaler setup
+    const upscaler = new window.Upscaler({
+      model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json"
+    });
 
     const imageInput = document.getElementById("imageInput");
-    const originalImage = document.getElementById("originalImage");
-    const canvas = document.getElementById("resultCanvas");
-    const ctx = canvas.getContext("2d");
-    const status = document.getElementById("status");
-    const upscaleBtn = document.getElementById("upscaleBtn");
     const scaleSelect = document.getElementById("scaleSelect");
+    const upscaleBtn = document.getElementById("upscaleBtn");
+    const originalImage = document.getElementById("originalImage");
+    const upscaledImage = document.getElementById("upscaledImage");
+    const status = document.getElementById("status");
+    const splitPreview = document.getElementById("splitPreview");
+    const overlay = document.querySelector(".split-overlay");
+    const handle = document.getElementById("sliderHandle");
     const downloadBtn = document.getElementById("downloadBtn");
 
     let currentImg = null;
 
-    imageInput.addEventListener("change", (e) => {
+    imageInput.addEventListener("change", e => {
       const file = e.target.files[0];
       if (!file) return;
       const url = URL.createObjectURL(file);
       originalImage.src = url;
+      splitPreview.style.display = "none";
       currentImg = new Image();
       currentImg.src = url;
-      currentImg.onload = () => {
-        status.textContent = "Image loaded — ready to upscale.";
-      };
+      currentImg.onload = () => status.textContent = "Image ready. Choose scale and upscale!";
     });
 
-    async function upscaleOnce(input) {
-      status.textContent = "Upscaling in progress...";
-      const result = await upscaler.upscale(input);
+    async function upscaleStep(inputCanvas) {
+      const result = await upscaler.upscale(inputCanvas);
       const img = new Image();
       img.src = result;
       await img.decode();
@@ -134,30 +172,29 @@ const upscaler = new Upscaler({
     }
 
     upscaleBtn.addEventListener("click", async () => {
-      if (!currentImg) return alert("Please select an image first.");
+      if (!currentImg) return alert("Please choose an image first!");
       const scale = parseInt(scaleSelect.value);
       let steps = Math.log2(scale);
-      let imgCanvas = document.createElement("canvas");
-      imgCanvas.width = currentImg.width;
-      imgCanvas.height = currentImg.height;
-      imgCanvas.getContext("2d").drawImage(currentImg, 0, 0);
+      let canvas = document.createElement("canvas");
+      canvas.width = currentImg.width;
+      canvas.height = currentImg.height;
+      canvas.getContext("2d").drawImage(currentImg, 0, 0);
 
       upscaleBtn.disabled = true;
-      status.textContent = `Upscaling ${scale}×... Please wait`;
+      status.textContent = `Upscaling ${scale}× — please wait...`;
 
       try {
         for (let i = 0; i < steps; i++) {
-          status.textContent = `Upscaling step ${i + 1} of ${steps}...`;
-          imgCanvas = await upscaleOnce(imgCanvas);
+          status.textContent = `Processing step ${i + 1}/${steps}...`;
+          canvas = await upscaleStep(canvas);
         }
-        canvas.width = imgCanvas.width;
-        canvas.height = imgCanvas.height;
-        ctx.drawImage(imgCanvas, 0, 0);
-        status.textContent = "✅ Upscaling complete!";
+        upscaledImage.src = canvas.toDataURL("image/png");
+        splitPreview.style.display = "block";
+        status.textContent = "✅ Upscaling complete! Drag the slider to compare.";
         downloadBtn.style.display = "inline-block";
       } catch (err) {
         console.error(err);
-        status.textContent = "⚠️ Upscaling failed. Try a smaller image or lower scale.";
+        status.textContent = "⚠️ Error upscaling. Try smaller size or lower scale.";
       } finally {
         upscaleBtn.disabled = false;
       }
@@ -166,9 +203,35 @@ const upscaler = new Upscaler({
     downloadBtn.addEventListener("click", () => {
       const link = document.createElement("a");
       link.download = "upscaled-image.png";
-      link.href = canvas.toDataURL("image/png");
+      link.href = upscaledImage.src;
       link.click();
     });
+
+    // Split slider movement
+    let dragging = false;
+    handle.addEventListener("mousedown", () => dragging = true);
+    window.addEventListener("mouseup", () => dragging = false);
+    window.addEventListener("mousemove", e => {
+      if (!dragging) return;
+      const rect = splitPreview.getBoundingClientRect();
+      let pos = ((e.clientX - rect.left) / rect.width) * 100;
+      pos = Math.max(0, Math.min(100, pos));
+      overlay.style.width = pos + "%";
+      handle.style.left = pos + "%";
+    });
+    // 📱 Touch event support for mobile
+handle.addEventListener("touchstart", () => dragging = true);
+window.addEventListener("touchend", () => dragging = false);
+window.addEventListener("touchmove", e => {
+  if (!dragging) return;
+  const touch = e.touches[0];
+  const rect = splitPreview.getBoundingClientRect();
+  let pos = ((touch.clientX - rect.left) / rect.width) * 100;
+  pos = Math.max(0, Math.min(100, pos));
+  overlay.style.width = pos + "%";
+  handle.style.left = pos + "%";
+});
+
   </script>
 </body>
 </html>
