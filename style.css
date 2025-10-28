@@ -252,4 +252,51 @@ footer {
   font-weight: 600;
 }
 
+/* Contact Page Styling + Dark Mode Support */
+.contact-section {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  padding: 2rem;
+  max-width: 700px;
+  margin: 2rem auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.contact-section input,
+.contact-section textarea {
+  width: 100%;
+  padding: 0.7rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.contact-section input:focus,
+.contact-section textarea:focus {
+  border-color: #1e40af;
+  outline: none;
+}
+
+.send-btn {
+  background: #1e40af;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.send-btn:hover {
+  background: #162f7d;
+}
+
+
 
