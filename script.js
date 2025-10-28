@@ -342,6 +342,37 @@ const Currency = (function () {
 })();
 
 /* ============================
+   TAB SWITCHING: showConverter
+   Handles tab buttons on homepage
+============================ */
+function showConverter(tabId) {
+  // Hide all converter sections
+  document.querySelectorAll('.converter').forEach(sec => {
+    sec.classList.remove('active');
+    sec.style.display = 'none';
+  });
+
+  // Deactivate all buttons (optional highlight support)
+  document.querySelectorAll('.tabs button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  // Show the chosen converter
+  const target = document.getElementById(tabId);
+  if (target) {
+    target.classList.add('active');
+    target.style.display = 'block';
+  }
+
+  // Highlight active button (if desired)
+  const activeBtn = document.querySelector(`.tabs button[onclick="showConverter('${tabId}')"]`);
+  if (activeBtn) {
+    activeBtn.classList.add('active');
+  }
+}
+
+
+/* ============================
    Final load reveal
 ============================ */
 window.addEventListener('DOMContentLoaded', () => {
@@ -351,3 +382,4 @@ window.addEventListener('DOMContentLoaded', () => {
   if (loader) loader.style.display = 'none';
   console.log('Convert Labs ready');
 });
+
