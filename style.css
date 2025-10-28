@@ -1,40 +1,47 @@
 /* ===========================
    BASE
 =========================== */
-html, body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  transition: background 0.3s, color 0.3s;
-}
 :root {
   --primary: #1e40af;
   --accent: #2563eb;
-  --bg: #f9fafc;
-  --text: #111;
-  --card: #fff;
-  --shadow: rgba(0,0,0,0.1);
+  --bg-light: #f9fafc;
+  --bg-dark: #0b1120;
+  --text-light: #111;
+  --text-dark: #e2e8f0;
+  --card-light: #fff;
+  --card-dark: #1e293b;
+  --shadow-light: rgba(0,0,0,0.1);
+  --shadow-dark: rgba(0,0,0,0.5);
 }
-html.dark {
-  --bg: #0f172a;
-  --text: #e2e8f0;
-  --card: #1e293b;
-  --shadow: rgba(0,0,0,0.5);
+
+html, body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  transition: background 0.3s, color 0.3s;
 }
-.theme-transition {
-  transition: background-color 0.4s ease, color 0.4s ease;
+
+html.dark, body.dark {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
 }
 
 /* ===========================
    HEADER & FOOTER
 =========================== */
 header, footer {
-  background: var(--primary);
-  color: white;
+  background-color: var(--primary);
+  color: #fff;
   text-align: center;
   padding: 10px 0;
+  transition: background-color 0.4s ease;
 }
+
+header.dark, footer.dark {
+  background-color: #0d1b3d;
+}
+
 .header-content {
   display: flex;
   justify-content: space-between;
@@ -43,24 +50,53 @@ header, footer {
   margin: auto;
   padding: 5px 15px;
 }
-.logo, .footer-logo { width: 40px; height: 40px; object-fit: contain; }
+
+.logo, .footer-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-text {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.brand:hover .brand-text {
+  color: #e0e0e0;
+}
+
 .header-btn {
-  background: white;
+  background: #fff;
   color: var(--primary);
   border: none;
   padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
+  transition: all 0.3s ease;
 }
+.header-btn:hover {
+  background: #f1f1f1;
+}
+
 .theme-toggle {
   background: none;
   border: none;
   font-size: 20px;
+  color: #fff;
   cursor: pointer;
   margin-left: 10px;
 }
-footer a { color: #fff; text-decoration: underline; }
 
 /* ===========================
    TABS
@@ -92,11 +128,18 @@ footer a { color: #fff; text-decoration: underline; }
 main {
   max-width: 960px;
   margin: 20px auto;
-  background: var(--card);
-  box-shadow: 0 0 10px var(--shadow);
+  background: var(--card-light);
+  box-shadow: 0 0 10px var(--shadow-light);
   border-radius: 12px;
   padding: 20px;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
 }
+
+html.dark main, body.dark main {
+  background: var(--card-dark);
+  box-shadow: 0 0 10px var(--shadow-dark);
+}
+
 .converter { text-align: center; }
 .converter input, .converter select {
   margin: 6px;
@@ -120,122 +163,7 @@ main {
 footer {
   margin-top: 20px;
   padding: 20px 0;
-  background: var(--primary);
-  color: white;
 }
-.footer-links a {
-  color: white;
-  margin: 0 5px;
-  text-decoration: underline;
-}
-
-/* ===========================
-   RESPONSIVE
-=========================== */
-@media (max-width: 600px) {
-  .tabs { flex-direction: column; align-items: center; }
-  .converter input, .converter select, .converter button { width: 90%; margin: 5px 0; }
-}
-
-/* ==========================================================
-   FIX HEADER BRAND COLOR + DARK MODE SUPPORT
-   ========================================================== */
-
-/* Brand (Convert Labs text beside logo) */
-.brand-text {
-  color: #fff;                 /* white in light mode */
-  font-weight: 600;
-  font-size: 1.25rem;
-  text-decoration: none;
-}
-
-/* Make sure the brand link doesn't turn purple or underlined */
-.brand {
-  color: inherit;
-  text-decoration: none;
-}
-
-.brand:hover .brand-text {
-  color: #e0e0e0;
-}
-
-/* Ensure logo and text aligned */
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-}
-
-/* ============================================
-   DARK MODE ADJUSTMENTS
-   ============================================ */
-:root.light {
-  --header-bg: #1e40af;
-  --footer-bg: #1e40af;
-  --text-color: #222;
-  --bg-color: #f9fafc;
-}
-
-:root.dark {
-  --header-bg: #0d1b3d;
-  --footer-bg: #0d1b3d;
-  --text-color: #f5f5f5;
-  --bg-color: #0b1120;
-}
-
-/* Apply colors dynamically */
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background-color 0.4s ease, color 0.4s ease;
-}
-
-header {
-  background-color: var(--header-bg);
-  color: #fff;
-  transition: background-color 0.4s ease;
-}
-
-footer {
-  background-color: var(--footer-bg);
-  color: #fff;
-  text-align: center;
-  padding: 1rem 0;
-  transition: background-color 0.4s ease;
-}
-
-/* Tagline + intro text remain readable */
-.tagline, .intro-text {
-  color: #fff;
-  font-weight: 400;
-  text-align: center;
-}
-
-/* Header button & theme toggle adjustments */
-.header-btn {
-  background: #fff;
-  color: #1e40af;
-  border-radius: 8px;
-  padding: 0.4rem 0.9rem;
-  border: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-.header-btn:hover {
-  background: #f1f1f1;
-}
-
-.theme-toggle {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.4rem;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-/* Footer brand alignment */
 .footer-brand {
   display: flex;
   align-items: center;
@@ -251,17 +179,29 @@ footer {
   color: #fff;
   font-weight: 600;
 }
+.footer-links a {
+  color: white;
+  margin: 0 5px;
+  text-decoration: underline;
+}
 
-/* Contact Page Styling + Dark Mode Support */
+/* ===========================
+   CONTACT FORM
+=========================== */
 .contact-section {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  background-color: var(--card-light);
+  color: var(--text-light);
   padding: 2rem;
   max-width: 700px;
   margin: 2rem auto;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px var(--shadow-light);
   transition: background-color 0.4s ease, color 0.4s ease;
+}
+html.dark .contact-section, body.dark .contact-section {
+  background-color: var(--card-dark);
+  color: var(--text-dark);
+  box-shadow: 0 4px 10px var(--shadow-dark);
 }
 
 .contact-section input,
@@ -273,18 +213,23 @@ footer {
   border: 1px solid #ccc;
   font-size: 1rem;
   transition: all 0.3s ease;
-  background: var(--bg-color);
-  color: var(--text-color);
+  background: var(--bg-light);
+  color: var(--text-light);
+}
+html.dark .contact-section input,
+html.dark .contact-section textarea {
+  background: var(--card-dark);
+  color: var(--text-dark);
 }
 
 .contact-section input:focus,
 .contact-section textarea:focus {
-  border-color: #1e40af;
+  border-color: #2563eb;
   outline: none;
 }
 
 .send-btn {
-  background: #1e40af;
+  background: var(--primary);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -293,10 +238,17 @@ footer {
   cursor: pointer;
   transition: background 0.3s ease;
 }
-
 .send-btn:hover {
   background: #162f7d;
 }
 
-
-
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 600px) {
+  .tabs { flex-direction: column; align-items: center; }
+  .converter input, .converter select, .converter button {
+    width: 90%;
+    margin: 5px 0;
+  }
+}
