@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Convert Labs — Smart Unit Converter</title>
+  <title>Convert Labs — Smart Online Unit Converter</title>
 
   <!-- ✅ SEO -->
-  <meta name="description" content="Convert Labs is your free, all-in-one online unit converter for length, temperature, volume, container, and kitchen measurements. Fast, accurate, and easy to use." />
-  <meta name="keywords" content="unit converter, online converter, length converter, temperature converter, kitchen converter, volume calculator, Convert Labs" />
+  <meta name="description" content="Convert Labs is your free, all-in-one online unit converter for length, temperature, volume, container, kitchen, and other practical tools like currency and image conversion. Fast, accurate, and easy to use." />
+  <meta name="keywords" content="unit converter, online converter, length converter, temperature converter, kitchen converter, currency converter, image converter, Convert Labs, tools, volume calculator" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://convertlabs.online" />
+  <link rel="canonical" href="https://convertlabs.online/" />
 
   <!-- ✅ Favicon -->
   <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
@@ -39,25 +39,25 @@
 
   <!-- Main App -->
   <div id="app" style="display:none;">
-   <header>
-  <div class="header-content">
-    <a href="index.html" class="brand" aria-label="Convert Labs home">
-      <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
-      <span class="brand-text">Convert Labs</span>
-    </a>
+    <header>
+      <div class="header-content">
+        <a href="index.html" class="brand" aria-label="Convert Labs home">
+          <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
+          <span class="brand-text">Convert Labs</span>
+        </a>
 
-    <div class="header-controls">
-      <a href="contact.html" class="header-btn">Contact Us</a>
-      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
-    </div>
-  </div>
+        <div class="header-controls">
+          <a href="contact.html" class="header-btn">Contact Us</a>
+          <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+        </div>
+      </div>
 
-  <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
+      <p class="tagline">Welcome to Convert Labs — your smart all-in-one online converter</p>
 
       <p class="intro-text">
         Convert Labs is a modern, free, and easy-to-use online unit converter that helps you quickly convert 
         between length, temperature, volume, container measurements, and kitchen ingredients. 
-        Whether you’re a student, engineer, cook, or just curious, Convert Labs makes every conversion fast, accurate, and simple — all in one place.
+        Explore our new tools like the currency and image converters — making every conversion fast, accurate, and simple.
       </p>
     </header>
 
@@ -68,6 +68,8 @@
       <button onclick="showConverter('volume')">Volume</button>
       <button onclick="showConverter('container')">Container Volume</button>
       <button onclick="showConverter('kitchen')">Kitchen</button>
+      <a href="tools/currency-converter.html"><button>Currency</button></a>
+      <a href="tools/image-converter.html"><button>Image Converter</button></a>
     </div>
 
     <!-- Converters -->
@@ -133,73 +135,13 @@
       <section id="kitchen" class="converter">
         <h2>Kitchen Converter</h2>
         <input type="number" id="kitchenInput" placeholder="Enter amount" />
-
-<select id="kitchenFrom">
-  <option value="" disabled selected>Select from unit</option>
-</select>
-
-<select id="kitchenTo">
-  <option value="" disabled selected>Select to unit</option>
-</select>
-
-<select id="kitchenIngredient">
-  <option value="" disabled selected>Select ingredient</option>
-  <optgroup label="Dry Ingredients">
-    <option>Flour</option>
-    <option>Sugar</option>
-    <option>Brown Sugar</option>
-    <option>Powdered Sugar</option>
-    <option>Salt</option>
-    <option>Baking Powder</option>
-    <option>Cocoa Powder</option>
-    <option>Rice</option>
-    <option>Oats</option>
-    <option>Corn Starch</option>
-    <option>Breadcrumbs</option>
-    <option>Pasta</option>
-    <option>Dry Milk</option>
-  </optgroup>
-
-  <optgroup label="Wet Ingredients">
-    <option>Water</option>
-    <option>Milk</option>
-    <option>Oil</option>
-    <option>Butter</option>
-    <option>Honey</option>
-    <option>Soya Sauce</option>
-    <option>Vanilla</option>
-    <option>Yogurt</option>
-    <option>Cream</option>
-    <option>Vinegar</option>
-    <option>Lemon Juice</option>
-  </optgroup>
-
-  <optgroup label="Nuts & Seeds">
-    <option>Almonds</option>
-    <option>Walnuts</option>
-    <option>Peanuts</option>
-    <option>Sunflower Seeds</option>
-    <option>Sesame</option>
-    <option>Cashew</option>
-    <option>Pistachio</option>
-    <option>Hazelnuts</option>
-  </optgroup>
-
-  <optgroup label="Special Ingredients">
-    <option>Yeast</option>
-    <option>Chocolate Chips</option>
-    <option>Peanut Butter</option>
-    <option>Tomato Paste</option>
-    <option>Coconut Flakes</option>
-    <option>Ground Coffee</option>
-    <option>Cocoa Nibs</option>
-    <option>Bread Crumbs</option>
-  </optgroup>
-</select>
-
-<button onclick="convertKitchen()">Convert</button>
-<p id="kitchenResult"></p>
-
+        <select id="kitchenFrom"></select>
+        <select id="kitchenTo"></select>
+        <select id="kitchenIngredient">
+          <option value="" disabled selected>Select ingredient</option>
+        </select>
+        <button onclick="convertKitchen()">Convert</button>
+        <p id="kitchenResult"></p>
       </section>
     </main>
 
@@ -222,5 +164,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
