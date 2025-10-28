@@ -253,6 +253,20 @@ body.dark-mode .theme-toggle{ border-color: rgba(255,255,255,0.85); color:#fff; 
   gap: 0.8rem;
   padding: 0.7rem;
 }
+
+.tabs button.active {
+  background-color: #1e40af;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 6px;
+}
+.converter {
+  display: none;
+}
+.converter.active {
+  display: block;
+}
+
 .tabs button {
   background: #1e40af;
   color: white;
@@ -377,6 +391,7 @@ main h1::after {
   background-color: #f3f4f6;
   touch-action: none;
 }
+
 
 
 
