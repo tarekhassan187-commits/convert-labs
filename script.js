@@ -154,12 +154,7 @@ function convertKitchen() {
   const result = val * unitToCup[from] * cupToUnit[to];
   resultText.textContent = `${val} ${from} of ${ingr} = ${result.toFixed(2)} ${to}`;
 }
-// === THEME TOGGLE ===
-const themeToggle = document.getElementById("themeToggle");
-themeToggle?.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  themeToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-});
+
 
 // === IMAGE UPSCALER ===
 const fileInput = document.getElementById("imageInput");
@@ -326,6 +321,7 @@ function initializeZoom() {
     drawZoom(x, y);
   });
 }
+
 
 
 
