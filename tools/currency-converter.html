@@ -1,1 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
+     crossorigin="anonymous"></script>
 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Currency Converter | Convert Labs</title>
+  <meta name="description" content="Free, fast, and accurate currency converter by Convert Labs. Convert between USD, EUR, GBP, AED, KWD, EGP, and more in real-time using live exchange rates." />
+  <link rel="icon" type="image/png" href="/assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- ✅ Breadcrumb Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://convertlabs.online/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Currency Converter",
+        "item": "https://convertlabs.online/currency-converter.html"
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-content">
+      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo" class="logo" />
+      <h1>Convert Labs</h1>
+      <button id="themeToggle" title="Switch Theme">🌙</button>
+    </div>
+    <p class="tagline">Convert currencies in real time with accurate exchange rates</p>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main style="padding:2rem 1rem; max-width:600px; margin:auto;">
+    <h2>Currency Converter</h2>
+    <p>Enter an amount and select currencies to convert instantly using live exchange rates.</p>
+
+    <div style="margin-top:1rem;">
+      <input type="number" id="amount" placeholder="Enter amount" step="0.01" />
+      <br />
+      <select id="fromCurrency"></select>
+      <select id="toCurrency"></select>
+      <br />
+      <button onclick="convertCurrency()">Convert</button>
+    </div>
+
+    <p id="result" style="font-size:1.3rem; font-weight:600; margin-top:1rem;"></p>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-logo">
+      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" />
+      <h3>Convert Labs</h3>
+    </div>
+
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/how-to.html">Guides</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/currency-converter.html">Currency Converter</a>
+    </div>
+
+    <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // 🌙 Theme Toggle
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggle = document.getElementById("themeToggle");
+      const saved = localStorage.getItem("theme");
+      if (saved === "dark") {
+        document.body.classList.add("dark-mode");
+        toggle.textContent = "☀️";
+      }
+      toggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        const dark = document.body.classList.contains("dark-mode");
+        toggle.textContent = dark ? "☀️" : "🌙";
+        localStorage.setItem("theme", dark ? "dark" : "light");
+      });
+    });
+
+    // 💱 Currency Converter
+    const fromSelect = document.getElementById("fromCurrency");
+    const toSelect = document.getElementById("toCurrency");
+    const result = document.getElementById("result");
+
+    // 🌍 Extended list of currencies
+    const currencies = [
+      "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "NZD", "CHF", "CNY", "HKD", "SGD",
+      "AED", "SAR", "KWD", "BHD", "OMR", "QAR", "EGP", "INR", "PKR", "BDT", "THB",
+      "MYR", "IDR", "ZAR", "NGN", "KES", "TRY", "SEK", "NOK", "DKK", "PLN", "CZK",
+      "HUF", "ILS", "MXN", "BRL", "ARS", "COP", "CLP", "PEN", "VND", "PHP"
+    ];
+
+    const currencyNames = {
+      USD: "US Dollar",
+      EUR: "Euro",
+      GBP: "British Pound",
+      JPY: "Japanese Yen",
+      CAD: "Canadian Dollar",
+      AUD: "Australian Dollar",
+      NZD: "New Zealand Dollar",
+      CHF: "Swiss Franc",
+      CNY: "Chinese Yuan",
+      HKD: "Hong Kong Dollar",
+      SGD: "Singapore Dollar",
+      AED: "UAE Dirham",
+      SAR: "Saudi Riyal",
+      KWD: "Kuwaiti Dinar",
+      BHD: "Bahraini Dinar",
+      OMR: "Omani Rial",
+      QAR: "Qatari Riyal",
+      EGP: "Egyptian Pound",
+      INR: "Indian Rupee",
+      PKR: "Pakistani Rupee",
+      BDT: "Bangladeshi Taka",
+      THB: "Thai Baht",
+      MYR: "Malaysian Ringgit",
+      IDR: "Indonesian Rupiah",
+      ZAR: "South African Rand",
+      NGN: "Nigerian Naira",
+      KES: "Kenyan Shilling",
+      TRY: "Turkish Lira",
+      SEK: "Swedish Krona",
+      NOK: "Norwegian Krone",
+      DKK: "Danish Krone",
+      PLN: "Polish Zloty",
+      CZK: "Czech Koruna",
+      HUF: "Hungarian Forint",
+      ILS: "Israeli Shekel",
+      MXN: "Mexican Peso",
+      BRL: "Brazilian Real",
+      ARS: "Argentine Peso",
+      COP: "Colombian Peso",
+      CLP: "Chilean Peso",
+      PEN: "Peruvian Sol",
+      VND: "Vietnamese Dong",
+      PHP: "Philippine Peso"
+    };
+
+    currencies.forEach(cur => {
+      const label = currencyNames[cur] ? `${cur} – ${currencyNames[cur]}` : cur;
+      fromSelect.add(new Option(label, cur));
+      toSelect.add(new Option(label, cur));
+    });
+
+    fromSelect.value = "EGP";
+    toSelect.value = "USD";
+
+    async function convertCurrency() {
+      const amount = parseFloat(document.getElementById("amount").value);
+      const from = fromSelect.value;
+      const to = toSelect.value;
+
+      if (isNaN(amount)) {
+        result.textContent = "⚠️ Please enter a valid amount.";
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+        const data = await res.json();
+
+        if (data && data.result === "success") {
+          const rate = data.rates[to];
+          if (rate) {
+            const converted = (amount * rate).toFixed(2);
+            result.textContent = `${amount} ${from} = ${converted} ${to}`;
+          } else {
+            result.textContent = "⚠️ Currency not supported.";
+          }
+        } else {
+          result.textContent = "⚠️ Unable to fetch exchange rates.";
+        }
+      } catch (err) {
+        result.textContent = "⚠️ Network error. Try again later.";
+      }
+    }
+  </script>
+</body>
+</html>
