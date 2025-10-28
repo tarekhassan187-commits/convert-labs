@@ -154,17 +154,126 @@ function convertKitchen() {
   const result = val * unitToCup[from] * cupToUnit[to];
   resultText.textContent = `${val} ${from} of ${ingr} = ${result.toFixed(2)} ${to}`;
 }
-// 🔍 Zoom View Feature
+// === THEME TOGGLE ===
+const themeToggle = document.getElementById("themeToggle");
+themeToggle?.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  themeToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+});
+
+// === IMAGE UPSCALER ===
+const fileInput = document.getElementById("imageInput");
+const upscaleBtn = document.getElementById("upscaleBtn");
+const scaleSelect = document.getElementById("scaleSelect");
+const errorMsg = document.getElementById("errorMsg");
+const originalImage = document.getElementById("originalImage");
+const upscaledImage = document.getElementById("upscaledImage");
+const previewContainer = document.getElementById("previewContainer");
+const downloadBtn = document.getElementById("downloadBtn");
 const zoomToggleBtn = document.getElementById("zoomToggleBtn");
-const zoomContainer = document.getElementById("zoomContainer");
+const splitPreview = document.getElementById("splitPreview");
+const overlay = document.getElementById("splitOverlay");
+const handle = document.getElementById("splitHandle");
 const zoomCanvas = document.getElementById("zoomCanvas");
 const zctx = zoomCanvas.getContext("2d");
-let zoomEnabled = false;
-let zoomFactor = 2; // 2x zoom
 
+let selectedFile, upscaler, dragging = false, zoomEnabled = false;
+
+// Load selected image
+fileInput.addEventListener("change", e => {
+  selectedFile = e.target.files[0];
+  if (selectedFile) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      originalImage.src = reader.result;
+      previewContainer.style.display = "none";
+      errorMsg.textContent = "";
+    };
+    reader.readAsDataURL(selectedFile);
+  }
+});
+
+// Upscale logic
+upscaleBtn.addEventListener("click", async () => {
+  if (!selectedFile) {
+    errorMsg.textContent = "Please choose an image first.";
+    return;
+  }
+  errorMsg.textContent = "Upscaling... please wait ⏳";
+
+  const scale = parseInt(scaleSelect.value);
+  try {
+    const imageBitmap = await createImageBitmap(selectedFile);
+    const canvas = document.createElement("canvas");
+    canvas.width = imageBitmap.width;
+    canvas.height = imageBitmap.height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(imageBitmap, 0, 0);
+
+    upscaler = new window.Realesrgan({ scale: scale >= 8 ? 4 : scale, model: "x4" });
+    let upscaled = await upscaler.upscale(canvas);
+
+    // For 8x upscale, do two passes (4x then 2x)
+    if (scale === 8) {
+      const img2 = new Image();
+      img2.src = upscaled;
+      await img2.decode();
+      const tempCanvas = document.createElement("canvas");
+      tempCanvas.width = img2.width;
+      tempCanvas.height = img2.height;
+      tempCanvas.getContext("2d").drawImage(img2, 0, 0);
+      upscaler = new window.Realesrgan({ scale: 2, model: "x2" });
+      upscaled = await upscaler.upscale(tempCanvas);
+    }
+
+    upscaledImage.src = upscaled;
+    previewContainer.style.display = "block";
+    errorMsg.textContent = "";
+  } catch (err) {
+    console.error(err);
+    errorMsg.textContent = "⚠️ Error upscaling. Try smaller size or lower scale.";
+  }
+});
+
+// === SPLIT SLIDER LOGIC ===
+let draggingSlider = false;
+
+handle.addEventListener("mousedown", () => draggingSlider = true);
+window.addEventListener("mouseup", () => draggingSlider = false);
+window.addEventListener("mousemove", e => {
+  if (!draggingSlider) return;
+  const rect = splitPreview.getBoundingClientRect();
+  let pos = ((e.clientX - rect.left) / rect.width) * 100;
+  pos = Math.max(0, Math.min(100, pos));
+  overlay.style.width = pos + "%";
+  handle.style.left = pos + "%";
+});
+
+// Touch support
+handle.addEventListener("touchstart", () => draggingSlider = true);
+window.addEventListener("touchend", () => draggingSlider = false);
+window.addEventListener("touchmove", e => {
+  if (!draggingSlider) return;
+  const touch = e.touches[0];
+  const rect = splitPreview.getBoundingClientRect();
+  let pos = ((touch.clientX - rect.left) / rect.width) * 100;
+  pos = Math.max(0, Math.min(100, pos));
+  overlay.style.width = pos + "%";
+  handle.style.left = pos + "%";
+});
+
+// === DOWNLOAD ===
+downloadBtn.addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = upscaledImage.src;
+  link.download = "upscaled-image.png";
+  link.click();
+});
+
+// === ZOOM VIEW ===
 zoomToggleBtn.addEventListener("click", () => {
   zoomEnabled = !zoomEnabled;
-  zoomContainer.style.display = zoomEnabled ? "block" : "none";
+  zoomCanvas.style.display = zoomEnabled ? "block" : "none";
   zoomToggleBtn.textContent = zoomEnabled ? "❌ Close Zoom" : "🔍 Zoom View";
   if (zoomEnabled) initializeZoom();
 });
@@ -179,7 +288,7 @@ function initializeZoom() {
   };
 
   function drawZoom(x, y) {
-    const size = 150;
+    const size = 150, zoomFactor = 2;
     const zoomSize = size / zoomFactor;
     zctx.clearRect(0, 0, zoomCanvas.width, zoomCanvas.height);
     zctx.drawImage(img, 0, 0);
@@ -200,7 +309,6 @@ function initializeZoom() {
     zctx.stroke();
   }
 
-  // Mouse zoom movement
   zoomCanvas.addEventListener("mousemove", e => {
     if (!zoomEnabled) return;
     const rect = zoomCanvas.getBoundingClientRect();
@@ -209,7 +317,6 @@ function initializeZoom() {
     drawZoom(x, y);
   });
 
-  // Touch zoom movement
   zoomCanvas.addEventListener("touchmove", e => {
     if (!zoomEnabled) return;
     const touch = e.touches[0];
@@ -220,14 +327,5 @@ function initializeZoom() {
   });
 }
 
-// Show zoom button after upscaling
-upscaleBtn.addEventListener("click", () => {
-  downloadBtn.style.display = "none";
-  zoomToggleBtn.style.display = "none";
-});
-upscaledImage.addEventListener("load", () => {
-  downloadBtn.style.display = "inline-block";
-  zoomToggleBtn.style.display = "inline-block";
-});
 
 
