@@ -154,4 +154,80 @@ function convertKitchen() {
   const result = val * unitToCup[from] * cupToUnit[to];
   resultText.textContent = `${val} ${from} of ${ingr} = ${result.toFixed(2)} ${to}`;
 }
+// 🔍 Zoom View Feature
+const zoomToggleBtn = document.getElementById("zoomToggleBtn");
+const zoomContainer = document.getElementById("zoomContainer");
+const zoomCanvas = document.getElementById("zoomCanvas");
+const zctx = zoomCanvas.getContext("2d");
+let zoomEnabled = false;
+let zoomFactor = 2; // 2x zoom
+
+zoomToggleBtn.addEventListener("click", () => {
+  zoomEnabled = !zoomEnabled;
+  zoomContainer.style.display = zoomEnabled ? "block" : "none";
+  zoomToggleBtn.textContent = zoomEnabled ? "❌ Close Zoom" : "🔍 Zoom View";
+  if (zoomEnabled) initializeZoom();
+});
+
+function initializeZoom() {
+  const img = new Image();
+  img.src = upscaledImage.src;
+  img.onload = () => {
+    zoomCanvas.width = img.width;
+    zoomCanvas.height = img.height;
+    zctx.drawImage(img, 0, 0);
+  };
+
+  function drawZoom(x, y) {
+    const size = 150;
+    const zoomSize = size / zoomFactor;
+    zctx.clearRect(0, 0, zoomCanvas.width, zoomCanvas.height);
+    zctx.drawImage(img, 0, 0);
+    zctx.save();
+    zctx.beginPath();
+    zctx.arc(x, y, size / 2, 0, Math.PI * 2);
+    zctx.clip();
+    zctx.drawImage(
+      img,
+      x - zoomSize / 2, y - zoomSize / 2, zoomSize, zoomSize,
+      x - size / 2, y - size / 2, size, size
+    );
+    zctx.restore();
+    zctx.strokeStyle = "#1e40af";
+    zctx.lineWidth = 2;
+    zctx.beginPath();
+    zctx.arc(x, y, size / 2, 0, Math.PI * 2);
+    zctx.stroke();
+  }
+
+  // Mouse zoom movement
+  zoomCanvas.addEventListener("mousemove", e => {
+    if (!zoomEnabled) return;
+    const rect = zoomCanvas.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * img.width;
+    const y = ((e.clientY - rect.top) / rect.height) * img.height;
+    drawZoom(x, y);
+  });
+
+  // Touch zoom movement
+  zoomCanvas.addEventListener("touchmove", e => {
+    if (!zoomEnabled) return;
+    const touch = e.touches[0];
+    const rect = zoomCanvas.getBoundingClientRect();
+    const x = ((touch.clientX - rect.left) / rect.width) * img.width;
+    const y = ((touch.clientY - rect.top) / rect.height) * img.height;
+    drawZoom(x, y);
+  });
+}
+
+// Show zoom button after upscaling
+upscaleBtn.addEventListener("click", () => {
+  downloadBtn.style.display = "none";
+  zoomToggleBtn.style.display = "none";
+});
+upscaledImage.addEventListener("load", () => {
+  downloadBtn.style.display = "inline-block";
+  zoomToggleBtn.style.display = "inline-block";
+});
+
 
