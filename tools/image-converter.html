@@ -1,1 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Converter | Convert Labs</title>
+  <!-- ✅ Google AdSense verification script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
+       crossorigin="anonymous"></script>
+  <meta name="description" content="Free online image converter — convert JPG, PNG, and WEBP instantly with Convert Labs. Fast, simple, and privacy-safe." />
+  <link rel="icon" href="/assets/convert-labs-icon.png" type="image/png" />
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#1e40af" />
 
+  <style>
+    /* --- Page Layout --- */
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f9fafc;
+      color: #222;
+      text-align: center;
+      margin: 0;
+    }
+
+    /* --- Refined Header --- */
+    .tool-header {
+      background: #1e40af;
+      color: #fff;
+      padding: 0.8rem 0;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .tool-header-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .tool-logo {
+      width: 34px;
+      height: 34px;
+    }
+
+    .tool-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+   .tool-tagline {
+  font-size: 0.95rem;
+  color: #E0E0E0;
+  margin-top: 0.3rem;
+  letter-spacing: 0.3px;
+}
+
+
+    /* --- Converter Section --- */
+    main {
+      max-width: 700px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #1e40af;
+      margin-bottom: 1rem;
+    }
+
+    .converter-section {
+      text-align: center;
+    }
+
+    input[type="file"] {
+      margin: 1rem 0;
+    }
+
+    select, button {
+      padding: 0.6rem;
+      margin: 0.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #1e40af;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #1e3a8a;
+    }
+
+    #preview {
+      margin-top: 1rem;
+      max-width: 100%;
+      border-radius: 8px;
+      display: none;
+    }
+
+    #downloadLink {
+      display: none;
+      margin-top: 1rem;
+      background: #16a34a;
+      color: white;
+      padding: 0.7rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    /* --- Footer --- */
+    .site-footer {
+      background-color: #1e40af;
+      color: #ffffff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-logo img {
+      height: 40px;
+      width: auto;
+    }
+
+    .footer-logo h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #a3bffa;
+      text-decoration: underline;
+    }
+
+    .copyright {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-top: 0.5rem;
+    }
+  </style>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://convertlabs.online/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Image Converter",
+      "item": "https://convertlabs.online/image-converter.html"
+    }
+  ]
+}
+</script>
+
+</head>
+
+<body>
+  <header class="tool-header">
+    <div class="tool-header-content">
+      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo" class="tool-logo" />
+      <h1 class="tool-title">Convert Labs</h1>
+    </div>
+    <p class="tool-tagline">Free Online Image Converter</p>
+  </header>
+
+  <main>
+    <div class="converter-section">
+      <h2>Convert Your Images Instantly</h2>
+      <p>Convert between JPG, PNG, and WEBP formats directly in your browser. No uploads, no data stored.</p>
+
+      <input type="file" id="imageInput" accept="image/*" />
+      <br />
+      <select id="formatSelect">
+        <option value="image/png">PNG</option>
+        <option value="image/jpeg">JPG</option>
+        <option value="image/webp">WEBP</option>
+      </select>
+      <br />
+      <button id="convertBtn">Convert Image</button>
+
+      <img id="preview" alt="Preview" />
+      <a id="downloadLink" download="converted-image">Download Converted Image</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-logo">
+      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon">
+      <h3>Convert Labs</h3>
+    </div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/how-to.html">Guides</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+    <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const input = document.getElementById('imageInput');
+    const format = document.getElementById('formatSelect');
+    const preview = document.getElementById('preview');
+    const download = document.getElementById('downloadLink');
+    const convertBtn = document.getElementById('convertBtn');
+
+    let uploadedImage = null;
+
+    input.addEventListener('change', () => {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          uploadedImage = new Image();
+          uploadedImage.src = e.target.result;
+          uploadedImage.onload = () => {
+            preview.src = uploadedImage.src;
+            preview.style.display = 'block';
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    convertBtn.addEventListener('click', () => {
+      if (!uploadedImage) {
+        alert('Please select an image first.');
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = uploadedImage.width;
+      canvas.height = uploadedImage.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(uploadedImage, 0, 0);
+
+      const convertedDataUrl = canvas.toDataURL(format.value);
+      preview.src = convertedDataUrl;
+
+      const ext = format.value.split('/')[1];
+      download.href = convertedDataUrl;
+      download.download = `converted-image.${ext}`;
+      download.style.display = 'inline-block';
+    });
+  </script>
+</body>
+  </html>
