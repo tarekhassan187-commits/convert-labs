@@ -1,403 +1,138 @@
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
+/* ===========================
+   BASE
+=========================== */
+html, body {
   margin: 0;
-  background: #f9fafc;
-  color: #222;
-  text-align: center;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+}
+:root {
+  --primary: #1e40af;
+  --accent: #2563eb;
+  --bg: #f9fafc;
+  --text: #111;
+  --card: #fff;
+  --shadow: rgba(0,0,0,0.1);
+}
+html.dark {
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --card: #1e293b;
+  --shadow: rgba(0,0,0,0.5);
+}
+.theme-transition {
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* Splash Screen */
-#loading-screen {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: #1e40af;
+/* ===========================
+   HEADER & FOOTER
+=========================== */
+header, footer {
+  background: var(--primary);
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  z-index: 999;
-  animation: fadeOut 1s ease 1s forwards;
+  text-align: center;
+  padding: 10px 0;
 }
-@keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-
-/* === Unified header styles for all pages === */
-header {
-  background: #1e40af;
-  color: #ffffff;
-  padding: 1rem 0 1.2rem;
-  border-radius: 6px; /* optional rounded top look — safe */
-}
-/* Header layout */
-header {
-  background: #1e40af;
-  color: #fff;
-  padding: 1rem 0 1.2rem;
-  position: relative;
-}
-
-/* top row: brand + controls */
 .header-content {
   display: flex;
-  align-items: center;
-  justify-content: space-between; /* brand left, controls right */
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  gap: 1rem;
-}
-
-/* brand with icon + text */
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  text-decoration: none;
-  color: white;
-}
-.logo {
-  width: 44px;           /* fixed small size so it won't blow up */
-  height: 44px;
-  border-radius: 50%;
-  object-fit: contain;
-  display: inline-block;
-}
-.brand-text {
-  font-weight: 700;
-  font-size: 1.25rem;
-  color: #fff;
-}
-
-/* header right side controls */
-.header-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-.header-btn {
-  display:inline-block;
-  background:#fff;
-  color:#1e40af;
-  padding:0.45rem 0.8rem;
-  border-radius:8px;
-  text-decoration:none;
-  font-weight:600;
-}
-.header-btn:hover { opacity:0.95; }
-
-/* theme toggle button style */
-.theme-toggle {
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-/* tagline below header row */
-.tagline {
-  margin: 0.6rem 0 0;
-  font-size: 0.95rem;
-  text-align: center;
-  color: #e6eefc;
-}
-
-/* page content max width and spacing */
-.page-content {
-  padding: 2rem 1rem;
-  max-width: 900px;
-  margin: 1.8rem auto 3rem;
-  background: transparent; /* ensure body background visible */
-}
-
-/* responsive: shrink brand text on small screens */
-@media (max-width:720px) {
-  .brand-text { font-size: 1rem; }
-  .logo { width:38px; height:38px; }
-  .header-content { padding: 0 0.6rem; }
-  .page-content { padding: 1.2rem; }
-  .header-controls .header-btn { padding: 0.3rem 0.6rem; font-size:0.9rem; }
-}
-
-.header-content{
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  gap: 12px;
-  box-sizing: border-box;
-}
-
-header img.logo {
-  max-width: 42px !important;
-  height: auto !important;
-}
-
-
-/* Brand (icon + text) */
-.brand{
-  display: flex;
   align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: #ffffff !important;
+  max-width: 960px;
+  margin: auto;
+  padding: 5px 15px;
 }
-.brand .logo{
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: block;
-}
-.brand .brand-text{
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #ffffff !important;
-  line-height: 1;
-}
-
-/* Ensure link color never turns red/purple */
-.brand,
-.brand a,
-.brand span {
-  color: #ffffff !important;
-}
-
-/* Tagline centered under header */
-.tagline{
-  text-align: center;
-  color: #e6eefc;
-  margin: 0.5rem 0 0;
-  font-size: 0.98rem;
-}
-
-/* Controls on the right (Contact + Theme) */
-.header-controls{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Contact button */
-.header-btn{
-  display: inline-block;
-  background: #fff;
-  color: #1e40af;
-  padding: 8px 14px;
+.logo, .footer-logo { width: 40px; height: 40px; object-fit: contain; }
+.header-btn {
+  background: white;
+  color: var(--primary);
+  border: none;
+  padding: 6px 10px;
   border-radius: 8px;
-  text-decoration: none;
+  cursor: pointer;
   font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
 }
-.header-btn:hover{ transform: translateY(-1px); background: #f3f4f6; }
-
-/* Theme toggle */
-.theme-toggle{
-  background: none;
-  border: 2px solid rgba(255,255,255,0.9);
-  color: #fff;
-  padding: 6px 9px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-.theme-toggle:hover{ transform: scale(1.06); }
-
-/* Dark mode header override */
-body.dark-mode header{ background: #0f1724; }
-body.dark-mode .brand .brand-text{ color: #f8fafc !important; }
-body.dark-mode .header-btn{ background:#374151; color:#f8fafc; border:1px solid #4b5563; }
-body.dark-mode .theme-toggle{ border-color: rgba(255,255,255,0.85); color:#fff; }
-
-/* Small screens */
-@media (max-width: 700px){
-  .header-content{ flex-direction: column; gap:8px; padding: 0.6rem 1rem; }
-  .header-controls{ gap:8px; align-self: center; }
-  .brand .brand-text{ font-size:1.2rem; }
-  .tagline{ font-size:0.92rem; padding:0 1rem; }
-}
-
-/* Tagline */
-.tagline {
-  color: #ffffff;
-  font-size: 1rem;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  margin-top: 0.3rem;
-}
-
-/* Theme Toggle */
-#themeToggle {
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
+.theme-toggle {
   background: none;
   border: none;
-  color: white;
-  font-size: 1.6rem;
+  font-size: 20px;
   cursor: pointer;
-  transition: transform 0.3s;
+  margin-left: 10px;
 }
-#themeToggle:hover { transform: scale(1.2); }
+footer a { color: #fff; text-decoration: underline; }
 
-/* Tabs */
+/* ===========================
+   TABS
+=========================== */
 .tabs {
-  background: #e5e7eb;
   display: flex;
   justify-content: center;
+  gap: 8px;
+  background: #e5e7eb;
+  padding: 8px;
   flex-wrap: wrap;
-  gap: 0.8rem;
-  padding: 0.7rem;
 }
-
-.tabs button.active {
-  background-color: #1e40af;
-  color: #fff;
-  font-weight: 600;
-  border-radius: 6px;
-}
-.converter {
-  display: none;
-}
-.converter.active {
-  display: block;
-}
-
 .tabs button {
-  background: #1e40af;
-  color: white;
-  border: none;
-  padding: 0.6rem 1rem;
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid #ccc;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
-  font-weight: bold;
+  font-weight: 600;
 }
-.tabs button:hover { background: #1e3a8a; }
+.tabs button.active {
+  background: var(--accent);
+  color: white;
+}
 
-/* Converter Sections */
-.converter {
-  display: none;
-  padding: 2rem 1rem;
+/* ===========================
+   CONVERTERS
+=========================== */
+main {
+  max-width: 960px;
+  margin: 20px auto;
+  background: var(--card);
+  box-shadow: 0 0 10px var(--shadow);
+  border-radius: 12px;
+  padding: 20px;
 }
-.converter.active { display: block; }
-input, select, button {
-  padding: 0.6rem;
-  margin: 0.4rem;
+.converter { text-align: center; }
+.converter input, .converter select {
+  margin: 6px;
+  padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  font-size: 1rem;
 }
-button {
-  background: #1e40af;
-  color: white;
+.converter button {
+  background: var(--accent);
+  color: #fff;
   border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s;
 }
-button:hover { background: #1e3a8a; }
+.converter p { font-weight: 600; }
 
-/* Footer */
+/* ===========================
+   FOOTER
+=========================== */
 footer {
-  background: #1e40af;
+  margin-top: 20px;
+  padding: 20px 0;
+  background: var(--primary);
   color: white;
-  padding: 1.5rem 0;
-  margin-top: 2rem;
-}
-.footer-logo {
-  width: 40px;
-  vertical-align: middle;
 }
 .footer-links a {
   color: white;
-  text-decoration: none;
-  margin: 0 0.4rem;
-}
-.footer-links a:hover {
+  margin: 0 5px;
   text-decoration: underline;
 }
-.footer-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 8px;
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 600px) {
+  .tabs { flex-direction: column; align-items: center; }
+  .converter input, .converter select, .converter button { width: 90%; margin: 5px 0; }
 }
-.footer-text {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
-}
-/* === Footer Brand Standardization === */
-.footer-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.footer-logo {
-  width: 40px;
-  height: 40px;
-  vertical-align: middle;
-}
-
-.footer-text {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
-}
-
-
-/* Dark Mode */
-body.dark-mode {
-  background: #1e1e1e;
-  color: #f5f5f5;
-  transition: background 0.4s;
-}
-body.dark-mode header { background: #111827; }
-body.dark-mode .tabs { background: #2d2d33; }
-body.dark-mode footer { background: #111827; }
-
-/* Page main titles (like Terms of Use, Privacy Policy, About, etc.) */
-main h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #111;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  text-align: center;
-  position: relative;
-  display: inline-block;
-}
-
-/* Blue underline effect */
-main h1::after {
-  content: "";
-  display: block;
-  width: 60px;
-  height: 3px;
-  background-color: #1e3bb3; /* same blue as your header/footer */
-  margin: 0.5rem auto 0;
-  border-radius: 2px;
-}
-#zoomCanvas {
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  background-color: #f3f4f6;
-  touch-action: none;
-}
-
-
-
-
-
-
-
-
-
-
