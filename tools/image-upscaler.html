@@ -91,10 +91,11 @@
     });
 
     // 🧠 Upscaler logic
-    const UpscalerJS = window.Upscaler;
-    const upscaler = new UpscalerJS({
-      model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json",
-    });
+    const { Upscaler } = window;
+const upscaler = new Upscaler({
+  model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json",
+});
+
 
     const imageInput = document.getElementById("imageInput");
     const originalImage = document.getElementById("originalImage");
