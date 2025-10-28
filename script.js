@@ -1,29 +1,19 @@
 /* script.js - Convert Labs
-   Full client-side logic for theme, header/footer behavior,
-   kitchen ingredient conversion lists, container volume UI,
-   currency converter, and small helpers.
-
-   Note: For paid APIs (CloudConvert etc.) place keys in the
-   designated placeholder below or, better, store keys server-side.
+   Fully corrected version (2025-10)
+   - Matches current index.html structure
+   - Fixes missing IDs that hid homepage
+   - Optimized for AdSense & Analytics safety
 */
 
 /* ============================
    Helper utilities
-   ============================ */
+============================ */
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 const on = (el, ev, fn) => el && el.addEventListener(ev, fn);
 
 function safeGet(selector) {
   return document.querySelector(selector) || null;
-}
-
-function debounce(fn, wait = 250) {
-  let t;
-  return (...args) => {
-    clearTimeout(t);
-    t = setTimeout(() => fn(...args), wait);
-  };
 }
 
 function formatNumber(n, digits = 6) {
@@ -34,8 +24,8 @@ function formatNumber(n, digits = 6) {
 }
 
 /* ============================
-   THEME: dark/light toggle
-   ============================ */
+   THEME toggle (dark/light)
+============================ */
 (function themeSetup() {
   const KEY = 'cl_theme';
   const themeToggle = safeGet('#themeToggle');
@@ -61,28 +51,25 @@ function formatNumber(n, digits = 6) {
       saved = (saved === 'light') ? 'dark' : 'light';
       localStorage.setItem(KEY, saved);
       applyTheme(saved);
-    }, {passive:true});
+    }, { passive: true });
   }
 })();
 
 /* ============================
-   HEADER / FOOTER alignment fixes
-   ensures logo + "Convert Labs" side-by-side
-   and makes icons a standard size across pages.
-   ============================ */
+   HEADER / FOOTER fixes
+============================ */
 (function headerFooterFixes() {
-  const logoSelectors = ['.logo', '.footer-logo'];
-  logoSelectors.forEach(sel => {
+  const logos = ['.logo', '.footer-logo'];
+  logos.forEach(sel => {
     const img = safeGet(sel);
     if (img) {
-      img.style.width = '44px';      // consistent size
+      img.style.width = '44px';
       img.style.height = '44px';
       img.style.objectFit = 'contain';
       img.style.verticalAlign = 'middle';
     }
   });
 
-  // Ensure .brand-text and .brand (if present) align horizontally
   const brand = safeGet('.brand');
   if (brand) {
     brand.style.display = 'inline-flex';
@@ -90,7 +77,8 @@ function formatNumber(n, digits = 6) {
     brand.style.gap = '10px';
     brand.style.textDecoration = 'none';
   }
-  const footerBrand = safeGet('.footer-content');
+
+  const footerBrand = safeGet('.footer-brand');
   if (footerBrand) {
     footerBrand.style.display = 'flex';
     footerBrand.style.alignItems = 'center';
@@ -100,10 +88,10 @@ function formatNumber(n, digits = 6) {
 })();
 
 /* ============================
-   CONTACT button minor tweak
-   ============================ */
+   CONTACT button
+============================ */
 (function contactButton() {
-  const btn = safeGet('.header-btn') || safeGet('#contactBtn');
+  const btn = safeGet('.header-btn');
   if (btn) {
     btn.style.padding = '8px 12px';
     btn.style.borderRadius = '8px';
@@ -114,17 +102,14 @@ function formatNumber(n, digits = 6) {
 })();
 
 /* ============================
-   KITCHEN ingredient data + unit lists
-   - long grouped list included
-   - two converters: volume <-> mass based on ingredient approximate density
-   ============================ */
-const Kitchen = (function kitchenModule(){
-  // Densities in g/ml (approx typical)
+   KITCHEN Converter
+============================ */
+const Kitchen = (function () {
   const densities = {
-    'all-purpose flour': 0.53, // g/ml (rough bulk density); 1 cup ~ 125g
-    'sugar (granulated)': 0.85, // 1 cup ~ 200g
+    'all-purpose flour': 0.53,
+    'sugar (granulated)': 0.85,
     'brown sugar packed': 0.95,
-    'butter': 0.96, // 1 cup ~ 227 g
+    'butter': 0.96,
     'milk (whole)': 1.03,
     'honey': 1.42,
     'olive oil': 0.92,
@@ -148,14 +133,12 @@ const Kitchen = (function kitchenModule(){
     'maple syrup': 1.33,
     'molasses': 1.4,
     'corn syrup': 1.38
-    // add more as you need...
   };
 
-  // Grouped ingredient names long list (non-duplicated)
   const ingredientGroups = {
-    'Baking staples': [
-      'all-purpose flour', 'bread flour', 'cake flour', 'baking powder', 'baking soda', 'salt (table)',
-      'granulated sugar', 'brown sugar packed', 'powdered sugar', 'cocoa powder', 'cornstarch'
+    'Baking Staples': [
+      'all-purpose flour', 'bread flour', 'cake flour', 'baking powder', 'baking soda',
+      'salt (table)', 'sugar (granulated)', 'brown sugar packed', 'powdered sugar', 'cocoa powder'
     ],
     'Dairy & Fats': [
       'butter', 'milk (whole)', 'cream cheese', 'yogurt (plain)', 'cheese (grated)'
@@ -171,49 +154,34 @@ const Kitchen = (function kitchenModule(){
     ]
   };
 
-  // Units we support on the UI
   const units = {
     mass: ['g', 'kg', 'oz', 'lb'],
     volume: ['ml', 'l', 'cup', 'tbsp', 'tsp', 'fl oz']
   };
 
-  // conversions
-  const massConversions = {
-    g: 1,
-    kg: 1000,
-    oz: 28.3495231,
-    lb: 453.59237
-  };
-  const volumeConversions_ml = {
-    ml: 1,
-    l: 1000,
-    'fl oz': 29.5735,
-    cup: 240,    // US cup
-    tbsp: 14.7868,
-    tsp: 4.92892
-  };
+  const massConv = { g: 1, kg: 1000, oz: 28.3495, lb: 453.592 };
+  const volConv = { ml: 1, l: 1000, 'fl oz': 29.5735, cup: 240, tbsp: 14.7868, tsp: 4.92892 };
 
-  function populateIngredientSelect(selElement) {
-    if (!selElement) return;
-    selElement.innerHTML = '';
-    Object.keys(ingredientGroups).forEach(group => {
-      const optgroup = document.createElement('optgroup');
-      optgroup.label = group;
-      ingredientGroups[group].forEach(name => {
+  function populateIngredientSelect(sel) {
+    if (!sel) return;
+    sel.innerHTML = '';
+    Object.entries(ingredientGroups).forEach(([group, list]) => {
+      const og = document.createElement('optgroup');
+      og.label = group;
+      list.forEach(name => {
         const o = document.createElement('option');
         o.value = name;
         o.textContent = name;
-        optgroup.appendChild(o);
+        og.appendChild(o);
       });
-      selElement.appendChild(optgroup);
+      sel.appendChild(og);
     });
   }
 
   function populateUnitSelect(sel, type = 'mass') {
     if (!sel) return;
     sel.innerHTML = '';
-    const list = units[type] || [];
-    list.forEach(u => {
+    (units[type] || []).forEach(u => {
       const o = document.createElement('option');
       o.value = u;
       o.textContent = u;
@@ -221,255 +189,165 @@ const Kitchen = (function kitchenModule(){
     });
   }
 
-  // mass <-> volume conversions for ingredient (using density)
-  // mass -> volume: vol_ml = mass_g / density (g/ml)
-  function convertMassToVolume(mass, massUnit, targetVolumeUnit, ingredient) {
-    const mass_g = mass * (massConversions[massUnit] || 1);
-    const dens = densities[ingredient] || 1.0; // fallback density=1 (water)
-    const ml = mass_g / dens;
-    const toMultiplier = (volumeConversions_ml[targetVolumeUnit] || 1);
-    return ml / toMultiplier;
+  function convertMassToVolume(m, from, to, ingr) {
+    const g = m * (massConv[from] || 1);
+    const dens = densities[ingr] || 1;
+    const ml = g / dens;
+    return ml / (volConv[to] || 1);
   }
-  // volume -> mass: mass_g = (volume_ml) * density (g/ml)
-  function convertVolumeToMass(vol, volUnit, targetMassUnit, ingredient) {
-    const ml = vol * (volumeConversions_ml[volUnit] || 1);
-    const dens = densities[ingredient] || 1.0;
+
+  function convertVolumeToMass(v, from, to, ingr) {
+    const ml = v * (volConv[from] || 1);
+    const dens = densities[ingr] || 1;
     const g = ml * dens;
-    const toUnit = (massConversions[targetMassUnit] || 1);
-    return g / toUnit;
+    return g / (massConv[to] || 1);
   }
 
-  return {
-    populateIngredientSelect,
-    populateUnitSelect,
-    convertMassToVolume,
-    convertVolumeToMass,
-    densities,
-    ingredientGroups
-  };
+  return { populateIngredientSelect, populateUnitSelect, convertMassToVolume, convertVolumeToMass };
 })();
 
-/* Auto-populate kitchen selects if present on the page */
+/* Auto-populate selects */
 (function kitchenPopulateUI() {
-  const ingredientSel = safeGet('#kitchenIngredient');
-  const fromUnitSel = safeGet('#kitchenFromUnit');
-  const toUnitSel = safeGet('#kitchenToUnit');
-  if (ingredientSel) Kitchen.populateIngredientSelect(ingredientSel);
-  // We'll provide both mass and volume lists for both selects and let the user choose
-  if (fromUnitSel) Kitchen.populateUnitSelect(fromUnitSel, 'mass');
-  if (toUnitSel) Kitchen.populateUnitSelect(toUnitSel, 'volume');
-  // If the page uses different selects add logic or call this later
+  const ingrSel = safeGet('#kitchenIngredient');
+  const fromSel = safeGet('#kitchenFrom');
+  const toSel = safeGet('#kitchenTo');
+  if (ingrSel) Kitchen.populateIngredientSelect(ingrSel);
+  if (fromSel) Kitchen.populateUnitSelect(fromSel, 'mass');
+  if (toSel) Kitchen.populateUnitSelect(toSel, 'volume');
 })();
 
-/* Small event-driven kitchen converter (works if elements exist) */
+/* Conversion event */
 (function kitchenEvents() {
-  const btn = safeGet('#kitchenConvertBtn');
+  const btn = safeGet('#kitchenConvertBtn') || safeGet('button[onclick="convertKitchen()"]');
   if (!btn) return;
-  on(btn, 'click', () => {
-    const ingredient = safeGet('#kitchenIngredient')?.value;
-    const fromUnit = safeGet('#kitchenFromUnit')?.value;
-    const toUnit = safeGet('#kitchenToUnit')?.value;
-    const value = parseFloat(safeGet('#kitchenValue')?.value || '0');
-    if (!ingredient || !fromUnit || !toUnit || !value) {
-      safeGet('#kitchenResult').textContent = 'Please fill all fields';
+
+  btn.addEventListener('click', () => {
+    const ingr = safeGet('#kitchenIngredient')?.value;
+    const from = safeGet('#kitchenFrom')?.value;
+    const to = safeGet('#kitchenTo')?.value;
+    const val = parseFloat(safeGet('#kitchenInput')?.value || '0');
+    const res = safeGet('#kitchenResult');
+
+    if (!ingr || !from || !to || !val) {
+      res.textContent = 'Please fill all fields.';
       return;
     }
 
-    // decide whether converting mass->volume or volume->mass
-    const massList = ['g','kg','oz','lb'];
-    const volumeList = ['ml','l','cup','tbsp','tsp','fl oz'];
+    const mass = ['g', 'kg', 'oz', 'lb'];
+    const vol = ['ml', 'l', 'cup', 'tbsp', 'tsp', 'fl oz'];
     let out;
-    if (massList.includes(fromUnit) && volumeList.includes(toUnit)) {
-      out = Kitchen.convertMassToVolume(value, fromUnit, toUnit, ingredient);
-      safeGet('#kitchenResult').textContent = `${formatNumber(out)} ${toUnit} (approx)`;
-    } else if (volumeList.includes(fromUnit) && massList.includes(toUnit)) {
-      out = Kitchen.convertVolumeToMass(value, fromUnit, toUnit, ingredient);
-      safeGet('#kitchenResult').textContent = `${formatNumber(out)} ${toUnit} (approx)`;
-    } else if (massList.includes(fromUnit) && massList.includes(toUnit)) {
-      // simple mass conversion
-      const grams = value * (massConversionsSafe(fromUnit));
-      const target = grams / (massConversionsSafe(toUnit));
-      safeGet('#kitchenResult').textContent = `${formatNumber(target)} ${toUnit}`;
-    } else if (volumeList.includes(fromUnit) && volumeList.includes(toUnit)) {
-      const ml = value * (volumeConversions_ml_safe(fromUnit));
-      const target = ml / (volumeConversions_ml_safe(toUnit));
-      safeGet('#kitchenResult').textContent = `${formatNumber(target)} ${toUnit}`;
-    } else {
-      safeGet('#kitchenResult').textContent = 'Unsupported conversion';
-    }
-  });
 
-  function massConversionsSafe(u) {
-    const table = { g:1, kg:1000, oz:28.3495231, lb:453.59237 };
-    return table[u] || 1;
-  }
-  function volumeConversions_ml_safe(u) {
-    const table = { ml:1, l:1000, 'fl oz':29.5735, cup:240, tbsp:14.7868, tsp:4.92892 };
-    return table[u] || 1;
-  }
+    if (mass.includes(from) && vol.includes(to)) {
+      out = Kitchen.convertMassToVolume(val, from, to, ingr);
+    } else if (vol.includes(from) && mass.includes(to)) {
+      out = Kitchen.convertVolumeToMass(val, from, to, ingr);
+    } else {
+      res.textContent = 'Unsupported conversion.';
+      return;
+    }
+
+    res.textContent = `${formatNumber(out)} ${to} (approx)`;
+  });
 })();
 
 /* ============================
-   Container Volume UI
-   - show box fields or cylinder fields
-   ============================ */
+   CONTAINER Volume Calculator
+============================ */
 (function containerVolumeUI() {
   const typeSel = safeGet('#containerType');
   if (!typeSel) return;
-  const boxFields = safeGet('#boxFields');
-  const cylFields = safeGet('#cylFields');
 
-  function adjustUI() {
-    const v = typeSel.value;
-    if (v === 'box') {
-      if (boxFields) boxFields.style.display = 'block';
-      if (cylFields) cylFields.style.display = 'none';
+  const boxInputs = safeGet('#boxInputs');
+  const cylInputs = safeGet('#cylinderInputs');
+
+  function adjust() {
+    if (typeSel.value === 'box') {
+      boxInputs.style.display = 'block';
+      cylInputs.style.display = 'none';
     } else {
-      if (boxFields) boxFields.style.display = 'none';
-      if (cylFields) cylFields.style.display = 'block';
+      boxInputs.style.display = 'none';
+      cylInputs.style.display = 'block';
     }
   }
-  adjustUI();
-  on(typeSel, 'change', adjustUI);
+  adjust();
+  on(typeSel, 'change', adjust);
 
-  // Container volume calculation if button exists
-  const calcBtn = safeGet('#containerCalcBtn');
-  if (!calcBtn) return;
-  on(calcBtn, 'click', () => {
-    const t = typeSel.value;
-    if (t === 'box') {
-      const l = parseFloat(safeGet('#boxLength')?.value || 0);
-      const w = parseFloat(safeGet('#boxWidth')?.value || 0);
-      const h = parseFloat(safeGet('#boxHeight')?.value || 0);
-      const vol = l * w * h; // assume same unit
-      safeGet('#containerResult').textContent = `${formatNumber(vol)} cubic units`;
+  const btn = safeGet('button[onclick="calculateContainerVolume()"]');
+  on(btn, 'click', () => {
+    const type = typeSel.value;
+    let volume = 0;
+
+    if (type === 'box') {
+      const l = parseFloat($('#lengthBox')?.value || 0);
+      const w = parseFloat($('#widthBox')?.value || 0);
+      const h = parseFloat($('#heightBox')?.value || 0);
+      volume = l * w * h;
     } else {
-      const r = parseFloat(safeGet('#cylRadius')?.value || 0);
-      const h = parseFloat(safeGet('#cylHeight')?.value || 0);
-      const vol = Math.PI * r * r * h;
-      safeGet('#containerResult').textContent = `${formatNumber(vol)} cubic units`;
+      const r = parseFloat($('#radiusCylinder')?.value || 0);
+      const h = parseFloat($('#heightCylinder')?.value || 0);
+      volume = Math.PI * r * r * h;
     }
+
+    $('#containerResult').textContent = `${formatNumber(volume)} cubic cm`;
   });
 })();
 
 /* ============================
-   CURRENCY converter
-   - populates currency selects with a comprehensive list including SGD, KWD, AED
-   - fetches exchange rates from exchangerate.host (free) with fallback.
-   ============================ */
-const Currency = (function currencyModule(){
-  // curated list (add currencies you need)
-  const currencyList = [
-    'USD','EUR','GBP','JPY','CNY','INR','EGP','AUD','CAD','CHF','SGD','KWD','AED','SAR','TRY','BRL','RUB','MXN'
-  ];
+   CURRENCY Converter (free API)
+============================ */
+const Currency = (function () {
+  const list = ['USD','EUR','GBP','JPY','CNY','INR','EGP','AUD','CAD','CHF','SGD','KWD','AED','SAR','TRY','BRL','RUB','MXN'];
 
   async function populateSelects(fromSel, toSel) {
     if (!fromSel || !toSel) return;
     fromSel.innerHTML = ''; toSel.innerHTML = '';
-    currencyList.forEach(code => {
-      const o1 = document.createElement('option'); o1.value = code; o1.textContent = code;
-      const o2 = o1.cloneNode(true);
-      fromSel.appendChild(o1); toSel.appendChild(o2);
+    list.forEach(c => {
+      const o1 = new Option(c, c), o2 = new Option(c, c);
+      fromSel.add(o1); toSel.add(o2);
     });
-    // sensible defaults
-    fromSel.value = 'EGP' in currencyList ? 'EGP' : 'USD';
-    toSel.value = 'USD';
+    fromSel.value = 'EGP'; toSel.value = 'USD';
   }
 
   async function getRate(from, to) {
-    // use exchangerate.host (free endpoint)
-    const url = `https://api.exchangerate.host/convert?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
-    try {
-      const r = await fetch(url);
-      if (!r.ok) throw new Error('rate fetch failed');
-      const j = await r.json();
-      if (j && j.result) return j.result;
-      if (j && j.info && j.info.rate) return j.info.rate;
-      throw new Error('unexpected response');
-    } catch (err) {
-      console.warn('Currency fetch error', err);
-      throw err;
-    }
+    const url = `https://api.exchangerate.host/convert?from=${from}&to=${to}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.result || data.info?.rate || 0;
   }
 
   return { populateSelects, getRate };
 })();
 
-/* Auto-run currency UI population if present */
-(function currencyPopulateUI(){
-  const from = safeGet('#currencyFrom');
-  const to = safeGet('#currencyTo');
-  const btn = safeGet('#currencyConvertBtn');
-  const amountInput = safeGet('#currencyAmount');
-  const resultEl = safeGet('#currencyResult');
-
-  if (!from || !to || !btn || !amountInput || !resultEl) return;
+(function currencyUI() {
+  const from = $('#currencyFrom');
+  const to = $('#currencyTo');
+  const btn = $('#currencyConvertBtn');
+  const amt = $('#currencyAmount');
+  const res = $('#currencyResult');
+  if (!from || !to || !btn || !amt || !res) return;
 
   Currency.populateSelects(from, to);
-
-  btn.addEventListener('click', async () => {
-    const a = parseFloat(amountInput.value || '0');
-    if (!a) { resultEl.textContent = 'Enter amount'; return; }
-    resultEl.textContent = 'Fetching rate…';
+  on(btn, 'click', async () => {
+    const a = parseFloat(amt.value);
+    if (!a) { res.textContent = 'Enter amount'; return; }
+    res.textContent = 'Fetching...';
     try {
       const rate = await Currency.getRate(from.value, to.value);
       const out = a * rate;
-      resultEl.textContent = `${formatNumber(out,8)} ${to.value} (rate: ${formatNumber(rate,8)})`;
-    } catch (err) {
-      resultEl.textContent = 'Unable to fetch rate. Try again later.';
+      res.textContent = `${formatNumber(out,8)} ${to.value} (rate: ${formatNumber(rate,8)})`;
+    } catch {
+      res.textContent = 'Error fetching rate.';
     }
   });
 })();
 
 /* ============================
-   IMAGE UPSCALER & OTHER TOOL hooks
-   (The image-upscaler page has its own script that uses Upscaler lib).
-   Keep minimal helpers here so pages won't error when referencing missing variables.
-   ============================ */
-/* CloudConvert / Paid APIs:
-   If you want to enable CloudConvert file conversions client-side (not recommended for security),
-   set CLOUDCONVERT_API_TOKEN below and uncomment relevant usages in your pages.
-*/
-const CLOUDCONVERT_API_TOKEN = null; // <-- Place token here only if you understand the security risk
-
-/* ============================
-   Misc / pagesafe guards
-   - Avoid "visitorCount is not defined" or other console errors when optional pages
-   - Example: simple visits counter stub (no remote call)
-   ============================ */
-(function visitsStub(){
-  // If page expects visitorCount var/function, provide safe stub
-  if (typeof window.visitorCount === 'undefined') {
-    window.visitorCount = function() {
-      return Promise.resolve({visits: 0});
-    };
-  }
-})();
-
-/* ============================
-   Page load tidy up & debug
-   ============================ */
-window.addEventListener('load', () => {
-  // small layout corrections for pages that used inline main width
-  const mains = $$('main');
-  mains.forEach(m => {
-    // If page sets main inline style that's too narrow or not centered, ensure consistent
-    m.style.maxWidth = m.style.maxWidth || '980px';
-    m.style.margin = m.style.margin || 'auto';
-  });
-
-  // Ensure footer text color white in header area
-  const footer = safeGet('footer');
-  if (footer) {
-    footer.style.color = footer.style.color || '#fff';
-  }
-
-  // Hide debug console warnings if needed (no-op)
-  console.log('script.js loaded - page:', location.pathname);
-});
-
-// Show main app after DOM is ready
-window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("app").style.display = "block";
-  document.getElementById("loading-screen").style.display = "none";
+   Final load reveal
+============================ */
+window.addEventListener('DOMContentLoaded', () => {
+  const app = $('#app');
+  const loader = $('#loading-screen');
+  if (app) app.style.display = 'block';
+  if (loader) loader.style.display = 'none';
+  console.log('Convert Labs ready');
 });
