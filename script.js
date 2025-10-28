@@ -205,7 +205,10 @@ upscaleBtn.addEventListener("click", async () => {
     const ctx = canvas.getContext("2d");
     ctx.drawImage(imageBitmap, 0, 0);
 
-    upscaler = new window.Realesrgan({ scale: scale >= 8 ? 4 : scale, model: "x4" });
+    new window.Upscaler({
+  model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json"
+});
+
     let upscaled = await upscaler.upscale(canvas);
 
     // For 8x upscale, do two passes (4x then 2x)
@@ -217,7 +220,10 @@ upscaleBtn.addEventListener("click", async () => {
       tempCanvas.width = img2.width;
       tempCanvas.height = img2.height;
       tempCanvas.getContext("2d").drawImage(img2, 0, 0);
-      upscaler = new window.Realesrgan({ scale: 2, model: "x2" });
+      new window.Upscaler({
+  model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json"
+});
+
       upscaled = await upscaler.upscale(tempCanvas);
     }
 
@@ -321,6 +327,7 @@ function initializeZoom() {
     drawZoom(x, y);
   });
 }
+
 
 
 
