@@ -5,7 +5,7 @@
   --primary: #1e40af;
   --accent: #2563eb;
 
-  /* Light mode defaults */
+  /* Light mode */
   --bg-color: #f9fafc;
   --text-color: #111;
   --card-bg: #ffffff;
@@ -14,8 +14,8 @@
   --footer-bg: #1e40af;
 }
 
-/* Dark Mode Overrides */
-html.dark, body.dark {
+/* Dark mode */
+html.dark {
   --bg-color: #0b1120;
   --text-color: #f5f5f5;
   --card-bg: #1e293b;
@@ -40,7 +40,7 @@ header, footer {
   color: #fff;
   text-align: center;
   padding: 10px 0;
-  transition: background-color 0.4s ease;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 .header-content {
@@ -110,8 +110,11 @@ header, footer {
   background: #e5e7eb;
   padding: 8px;
   flex-wrap: wrap;
+  transition: background-color 0.4s ease;
 }
-
+html.dark .tabs {
+  background: #1e293b;
+}
 .tabs button {
   padding: 8px 16px;
   background: #fff;
@@ -121,7 +124,11 @@ header, footer {
   font-weight: 600;
   transition: all 0.3s ease;
 }
-
+html.dark .tabs button {
+  background: #334155;
+  color: #f5f5f5;
+  border-color: #475569;
+}
 .tabs button.active {
   background: var(--accent);
   color: white;
