@@ -156,83 +156,48 @@ function convertKitchen() {
 }
 
 
-// === IMAGE UPSCALER ===
-const fileInput = document.getElementById("imageInput");
-const upscaleBtn = document.getElementById("upscaleBtn");
-const scaleSelect = document.getElementById("scaleSelect");
-const errorMsg = document.getElementById("errorMsg");
-const originalImage = document.getElementById("originalImage");
-const upscaledImage = document.getElementById("upscaledImage");
-const previewContainer = document.getElementById("previewContainer");
-const downloadBtn = document.getElementById("downloadBtn");
-const zoomToggleBtn = document.getElementById("zoomToggleBtn");
-const splitPreview = document.getElementById("splitPreview");
-const overlay = document.getElementById("splitOverlay");
-const handle = document.getElementById("splitHandle");
-const zoomCanvas = document.getElementById("zoomCanvas");
-const zctx = zoomCanvas.getContext("2d");
-
-let selectedFile, upscaler, dragging = false, zoomEnabled = false;
-
-// Load selected image
-fileInput.addEventListener("change", e => {
-  selectedFile = e.target.files[0];
-  if (selectedFile) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      originalImage.src = reader.result;
-      previewContainer.style.display = "none";
-      errorMsg.textContent = "";
-    };
-    reader.readAsDataURL(selectedFile);
-  }
-});
-
-// Upscale logic
-upscaleBtn.addEventListener("click", async () => {
+upscaleBtn.addEventListener('click', async () => {
   if (!selectedFile) {
     errorMsg.textContent = "Please choose an image first.";
     return;
   }
+
   errorMsg.textContent = "Upscaling... please wait ⏳";
 
-  const scale = parseInt(scaleSelect.value);
   try {
-    const imageBitmap = await createImageBitmap(selectedFile);
+    const bitmap = await createImageBitmap(selectedFile);
     const canvas = document.createElement("canvas");
-    canvas.width = imageBitmap.width;
-    canvas.height = imageBitmap.height;
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
     const ctx = canvas.getContext("2d");
-    ctx.drawImage(imageBitmap, 0, 0);
+    ctx.drawImage(bitmap, 0, 0);
 
-    new window.Upscaler({
-  model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json"
-});
+    const upscaler = new window.Upscaler({
+      model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json"
+    });
 
-    let upscaled = await upscaler.upscale(canvas);
+    const scale = parseInt(scaleSelect.value);
+    let result = canvas;
 
-    // For 8x upscale, do two passes (4x then 2x)
-    if (scale === 8) {
-      const img2 = new Image();
-      img2.src = upscaled;
-      await img2.decode();
+    for (let i = 0; i < Math.log2(scale); i++) {
+      const upscaled = await upscaler.upscale(result);
+      const img = new Image();
+      img.src = upscaled;
+      await img.decode();
       const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = img2.width;
-      tempCanvas.height = img2.height;
-      tempCanvas.getContext("2d").drawImage(img2, 0, 0);
-      new window.Upscaler({
-  model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json"
-});
-
-      upscaled = await upscaler.upscale(tempCanvas);
+      tempCanvas.width = img.width;
+      tempCanvas.height = img.height;
+      tempCanvas.getContext("2d").drawImage(img, 0, 0);
+      result = tempCanvas;
     }
 
-    upscaledImage.src = upscaled;
+    upscaledImage.src = result.toDataURL("image/png");
     previewContainer.style.display = "block";
     errorMsg.textContent = "";
+
   } catch (err) {
     console.error(err);
-    errorMsg.textContent = "⚠️ Error upscaling. Try smaller size or lower scale.";
+    errorMsg.textContent = "⚠️ Error upscaling. Try smaller file or lower scale.";
   }
 });
 
@@ -327,6 +292,7 @@ function initializeZoom() {
     drawZoom(x, y);
   });
 }
+
 
 
 
