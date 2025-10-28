@@ -317,6 +317,17 @@ function convertKitchen() {
 /* ============================================================
    PAGE READY
    ============================================================ */
+// 🛡️ Safe startup wrapper to prevent early crash
+window.addEventListener("error", (e) => {
+  console.error("Runtime error caught:", e.message);
+  const app = document.getElementById("app");
+  const loading = document.getElementById("loading-screen");
+  if (app && loading) {
+    loading.style.display = "none";
+    app.style.display = "block";
+  }
+});
+
 window.addEventListener("load", () => {
   const app = $("#app"),
     loading = $("#loading-screen");
@@ -326,3 +337,4 @@ window.addEventListener("load", () => {
   }
   console.log("Convert Labs ready ✔️");
 });
+
