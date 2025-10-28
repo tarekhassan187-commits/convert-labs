@@ -467,3 +467,9 @@ window.addEventListener('load', () => {
   // Hide debug console warnings if needed (no-op)
   console.log('script.js loaded - page:', location.pathname);
 });
+
+// Show main app after DOM is ready
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("app").style.display = "block";
+  document.getElementById("loading-screen").style.display = "none";
+});
