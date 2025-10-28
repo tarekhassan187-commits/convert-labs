@@ -1,93 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AI Image Upscaler | Convert Labs</title>
 
-  <!-- Link your main CSS -->
   <link rel="stylesheet" href="../style.css" />
-
-  <!-- UpscalerJS model -->
   <script src="https://cdn.jsdelivr.net/npm/upscaler@1.0.6/dist/browser/upscaler.min.js"></script>
 
   <style>
-    main {
-      text-align: center;
-      max-width: 900px;
-      margin: auto;
-      padding: 2rem 1rem;
+    main { text-align:center; max-width:980px; margin:auto; padding:2rem 1rem; }
+    input, select, button { margin:0.6rem 0.4rem; padding:0.5rem 0.9rem; font-size:1rem; }
+    button { background:#1e40af; color:#fff; border:none; border-radius:8px; cursor:pointer; }
+    button:disabled { opacity:.6; cursor:default; }
+
+    #previewContainer { display:none; margin-top:1.5rem; }
+    #splitPreview { position:relative; width:100%; max-width:840px; margin:auto; overflow:hidden; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.08);}
+    #splitPreview img{ width:100%; display:block; user-select:none; -webkit-user-drag:none; }
+    #splitOverlay { position:absolute; top:0; left:0; width:50%; height:100%; overflow:hidden; }
+    #splitHandle { position:absolute; top:0; left:50%; transform:translateX(-50%); width:6px; height:100%; background:#1e40af; cursor:ew-resize; z-index:10; border-radius:3px; box-shadow:0 0 0 3px rgba(255,255,255,0.15) inset; }
+
+    .error { color:#b91c1c; font-weight:700; margin-top:0.6rem; }
+
+    /* progress */
+    .progress-wrap { max-width:600px; margin:18px auto 0; text-align:center; }
+    .progress { background:#e6e9ee; border-radius:999px; height:12px; overflow:hidden; }
+    .progress > i { display:block; height:100%; width:0%; background:linear-gradient(90deg,#2563eb,#1e40af); transition:width .25s linear; }
+    .progress-label { font-size:0.9rem; margin-top:8px; color:#111827; font-weight:600; display:flex; align-items:center; justify-content:center; gap:0.4rem; }
+
+    .spinner {
+      width:18px; height:18px;
+      border:3px solid #cbd5e1;
+      border-top-color:#1e40af;
+      border-radius:50%;
+      animation:spin 1s linear infinite;
     }
-
-    input, select, button {
-      margin: 0.5rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-    }
-
-    button {
-      background: #1e40af;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover { background: #1d4ed8; }
-
-    #previewContainer {
-      display: none;
-      margin-top: 2rem;
-    }
-
-    #splitPreview {
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      margin: auto;
-      overflow: hidden;
-      border-radius: 12px;
-    }
-
-    #splitPreview img {
-      width: 100%;
-      display: block;
-      user-select: none;
-    }
-
-    #splitOverlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 50%; height: 100%;
-      overflow: hidden;
-    }
-
-    #splitOverlay img { width: 100%; }
-
-    #splitHandle {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 4px;
-      height: 100%;
-      background: #1e40af;
-      cursor: ew-resize;
-      z-index: 10;
-    }
-
-    .error {
-      color: #b91c1c;
-      font-weight: 600;
-      margin-top: 0.5rem;
-    }
+    @keyframes spin { 100% { transform:rotate(360deg);} }
   </style>
 </head>
-
 <body>
   <!-- HEADER -->
   <header>
     <div class="header-content">
-      <a href="../index.html" class="brand">
+      <a href="../index.html" class="brand" aria-label="Convert Labs home">
         <img src="../assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
         <span class="brand-text">Convert Labs</span>
       </a>
@@ -99,27 +54,32 @@
     <p class="tagline">AI Image Upscaler — Enhance and Enlarge Your Images Instantly</p>
   </header>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <main>
     <h1>AI Image Upscaler</h1>
     <p>Upscale your images up to 8× resolution directly in your browser — free & private.</p>
 
-    <input type="file" id="imageInput" accept="image/*" />
-    <select id="scaleSelect">
-      <option value="2">2×</option>
-      <option value="4">4×</option>
-      <option value="8">8×</option>
-    </select>
-    <button id="upscaleBtn">Upscale Now</button>
+    <div>
+      <input id="imageInput" type="file" accept="image/*" />
+      <select id="scaleSelect">
+        <option value="2">2×</option>
+        <option value="4">4×</option>
+        <option value="8">8×</option>
+      </select>
+      <button id="upscaleBtn">Upscale Now</button>
+    </div>
 
-    <p id="errorMsg" class="error"></p>
+    <div class="progress-wrap" id="progressWrap" style="display:none;">
+      <div class="progress"><i id="progressBar"></i></div>
+      <div class="progress-label" id="progressLabel"><div class="spinner"></div><span>Preparing model…</span></div>
+    </div>
+
+    <div id="errorMsg" class="error"></div>
 
     <div id="previewContainer">
       <div id="splitPreview">
         <img id="originalImage" alt="Original" />
-        <div id="splitOverlay">
-          <img id="upscaledImage" alt="Upscaled" />
-        </div>
+        <div id="splitOverlay"><img id="upscaledImage" alt="Upscaled" /></div>
         <div id="splitHandle"></div>
       </div>
       <button id="downloadBtn" style="margin-top:1rem;">Download Upscaled Image</button>
@@ -135,104 +95,151 @@
     <p>© 2025 Convert Labs | <a href="../index.html">Back to Home</a></p>
   </footer>
 
-  <!-- SITE JS -->
   <script src="../script.js"></script>
 
-  <!-- PAGE LOGIC -->
   <script>
-    const fileInput = document.getElementById("imageInput");
-    const upscaleBtn = document.getElementById("upscaleBtn");
-    const scaleSelect = document.getElementById("scaleSelect");
-    const errorMsg = document.getElementById("errorMsg");
-    const originalImage = document.getElementById("originalImage");
-    const upscaledImage = document.getElementById("upscaledImage");
-    const previewContainer = document.getElementById("previewContainer");
-    const downloadBtn = document.getElementById("downloadBtn");
-    const overlay = document.getElementById("splitOverlay");
-    const handle = document.getElementById("splitHandle");
+  (function(){
+    const fileInput = document.getElementById('imageInput');
+    const upscaleBtn = document.getElementById('upscaleBtn');
+    const scaleSelect = document.getElementById('scaleSelect');
+    const errorMsg = document.getElementById('errorMsg');
+    const originalImage = document.getElementById('originalImage');
+    const upscaledImage = document.getElementById('upscaledImage');
+    const previewContainer = document.getElementById('previewContainer');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const overlay = document.getElementById('splitOverlay');
+    const handle = document.getElementById('splitHandle');
+    const previewBox = document.getElementById('splitPreview');
+    const progressWrap = document.getElementById('progressWrap');
+    const progressBar = document.getElementById('progressBar');
+    const progressLabel = document.getElementById('progressLabel');
 
-    let selectedFile = null;
-    let dragging = false;
+    let selectedFile = null, dragging = false;
 
-    // Load chosen file
-    fileInput.addEventListener("change", (e) => {
+    fileInput.addEventListener('change', (e) => {
       selectedFile = e.target.files[0];
-      if (selectedFile) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          originalImage.src = reader.result;
-          previewContainer.style.display = "none";
-          errorMsg.textContent = "";
-        };
-        reader.readAsDataURL(selectedFile);
+      if (!selectedFile) return;
+      if (selectedFile.size > 4 * 1024 * 1024) {
+        errorMsg.textContent = "⚠️ File too large. Please choose an image smaller than 4 MB.";
+        fileInput.value = "";
+        selectedFile = null;
+        return;
       }
+      const reader = new FileReader();
+      reader.onload = () => {
+        originalImage.src = reader.result;
+        previewContainer.style.display = 'none';
+        errorMsg.textContent = '';
+      };
+      reader.readAsDataURL(selectedFile);
     });
 
-    // Upscaling logic
-    upscaleBtn.addEventListener("click", async () => {
+    async function upscaleImage() {
       if (!selectedFile) {
         errorMsg.textContent = "Please choose an image first.";
         return;
       }
 
-      errorMsg.textContent = "Upscaling... please wait ⏳";
+      errorMsg.textContent = "";
+      upscaleBtn.disabled = true;
+      scaleSelect.disabled = true;
+      fileInput.disabled = true;
+      progressWrap.style.display = 'block';
+      progressBar.style.width = "5%";
+      progressLabel.innerHTML = '<div class="spinner"></div><span>Loading Upscaler…</span>';
 
       try {
         const upscaler = new window.Upscaler({
-          model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json",
+          model: "https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.1.0/weights/1x/model.json"
         });
 
-        const imageBitmap = await createImageBitmap(selectedFile);
-        const canvas = document.createElement("canvas");
-        canvas.width = imageBitmap.width;
-        canvas.height = imageBitmap.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(imageBitmap, 0, 0);
+        const bitmap = await createImageBitmap(selectedFile);
+        let canvas = document.createElement("canvas");
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+        canvas.getContext("2d").drawImage(bitmap, 0, 0);
 
         const scale = parseInt(scaleSelect.value);
-        let resultCanvas = canvas;
+        const passes = Math.log2(scale);
 
-        // Multiply passes (2×, 4×, 8×)
-        for (let i = 0; i < Math.log2(scale); i++) {
-          const upscaled = await upscaler.upscale(resultCanvas);
+        for (let i = 0; i < passes; i++) {
+          progressLabel.innerHTML = `<div class="spinner"></div><span>Upscaling pass ${i+1}/${passes}…</span>`;
+          progressBar.style.width = `${(i/passes)*80 + 10}%`;
+
+          const result = await upscaler.upscale(canvas);
           const img = new Image();
-          img.src = upscaled;
+          img.src = result;
           await img.decode();
-          const tempCanvas = document.createElement("canvas");
-          tempCanvas.width = img.width;
-          tempCanvas.height = img.height;
-          tempCanvas.getContext("2d").drawImage(img, 0, 0);
-          resultCanvas = tempCanvas;
+
+          const temp = document.createElement("canvas");
+          temp.width = img.width;
+          temp.height = img.height;
+          temp.getContext("2d").drawImage(img, 0, 0);
+          canvas = temp;
         }
 
-        upscaledImage.src = resultCanvas.toDataURL("image/png");
+        progressBar.style.width = "100%";
+        progressLabel.innerHTML = "<span>Completed 100%</span>";
+
+        upscaledImage.src = canvas.toDataURL("image/png");
         previewContainer.style.display = "block";
-        errorMsg.textContent = "";
       } catch (err) {
         console.error(err);
-        errorMsg.textContent = "⚠️ Error upscaling. Try smaller file or lower scale.";
+        errorMsg.textContent = "⚠️ Error upscaling. Try smaller image or lower scale.";
+        progressLabel.innerHTML = "<span style='color:#b91c1c;'>Failed</span>";
+      } finally {
+        upscaleBtn.disabled = false;
+        scaleSelect.disabled = false;
+        fileInput.disabled = false;
+        setTimeout(() => progressWrap.style.display = "none", 1000);
       }
-    });
+    }
 
-    // Split handle logic
+    upscaleBtn.addEventListener("click", upscaleImage);
+
+    // Split drag logic
     handle.addEventListener("mousedown", () => dragging = true);
     window.addEventListener("mouseup", () => dragging = false);
     window.addEventListener("mousemove", (e) => {
       if (!dragging) return;
-      const rect = document.getElementById("splitPreview").getBoundingClientRect();
+      const rect = previewBox.getBoundingClientRect();
       let pos = ((e.clientX - rect.left) / rect.width) * 100;
       pos = Math.max(0, Math.min(100, pos));
       overlay.style.width = pos + "%";
       handle.style.left = pos + "%";
     });
 
-    // Download upscaled
+    // Touch drag
+    handle.addEventListener("touchstart", () => dragging = true, {passive:true});
+    window.addEventListener("touchend", () => dragging = false);
+    window.addEventListener("touchmove", (e) => {
+      if (!dragging) return;
+      const touch = e.touches[0];
+      const rect = previewBox.getBoundingClientRect();
+      let pos = ((touch.clientX - rect.left) / rect.width) * 100;
+      pos = Math.max(0, Math.min(100, pos));
+      overlay.style.width = pos + "%";
+      handle.style.left = pos + "%";
+    }, {passive:true});
+
+    // Download button
     downloadBtn.addEventListener("click", () => {
+      if (!upscaledImage.src) return;
       const link = document.createElement("a");
       link.href = upscaledImage.src;
       link.download = "upscaled-image.png";
       link.click();
     });
+
+    // Reset split position on resize/load
+    function resetSplit() {
+      overlay.style.width = "50%";
+      handle.style.left = "50%";
+    }
+    window.addEventListener("resize", resetSplit);
+    originalImage.addEventListener("load", resetSplit);
+    upscaledImage.addEventListener("load", resetSplit);
+  })();
   </script>
 </body>
 </html>
