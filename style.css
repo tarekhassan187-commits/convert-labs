@@ -4,42 +4,43 @@
 :root {
   --primary: #1e40af;
   --accent: #2563eb;
-  --bg-light: #f9fafc;
-  --bg-dark: #0b1120;
-  --text-light: #111;
-  --text-dark: #e2e8f0;
-  --card-light: #fff;
-  --card-dark: #1e293b;
-  --shadow-light: rgba(0,0,0,0.1);
-  --shadow-dark: rgba(0,0,0,0.5);
+
+  /* Light mode defaults */
+  --bg-color: #f9fafc;
+  --text-color: #111;
+  --card-bg: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --header-bg: #1e40af;
+  --footer-bg: #1e40af;
+}
+
+/* Dark Mode Overrides */
+html.dark, body.dark {
+  --bg-color: #0b1120;
+  --text-color: #f5f5f5;
+  --card-bg: #1e293b;
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  --header-bg: #0d1b3d;
+  --footer-bg: #0d1b3d;
 }
 
 html, body {
   margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
-  background-color: var(--bg-light);
-  color: var(--text-light);
-  transition: background 0.3s, color 0.3s;
-}
-
-html.dark, body.dark {
-  background-color: var(--bg-dark);
-  color: var(--text-dark);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 /* ===========================
    HEADER & FOOTER
 =========================== */
 header, footer {
-  background-color: var(--primary);
+  background-color: var(--header-bg);
   color: #fff;
   text-align: center;
   padding: 10px 0;
   transition: background-color 0.4s ease;
-}
-
-header.dark, footer.dark {
-  background-color: #0d1b3d;
 }
 
 .header-content {
@@ -85,6 +86,7 @@ header.dark, footer.dark {
   font-weight: 600;
   transition: all 0.3s ease;
 }
+
 .header-btn:hover {
   background: #f1f1f1;
 }
@@ -109,6 +111,7 @@ header.dark, footer.dark {
   padding: 8px;
   flex-wrap: wrap;
 }
+
 .tabs button {
   padding: 8px 16px;
   background: #fff;
@@ -116,7 +119,9 @@ header.dark, footer.dark {
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
+  transition: all 0.3s ease;
 }
+
 .tabs button.active {
   background: var(--accent);
   color: white;
@@ -128,25 +133,28 @@ header.dark, footer.dark {
 main {
   max-width: 960px;
   margin: 20px auto;
-  background: var(--card-light);
-  box-shadow: 0 0 10px var(--shadow-light);
+  background: var(--card-bg);
+  box-shadow: 0 0 10px var(--shadow-color);
   border-radius: 12px;
   padding: 20px;
-  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease, color 0.4s ease;
 }
 
-html.dark main, body.dark main {
-  background: var(--card-dark);
-  box-shadow: 0 0 10px var(--shadow-dark);
+.converter {
+  text-align: center;
 }
 
-.converter { text-align: center; }
-.converter input, .converter select {
+.converter input,
+.converter select {
   margin: 6px;
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  background: var(--card-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
 }
+
 .converter button {
   background: var(--accent);
   color: #fff;
@@ -154,8 +162,17 @@ html.dark main, body.dark main {
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
-.converter p { font-weight: 600; }
+
+.converter button:hover {
+  background: #1e3a8a;
+}
+
+.converter p {
+  font-weight: 600;
+  color: var(--text-color);
+}
 
 /* ===========================
    FOOTER
@@ -163,22 +180,29 @@ html.dark main, body.dark main {
 footer {
   margin-top: 20px;
   padding: 20px 0;
+  background-color: var(--footer-bg);
+  color: #fff;
+  transition: background-color 0.4s ease;
 }
+
 .footer-brand {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 }
+
 .footer-logo {
   width: 40px;
   height: 40px;
   object-fit: contain;
 }
+
 .footer-text {
   color: #fff;
   font-weight: 600;
 }
+
 .footer-links a {
   color: white;
   margin: 0 5px;
@@ -189,19 +213,14 @@ footer {
    CONTACT FORM
 =========================== */
 .contact-section {
-  background-color: var(--card-light);
-  color: var(--text-light);
+  background-color: var(--card-bg);
+  color: var(--text-color);
   padding: 2rem;
   max-width: 700px;
   margin: 2rem auto;
   border-radius: 10px;
-  box-shadow: 0 4px 10px var(--shadow-light);
-  transition: background-color 0.4s ease, color 0.4s ease;
-}
-html.dark .contact-section, body.dark .contact-section {
-  background-color: var(--card-dark);
-  color: var(--text-dark);
-  box-shadow: 0 4px 10px var(--shadow-dark);
+  box-shadow: 0 4px 10px var(--shadow-color);
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
 }
 
 .contact-section input,
@@ -212,19 +231,14 @@ html.dark .contact-section, body.dark .contact-section {
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 1rem;
+  background: var(--card-bg);
+  color: var(--text-color);
   transition: all 0.3s ease;
-  background: var(--bg-light);
-  color: var(--text-light);
-}
-html.dark .contact-section input,
-html.dark .contact-section textarea {
-  background: var(--card-dark);
-  color: var(--text-dark);
 }
 
 .contact-section input:focus,
 .contact-section textarea:focus {
-  border-color: #2563eb;
+  border-color: var(--accent);
   outline: none;
 }
 
@@ -238,6 +252,7 @@ html.dark .contact-section textarea {
   cursor: pointer;
   transition: background 0.3s ease;
 }
+
 .send-btn:hover {
   background: #162f7d;
 }
@@ -246,8 +261,13 @@ html.dark .contact-section textarea {
    RESPONSIVE
 =========================== */
 @media (max-width: 600px) {
-  .tabs { flex-direction: column; align-items: center; }
-  .converter input, .converter select, .converter button {
+  .tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  .converter input,
+  .converter select,
+  .converter button {
     width: 90%;
     margin: 5px 0;
   }
