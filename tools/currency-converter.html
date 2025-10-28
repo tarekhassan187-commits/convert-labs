@@ -1,202 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-     crossorigin="anonymous"></script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Currency Converter | Convert Labs</title>
-  <meta name="description" content="Free, fast, and accurate currency converter by Convert Labs. Convert between USD, EUR, GBP, AED, KWD, EGP, and more in real-time using live exchange rates." />
-  <link rel="icon" type="image/png" href="/assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-  <link rel="stylesheet" href="style.css" />
+  <title>Currency Converter – Convert Labs</title>
 
-  <!-- ✅ Breadcrumb Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://convertlabs.online/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Currency Converter",
-        "item": "https://convertlabs.online/currency-converter.html"
-      }
-    ]
-  }
+  <!-- ✅ SEO -->
+  <meta name="description" content="Free Currency Converter by Convert Labs — calculate live exchange rates for USD, EUR, GBP, AED, SAR, INR, EGP, KWD, and more. Fast, accurate, and up-to-date with trusted sources." />
+  <meta name="keywords" content="currency converter, exchange rate, live forex, money conversion, usd to egp, eur to usd, aed to sar, convert labs" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://convertlabs.online/tools/currency-converter.html" />
+
+  <!-- ✅ Favicon -->
+  <link rel="icon" type="image/png" href="../assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
+
+  <!-- ✅ Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
+    crossorigin="anonymous"></script>
+
+  <!-- ✅ Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P');
   </script>
+
+  <link rel="stylesheet" href="../style.css" />
 </head>
 
 <body>
-  <!-- HEADER -->
-  <header class="site-header">
+  <header>
     <div class="header-content">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo" class="logo" />
-      <h1>Convert Labs</h1>
-      <button id="themeToggle" title="Switch Theme">🌙</button>
+      <a href="../index.html" class="brand" aria-label="Convert Labs home">
+        <img src="../assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
+        <span class="brand-text">Convert Labs</span>
+      </a>
+
+      <div class="header-controls">
+        <a href="../contact.html" class="header-btn">Contact Us</a>
+        <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+      </div>
     </div>
-    <p class="tagline">Convert currencies in real time with accurate exchange rates</p>
   </header>
 
-  <!-- MAIN CONTENT -->
-  <main style="padding:2rem 1rem; max-width:600px; margin:auto;">
-    <h2>Currency Converter</h2>
-    <p>Enter an amount and select currencies to convert instantly using live exchange rates.</p>
+  <main class="content-section">
+    <h1>Currency Converter — Live Exchange Rates</h1>
+    <p>
+      Convert Labs' Currency Converter gives you fast, accurate exchange calculations between all major world currencies. 
+      Whether you're shopping online, working with international clients, or planning a trip abroad, this tool helps you instantly find the latest conversion rates — updated in real time from trusted sources.
+      No registration, no fees — just reliable currency conversion right in your browser.
+    </p>
 
-    <div style="margin-top:1rem;">
-      <input type="number" id="amount" placeholder="Enter amount" step="0.01" />
-      <br />
-      <select id="fromCurrency"></select>
-      <select id="toCurrency"></select>
-      <br />
-      <button onclick="convertCurrency()">Convert</button>
-    </div>
+    <ul style="text-align:left; max-width:700px; margin:10px auto;">
+      <li>Supported currencies: USD, EUR, GBP, AED, SAR, INR, EGP, KWD, JPY, CNY, SGD, TRY, CAD, AUD, CHF, ZAR, PKR, RUB, MXN, BRL, and more</li>
+      <li>Live data sourced from exchangerate.host API</li>
+      <li>Quick, ad-supported, and mobile-optimized</li>
+    </ul>
 
-    <p id="result" style="font-size:1.3rem; font-weight:600; margin-top:1rem;"></p>
+    <section class="converter">
+      <input type="number" id="currencyAmount" placeholder="Enter amount" />
+      <select id="currencyFrom"></select>
+      <select id="currencyTo"></select>
+      <button id="currencyConvertBtn">Convert</button>
+      <p id="currencyResult"></p>
+    </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-logo">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" />
-      <h3>Convert Labs</h3>
+  <footer>
+    <div class="footer-brand">
+      <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <span class="footer-text">Convert Labs</span>
     </div>
-
+    <p>© 2025 Convert Labs. All rights reserved.</p>
     <div class="footer-links">
-      <a href="/">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/how-to.html">Guides</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/terms.html">Terms</a>
-      <a href="/currency-converter.html">Currency Converter</a>
+      <a href="../about.html">About</a> |
+      <a href="../how-to.html">Guides</a> |
+      <a href="../privacy.html">Privacy Policy</a> |
+      <a href="../terms.html">Terms of Use</a> |
+      <a href="../index.html">Home</a>
     </div>
-
-    <p class="copyright">© 2025 Convert Labs. All rights reserved.</p>
   </footer>
 
   <script>
-    // 🌙 Theme Toggle
-    document.addEventListener("DOMContentLoaded", () => {
-      const toggle = document.getElementById("themeToggle");
-      const saved = localStorage.getItem("theme");
-      if (saved === "dark") {
-        document.body.classList.add("dark-mode");
-        toggle.textContent = "☀️";
-      }
-      toggle.addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
-        const dark = document.body.classList.contains("dark-mode");
-        toggle.textContent = dark ? "☀️" : "🌙";
-        localStorage.setItem("theme", dark ? "dark" : "light");
-      });
-    });
-
-    // 💱 Currency Converter
-    const fromSelect = document.getElementById("fromCurrency");
-    const toSelect = document.getElementById("toCurrency");
-    const result = document.getElementById("result");
-
-    // 🌍 Extended list of currencies
-    const currencies = [
-      "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "NZD", "CHF", "CNY", "HKD", "SGD",
-      "AED", "SAR", "KWD", "BHD", "OMR", "QAR", "EGP", "INR", "PKR", "BDT", "THB",
-      "MYR", "IDR", "ZAR", "NGN", "KES", "TRY", "SEK", "NOK", "DKK", "PLN", "CZK",
-      "HUF", "ILS", "MXN", "BRL", "ARS", "COP", "CLP", "PEN", "VND", "PHP"
+    // Extended currency list (restored from previous version + improved grouping)
+    const currencyList = [
+      "USD","EUR","GBP","JPY","CNY","INR","EGP","AUD","CAD","CHF","SGD","KWD","AED","SAR","TRY",
+      "BRL","RUB","MXN","PKR","ZAR","NOK","SEK","DKK","PLN","HUF","THB","IDR","MYR","PHP","VND",
+      "NGN","BDT","QAR","BHD","OMR","ILS","KRW","HKD","NZD","CZK","ARS","CLP","COP","RON","UAH","MAD","DZD"
     ];
 
-    const currencyNames = {
-      USD: "US Dollar",
-      EUR: "Euro",
-      GBP: "British Pound",
-      JPY: "Japanese Yen",
-      CAD: "Canadian Dollar",
-      AUD: "Australian Dollar",
-      NZD: "New Zealand Dollar",
-      CHF: "Swiss Franc",
-      CNY: "Chinese Yuan",
-      HKD: "Hong Kong Dollar",
-      SGD: "Singapore Dollar",
-      AED: "UAE Dirham",
-      SAR: "Saudi Riyal",
-      KWD: "Kuwaiti Dinar",
-      BHD: "Bahraini Dinar",
-      OMR: "Omani Rial",
-      QAR: "Qatari Riyal",
-      EGP: "Egyptian Pound",
-      INR: "Indian Rupee",
-      PKR: "Pakistani Rupee",
-      BDT: "Bangladeshi Taka",
-      THB: "Thai Baht",
-      MYR: "Malaysian Ringgit",
-      IDR: "Indonesian Rupiah",
-      ZAR: "South African Rand",
-      NGN: "Nigerian Naira",
-      KES: "Kenyan Shilling",
-      TRY: "Turkish Lira",
-      SEK: "Swedish Krona",
-      NOK: "Norwegian Krone",
-      DKK: "Danish Krone",
-      PLN: "Polish Zloty",
-      CZK: "Czech Koruna",
-      HUF: "Hungarian Forint",
-      ILS: "Israeli Shekel",
-      MXN: "Mexican Peso",
-      BRL: "Brazilian Real",
-      ARS: "Argentine Peso",
-      COP: "Colombian Peso",
-      CLP: "Chilean Peso",
-      PEN: "Peruvian Sol",
-      VND: "Vietnamese Dong",
-      PHP: "Philippine Peso"
-    };
+    const fromSel = document.getElementById('currencyFrom');
+    const toSel = document.getElementById('currencyTo');
+    const btn = document.getElementById('currencyConvertBtn');
+    const amountInput = document.getElementById('currencyAmount');
+    const resultEl = document.getElementById('currencyResult');
 
-    currencies.forEach(cur => {
-      const label = currencyNames[cur] ? `${cur} – ${currencyNames[cur]}` : cur;
-      fromSelect.add(new Option(label, cur));
-      toSelect.add(new Option(label, cur));
-    });
+    // Populate currency dropdowns
+    function populateSelects() {
+      fromSel.innerHTML = '';
+      toSel.innerHTML = '';
+      currencyList.forEach(code => {
+        const opt1 = document.createElement('option');
+        opt1.value = code;
+        opt1.textContent = code;
+        const opt2 = opt1.cloneNode(true);
+        fromSel.appendChild(opt1);
+        toSel.appendChild(opt2);
+      });
+      fromSel.value = "USD";
+      toSel.value = "EUR";
+    }
 
-    fromSelect.value = "EGP";
-    toSelect.value = "USD";
-
-    async function convertCurrency() {
-      const amount = parseFloat(document.getElementById("amount").value);
-      const from = fromSelect.value;
-      const to = toSelect.value;
-
-      if (isNaN(amount)) {
-        result.textContent = "⚠️ Please enter a valid amount.";
-        return;
-      }
-
+    // Fetch and convert currency
+    async function getRate(from, to) {
+      const url = `https://api.exchangerate.host/convert?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
       try {
-        const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
-        const data = await res.json();
-
-        if (data && data.result === "success") {
-          const rate = data.rates[to];
-          if (rate) {
-            const converted = (amount * rate).toFixed(2);
-            result.textContent = `${amount} ${from} = ${converted} ${to}`;
-          } else {
-            result.textContent = "⚠️ Currency not supported.";
-          }
-        } else {
-          result.textContent = "⚠️ Unable to fetch exchange rates.";
-        }
-      } catch (err) {
-        result.textContent = "⚠️ Network error. Try again later.";
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.result || null;
+      } catch (e) {
+        console.error("Error fetching rate:", e);
+        return null;
       }
     }
+
+    btn.addEventListener('click', async () => {
+      const amount = parseFloat(amountInput.value);
+      if (!amount) {
+        resultEl.textContent = "Please enter an amount.";
+        return;
+      }
+      resultEl.textContent = "Fetching latest rates...";
+      const rate = await getRate(fromSel.value, toSel.value);
+      if (rate) {
+        const converted = amount * rate;
+        resultEl.textContent = `${amount} ${fromSel.value} = ${converted.toFixed(4)} ${toSel.value} (Rate: ${rate.toFixed(4)})`;
+      } else {
+        resultEl.textContent = "Unable to retrieve rate. Please try again later.";
+      }
+    });
+
+    populateSelects();
   </script>
+
+  <script src="../script.js"></script>
 </body>
 </html>
