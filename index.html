@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Convert Labs — Smart Unit Converter</title>
 
-  <!-- ✅ SEO -->
+  <!-- SEO -->
   <meta name="description" content="Convert Labs is your free, all-in-one online unit converter for length, temperature, volume, container, and kitchen measurements. Fast, accurate, and easy to use." />
   <meta name="keywords" content="unit converter, online converter, length converter, temperature converter, kitchen converter, volume calculator, Convert Labs" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://convertlabs.online" />
 
-  <!-- ✅ Favicon -->
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
 
-  <!-- ✅ Google AdSense -->
+  <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
     crossorigin="anonymous"></script>
 
-  <!-- ✅ Google Analytics -->
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -30,7 +30,6 @@
 
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <!-- Splash Screen -->
   <div id="loading-screen">
@@ -39,21 +38,20 @@
 
   <!-- Main App -->
   <div id="app" style="display:none;">
-   <header>
-  <div class="header-content">
-    <a href="index.html" class="brand" aria-label="Convert Labs home">
-      <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
-      <span class="brand-text">Convert Labs</span>
-    </a>
+    <header>
+      <div class="header-content">
+        <a href="index.html" class="brand" aria-label="Convert Labs home">
+          <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo" />
+          <span class="brand-text">Convert Labs</span>
+        </a>
 
-    <div class="header-controls">
-      <a href="contact.html" class="header-btn">Contact Us</a>
-      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
-    </div>
-  </div>
+        <div class="header-controls">
+          <a href="contact.html" class="header-btn">Contact Us</a>
+          <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+        </div>
+      </div>
 
-  <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
-
+      <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
       <p class="intro-text">
         Convert Labs is a modern, free, and easy-to-use online unit converter that helps you quickly convert 
         between length, temperature, volume, container measurements, and kitchen ingredients. 
@@ -72,6 +70,7 @@
 
     <!-- Converters -->
     <main>
+      <!-- Length -->
       <section id="length" class="converter active">
         <h2>Length Converter</h2>
         <input type="number" id="lengthInput" placeholder="Enter value" />
@@ -81,6 +80,7 @@
         <p id="lengthResult"></p>
       </section>
 
+      <!-- Temperature -->
       <section id="temperature" class="converter">
         <h2>Temperature Converter</h2>
         <input type="number" id="tempInput" placeholder="Enter value" />
@@ -90,6 +90,7 @@
         <p id="tempResult"></p>
       </section>
 
+      <!-- Volume -->
       <section id="volume" class="converter">
         <h2>Volume Converter</h2>
         <input type="number" id="volumeInput" placeholder="Enter value" />
@@ -99,6 +100,7 @@
         <p id="volumeResult"></p>
       </section>
 
+      <!-- Container -->
       <section id="container" class="converter">
         <h2>Container Volume Calculator</h2>
         <select id="containerType">
@@ -117,89 +119,19 @@
           <input type="number" id="heightCylinder" placeholder="Height (cm)" />
         </div>
 
-        <select id="liquidType">
-          <option value="water">Water</option>
-          <option value="milk">Milk</option>
-          <option value="oil">Oil</option>
-          <option value="honey">Honey</option>
-          <option value="custom">Custom (enter density)</option>
-        </select>
-
-        <input type="number" id="customDensity" placeholder="Custom density (g/cm³)" style="display:none;" />
         <button onclick="calculateContainerVolume()">Calculate</button>
         <p id="containerResult"></p>
       </section>
 
+      <!-- Kitchen -->
       <section id="kitchen" class="converter">
         <h2>Kitchen Converter</h2>
         <input type="number" id="kitchenInput" placeholder="Enter amount" />
-
-<select id="kitchenFrom">
-  <option value="" disabled selected>Select from unit</option>
-</select>
-
-<select id="kitchenTo">
-  <option value="" disabled selected>Select to unit</option>
-</select>
-
-<select id="kitchenIngredient">
-  <option value="" disabled selected>Select ingredient</option>
-  <optgroup label="Dry Ingredients">
-    <option>Flour</option>
-    <option>Sugar</option>
-    <option>Brown Sugar</option>
-    <option>Powdered Sugar</option>
-    <option>Salt</option>
-    <option>Baking Powder</option>
-    <option>Cocoa Powder</option>
-    <option>Rice</option>
-    <option>Oats</option>
-    <option>Corn Starch</option>
-    <option>Breadcrumbs</option>
-    <option>Pasta</option>
-    <option>Dry Milk</option>
-  </optgroup>
-
-  <optgroup label="Wet Ingredients">
-    <option>Water</option>
-    <option>Milk</option>
-    <option>Oil</option>
-    <option>Butter</option>
-    <option>Honey</option>
-    <option>Soya Sauce</option>
-    <option>Vanilla</option>
-    <option>Yogurt</option>
-    <option>Cream</option>
-    <option>Vinegar</option>
-    <option>Lemon Juice</option>
-  </optgroup>
-
-  <optgroup label="Nuts & Seeds">
-    <option>Almonds</option>
-    <option>Walnuts</option>
-    <option>Peanuts</option>
-    <option>Sunflower Seeds</option>
-    <option>Sesame</option>
-    <option>Cashew</option>
-    <option>Pistachio</option>
-    <option>Hazelnuts</option>
-  </optgroup>
-
-  <optgroup label="Special Ingredients">
-    <option>Yeast</option>
-    <option>Chocolate Chips</option>
-    <option>Peanut Butter</option>
-    <option>Tomato Paste</option>
-    <option>Coconut Flakes</option>
-    <option>Ground Coffee</option>
-    <option>Cocoa Nibs</option>
-    <option>Bread Crumbs</option>
-  </optgroup>
-</select>
-
-<button onclick="convertKitchen()">Convert</button>
-<p id="kitchenResult"></p>
-
+        <select id="kitchenFrom"></select>
+        <select id="kitchenTo"></select>
+        <select id="kitchenIngredient"></select>
+        <button onclick="convertKitchen()">Convert</button>
+        <p id="kitchenResult"></p>
       </section>
     </main>
 
@@ -222,5 +154,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
