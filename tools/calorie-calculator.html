@@ -5,13 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calorie Calculator | Convert Labs</title>
 
-  <meta name="description" content="Estimate the calories in your meal using a photo or by entering ingredients and weights with Convert Labs Calorie Calculator." />
-  <meta name="keywords" content="calorie calculator, meal calorie estimate, food nutrition, Convert Labs calories, food photo calories" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://convertlabs.online/tools/calorie-calculator.html" />
-  <link rel="icon" type="image/png" href="../assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-
   <!-- ✅ Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
     crossorigin="anonymous"></script>
@@ -20,78 +13,67 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
+  <meta name="description" content="Estimate the calories in your meal by uploading a photo or entering ingredients manually. Fast, smart, and accurate calorie calculator by Convert Labs." />
+  <link rel="icon" type="image/png" href="../assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
   <link rel="stylesheet" href="../style.css" />
 </head>
 
 <body>
-  <!-- ✅ Header -->
+  <!-- Header -->
   <header>
     <div class="header-content">
       <a href="../index.html" class="brand" aria-label="Convert Labs home">
         <img src="../assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
         <span class="brand-text">Convert Labs</span>
       </a>
-
       <div class="header-controls">
         <a href="../contact.html" class="header-btn">Contact Us</a>
         <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
       </div>
     </div>
-
-    <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
+    <p class="tagline">Welcome to Convert Labs — your smart all-in-one converter</p>
   </header>
 
-  <!-- ✅ Tabs under Tools -->
+  <!-- Tabs -->
   <div class="tabs">
     <button onclick="window.location.href='currency-converter.html'">Currency Converter</button>
     <button onclick="window.location.href='image-converter.html'">Image Converter</button>
     <button class="active">Calorie Calculator</button>
   </div>
 
-  <!-- ✅ Main Section -->
-  <main class="converter">
-    <h1>Calorie Calculator</h1>
-    <p>Estimate the calories in your meal by taking or uploading a photo, or manually entering the ingredients and their weights.</p>
+  <!-- Main Content -->
+  <main>
+    <section class="converter active" id="calorie">
+      <h2>Calorie Calculator</h2>
+      <p>Estimate the calories in your meal by uploading a photo or entering ingredients and weights manually.</p>
 
-    <div class="converter-options">
-      <button id="photoMode">📸 Take or Upload Photo</button>
-      <button id="manualMode">🥣 Enter Ingredients Manually</button>
-    </div>
+      <div class="mode-buttons" style="margin-bottom:1rem;">
+        <button id="photoModeBtn">📷 Take or Upload Photo</button>
+        <button id="manualModeBtn">🥣 Enter Ingredients Manually</button>
+      </div>
 
-    <!-- 📸 Photo Upload Section -->
-    <section id="photoSection" style="display:none; margin-top:1rem;">
-      <input type="file" id="mealPhoto" accept="image/*" capture="environment">
-      <div id="photoPreview" style="margin-top:1rem;"></div>
-      <button id="analyzePhoto">Analyze Photo</button>
-      <p id="photoResult"></p>
+      <div id="photoSection" style="display:none;">
+        <input type="file" id="mealPhoto" accept="image/*" />
+        <button id="analyzePhotoBtn">Analyze Photo</button>
+        <div id="photoPreview" style="margin-top:1rem;"></div>
+        <p id="photoResult"></p>
+      </div>
+
+      <div id="manualSection" style="display:none;">
+        <div id="ingredientList"></div>
+        <button id="addIngredientBtn">+ Add Ingredient</button>
+        <button id="calculateCaloriesBtn">Calculate Total Calories</button>
+        <p id="manualResult"></p>
+      </div>
     </section>
-
-    <!-- 🥣 Manual Entry Section -->
-    <section id="manualSection" style="display:none; margin-top:1rem;">
-      <div id="ingredientList"></div>
-      <button id="addIngredient">➕ Add Ingredient</button>
-      <button id="calculateCalories" style="margin-top:1rem;">Calculate Total Calories</button>
-      <p id="calorieResult"></p>
-    </section>
-
-    <!-- Ad placement -->
-    <div style="margin: 2rem auto; text-align:center;">
-      <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-2490597435056272"
-        data-ad-slot="1234567890"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
   </main>
 
-  <!-- ✅ Footer -->
   <footer>
     <div class="footer-brand">
       <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
@@ -111,4 +93,3 @@
   <script src="calorie.js"></script>
 </body>
 </html>
-
