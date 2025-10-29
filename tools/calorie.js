@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!CALORIE_MAMA_API || CALORIE_MAMA_API === "YOUR_API_KEY_HERE") {
+    if (!CALORIE_MAMA_API || CALORIE_MAMA_API === 2b09c6ac3688ea052f4692860de3aff8) {
       photoResult.innerHTML = "⚠️ Automatic photo analysis requires an API key. Please use manual entry mode.";
       return;
     }
