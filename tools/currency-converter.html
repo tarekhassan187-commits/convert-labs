@@ -92,14 +92,13 @@
 
  <script src="../script.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
   const fromSel = document.getElementById("currencyFrom");
   const toSel = document.getElementById("currencyTo");
   const amountInput = document.getElementById("currencyAmount");
   const convertBtn = document.getElementById("currencyConvertBtn");
   const result = document.getElementById("currencyResult");
 
-  // ✅ Extended currency list
   const currencyList = [
     "USD","EUR","GBP","JPY","CNY","INR","EGP","AUD","CAD","CHF","SGD","KWD","AED",
     "SAR","QAR","OMR","BHD","TRY","BRL","RUB","MXN","PKR","NOK","SEK","DKK","ZAR",
@@ -109,15 +108,38 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Populate dropdowns
   currencyList.forEach(c => {
     const o1 = document.createElement("option");
-    o1.value = c; o1.textContent = c;
+    o1.value = c;
+    o1.textContent = c;
     const o2 = o1.cloneNode(true);
-    fromSel.appendChild(o1); toSel.appendChild(o2);
+    fromSel.appendChild(o1);
+    toSel.appendChild(o2);
   });
-
   fromSel.value = "USD";
   toSel.value = "EUR";
 
-  // ✅ Convert function
+  // Unified Fetch Function
+  async function fetchRate(from, to) {
+    // Primary API: exchangerate.host
+    try {
+      const r1 = await fetch(`https://api.exchangerate.host/latest?base=${from}`);
+      const data1 = await r1.json();
+      if (data1 && data1.rates && data1.rates[to]) return data1.rates[to];
+    } catch (e) {
+      console.warn("Primary API failed", e);
+    }
+
+    // Fallback API: open.er-api.com (very stable)
+    try {
+      const r2 = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+      const data2 = await r2.json();
+      if (data2 && data2.rates && data2.rates[to]) return data2.rates[to];
+    } catch (e) {
+      console.warn("Fallback API failed", e);
+    }
+
+    throw new Error("No valid exchange rate available");
+  }
+
   convertBtn.addEventListener("click", async () => {
     const amount = parseFloat(amountInput.value);
     const from = fromSel.value;
@@ -128,26 +150,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    result.textContent = "Fetching exchange rate...";
+    result.textContent = "Fetching latest exchange rate...";
 
     try {
-      const response = await fetch(`https://api.exchangerate.host/convert?from=${from}&to=${to}`);
-      const data = await response.json();
-
-      if (data && data.result) {
-        const converted = (amount * data.result).toFixed(4);
-        result.innerHTML = `
-          <b>${amount}</b> ${from} = <b>${converted}</b> ${to}<br>
-          <small>Rate: ${data.result.toFixed(4)}</small>
-        `;
-      } else {
-        result.textContent = "Unable to fetch conversion rate. Try again.";
-      }
+      const rate = await fetchRate(from, to);
+      const converted = (amount * rate).toFixed(4);
+      result.innerHTML = `
+        <b>${amount}</b> ${from} = <b>${converted}</b> ${to}<br>
+        <small>Exchange Rate: ${rate.toFixed(4)}</small>
+      `;
     } catch (err) {
-      result.textContent = "Network error — please check your connection.";
+      console.error(err);
+      result.textContent = "Could not fetch conversion rate. Try again later.";
     }
   });
 });
 </script>
+
 </body>
 </html>
