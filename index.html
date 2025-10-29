@@ -142,9 +142,53 @@
         <h2>Kitchen Converter</h2>
         <p>Convert cooking ingredients between grams, cups, tablespoons, and teaspoons — with built-in ingredient densities for accurate recipe scaling.</p>
         <input type="number" id="kitchenInput" placeholder="Enter amount" />
-        <select id="kitchenFrom"></select>
-        <select id="kitchenTo"></select>
-        <select id="kitchenIngredient"></select>
+       <select id="kitchenFrom"></select>
+<select id="kitchenTo"></select>
+
+<select id="kitchenIngredient">
+  <optgroup label="Baking Staples">
+    <option value="all-purpose flour">All-purpose Flour</option>
+    <option value="brown sugar packed">Brown Sugar</option>
+    <option value="granulated sugar">Granulated Sugar</option>
+    <option value="powdered sugar">Powdered Sugar</option>
+    <option value="salt (table)">Salt</option>
+    <option value="baking powder">Baking Powder</option>
+    <option value="baking soda">Baking Soda</option>
+    <option value="cocoa powder">Cocoa Powder</option>
+    <option value="cornstarch">Cornstarch</option>
+  </optgroup>
+
+  <optgroup label="Dairy & Fats">
+    <option value="butter">Butter</option>
+    <option value="milk (whole)">Milk</option>
+    <option value="cream cheese">Cream Cheese</option>
+    <option value="yogurt (plain)">Yogurt</option>
+    <option value="cheese (grated)">Grated Cheese</option>
+  </optgroup>
+
+  <optgroup label="Oils & Syrups">
+    <option value="olive oil">Olive Oil</option>
+    <option value="maple syrup">Maple Syrup</option>
+    <option value="honey">Honey</option>
+    <option value="molasses">Molasses</option>
+    <option value="corn syrup">Corn Syrup</option>
+  </optgroup>
+
+  <optgroup label="Nuts & Flours">
+    <option value="almond flour">Almond Flour</option>
+    <option value="coconut flour">Coconut Flour</option>
+    <option value="peanut butter">Peanut Butter</option>
+  </optgroup>
+
+  <optgroup label="Miscellaneous">
+    <option value="rice (uncooked)">Rice</option>
+    <option value="oats (rolled)">Oats</option>
+    <option value="yeast (active dry)">Yeast</option>
+    <option value="mayonnaise">Mayonnaise</option>
+    <option value="water">Water</option>
+  </optgroup>
+</select>
+
         <button onclick="convertKitchen()">Convert</button>
         <p id="kitchenResult"></p>
       </section>
@@ -169,5 +213,6 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
