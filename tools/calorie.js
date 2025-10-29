@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const calorieResult = document.getElementById("calorieResult");
 
   // Your free Calorie Mama API key (get one at https://dev.caloriemama.ai/)
-  const CALORIE_MAMA_API = 2b09c6ac3688ea052f4692860de3aff8;
+  const CALORIE_MAMA_API = ;
 
   // Default calorie data for manual entry (per 100g)
   const foodCalories = {
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!CALORIE_MAMA_API || CALORIE_MAMA_API === 2b09c6ac3688ea052f4692860de3aff8) {
+    if (!CALORIE_MAMA_API || CALORIE_MAMA_API === ) {
       photoResult.innerHTML = "⚠️ Automatic photo analysis requires an API key. Please use manual entry mode.";
       return;
     }
