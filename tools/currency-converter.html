@@ -92,43 +92,103 @@
 
   <script src="../script.js"></script>
   <script>
-    // Currency converter logic (extended list + working fetch)
-    document.addEventListener("DOMContentLoaded", async () => {
-      const currencyList = [
-        "USD","EUR","GBP","JPY","CNY","INR","EGP","AUD","CAD","CHF","SGD","KWD","AED","SAR","QAR","OMR",
-        "BHD","TRY","BRL","RUB","MXN","PKR","NOK","SEK","DKK","ZAR","HKD","THB","MYR","IDR","PLN","PHP"
-      ];
-      const fromSel = document.getElementById("currencyFrom");
-      const toSel = document.getElementById("currencyTo");
-      const result = document.getElementById("currencyResult");
+       // 💱 Currency Converter
+    const fromSelect = document.getElementById("fromCurrency");
+    const toSelect = document.getElementById("toCurrency");
+    const result = document.getElementById("result");
 
-      currencyList.forEach(c => {
-        const o1 = document.createElement("option");
-        o1.value = c; o1.textContent = c;
-        const o2 = o1.cloneNode(true);
-        fromSel.appendChild(o1); toSel.appendChild(o2);
-      });
-      fromSel.value = "USD"; toSel.value = "EUR";
+    // 🌍 Extended list of currencies
+    const currencies = [
+      "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "NZD", "CHF", "CNY", "HKD", "SGD",
+      "AED", "SAR", "KWD", "BHD", "OMR", "QAR", "EGP", "INR", "PKR", "BDT", "THB",
+      "MYR", "IDR", "ZAR", "NGN", "KES", "TRY", "SEK", "NOK", "DKK", "PLN", "CZK",
+      "HUF", "ILS", "MXN", "BRL", "ARS", "COP", "CLP", "PEN", "VND", "PHP"
+    ];
 
-      document.getElementById("currencyConvertBtn").addEventListener("click", async () => {
-        const amount = parseFloat(document.getElementById("currencyAmount").value);
-        const from = fromSel.value;
-        const to = toSel.value;
-        if (!amount) return (result.textContent = "Enter a valid amount");
+    const currencyNames = {
+      USD: "US Dollar",
+      EUR: "Euro",
+      GBP: "British Pound",
+      JPY: "Japanese Yen",
+      CAD: "Canadian Dollar",
+      AUD: "Australian Dollar",
+      NZD: "New Zealand Dollar",
+      CHF: "Swiss Franc",
+      CNY: "Chinese Yuan",
+      HKD: "Hong Kong Dollar",
+      SGD: "Singapore Dollar",
+      AED: "UAE Dirham",
+      SAR: "Saudi Riyal",
+      KWD: "Kuwaiti Dinar",
+      BHD: "Bahraini Dinar",
+      OMR: "Omani Rial",
+      QAR: "Qatari Riyal",
+      EGP: "Egyptian Pound",
+      INR: "Indian Rupee",
+      PKR: "Pakistani Rupee",
+      BDT: "Bangladeshi Taka",
+      THB: "Thai Baht",
+      MYR: "Malaysian Ringgit",
+      IDR: "Indonesian Rupiah",
+      ZAR: "South African Rand",
+      NGN: "Nigerian Naira",
+      KES: "Kenyan Shilling",
+      TRY: "Turkish Lira",
+      SEK: "Swedish Krona",
+      NOK: "Norwegian Krone",
+      DKK: "Danish Krone",
+      PLN: "Polish Zloty",
+      CZK: "Czech Koruna",
+      HUF: "Hungarian Forint",
+      ILS: "Israeli Shekel",
+      MXN: "Mexican Peso",
+      BRL: "Brazilian Real",
+      ARS: "Argentine Peso",
+      COP: "Colombian Peso",
+      CLP: "Chilean Peso",
+      PEN: "Peruvian Sol",
+      VND: "Vietnamese Dong",
+      PHP: "Philippine Peso"
+    };
 
-        result.textContent = "Fetching exchange rate...";
-        try {
-          const res = await fetch(`https://api.exchangerate.host/convert?from=${from}&to=${to}`);
-          const data = await res.json();
-          if (data && data.result) {
-            const converted = (amount * data.result).toFixed(4);
-            result.textContent = `${amount} ${from} = ${converted} ${to} (Rate: ${data.result.toFixed(4)})`;
-          } else result.textContent = "Error fetching conversion rate.";
-        } catch {
-          result.textContent = "Network error. Please try again.";
-        }
-      });
+    currencies.forEach(cur => {
+      const label = currencyNames[cur] ? `${cur} – ${currencyNames[cur]}` : cur;
+      fromSelect.add(new Option(label, cur));
+      toSelect.add(new Option(label, cur));
     });
+
+    fromSelect.value = "EGP";
+    toSelect.value = "USD";
+
+    async function convertCurrency() {
+      const amount = parseFloat(document.getElementById("amount").value);
+      const from = fromSelect.value;
+      const to = toSelect.value;
+
+      if (isNaN(amount)) {
+        result.textContent = "⚠️ Please enter a valid amount.";
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+        const data = await res.json();
+
+        if (data && data.result === "success") {
+          const rate = data.rates[to];
+          if (rate) {
+            const converted = (amount * rate).toFixed(2);
+            result.textContent = `${amount} ${from} = ${converted} ${to}`;
+          } else {
+            result.textContent = "⚠️ Currency not supported.";
+          }
+        } else {
+          result.textContent = "⚠️ Unable to fetch exchange rates.";
+        }
+      } catch (err) {
+        result.textContent = "⚠️ Network error. Try again later.";
+      }
+    }
   </script>
 </body>
 </html>
