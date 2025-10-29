@@ -12,10 +12,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const calculateCaloriesBtn = document.getElementById("calculateCalories");
   const calorieResult = document.getElementById("calorieResult");
 
-  // Default calorie data per 100g
+  // Your free Calorie Mama API key (get one at https://developer.azumio.com)
+  const CALORIE_MAMA_API = "YOUR_API_KEY_HERE";
+
+  // Default calorie data for manual entry (per 100g)
   const foodCalories = {
     "rice": 130,
     "chicken breast": 165,
+    "steak": 250,
     "beef": 250,
     "fish": 190,
     "bread": 265,
@@ -32,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "honey": 304
   };
 
-  // Toggle modes
+  // Toggle between modes
   photoModeBtn.addEventListener("click", () => {
     photoSection.style.display = "block";
     manualSection.style.display = "none";
@@ -43,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     manualSection.style.display = "block";
   });
 
-  // Show photo preview
+  // Photo preview
   mealPhoto.addEventListener("change", () => {
     const file = mealPhoto.files[0];
     if (!file) return;
@@ -54,19 +58,59 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 
-  // Fake photo analysis (for now)
-  analyzePhotoBtn.addEventListener("click", () => {
+  // Analyze photo with Calorie Mama API
+  analyzePhotoBtn.addEventListener("click", async () => {
     if (!mealPhoto.files[0]) {
       photoResult.textContent = "Please upload a meal photo first.";
       return;
     }
-    photoResult.textContent = "Analyzing photo... (demo mode)";
-    setTimeout(() => {
-      photoResult.textContent = "Estimated total: 🍛 ~550 kcal (e.g., rice + chicken + salad)";
-    }, 1500);
+
+    if (!CALORIE_MAMA_API || CALORIE_MAMA_API === "YOUR_API_KEY_HERE") {
+      photoResult.innerHTML = "⚠️ Automatic photo analysis requires an API key. Please use manual entry mode.";
+      return;
+    }
+
+    photoResult.innerHTML = "🔍 Analyzing photo... please wait.";
+
+    try {
+      const form = new FormData();
+      form.append("file", mealPhoto.files[0]);
+
+      const response = await fetch("https://api.caloriemama.ai/v1/foodrecognition", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${CALORIE_MAMA_API}`
+        },
+        body: form
+      });
+
+      if (!response.ok) throw new Error("API request failed");
+      const data = await response.json();
+
+      if (!data.results || data.results.length === 0) {
+        photoResult.innerHTML = "⚠️ No recognizable foods found. Please try a clearer image.";
+        return;
+      }
+
+      let totalCalories = 0;
+      let resultHTML = "<strong>Detected Foods:</strong><br><ul style='text-align:left;'>";
+
+      data.results.forEach(item => {
+        const name = item.food_name || "Unknown";
+        const cal = item.calories || 0;
+        totalCalories += cal;
+        resultHTML += `<li>${name} — ${cal} kcal</li>`;
+      });
+
+      resultHTML += `</ul><p><strong>Total Estimated:</strong> 🍽️ ${Math.round(totalCalories)} kcal</p>`;
+      photoResult.innerHTML = resultHTML;
+    } catch (err) {
+      console.error(err);
+      photoResult.innerHTML = "⚠️ Unable to analyze the photo right now. Please try again later or use manual input.";
+    }
   });
 
-  // Add manual ingredient row
+  // Add ingredient row
   addIngredientBtn.addEventListener("click", () => {
     const row = document.createElement("div");
     row.className = "ingredient-row";
@@ -80,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ingredientList.appendChild(row);
   });
 
-  // Calculate total calories
+  // Manual calorie calculation
   calculateCaloriesBtn.addEventListener("click", () => {
     const rows = ingredientList.querySelectorAll(".ingredient-row");
     if (!rows.length) {
@@ -99,4 +143,3 @@ document.addEventListener("DOMContentLoaded", () => {
     calorieResult.innerHTML = `<strong>Total Calories:</strong> ${total.toFixed(0)} kcal`;
   });
 });
-
