@@ -9,7 +9,7 @@ const app = express();
 const upload = multer({ dest: "uploads/" });
 app.use(cors());
 
-const AZUMIO_API_KEY = "2b09c6ac3688ea052f4692860de3aff8"; // 🔒 keep private
+const AZUMIO_API_KEY = "0898a32e8d75205be339371ef3cace9a"; // 🔒 keep private
 
 app.post("/api/calories", upload.single("file"), async (req, res) => {
   try {
