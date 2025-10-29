@@ -332,63 +332,6 @@ function convertVolume() {
   out.textContent = `${formatNumber(res)} ${t}`;
 }
 
-/* ============================================================
-   KITCHEN CONVERTER — Mass ↔ Volume using densities
-   ============================================================ */
-function convertKitchen() {
-  const val = parseFloat($("#kitchenInput")?.value || 0);
-  const from = $("#kitchenFrom")?.value;
-  const to = $("#kitchenTo")?.value;
-  const ing = $("#kitchenIngredient")?.value || "water";
-  const out = $("#kitchenResult");
-
-  if (!val || !from || !to) {
-    out.textContent = "Please fill all fields.";
-    return;
-  }
-
-  // Supported conversions
-  const massMap = { g: 1, kg: 1000, oz: 28.3495, lb: 453.592 };
-  const volMap = { ml: 1, L: 1000, cup: 240, tbsp: 14.7868, tsp: 4.92892, "fl oz": 29.5735 };
-
-  const densities = {
-    water: 1.0,
-    milk: 1.03,
-    oil: 0.92,
-    honey: 1.42,
-    butter: 0.96,
-    flour: 0.53,
-    sugar: 0.85,
-    salt: 1.2,
-    "brown sugar": 0.95,
-  };
-  const d = densities[ing.toLowerCase()] || 1.0;
-
-  const massUnits = Object.keys(massMap);
-  const volUnits = Object.keys(volMap);
-
-  let result;
-
-  if (massUnits.includes(from) && volUnits.includes(to)) {
-    const g = val * massMap[from];
-    const ml = g / d;
-    result = ml / volMap[to];
-  } else if (volUnits.includes(from) && massUnits.includes(to)) {
-    const ml = val * volMap[from];
-    const g = ml * d;
-    result = g / massMap[to];
-  } else if (massUnits.includes(from) && massUnits.includes(to)) {
-    const g = val * massMap[from];
-    result = g / massMap[to];
-  } else if (volUnits.includes(from) && volUnits.includes(to)) {
-    const ml = val * volMap[from];
-    result = ml / volMap[to];
-  } else {
-    result = val;
-  }
-
-  out.textContent = `${formatNumber(result)} ${to}`;
-}
 
 /* ============================================================
    CONTAINER VOLUME CALCULATOR
@@ -451,6 +394,29 @@ window.addEventListener("load", () => {
     app.style.display = "block";
   }
   console.log("Convert Labs ready ✔️");
+});
+
+// ============================
+// PAGE LOADER (Always show app)
+// ============================
+window.addEventListener("DOMContentLoaded", () => {
+  const app = document.getElementById("app");
+  const loader = document.getElementById("loading-screen");
+  if (app && loader) {
+    app.style.display = "block";
+    loader.style.display = "none";
+  }
+  console.log("✅ Convert Labs loaded safely.");
+});
+
+window.addEventListener("error", (e) => {
+  console.warn("⚠️ JS Error:", e.message);
+  const app = document.getElementById("app");
+  const loader = document.getElementById("loading-screen");
+  if (app && loader) {
+    app.style.display = "block";
+    loader.style.display = "none";
+  }
 });
 
 
