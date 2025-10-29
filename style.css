@@ -134,6 +134,52 @@ html.dark .tabs button {
   color: white;
 }
 
+/* ===== Dropdown Menu (Tools Tab) ===== */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background-color: var(--btn-bg, #1e40af);
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--card-bg, #fff);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  min-width: 220px;
+  z-index: 1000;
+}
+
+.dropdown-content a {
+  color: var(--text, #111);
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  font-weight: 500;
+}
+
+.dropdown-content a:hover {
+  background-color: var(--hover-bg, #e5e7eb);
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: var(--hover-primary, #15389c);
+}
+
 /* ===========================
    CONVERTERS
 =========================== */
@@ -306,3 +352,4 @@ footer {
 .adsbygoogle + h2 {
   margin-top: 1.5rem !important;
 }
+
