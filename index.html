@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Convert Labs — Smart Online Unit Converter</title>
+  <title>Convert Labs — Smart Unit Converter</title>
 
   <!-- ✅ SEO -->
-  <meta name="description" content="Convert Labs is your free, all-in-one online unit converter for length, temperature, volume, container, kitchen, and other practical tools like currency and image conversion. Fast, accurate, and easy to use." />
-  <meta name="keywords" content="unit converter, online converter, length converter, temperature converter, kitchen converter, currency converter, image converter, Convert Labs, tools, volume calculator" />
+  <meta name="description" content="Convert Labs is your free, all-in-one online converter for length, temperature, volume, container, kitchen, currency, and images. Fast, accurate, and easy to use." />
+  <meta name="keywords" content="unit converter, length converter, temperature converter, volume calculator, kitchen converter, currency converter, image converter, Convert Labs" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://convertlabs.online/" />
+  <link rel="canonical" href="https://convertlabs.online" />
 
   <!-- ✅ Favicon -->
   <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
@@ -52,12 +52,10 @@
         </div>
       </div>
 
-      <p class="tagline">Welcome to Convert Labs — your smart all-in-one online converter</p>
-
-      <p class="intro-text">
-        Convert Labs is a modern, free, and easy-to-use online unit converter that helps you quickly convert 
-        between length, temperature, volume, container measurements, and kitchen ingredients. 
-        Explore our new tools like the currency and image converters — making every conversion fast, accurate, and simple.
+      <p class="tagline">Welcome to Convert Labs — your smart all-in-one converter</p>
+      <p class="intro-text" style="max-width:900px; margin:auto; text-align:left; padding:0 1rem;">
+        Convert Labs makes conversions effortless across multiple categories — including Length, Temperature, Volume, Container measurements, Kitchen ingredients, Currency, and Images. 
+        All tools are fast, accurate, and free to use — whether you’re cooking, studying, or working on a project. Switch between converters using the tabs below.
       </p>
     </header>
 
@@ -68,14 +66,15 @@
       <button onclick="showConverter('volume')">Volume</button>
       <button onclick="showConverter('container')">Container Volume</button>
       <button onclick="showConverter('kitchen')">Kitchen</button>
-      <a href="tools/currency-converter.html"><button>Currency</button></a>
-      <a href="tools/image-converter.html"><button>Image Converter</button></a>
+      <button onclick="window.location.href='tools/currency-converter.html'">Tools</button>
     </div>
 
     <!-- Converters -->
     <main>
+      <!-- Length -->
       <section id="length" class="converter active">
         <h2>Length Converter</h2>
+        <p>Easily convert between metric and imperial units — such as meters, kilometers, inches, and feet. Perfect for engineers, students, and everyday users.</p>
         <input type="number" id="lengthInput" placeholder="Enter value" />
         <select id="lengthFrom"></select>
         <select id="lengthTo"></select>
@@ -83,8 +82,10 @@
         <p id="lengthResult"></p>
       </section>
 
+      <!-- Temperature -->
       <section id="temperature" class="converter">
         <h2>Temperature Converter</h2>
+        <p>Convert instantly between Celsius, Fahrenheit, and Kelvin — great for weather, cooking, or scientific use.</p>
         <input type="number" id="tempInput" placeholder="Enter value" />
         <select id="tempFrom"></select>
         <select id="tempTo"></select>
@@ -92,8 +93,10 @@
         <p id="tempResult"></p>
       </section>
 
+      <!-- Volume -->
       <section id="volume" class="converter">
         <h2>Volume Converter</h2>
+        <p>Quickly convert between liters, milliliters, cups, and gallons — ideal for fluid and ingredient conversions.</p>
         <input type="number" id="volumeInput" placeholder="Enter value" />
         <select id="volumeFrom"></select>
         <select id="volumeTo"></select>
@@ -101,8 +104,10 @@
         <p id="volumeResult"></p>
       </section>
 
+      <!-- Container -->
       <section id="container" class="converter">
         <h2>Container Volume Calculator</h2>
+        <p>Estimate the volume of boxes and cylinders using simple dimensions. Great for packaging, shipping, or DIY projects.</p>
         <select id="containerType">
           <option value="box">Box (L×W×H)</option>
           <option value="cylinder">Cylinder (r×h)</option>
@@ -132,14 +137,14 @@
         <p id="containerResult"></p>
       </section>
 
+      <!-- Kitchen -->
       <section id="kitchen" class="converter">
         <h2>Kitchen Converter</h2>
+        <p>Convert cooking ingredients between grams, cups, tablespoons, and teaspoons — with built-in ingredient densities for accurate recipe scaling.</p>
         <input type="number" id="kitchenInput" placeholder="Enter amount" />
         <select id="kitchenFrom"></select>
         <select id="kitchenTo"></select>
-        <select id="kitchenIngredient">
-          <option value="" disabled selected>Select ingredient</option>
-        </select>
+        <select id="kitchenIngredient"></select>
         <button onclick="convertKitchen()">Convert</button>
         <p id="kitchenResult"></p>
       </section>
@@ -156,7 +161,7 @@
         <a href="how-to.html">Guides</a> |
         <a href="privacy.html">Privacy Policy</a> |
         <a href="terms.html">Terms of Use</a> |
-        <a href="index.html">Home</a>
+        <a href="contact.html">Contact</a>
       </div>
     </footer>
   </div>
