@@ -126,21 +126,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
  // ============================
-// KITCHEN CONVERTER
+// KITCHEN CONVERTER (SAFE VERSION)
 // ============================
-function convertKitchen() {
-  const input = parseFloat(document.getElementById("kitchenInput").value);
-  const from = document.getElementById("kitchenFrom").value;
-  const to = document.getElementById("kitchenTo").value;
-  const ingredient = document.getElementById("kitchenIngredient").value;
-  const result = document.getElementById("kitchenResult");
+document.addEventListener("DOMContentLoaded", () => {
+  const kitchenInput = document.getElementById("kitchenInput");
+  const kitchenFrom = document.getElementById("kitchenFrom");
+  const kitchenTo = document.getElementById("kitchenTo");
+  const kitchenIngredient = document.getElementById("kitchenIngredient");
+  const kitchenResult = document.getElementById("kitchenResult");
+  const kitchenBtn = document.querySelector("button[onclick='convertKitchen()']");
 
-  if (!input || !from || !to || !ingredient) {
-    result.textContent = "Please fill all fields correctly.";
+  if (!kitchenInput || !kitchenFrom || !kitchenTo || !kitchenIngredient || !kitchenResult || !kitchenBtn) {
+    console.warn("Kitchen converter elements not found — skipping initialization.");
     return;
   }
 
-  // ✅ Common unit multipliers (base = milliliters)
   const unitToMl = {
     ml: 1,
     liter: 1000,
@@ -149,7 +149,6 @@ function convertKitchen() {
     tsp: 5,
   };
 
-  // ✅ Mass unit multipliers (base = grams)
   const unitToGram = {
     g: 1,
     kg: 1000,
@@ -157,7 +156,6 @@ function convertKitchen() {
     lb: 453.592,
   };
 
-  // ✅ Realistic ingredient densities (grams per milliliter)
   const densities = {
     "water": 1.00,
     "milk (whole)": 1.03,
@@ -188,55 +186,6 @@ function convertKitchen() {
     "mayonnaise": 0.95
   };
 
-  const density = densities[ingredient];
-  if (!density) {
-    result.textContent = "Density data not available for this ingredient.";
-    return;
-  }
-
-  let inGrams = 0;
-  let outValue = 0;
-
-  const isFromVolume = unitToMl[from] !== undefined;
-  const isToVolume = unitToMl[to] !== undefined;
-  const isFromMass = unitToGram[from] !== undefined;
-  const isToMass = unitToGram[to] !== undefined;
-
-  // ✅ Convert from → grams
-  if (isFromVolume) {
-    const ml = input * unitToMl[from];
-    inGrams = ml * density;
-  } else if (isFromMass) {
-    inGrams = input * unitToGram[from];
-  } else {
-    result.textContent = "Unsupported 'from' unit.";
-    return;
-  }
-
-  // ✅ Convert grams → target unit
-  if (isToVolume) {
-    const ml = inGrams / density;
-    outValue = ml / unitToMl[to];
-  } else if (isToMass) {
-    outValue = inGrams / unitToGram[to];
-  } else {
-    result.textContent = "Unsupported 'to' unit.";
-    return;
-  }
-
-  result.innerHTML = `
-    <b>${input}</b> ${from} of <b>${ingredient}</b> =
-    <b>${outValue.toFixed(2)}</b> ${to}
-  `;
-}
-
-// ============================
-// Populate kitchen units
-// ============================
-document.addEventListener("DOMContentLoaded", () => {
-  const kitchenFrom = document.getElementById("kitchenFrom");
-  const kitchenTo = document.getElementById("kitchenTo");
-
   const units = [
     { value: "g", text: "Gram (g)" },
     { value: "kg", text: "Kilogram (kg)" },
@@ -249,17 +198,71 @@ document.addEventListener("DOMContentLoaded", () => {
     { value: "tsp", text: "Teaspoon (tsp)" },
   ];
 
-  units.forEach(u => {
-    const opt1 = document.createElement("option");
-    opt1.value = u.value;
-    opt1.textContent = u.text;
-    const opt2 = opt1.cloneNode(true);
-    kitchenFrom.appendChild(opt1);
-    kitchenTo.appendChild(opt2);
-  });
+  // Populate dropdowns only if empty
+  if (!kitchenFrom.options.length) {
+    units.forEach(u => {
+      const opt1 = document.createElement("option");
+      opt1.value = u.value;
+      opt1.textContent = u.text;
+      const opt2 = opt1.cloneNode(true);
+      kitchenFrom.appendChild(opt1);
+      kitchenTo.appendChild(opt2);
+    });
+    kitchenFrom.value = "g";
+    kitchenTo.value = "cup";
+  }
 
-  kitchenFrom.value = "g";
-  kitchenTo.value = "cup";
+  window.convertKitchen = function() {
+    const input = parseFloat(kitchenInput.value);
+    const from = kitchenFrom.value;
+    const to = kitchenTo.value;
+    const ingredient = kitchenIngredient.value;
+
+    if (!input || !from || !to || !ingredient) {
+      kitchenResult.textContent = "Please fill all fields correctly.";
+      return;
+    }
+
+    const density = densities[ingredient];
+    if (!density) {
+      kitchenResult.textContent = "Density data not available for this ingredient.";
+      return;
+    }
+
+    let inGrams = 0, outValue = 0;
+
+    const isFromVolume = unitToMl[from] !== undefined;
+    const isToVolume = unitToMl[to] !== undefined;
+    const isFromMass = unitToGram[from] !== undefined;
+    const isToMass = unitToGram[to] !== undefined;
+
+    // From → grams
+    if (isFromVolume) {
+      const ml = input * unitToMl[from];
+      inGrams = ml * density;
+    } else if (isFromMass) {
+      inGrams = input * unitToGram[from];
+    } else {
+      kitchenResult.textContent = "Unsupported 'from' unit.";
+      return;
+    }
+
+    // grams → To
+    if (isToVolume) {
+      const ml = inGrams / density;
+      outValue = ml / unitToMl[to];
+    } else if (isToMass) {
+      outValue = inGrams / unitToGram[to];
+    } else {
+      kitchenResult.textContent = "Unsupported 'to' unit.";
+      return;
+    }
+
+    kitchenResult.innerHTML = `
+      <b>${input}</b> ${from} of <b>${ingredient}</b> =
+      <b>${outValue.toFixed(2)}</b> ${to}
+    `;
+  };
 });
 
 /* ============================================================
@@ -449,5 +452,6 @@ window.addEventListener("load", () => {
   }
   console.log("Convert Labs ready ✔️");
 });
+
 
 
