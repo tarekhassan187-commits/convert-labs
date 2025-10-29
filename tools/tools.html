@@ -1,1 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tools | Convert Labs</title>
+
+  <meta name="description" content="Explore Convert Labs tools: currency converter, image converter, and calorie calculator. Smart, fast, and free utilities for everyone." />
+  <link rel="icon" type="image/png" href="../assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
+
+  <!-- ✅ Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
+    crossorigin="anonymous"></script>
+
+  <!-- ✅ Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P');
+  </script>
+
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <a href="../index.html" class="brand" aria-label="Convert Labs home">
+        <img src="../assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
+        <span class="brand-text">Convert Labs</span>
+      </a>
+
+      <div class="header-controls">
+        <a href="../contact.html" class="header-btn">Contact Us</a>
+        <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+      </div>
+    </div>
+    <p class="tagline">Welcome to Convert Labs — your smart all-in-one converter</p>
+  </header>
+
+  <!-- Main Tools Section -->
+  <main class="converter">
+    <h1>Our Conversion Tools</h1>
+    <p>Discover our expanding toolkit designed to make your daily calculations simpler and faster. Choose a tool below to begin.</p>
+
+    <div class="tool-grid">
+      <div class="tool-card" onclick="window.location.href='currency-converter.html'">
+        💱 <h2>Currency Converter</h2>
+        <p>Convert between global currencies with real-time exchange rates. Perfect for travelers, freelancers, and international shopping.</p>
+      </div>
+
+      <div class="tool-card" onclick="window.location.href='image-converter.html'">
+        🖼️ <h2>Image Converter</h2>
+        <p>Quickly convert between JPG, PNG, WEBP, and GIF formats. Upload, preview, and download optimized images instantly.</p>
+      </div>
+
+      <div class="tool-card" onclick="window.location.href='calorie-calculator.html'">
+        🍽️ <h2>Calorie Calculator</h2>
+        <p>Estimate calories in your meal by uploading a photo or entering ingredients manually. Simple, accurate, and fast.</p>
+      </div>
+    </div>
+
+    <!-- Ad block -->
+    <div style="margin: 2rem auto; text-align:center;">
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-2490597435056272"
+        data-ad-slot="1122334455"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">
+      <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <span class="footer-text">Convert Labs</span>
+    </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="../about.html">About</a> |
+      <a href="../how-to.html">Guides</a> |
+      <a href="../privacy.html">Privacy Policy</a> |
+      <a href="../terms.html">Terms of Use</a> |
+      <a href="../index.html">Home</a>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+
+  <style>
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: left;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 12px rgba(0,0,0,0.15);
+    }
+
+    .tool-card h2 {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .tool-card p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</body>
+</html>
 
