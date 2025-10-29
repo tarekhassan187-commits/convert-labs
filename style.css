@@ -279,3 +279,30 @@ footer {
     margin: 5px 0;
   }
 }
+
+/* ===========================
+   ADSENSE LAYOUT FIX
+   =========================== */
+
+/* Make ads responsive and centered */
+.adsbygoogle {
+  display: block;
+  text-align: center;
+  width: 100%;
+  margin: 1rem auto;
+  min-height: 0 !important;
+  transition: all 0.3s ease;
+}
+
+/* Hide empty ad containers (when no ad is served) */
+.adsbygoogle:empty {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Optional: reduce vertical space around ads */
+.adsbygoogle + h2 {
+  margin-top: 1.5rem !important;
+}
