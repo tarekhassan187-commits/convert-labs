@@ -125,29 +125,141 @@ document.addEventListener("DOMContentLoaded", () => {
       volumeTo.add(new Option(u, u));
     });
 
-  // Kitchen
-  const kitchenFrom = $("#kitchenFrom"),
-    kitchenTo = $("#kitchenTo");
-  if (kitchenFrom && kitchenTo) {
-    const kitchenUnits = [
-      "g",
-      "kg",
-      "oz",
-      "lb",
-      "ml",
-      "L",
-      "cup",
-      "tbsp",
-      "tsp",
-      "fl oz",
-    ];
-    kitchenFrom.innerHTML = "";
-    kitchenTo.innerHTML = "";
-    kitchenUnits.forEach((u) => {
-      kitchenFrom.add(new Option(u, u));
-      kitchenTo.add(new Option(u, u));
-    });
+ // ============================
+// KITCHEN CONVERTER
+// ============================
+function convertKitchen() {
+  const input = parseFloat(document.getElementById("kitchenInput").value);
+  const from = document.getElementById("kitchenFrom").value;
+  const to = document.getElementById("kitchenTo").value;
+  const ingredient = document.getElementById("kitchenIngredient").value;
+  const result = document.getElementById("kitchenResult");
+
+  if (!input || !from || !to || !ingredient) {
+    result.textContent = "Please fill all fields correctly.";
+    return;
   }
+
+  // ✅ Common unit multipliers (base = milliliters)
+  const unitToMl = {
+    ml: 1,
+    liter: 1000,
+    cup: 240,
+    tbsp: 15,
+    tsp: 5,
+  };
+
+  // ✅ Mass unit multipliers (base = grams)
+  const unitToGram = {
+    g: 1,
+    kg: 1000,
+    oz: 28.3495,
+    lb: 453.592,
+  };
+
+  // ✅ Realistic ingredient densities (grams per milliliter)
+  const densities = {
+    "water": 1.00,
+    "milk (whole)": 1.03,
+    "butter": 0.96,
+    "olive oil": 0.91,
+    "honey": 1.42,
+    "maple syrup": 1.33,
+    "molasses": 1.45,
+    "corn syrup": 1.36,
+    "all-purpose flour": 0.53,
+    "almond flour": 0.48,
+    "coconut flour": 0.39,
+    "granulated sugar": 0.85,
+    "brown sugar packed": 0.95,
+    "powdered sugar": 0.56,
+    "salt (table)": 1.20,
+    "baking powder": 0.93,
+    "baking soda": 0.96,
+    "cocoa powder": 0.64,
+    "cornstarch": 0.54,
+    "cream cheese": 0.97,
+    "yogurt (plain)": 1.03,
+    "cheese (grated)": 0.53,
+    "peanut butter": 1.05,
+    "rice (uncooked)": 0.85,
+    "oats (rolled)": 0.38,
+    "yeast (active dry)": 0.45,
+    "mayonnaise": 0.95
+  };
+
+  const density = densities[ingredient];
+  if (!density) {
+    result.textContent = "Density data not available for this ingredient.";
+    return;
+  }
+
+  let inGrams = 0;
+  let outValue = 0;
+
+  const isFromVolume = unitToMl[from] !== undefined;
+  const isToVolume = unitToMl[to] !== undefined;
+  const isFromMass = unitToGram[from] !== undefined;
+  const isToMass = unitToGram[to] !== undefined;
+
+  // ✅ Convert from → grams
+  if (isFromVolume) {
+    const ml = input * unitToMl[from];
+    inGrams = ml * density;
+  } else if (isFromMass) {
+    inGrams = input * unitToGram[from];
+  } else {
+    result.textContent = "Unsupported 'from' unit.";
+    return;
+  }
+
+  // ✅ Convert grams → target unit
+  if (isToVolume) {
+    const ml = inGrams / density;
+    outValue = ml / unitToMl[to];
+  } else if (isToMass) {
+    outValue = inGrams / unitToGram[to];
+  } else {
+    result.textContent = "Unsupported 'to' unit.";
+    return;
+  }
+
+  result.innerHTML = `
+    <b>${input}</b> ${from} of <b>${ingredient}</b> =
+    <b>${outValue.toFixed(2)}</b> ${to}
+  `;
+}
+
+// ============================
+// Populate kitchen units
+// ============================
+document.addEventListener("DOMContentLoaded", () => {
+  const kitchenFrom = document.getElementById("kitchenFrom");
+  const kitchenTo = document.getElementById("kitchenTo");
+
+  const units = [
+    { value: "g", text: "Gram (g)" },
+    { value: "kg", text: "Kilogram (kg)" },
+    { value: "oz", text: "Ounce (oz)" },
+    { value: "lb", text: "Pound (lb)" },
+    { value: "ml", text: "Milliliter (ml)" },
+    { value: "liter", text: "Liter (L)" },
+    { value: "cup", text: "Cup" },
+    { value: "tbsp", text: "Tablespoon (tbsp)" },
+    { value: "tsp", text: "Teaspoon (tsp)" },
+  ];
+
+  units.forEach(u => {
+    const opt1 = document.createElement("option");
+    opt1.value = u.value;
+    opt1.textContent = u.text;
+    const opt2 = opt1.cloneNode(true);
+    kitchenFrom.appendChild(opt1);
+    kitchenTo.appendChild(opt2);
+  });
+
+  kitchenFrom.value = "g";
+  kitchenTo.value = "cup";
 });
 
 /* ============================================================
@@ -337,4 +449,5 @@ window.addEventListener("load", () => {
   }
   console.log("Convert Labs ready ✔️");
 });
+
 
