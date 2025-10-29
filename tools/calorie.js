@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const calorieResult = document.getElementById("calorieResult");
 
   // Your free Calorie Mama API key (get one at https://developer.azumio.com)
-  const CALORIE_MAMA_API = "YOUR_API_KEY_HERE";
+  const CALORIE_MAMA_API = 2b09c6ac3688ea052f4692860de3aff8;
 
   // Default calorie data for manual entry (per 100g)
   const foodCalories = {
