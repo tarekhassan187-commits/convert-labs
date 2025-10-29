@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Currency Converter – Convert Labs</title>
+  <title>Currency Converter – Convert Labs Tools</title>
 
   <!-- ✅ SEO -->
-  <meta name="description" content="Free Currency Converter by Convert Labs — calculate live exchange rates for USD, EUR, GBP, AED, SAR, INR, EGP, KWD, and more. Fast, accurate, and up-to-date with trusted sources." />
-  <meta name="keywords" content="currency converter, exchange rate, live forex, money conversion, usd to egp, eur to usd, aed to sar, convert labs" />
+  <meta name="description" content="Convert Labs Currency Converter — fast, real-time exchange rates for USD, EUR, GBP, AED, SAR, EGP, and more. Simple, accurate, and free." />
+  <meta name="keywords" content="currency converter, online currency exchange, USD to EGP, AED to SAR, Convert Labs tools" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://convertlabs.online/tools/currency-converter.html" />
 
@@ -32,6 +32,7 @@
 </head>
 
 <body>
+  <!-- Header -->
   <header>
     <div class="header-content">
       <a href="../index.html" class="brand" aria-label="Convert Labs home">
@@ -44,29 +45,34 @@
         <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
       </div>
     </div>
+    <p class="tagline">Welcome to Convert Labs Tools — quick, accurate, and free converters</p>
   </header>
 
-  <main class="content-section">
-    <h1>Currency Converter — Live Exchange Rates</h1>
-    <p>
-      Convert Labs' Currency Converter gives you fast, accurate exchange calculations between all major world currencies. 
-      Whether you're shopping online, working with international clients, or planning a trip abroad, this tool helps you instantly find the latest conversion rates — updated in real time from trusted sources.
-      No registration, no fees — just reliable currency conversion right in your browser.
+  <!-- Tools Tabs -->
+  <div class="tabs">
+    <button class="active" onclick="window.location.href='currency-converter.html'">Currency Converter</button>
+    <button onclick="window.location.href='image-converter.html'">Image Converter</button>
+    <button onclick="window.location.href='../index.html'">Back to Home</button>
+  </div>
+
+  <main class="converter">
+    <h1>Currency Converter</h1>
+    <p style="max-width:800px;margin:auto;text-align:left;">
+      Instantly convert between world currencies with real-time exchange rates powered by reliable APIs.
+      Choose from over 30 major global currencies, including USD, EUR, GBP, AED, SAR, EGP, and more.
     </p>
 
-    <ul style="text-align:left; max-width:700px; margin:10px auto;">
-      <li>Supported currencies: USD, EUR, GBP, AED, SAR, INR, EGP, KWD, JPY, CNY, SGD, TRY, CAD, AUD, CHF, ZAR, PKR, RUB, MXN, BRL, and more</li>
-      <li>Live data sourced from exchangerate.host API</li>
-      <li>Quick, ad-supported, and mobile-optimized</li>
-    </ul>
-
-    <section class="converter">
+    <div style="margin-top:1rem;">
       <input type="number" id="currencyAmount" placeholder="Enter amount" />
       <select id="currencyFrom"></select>
       <select id="currencyTo"></select>
       <button id="currencyConvertBtn">Convert</button>
       <p id="currencyResult"></p>
-    </section>
+    </div>
+
+    <p style="margin-top:2rem; font-size:0.95rem; color:gray;">
+      💡 Tip: Conversion rates are fetched in real-time from <b>Exchangerate.host</b> — no sign-up required.
+    </p>
   </main>
 
   <footer>
@@ -80,72 +86,49 @@
       <a href="../how-to.html">Guides</a> |
       <a href="../privacy.html">Privacy Policy</a> |
       <a href="../terms.html">Terms of Use</a> |
-      <a href="../index.html">Home</a>
+      <a href="../contact.html">Contact</a>
     </div>
   </footer>
 
-  <script>
-    // Extended currency list (restored from previous version + improved grouping)
-    const currencyList = [
-      "USD","EUR","GBP","JPY","CNY","INR","EGP","AUD","CAD","CHF","SGD","KWD","AED","SAR","TRY",
-      "BRL","RUB","MXN","PKR","ZAR","NOK","SEK","DKK","PLN","HUF","THB","IDR","MYR","PHP","VND",
-      "NGN","BDT","QAR","BHD","OMR","ILS","KRW","HKD","NZD","CZK","ARS","CLP","COP","RON","UAH","MAD","DZD"
-    ];
-
-    const fromSel = document.getElementById('currencyFrom');
-    const toSel = document.getElementById('currencyTo');
-    const btn = document.getElementById('currencyConvertBtn');
-    const amountInput = document.getElementById('currencyAmount');
-    const resultEl = document.getElementById('currencyResult');
-
-    // Populate currency dropdowns
-    function populateSelects() {
-      fromSel.innerHTML = '';
-      toSel.innerHTML = '';
-      currencyList.forEach(code => {
-        const opt1 = document.createElement('option');
-        opt1.value = code;
-        opt1.textContent = code;
-        const opt2 = opt1.cloneNode(true);
-        fromSel.appendChild(opt1);
-        toSel.appendChild(opt2);
-      });
-      fromSel.value = "USD";
-      toSel.value = "EUR";
-    }
-
-    // Fetch and convert currency
-    async function getRate(from, to) {
-      const url = `https://api.exchangerate.host/convert?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data.result || null;
-      } catch (e) {
-        console.error("Error fetching rate:", e);
-        return null;
-      }
-    }
-
-    btn.addEventListener('click', async () => {
-      const amount = parseFloat(amountInput.value);
-      if (!amount) {
-        resultEl.textContent = "Please enter an amount.";
-        return;
-      }
-      resultEl.textContent = "Fetching latest rates...";
-      const rate = await getRate(fromSel.value, toSel.value);
-      if (rate) {
-        const converted = amount * rate;
-        resultEl.textContent = `${amount} ${fromSel.value} = ${converted.toFixed(4)} ${toSel.value} (Rate: ${rate.toFixed(4)})`;
-      } else {
-        resultEl.textContent = "Unable to retrieve rate. Please try again later.";
-      }
-    });
-
-    populateSelects();
-  </script>
-
   <script src="../script.js"></script>
+  <script>
+    // Currency converter logic (extended list + working fetch)
+    document.addEventListener("DOMContentLoaded", async () => {
+      const currencyList = [
+        "USD","EUR","GBP","JPY","CNY","INR","EGP","AUD","CAD","CHF","SGD","KWD","AED","SAR","QAR","OMR",
+        "BHD","TRY","BRL","RUB","MXN","PKR","NOK","SEK","DKK","ZAR","HKD","THB","MYR","IDR","PLN","PHP"
+      ];
+      const fromSel = document.getElementById("currencyFrom");
+      const toSel = document.getElementById("currencyTo");
+      const result = document.getElementById("currencyResult");
+
+      currencyList.forEach(c => {
+        const o1 = document.createElement("option");
+        o1.value = c; o1.textContent = c;
+        const o2 = o1.cloneNode(true);
+        fromSel.appendChild(o1); toSel.appendChild(o2);
+      });
+      fromSel.value = "USD"; toSel.value = "EUR";
+
+      document.getElementById("currencyConvertBtn").addEventListener("click", async () => {
+        const amount = parseFloat(document.getElementById("currencyAmount").value);
+        const from = fromSel.value;
+        const to = toSel.value;
+        if (!amount) return (result.textContent = "Enter a valid amount");
+
+        result.textContent = "Fetching exchange rate...";
+        try {
+          const res = await fetch(`https://api.exchangerate.host/convert?from=${from}&to=${to}`);
+          const data = await res.json();
+          if (data && data.result) {
+            const converted = (amount * data.result).toFixed(4);
+            result.textContent = `${amount} ${from} = ${converted} ${to} (Rate: ${data.result.toFixed(4)})`;
+          } else result.textContent = "Error fetching conversion rate.";
+        } catch {
+          result.textContent = "Network error. Please try again.";
+        }
+      });
+    });
+  </script>
 </body>
 </html>
