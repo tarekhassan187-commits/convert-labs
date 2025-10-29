@@ -418,6 +418,3 @@ window.addEventListener("error", (e) => {
     loader.style.display = "none";
   }
 });
-
-
-
