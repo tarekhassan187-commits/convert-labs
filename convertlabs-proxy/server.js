@@ -19,7 +19,7 @@ app.post("/api/calories", upload.single("file"), async (req, res) => {
     const response = await fetch("https://api.caloriemama.ai/v1/foodrecognition", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${AZUMIO_API_KEY}`
+        "Authorization": `Bearer ${0898a32e8d75205be339371ef3cace9a}`
       },
       body: form
     });
