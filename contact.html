@@ -4,15 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Contact Us – Convert Labs</title>
-  <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
-  <link rel="stylesheet" href="style.css" />
-<script defer src="script.js"></script>
 
-  <!-- AdSense -->
+  <!-- ✅ SEO -->
+  <meta name="description" content="Get in touch with Convert Labs — contact us for feedback, suggestions, or partnership inquiries." />
+  <meta name="keywords" content="contact Convert Labs, feedback form, unit converter support, Convert Labs help" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://convertlabs.online/contact.html" />
+  <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
+
+  <!-- ✅ Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
     crossorigin="anonymous"></script>
 
-  <!-- GA4 -->
+  <!-- ✅ Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -21,91 +26,107 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
+  <!-- ✅ Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "url": "https://convertlabs.online/contact.html",
+    "name": "Contact Convert Labs",
+    "description": "Use the contact form to reach Convert Labs for support or feedback."
+  }
+  </script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <!-- ✅ Header -->
   <header>
-    <body class="light">
+    <div class="header-content">
+      <a href="index.html" class="brand" aria-label="Convert Labs home">
+        <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
+        <span class="brand-text">Convert Labs</span>
+      </a>
 
-  <div class="header-content">
-    <a href="index.html" class="brand" aria-label="Convert Labs home">
-      <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
-      <span class="brand-text">Convert Labs</span>
-    </a>
-
-    <div class="header-controls">
-      <a href="contact.html" class="header-btn">Contact Us</a>
-      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+      <div class="header-controls">
+        <a href="contact.html" class="header-btn">Contact Us</a>
+        <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+      </div>
     </div>
+    <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
+  </header>
 
-  <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
-</header>
+  <!-- ✅ Main Content -->
+  <main>
+    <section class="contact-section">
+      <h1>Contact Us</h1>
+      <p>Have a question, feedback, or suggestion? We'd love to hear from you. Use the form below to reach out.</p>
 
+      <form id="contactForm" action="https://formspree.io/f/movkgjwq" method="POST">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
 
-  <main style="padding:2rem 1rem; max-width:800px; margin:auto;">
-  <h1>Contact Us</h1>
-  <p>Have a question, feedback, or suggestion? We'd love to hear from you.</p>
+        <label for="email">Your Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
-  <form action="https://formspree.io/f/movkgjwq" method="POST" class="contact-form">
-  
-    <label for="name">Your Name</label>
-    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Type your message..." required></textarea>
 
-    <label for="email">Your Email</label>
-    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <p class="privacy-note" style="font-size:0.9rem; color:var(--text); margin-top:0.5rem;">
+          We respect your privacy — your message is never shared with third parties.
+        </p>
 
-    <label for="message">Message</label>
-    <textarea id="message" name="message" placeholder="Type your message..." required></textarea>
-    
-<!-- ✳️ Add this privacy reassurance line right below the form -->
-  <p class="privacy-note" style="margin-top:1rem; font-size:0.9rem; color:#444;">
-    We respect your privacy — your message is never shared with third parties.
-  </p>
-    <button type="submit">Send Message</button>
-  </form>
+        <button type="submit" class="send-btn">Send Message</button>
+        <p id="formMessage" style="margin-top:1rem; font-size:0.9rem;"></p>
+      </form>
+    </section>
+  </main>
 
-  
-</main>
-
+  <!-- ✅ Footer -->
   <footer>
     <div class="footer-brand">
       <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <span class="footer-text">Convert Labs</span>
     </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
     <div class="footer-links">
-      <a href="index.html">Home</a> |
       <a href="about.html">About</a> |
       <a href="how-to.html">Guides</a> |
       <a href="privacy.html">Privacy Policy</a> |
       <a href="terms.html">Terms of Use</a> |
-      <a href="contact.html">Contact</a>
+      <a href="index.html">Home</a>
     </div>
-    <p>© 2025 Convert Labs. All rights reserved.</p>
   </footer>
 
+  <!-- ✅ Form Handling Script -->
   <script>
-    // Small client-side handler to show success/error message without changing global JS
-    const form = document.getElementById('contactForm');
-    const msg = document.getElementById('formMessage');
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      msg.textContent = 'Sending…';
-      try {
-        const resp = await fetch(form.action, {
-          method: form.method,
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        });
-        if (resp.ok) {
-          msg.textContent = '✅ Message sent — thanks!';
-          form.reset();
-        } else {
-          msg.textContent = '⚠️ Could not send message. Please try again later.';
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('contactForm');
+      const msg = document.getElementById('formMessage');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.textContent = 'Sending...';
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          });
+          if (res.ok) {
+            msg.textContent = '✅ Message sent successfully!';
+            form.reset();
+          } else {
+            msg.textContent = '⚠️ Unable to send message. Please try again later.';
+          }
+        } catch {
+          msg.textContent = '⚠️ Network error. Please try again.';
         }
-      } catch (err) {
-        msg.textContent = '⚠️ Network error. Please try again.';
-      }
+      });
     });
   </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
