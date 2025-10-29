@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const calculateCaloriesBtn = document.getElementById("calculateCalories");
   const calorieResult = document.getElementById("calorieResult");
 
-  // Your free Calorie Mama API key (get one at https://developer.azumio.com)
+  // Your free Calorie Mama API key (get one at https://dev.caloriemama.ai/)
   const CALORIE_MAMA_API = 2b09c6ac3688ea052f4692860de3aff8;
 
   // Default calorie data for manual entry (per 100g)
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const form = new FormData();
       form.append("file", mealPhoto.files[0]);
 
-      const response = await fetch("https://api.caloriemama.ai/v1/foodrecognition", {
+      const response = await fetch("https://dev.caloriemama.ai/admin/applications/1409626325195/v1/foodrecognition", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${CALORIE_MAMA_API}`
