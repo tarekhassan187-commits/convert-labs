@@ -1,7 +1,8 @@
 // ==========================================
-// Calorie Calculator — Food-101 Offline Edition
+// Calorie Calculator — Food-101 (Optimized Free Edition)
 // ==========================================
 
+// === DOM Elements ===
 const photoBtn = document.getElementById("photoModeBtn");
 const manualBtn = document.getElementById("manualModeBtn");
 const photoSection = document.getElementById("photoSection");
@@ -15,21 +16,11 @@ const calcCaloriesBtn = document.getElementById("calculateCaloriesBtn");
 const manualResult = document.getElementById("manualResult");
 const ingredientList = document.getElementById("ingredientList");
 
-let model;
+let model = null; // will load lazily
 
-// ===== Load Food-101 TF.js model =====
-async function loadModel() {
-  photoResult.innerHTML = "⏳ Loading Food-101 model...";
-  // hosted community TF.js model converted from Food-101 (mobile-optimized)
-  model = await tf.loadGraphModel(
-    "https://tfhub.dev/google/food_classifier/1",
-    { fromTFHub: true }
-  );
-  photoResult.innerHTML = "";
-}
-loadModel();
-
-// ===== Switch modes =====
+// ==============================
+// MODE SWITCHING
+// ==============================
 photoBtn.onclick = () => {
   manualSection.style.display = "none";
   photoSection.style.display = "block";
@@ -39,10 +30,14 @@ manualBtn.onclick = () => {
   manualSection.style.display = "block";
 };
 
-// ===== Preview uploaded image =====
-photoInput.onchange = (e) => {
+// ==============================
+// IMAGE PREVIEW + COMPRESSION
+// ==============================
+photoInput.onchange = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
+
+  // Create preview
   const img = document.createElement("img");
   img.src = URL.createObjectURL(file);
   img.id = "previewImg";
@@ -50,17 +45,67 @@ photoInput.onchange = (e) => {
   img.style.borderRadius = "8px";
   photoPreview.innerHTML = "";
   photoPreview.appendChild(img);
+
+  // Compress/rescale image before analysis (keep under 800 px)
+  const compressed = await compressImage(file, 800);
+  img.dataset.compressed = URL.createObjectURL(compressed);
 };
 
-// ===== Analyze image locally =====
+// Compress uploaded photo for faster inference
+async function compressImage(file, maxSize) {
+  const img = await createImageBitmap(file);
+  const canvas = document.createElement("canvas");
+  const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
+  canvas.width = img.width * scale;
+  canvas.height = img.height * scale;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  return new Promise((resolve) =>
+    canvas.toBlob(
+      (b) => resolve(new File([b], file.name, { type: "image/jpeg" })),
+      "image/jpeg",
+      0.8
+    )
+  );
+}
+
+// ==============================
+// MODEL LOADING (lazy)
+// ==============================
+async function loadModel() {
+  photoResult.innerHTML = "⏳ Loading Food-101 model (first use)…";
+  model = await tf.loadGraphModel(
+    "https://tfhub.dev/google/food_classifier/1",
+    { fromTFHub: true }
+  );
+  photoResult.innerHTML = "";
+}
+
+// ==============================
+// ANALYZE PHOTO
+// ==============================
 analyzeBtn.onclick = async () => {
   const file = photoInput.files[0];
   if (!file) return alert("Please upload a meal photo first.");
-  if (!model) return alert("Model not ready yet, please wait a few seconds.");
+
+  // Lazy-load the model on first use
+  if (!model) await loadModel();
+
+  // Wait a moment so UI updates before heavy work
+  await new Promise((r) => setTimeout(r, 100));
+
+  photoResult.innerHTML = "🔍 Analyzing image…";
 
   const imgEl = document.getElementById("previewImg");
-  const tensor = tf.browser.fromPixels(imgEl)
-    .resizeNearestNeighbor([224, 224])
+  const src = imgEl.dataset.compressed || imgEl.src;
+  const img = await createImageBitmap(await fetch(src).then((r) => r.blob()));
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = 224;
+  canvas.height = 224;
+  ctx.drawImage(img, 0, 0, 224, 224);
+
+  const tensor = tf.browser.fromPixels(canvas)
     .toFloat()
     .div(255)
     .expandDims();
@@ -69,14 +114,16 @@ analyzeBtn.onclick = async () => {
   const topIdx = preds.indexOf(Math.max(...preds));
   const foodName = FOOD_CLASSES[topIdx] || "food";
 
-  photoResult.innerHTML = `🍽 <b>${foodName}</b><br>Fetching nutrition info...`;
+  photoResult.innerHTML = `🍽 <b>${foodName}</b><br>Fetching nutrition info…`;
   fetchNutrition(foodName);
 };
 
-// ===== Fetch nutrition from FoodData Central =====
+// ==============================
+// FETCH NUTRITION DATA (Free USDA API)
+// ==============================
 async function fetchNutrition(foodName) {
   try {
-    const apiKey = fy5rirXbJrdpYty9MBRYAQl1VsTUEhiRIpSPqkmE; // replace with your free key from fdc.nal.usda.gov
+    const apiKey = "DEMO_KEY"; // replace with your free key from fdc.nal.usda.gov
     const url = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(
       foodName
     )}&pageSize=1&api_key=${apiKey}`;
@@ -101,7 +148,9 @@ async function fetchNutrition(foodName) {
   }
 }
 
-// ===== Manual input (same as before) =====
+// ==============================
+// MANUAL INPUT MODE (same logic)
+// ==============================
 function addIngredientRow(name = "", grams = "") {
   const row = document.createElement("div");
   row.style.margin = "5px";
@@ -115,6 +164,7 @@ function addIngredientRow(name = "", grams = "") {
 addIngredientRow("chicken", 150);
 addIngredientRow("rice", 100);
 addIngredientBtn.onclick = () => addIngredientRow();
+
 calcCaloriesBtn.onclick = () => {
   const rows = ingredientList.querySelectorAll("div");
   let total = 0;
@@ -125,7 +175,9 @@ calcCaloriesBtn.onclick = () => {
   manualResult.textContent = `Total Calories: ${Math.round(total)} kcal`;
 };
 
-// ===== Food-101 label list (short version for demo) =====
+// ==============================
+// SHORT FOOD-101 LABEL MAP
+// ==============================
 const FOOD_CLASSES = [
   "apple pie","baby back ribs","baklava","beef carpaccio","beef tartare",
   "beet salad","beignets","bibimbap","bread pudding","breakfast burrito",
