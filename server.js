@@ -1,39 +1,54 @@
+// ==========================================
+// server.js - Render proxy for Azumio Calorie API
+// ==========================================
 import express from "express";
-import fetch from "node-fetch";
+import cors from "cors";
 import multer from "multer";
-import FormData from "form-data";
+import fetch from "node-fetch";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
-const PORT = process.env.PORT || 3000;
-const AZUMIO_KEY = process.env.AZUMIO_API_KEY; // keep in Render Environment Variables
 
-// Serve static frontend
-app.use(express.static("."));
+app.use(cors());
+app.use(express.json());
 
-// API route to handle photo analysis
+// ✅ Test route
+app.get("/", (req, res) => {
+  res.send("✅ Convert Labs Calorie Proxy is running successfully!");
+});
+
+// ✅ Calorie Analysis Route
 app.post("/api/calories", upload.single("image"), async (req, res) => {
   try {
-    const formData = new FormData();
-    formData.append("image", req.file.buffer, { filename: req.file.originalname });
-    const response = await fetch("https://api-portal.azumio.com/v1/foodrecognition", {
+    if (!req.file) {
+      return res.status(400).json({ error: "No image file provided" });
+    }
+
+    const apiKey = process.env.AZUMIO_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: "API key not set in environment variables" });
+    }
+
+    const response = await fetch("https://api.azumio.com/v2/calories/estimate", {
       method: "POST",
-      headers: { "Authorization": `Bearer ${AZUMIO_KEY}` },
-      body: formData
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/octet-stream"
+      },
+      body: req.file.buffer
     });
-    const data = await response.json();
-    if (!data || !data.items) throw new Error("No response from API");
 
-    const totalCalories = data.items.reduce((sum, item) => sum + (item.calories || 0), 0);
-    const names = data.items.map(i => i.name).join(", ");
+    const result = await response.json();
+    res.json(result);
 
-    res.json({ calories: totalCalories, description: names });
-  } catch (err) {
-    console.error(err);
-    res.json({ error: "Analysis failed" });
+  } catch (error) {
+    console.error("❌ Server error:", error);
+    res.status(500).json({ error: "Failed to analyze image" });
   }
 });
 
-app.listen(PORT, () => console.log(`Convert Labs proxy running on port ${PORT}`));
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
