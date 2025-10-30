@@ -4,54 +4,199 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calorie Calculator - Convert Labs</title>
+
+  <!-- 🌐 Meta -->
+  <meta name="description" content="Estimate calories from food photos or ingredients. Convert Labs Calorie Calculator uses AI to analyze meals instantly." />
+  <meta name="author" content="Convert Labs" />
+
+  <!-- 🎨 Main Stylesheet -->
   <link rel="stylesheet" href="/assets/style.css" />
+
+  <!-- 💰 Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
+
+  <!-- 📊 Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX'); // ← replace with your GA4 ID
+  </script>
+
+  <!-- 🖋 Inline Style for responsiveness & layout -->
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background: #f5f7fa;
+      color: #222;
+    }
+    header {
+      background: #123ba0;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+      font-size: 15px;
+    }
+    nav a.active {
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    main {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    h2 {
+      color: #123ba0;
+      margin-top: 0;
+      text-align: center;
+    }
+    button {
+      background: #123ba0;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #0f2f84;
+    }
+    #photoPreview img {
+      max-width: 200px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    #photoResult, #manualResult {
+      background: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #f0f0f0;
+      text-align: left;
+    }
+    footer {
+      text-align: center;
+      background: #123ba0;
+      color: white;
+      padding: 15px 10px;
+      margin-top: 40px;
+      font-size: 14px;
+    }
+    .mode-buttons {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .mode-buttons button.active {
+      background: #ff9800;
+    }
+    @media (max-width: 600px) {
+      main {
+        margin: 10px;
+        padding: 15px;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        margin-top: 8px;
+      }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- 🧭 Header -->
   <header>
-    <div class="nav">
-      <h1>Convert Labs</h1>
-      <nav>
-        <a href="/tools/currency.html">Currency Converter</a>
-        <a href="/tools/image-converter.html">Image Converter</a>
-        <a class="active" href="/tools/calorie-calculator.html">Calorie Calculator</a>
-      </nav>
-    </div>
+    <h1>Convert Labs</h1>
+    <nav>
+      <a href="/tools/currency-converter.html">Currency Converter</a>
+      <a href="/tools/image-converter.html">Image Converter</a>
+      <a href="/tools/calorie-calculator.html" class="active">Calorie Calculator</a>
+    </nav>
   </header>
 
+  <!-- 🧮 Main Section -->
   <main>
-    <section class="tool-container">
-      <h2>Calorie Calculator</h2>
-      <p>Estimate the calories in your meal by uploading a photo or entering ingredients manually.</p>
+    <h2>Calorie Calculator</h2>
+    <p style="text-align:center;">Estimate the calories in your meal by uploading a photo or entering ingredients manually.</p>
 
-      <!-- Toggle buttons -->
-      <div style="margin: 15px 0;">
-        <button id="photoModeBtn">📸 Take or Upload Photo</button>
-        <button id="manualModeBtn">🥗 Enter Ingredients Manually</button>
-      </div>
+    <div class="mode-buttons">
+      <button id="photoModeBtn" class="active">📸 Take or Upload Photo</button>
+      <button id="manualModeBtn">🥗 Enter Ingredients Manually</button>
+    </div>
 
-      <!-- Photo Upload Section -->
-      <div id="photoSection" style="display:block;">
+    <!-- Photo Upload Section -->
+    <section id="photoSection">
+      <div style="text-align:center;">
         <input type="file" id="mealPhoto" accept="image/*" />
-        <button id="analyzePhotoBtn">Analyze Photo</button>
-
-        <div id="photoPreview" style="margin-top:15px;"></div>
-        <div id="photoResult" style="margin-top:15px;"></div>
+        <button id="analyzePhotoBtn" style="margin-top:10px;">Analyze Photo</button>
       </div>
+      <div id="photoPreview" style="text-align:center; margin-top:10px;"></div>
+      <div id="photoResult"></div>
+    </section>
 
-      <!-- Manual Entry Section -->
-      <div id="manualSection" style="display:none;">
-        <div id="ingredientList" style="margin:10px 0;"></div>
-        <button id="addIngredientBtn">➕ Add Ingredient</button>
-        <button id="calculateCaloriesBtn">🧮 Calculate Calories</button>
-        <div id="manualResult" style="margin-top:15px;"></div>
-      </div>
+    <!-- Manual Entry Section -->
+    <section id="manualSection" style="display:none;">
+      <div id="ingredientList" style="margin:10px 0;"></div>
+      <button id="addIngredientBtn">➕ Add Ingredient</button>
+      <button id="calculateCaloriesBtn">🧮 Calculate Calories</button>
+      <div id="manualResult"></div>
     </section>
   </main>
 
+  <!-- 📢 AdSense Ad (optional placement) -->
+  <div style="text-align:center; margin: 25px 0;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- ⚙️ Footer -->
   <footer>
-    <p>© 2025 Convert Labs. All rights reserved.</p>
+    © 2025 Convert Labs. All rights reserved. |
+    <a href="/about.html" style="color:#ffcc00;">About</a> |
+    <a href="/privacy.html" style="color:#ffcc00;">Privacy Policy</a> |
+    <a href="/terms.html" style="color:#ffcc00;">Terms</a>
   </footer>
 
+  <!-- 🧠 Frontend Logic -->
   <script src="/tools/calorie.js"></script>
 </body>
 </html>
