@@ -6,14 +6,14 @@
   <title>Calorie Calculator – Convert Labs</title>
 
   <meta name="description" content="Estimate the calories in a meal by uploading a photo or entering ingredients manually." />
-  <link rel="icon" type="image/png" href="/assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#0033A0" />
+  <link rel="icon" type="image/png" href="../assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
 
-  <!-- Google AdSense (if you use it on pages) -->
+  <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
     crossorigin="anonymous"></script>
 
-  <!-- Google Analytics GA4 -->
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -22,106 +22,84 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- main site CSS: should be in project root -->
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="../style.css" />
 </head>
 
-<body class="light">
-  <!-- Header (same structure as index.html) -->
+<body>
   <header>
     <div class="header-content">
-      <a href="/index.html" class="brand" aria-label="Convert Labs home">
-        <img src="/assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
+      <a href="../index.html" class="brand" aria-label="Convert Labs home">
+        <img src="../assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
         <span class="brand-text">Convert Labs</span>
       </a>
 
       <div class="header-controls">
-        <a href="/contact.html" class="header-btn">Contact Us</a>
+        <a href="../contact.html" class="header-btn">Contact Us</a>
         <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
       </div>
     </div>
-
-    <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
+    <p class="tagline">Welcome to Convert Labs — your smart all-in-one converter</p>
   </header>
 
-  <!-- page-level nav / tool tabs (keeps look consistent) -->
-  <div class="tools-nav">
-    <div class="tools-nav-inner">
-      <a href="/tools/currency-converter.html" class="tool-tab">Currency Converter</a>
-      <a href="/tools/image-converter.html" class="tool-tab">Image Converter</a>
-      <a href="/tools/calorie-calculator.html" class="tool-tab active">Calorie Calculator</a>
-    </div>
+  <!-- Tabs (same look as index.html) -->
+  <div class="tabs">
+    <button onclick="window.location.href='../index.html'">Converters</button>
+    <button onclick="window.location.href='currency-converter.html'">Currency Converter</button>
+    <button onclick="window.location.href='image-converter.html'">Image Converter</button>
+    <button class="active">Calorie Calculator</button>
   </div>
 
-  <!-- Main content area - matches site card style -->
-  <main class="content-section page-content">
-    <div class="card card-large" style="max-width:900px; margin: 2rem auto; padding: 2.25rem;">
-      <h1 style="text-align:center; margin-bottom:0.25rem;">Calorie Calculator</h1>
-      <p style="text-align:center; color:#444; margin-top:0.25rem; margin-bottom:1.25rem;">
-        Estimate calories in your meal by uploading a photo or adding ingredients manually.
-      </p>
+  <main>
+    <section class="converter">
+      <h1>🍽 Calorie Calculator</h1>
+      <p>Estimate calories in your meal by uploading a photo or entering ingredients manually.</p>
 
-      <!-- Action buttons -->
-      <div style="text-align:center; margin-bottom:1rem;">
-        <button id="photoModeBtn" class="btn btn-primary" aria-pressed="false" title="Upload photo">📷 Take or Upload Photo</button>
-        <button id="manualModeBtn" class="btn btn-outline" aria-pressed="false" title="Manual input">🥗 Enter Ingredients Manually</button>
+      <div style="text-align:center;margin-bottom:1.2rem;">
+        <button id="photoModeBtn" class="header-btn">📷 Upload Photo</button>
+        <button id="manualModeBtn" class="header-btn">🥗 Manual Input</button>
       </div>
 
-      <!-- Photo mode section -->
-      <section id="photoSection" style="display:block; text-align:center;">
-        <div style="margin: 0 auto 1rem; max-width:520px;">
-          <input id="mealPhoto" type="file" accept="image/*" style="display:inline-block" />
-          <button id="analyzePhotoBtn" class="btn btn-primary" style="margin-left:0.6rem;">Analyze Photo</button>
+      <!-- Photo Mode -->
+      <div id="photoSection">
+        <input id="mealPhoto" type="file" accept="image/*" />
+        <button id="analyzePhotoBtn" class="header-btn" style="margin-top:8px;">Analyze Photo</button>
+        <div id="photoPreview" style="margin-top:1rem;"></div>
+        <div id="photoResult" class="calorie-result" style="margin-top:1rem;font-weight:600;"></div>
+      </div>
+
+      <!-- Manual Mode -->
+      <div id="manualSection" style="display:none;margin-top:1rem;">
+        <div id="ingredientList" style="display:flex;flex-direction:column;gap:8px;align-items:center;"></div>
+
+        <div style="margin-top:1rem;">
+          <button id="addIngredientBtn" class="header-btn">➕ Add Ingredient</button>
+          <button id="calculateCaloriesBtn" class="header-btn">Calculate</button>
         </div>
 
-        <div id="photoPreview" style="text-align:center; margin-bottom:0.75rem;">
-          <!-- preview inserted by calorie.js -->
-        </div>
+        <div id="manualResult" class="calorie-result" style="margin-top:1rem;font-weight:600;"></div>
+      </div>
 
-        <div id="photoResult" class="calorie-result" style="text-align:center; font-weight:600; color:#111; margin-top:0.6rem;">
-          <!-- result text inserted by calorie.js -->
-        </div>
-      </section>
-
-      <!-- Manual entry section -->
-      <section id="manualSection" style="display:none; margin-top:1rem;">
-        <div id="ingredientList" style="display:flex; flex-direction:column; gap:8px; align-items:center;">
-          <!-- rows will be appended here by calorie.js -->
-        </div>
-
-        <div style="text-align:center; margin-top:1rem;">
-          <button id="addIngredientBtn" class="btn btn-outline">➕ Add Ingredient</button>
-          <button id="calculateCaloriesBtn" class="btn btn-primary" style="margin-left:0.6rem;">Calculate Total Calories</button>
-        </div>
-
-        <div id="manualResult" class="calorie-result" style="text-align:center; margin-top:1rem; font-weight:600;"></div>
-      </section>
-
-      <!-- small help / privacy line -->
-      <p style="text-align:center; margin-top:1.1rem; color:#666; font-size:0.95rem;">
-        Images are sent to our backend for analysis. We do not store your images permanently.
+      <p style="margin-top:1rem;color:var(--text-color);font-size:0.9rem;">
+        🔒 Images are processed securely and not stored permanently.
       </p>
-    </div>
+    </section>
   </main>
 
-  <!-- Footer (same structure as index.html) -->
   <footer>
     <div class="footer-brand">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <span class="footer-text">Convert Labs</span>
     </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
     <div class="footer-links">
-      <a href="/about.html">About</a> |
-      <a href="/how-to.html">Guides</a> |
-      <a href="/privacy.html">Privacy Policy</a> |
-      <a href="/terms.html">Terms of Use</a> |
-      <a href="/index.html">Home</a>
+      <a href="../about.html">About</a> |
+      <a href="../privacy.html">Privacy</a> |
+      <a href="../terms.html">Terms</a> |
+      <a href="../contact.html">Contact</a>
     </div>
   </footer>
 
-  <!-- page scripts: load global site script first, then calorie module -->
-  <script src="/script.js"></script>
-  <script src="/tools/calorie.js"></script>
+  <script src="../script.js"></script>
+  <script src="../tools/calorie.js"></script>
 </body>
 </html>
