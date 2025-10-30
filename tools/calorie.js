@@ -1,7 +1,9 @@
 // ==========================================
-// Calorie Calculator — Fast Edition (MobileNet + Spinner + Fallback)
+// Calorie Calculator — Fast Free API Edition
+// Using Calorie Ninjas + Open Food Facts
 // ==========================================
 
+// === DOM Elements ===
 const photoBtn = document.getElementById("photoModeBtn");
 const manualBtn = document.getElementById("manualModeBtn");
 const photoSection = document.getElementById("photoSection");
@@ -15,149 +17,156 @@ const calcCaloriesBtn = document.getElementById("calculateCaloriesBtn");
 const manualResult = document.getElementById("manualResult");
 const ingredientList = document.getElementById("ingredientList");
 
-let model = null;
+// === Your free API key from https://api-ninjas.com/profile
+const CALORIE_NINJAS_KEY = "YOUR_API_NINJAS_KEY_HERE";
 
-// === Spinner styles (light + dark mode) ===
-const spinnerStyle = document.createElement("style");
-spinnerStyle.textContent = `
-@keyframes spin { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
-.spinner {
-  width:40px;height:40px;
-  border:4px solid rgba(150,150,150,0.3);
-  border-top-color: var(--accent-color, #1e40af);
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-}
-body.dark-mode .spinner {
-  border:4px solid rgba(255,255,255,0.15);
-  border-top-color:#fff;
-}
-`;
-document.head.appendChild(spinnerStyle);
-
-function showSpinner(message="Loading...") {
-  photoResult.innerHTML = `
-    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-      <div class="spinner"></div>
-      <p style="font-weight:600;color:var(--text-color);text-align:center;">${message}</p>
-    </div>`;
-}
-function hideSpinner(){ photoResult.innerHTML = ""; }
-
-// === Switch modes ===
-photoBtn.onclick = () => { manualSection.style.display="none"; photoSection.style.display="block"; };
-manualBtn.onclick = () => { photoSection.style.display="none"; manualSection.style.display="block"; };
-
-// === Preview + compress image ===
-photoInput.onchange = async (e)=>{
-  const file=e.target.files[0];
-  if(!file)return;
-  const img=document.createElement("img");
-  img.src=URL.createObjectURL(file);
-  img.id="previewImg";
-  img.style.maxWidth="240px";img.style.borderRadius="8px";
-  photoPreview.innerHTML="";photoPreview.appendChild(img);
-  const compressed=await compressImage(file,800);
-  img.dataset.compressed=URL.createObjectURL(compressed);
+// === Mode switching ===
+photoBtn.onclick = () => {
+  manualSection.style.display = "none";
+  photoSection.style.display = "block";
 };
-async function compressImage(file,max){
-  const img=await createImageBitmap(file);
-  const c=document.createElement("canvas");
-  const s=Math.min(max/img.width,max/img.height,1);
-  c.width=img.width*s;c.height=img.height*s;
-  c.getContext("2d").drawImage(img,0,0,c.width,c.height);
-  return new Promise(r=>c.toBlob(b=>r(new File([b],file.name,{type:"image/jpeg"})),"image/jpeg",0.8));
-}
+manualBtn.onclick = () => {
+  photoSection.style.display = "none";
+  manualSection.style.display = "block";
+};
 
-// === Lazy-load lightweight MobileNet model ===
-async function loadModel(){
-  showSpinner("Loading quick analysis model…");
-  model = await tf.loadGraphModel(
-    "https://tfhub.dev/google/imagenet/mobilenet_v3_small_100_224/classification/5",
-    { fromTFHub:true }
-  );
-  hideSpinner();
-}
+// === Preview uploaded image and ask for food name ===
+photoInput.onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(file);
+  img.id = "previewImg";
+  img.style.maxWidth = "240px";
+  img.style.borderRadius = "8px";
+  photoPreview.innerHTML = "";
+  photoPreview.appendChild(img);
 
-// === Analyze photo ===
-analyzeBtn.onclick = async ()=>{
-  const file=photoInput.files[0];
-  if(!file)return alert("Please upload a meal photo first.");
-  if(!model) await loadModel();
+  // Extract hint from file name
+  const guess = file.name.split(".")[0].replace(/[-_]/g, " ");
+  photoResult.innerHTML = `
+    <p style="margin-top:10px;">Detected file name: <b>${guess}</b></p>
+    <label>What food is in this photo?</label><br>
+    <input id="foodNameInput" value="${guess}" style="padding:6px;border-radius:6px;width:200px;">
+  `;
+};
 
-  showSpinner("Analyzing photo (5s)…");
-  const imgEl=document.getElementById("previewImg");
-  const src=imgEl.dataset.compressed||imgEl.src;
-  const img=await createImageBitmap(await fetch(src).then(r=>r.blob()));
-  const c=document.createElement("canvas");
-  const ctx=c.getContext("2d");
-  c.width=224;c.height=224;
-  ctx.drawImage(img,0,0,224,224);
-  const tensor=tf.browser.fromPixels(c).toFloat().div(255).expandDims();
+// === Analyze using Calorie Ninjas + Open Food Facts ===
+analyzeBtn.onclick = async () => {
+  const input = document.getElementById("foodNameInput");
+  if (!input) return alert("Please upload a photo first.");
+  const query = input.value.trim();
+  if (!query) return alert("Please enter the food name.");
 
-  // Time limit: 15s
-  const resultPromise = model.predict(tensor).data();
-  const preds = await Promise.race([
-    resultPromise,
-    new Promise((_,reject)=>setTimeout(()=>reject("timeout"),15000))
-  ]).catch(()=>null);
+  showSpinner("Analyzing nutrition data…");
 
-  if(!preds){
-    photoResult.innerHTML=`⏱ Too slow to analyze this image.<br><br>
-      <b>Tip:</b> Try smaller photo or type food name manually below.`;
+  const data = await getCaloriesFromNinjas(query);
+  if (data) {
+    displayNutrition(data, "Calorie Ninjas");
     return;
   }
 
-  const idx = preds.indexOf(Math.max(...preds));
-  const label = IMAGENET_CLASSES[idx] || "food";
-  showSpinner(`🍽 Detected: <b>${label}</b><br>Fetching nutrition info…`);
-  fetchNutrition(label);
+  const fallback = await getFromOpenFoodFacts(query);
+  if (fallback) {
+    displayNutrition(fallback, "Open Food Facts");
+  } else {
+    photoResult.innerHTML = `⚠️ No data found for <b>${query}</b>. Try a different name.`;
+  }
 };
 
-// === Nutrition lookup (USDA free API) ===
-async function fetchNutrition(foodName){
-  try{
-    const apiKey="DEMO_KEY"; // replace with your free FoodData Central key
-    const url=`https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(foodName)}&pageSize=1&api_key=${apiKey}`;
-    const res=await fetch(url);const data=await res.json();
-    const food=data.foods?.[0];if(!food) throw 0;
-    const n={};food.foodNutrients.forEach(f=>n[f.nutrientName]=f.value);
-    photoResult.innerHTML=`
-      <h3>${food.description}</h3>
-      <p>Calories: ${n["Energy"]||0} kcal</p>
-      <p>Protein: ${n["Protein"]||0} g</p>
-      <p>Carbs: ${n["Carbohydrate, by difference"]||0} g</p>
-      <p>Fat: ${n["Total lipid (fat)"]||0} g</p>`;
-  }catch(e){
-    photoResult.innerHTML=`⚠️ Couldn't find nutrition data.<br>
-      Please type food manually below.`;
+// === Spinner ===
+function showSpinner(text) {
+  photoResult.innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <div style="width:40px;height:40px;border:4px solid #ddd;border-top-color:#1e40af;border-radius:50%;animation:spin 1s linear infinite;margin:10px 0;"></div>
+      <p>${text}</p>
+    </div>
+  `;
+}
+const style = document.createElement("style");
+style.textContent = "@keyframes spin {from{transform:rotate(0deg)}to{transform:rotate(360deg)}}";
+document.head.appendChild(style);
+
+// === Call Calorie Ninjas API ===
+async function getCaloriesFromNinjas(food) {
+  try {
+    const res = await fetch(
+      `https://api.api-ninjas.com/v1/nutrition?query=${encodeURIComponent(food)}`,
+      { headers: { "X-Api-Key": CY71CYQzW/IPaj4uZ7adgw==ZVWd8maEsi8V5Rri } }
+    );
+    if (!res.ok) throw new Error("API error");
+    const arr = await res.json();
+    if (!arr || !arr.length) return null;
+    const item = arr[0];
+    return {
+      name: item.name,
+      calories: item.calories,
+      protein: item.protein_g,
+      carbs: item.carbohydrates_total_g,
+      fat: item.fat_total_g,
+    };
+  } catch (err) {
+    console.warn("Ninjas API failed", err);
+    return null;
   }
 }
 
-// === Manual input ===
-function addIngredientRow(n="",g=""){
-  const r=document.createElement("div");
-  r.style.margin="5px";
-  r.innerHTML=`<input type="text" placeholder="Ingredient" value="${n}">
-  <input type="number" placeholder="Weight (g)" value="${g}">
-  <button class="removeBtn">❌</button>`;
-  r.querySelector(".removeBtn").onclick=()=>r.remove();
-  ingredientList.appendChild(r);
+// === Call Open Food Facts API as fallback ===
+async function getFromOpenFoodFacts(food) {
+  try {
+    const res = await fetch(
+      `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(
+        food
+      )}&search_simple=1&action=process&json=1`
+    );
+    const data = await res.json();
+    if (!data.products?.length) return null;
+    const p = data.products[0];
+    return {
+      name: p.product_name || food,
+      calories: p.nutriments["energy-kcal_100g"] || 0,
+      protein: p.nutriments.proteins_100g || 0,
+      carbs: p.nutriments.carbohydrates_100g || 0,
+      fat: p.nutriments.fat_100g || 0,
+    };
+  } catch (err) {
+    console.warn("Open Food Facts failed", err);
+    return null;
+  }
 }
-addIngredientRow("chicken",150);addIngredientRow("rice",100);
-addIngredientBtn.onclick=()=>addIngredientRow();
-calcCaloriesBtn.onclick=()=>{
-  const rows=ingredientList.querySelectorAll("div");let total=0;
-  rows.forEach(r=>{
-    const g=parseFloat(r.querySelector("input[type='number']").value)||0;
-    total+=g*1.3;
-  });
-  manualResult.textContent=`Total Calories: ${Math.round(total)} kcal`;
-};
 
-// === Simplified ImageNet foodish labels ===
-const IMAGENET_CLASSES={
-  924:"pizza",934:"rice",967:"hamburger",961:"hotdog",963:"broccoli",
-  953:"banana",956:"apple",969:"ice cream",975:"burrito",979:"omelet",
-  978:"cupcake",948:"strawberry",925:"plate of food"
+// === Display nutrition results ===
+function displayNutrition(data, source) {
+  photoResult.innerHTML = `
+    <h3>${data.name}</h3>
+    <p>Calories: ${data.calories.toFixed(0)} kcal</p>
+    <p>Protein: ${data.protein.toFixed(1)} g</p>
+    <p>Carbs: ${data.carbs.toFixed(1)} g</p>
+    <p>Fat: ${data.fat.toFixed(1)} g</p>
+    <p style="font-size:12px;color:gray;">Data source: ${source}</p>
+  `;
+}
+
+// === Manual input mode (unchanged) ===
+function addIngredientRow(name = "", grams = "") {
+  const row = document.createElement("div");
+  row.style.margin = "5px";
+  row.innerHTML = `
+    <input type="text" placeholder="Ingredient" value="${name}">
+    <input type="number" placeholder="Weight (g)" value="${grams}">
+    <button class="removeBtn">❌</button>`;
+  row.querySelector(".removeBtn").onclick = () => row.remove();
+  ingredientList.appendChild(row);
+}
+addIngredientRow("chicken", 150);
+addIngredientRow("rice", 100);
+addIngredientBtn.onclick = () => addIngredientRow();
+calcCaloriesBtn.onclick = () => {
+  const rows = ingredientList.querySelectorAll("div");
+  let total = 0;
+  rows.forEach((r) => {
+    const g = parseFloat(r.querySelector("input[type='number']").value) || 0;
+    total += g * 1.3;
+  });
+  manualResult.textContent = `Total Calories: ${Math.round(total)} kcal`;
 };
