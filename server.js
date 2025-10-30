@@ -1,11 +1,10 @@
 // ==========================================
-// server.js - Convert Labs Calorie Proxy (Azumio 403 Fixed Version)
+// server.js - Convert Labs Calorie Proxy (Official Calorie Mama API)
 // ==========================================
 import express from "express";
 import cors from "cors";
 import multer from "multer";
 import fetch from "node-fetch";
-import FormData from "form-data";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -18,10 +17,9 @@ app.use(express.json());
 
 // ✅ Health check
 app.get("/", (req, res) => {
-  res.send("✅ Convert Labs Calorie Proxy is running successfully!");
+  res.send("✅ Convert Labs Calorie Proxy is live and using Calorie Mama API!");
 });
 
-// ✅ Calorie recognition route
 app.post("/api/calories", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
@@ -33,19 +31,17 @@ app.post("/api/calories", upload.single("image"), async (req, res) => {
       return res.status(500).json({ error: "Missing AZUMIO_API_KEY in environment" });
     }
 
-    // ✅ Construct form data
+    const endpoint = `https://api-2445582032290.production.gw.apicast.io/v1/foodrecognition?user_key=${apiKey}`;
+
+    // ✅ Send as multipart form with key "media"
     const formData = new FormData();
-    formData.append("image", req.file.buffer, {
+    formData.append("media", req.file.buffer, {
       filename: req.file.originalname || "meal.jpg",
       contentType: req.file.mimetype,
     });
 
-    // ✅ Use the correct header format for free developer keys
-    const response = await fetch("https://api.azumio.com/v1/foodrecognition/analyze", {
+    const response = await fetch(endpoint, {
       method: "POST",
-      headers: {
-        "X-Azumio-Api-Key": apiKey,
-      },
       body: formData,
     });
 
@@ -55,17 +51,21 @@ app.post("/api/calories", upload.single("image"), async (req, res) => {
       return res.status(response.status).json({ error: "Azumio API error", details: text });
     }
 
-    // ✅ Parse the result safely
     let data = {};
     try { data = JSON.parse(text); } catch (err) {
       console.warn("⚠️ Could not parse JSON:", text);
     }
 
-    console.log("✅ Azumio Response:", data);
+    console.log("✅ Calorie Mama API Response:", data);
+
+    // ✅ Parse simplified summary
+    const food = data.results?.[0]?.items?.[0];
+    const calories = food?.nutrition?.calories || 0;
+    const name = food?.name || "meal";
 
     res.json({
-      calories: data?.summary?.totalCalories || data?.totalCalories || 0,
-      description: data?.foods?.map(f => f.name).join(", ") || "meal",
+      calories,
+      description: name,
     });
 
   } catch (err) {
@@ -74,5 +74,6 @@ app.post("/api/calories", upload.single("image"), async (req, res) => {
   }
 });
 
+// ✅ Start server
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`🚀 Proxy running on port ${port}`));
