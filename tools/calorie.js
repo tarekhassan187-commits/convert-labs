@@ -1,5 +1,5 @@
 // ==========================================
-// Calorie Calculator — Food-101 (Optimized Free Edition)
+// Calorie Calculator — Food-101 (Final Free Edition)
 // ==========================================
 
 // === DOM Elements ===
@@ -16,7 +16,7 @@ const calcCaloriesBtn = document.getElementById("calculateCaloriesBtn");
 const manualResult = document.getElementById("manualResult");
 const ingredientList = document.getElementById("ingredientList");
 
-let model = null; // will load lazily
+let model = null;
 
 // ==============================
 // MODE SWITCHING
@@ -31,13 +31,38 @@ manualBtn.onclick = () => {
 };
 
 // ==============================
+// SPINNER UTILITIES
+// ==============================
+function showSpinner(message = "Loading...") {
+  photoResult.innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div class="spinner" style="
+        width:40px;height:40px;border:4px solid #ddd;border-top-color:#1e40af;
+        border-radius:50%;animation:spin 1s linear infinite;margin:10px 0;">
+      </div>
+      <p style="color:var(--text-color);font-weight:600;">${message}</p>
+    </div>
+  `;
+}
+
+function hideSpinner() {
+  photoResult.innerHTML = "";
+}
+
+// Add CSS animation for spinner
+const spinnerStyle = document.createElement("style");
+spinnerStyle.textContent = `
+@keyframes spin { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+`;
+document.head.appendChild(spinnerStyle);
+
+// ==============================
 // IMAGE PREVIEW + COMPRESSION
 // ==============================
 photoInput.onchange = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  // Create preview
   const img = document.createElement("img");
   img.src = URL.createObjectURL(file);
   img.id = "previewImg";
@@ -46,12 +71,10 @@ photoInput.onchange = async (e) => {
   photoPreview.innerHTML = "";
   photoPreview.appendChild(img);
 
-  // Compress/rescale image before analysis (keep under 800 px)
   const compressed = await compressImage(file, 800);
   img.dataset.compressed = URL.createObjectURL(compressed);
 };
 
-// Compress uploaded photo for faster inference
 async function compressImage(file, maxSize) {
   const img = await createImageBitmap(file);
   const canvas = document.createElement("canvas");
@@ -70,15 +93,15 @@ async function compressImage(file, maxSize) {
 }
 
 // ==============================
-// MODEL LOADING (lazy)
+// MODEL LOADING (Lazy)
 // ==============================
 async function loadModel() {
-  photoResult.innerHTML = "⏳ Loading Food-101 model (first use)…";
+  showSpinner("Loading Food-101 model (first time)...");
   model = await tf.loadGraphModel(
     "https://tfhub.dev/google/food_classifier/1",
     { fromTFHub: true }
   );
-  photoResult.innerHTML = "";
+  hideSpinner();
 }
 
 // ==============================
@@ -88,13 +111,10 @@ analyzeBtn.onclick = async () => {
   const file = photoInput.files[0];
   if (!file) return alert("Please upload a meal photo first.");
 
-  // Lazy-load the model on first use
   if (!model) await loadModel();
 
-  // Wait a moment so UI updates before heavy work
+  showSpinner("Analyzing photo...");
   await new Promise((r) => setTimeout(r, 100));
-
-  photoResult.innerHTML = "🔍 Analyzing image…";
 
   const imgEl = document.getElementById("previewImg");
   const src = imgEl.dataset.compressed || imgEl.src;
@@ -114,8 +134,8 @@ analyzeBtn.onclick = async () => {
   const topIdx = preds.indexOf(Math.max(...preds));
   const foodName = FOOD_CLASSES[topIdx] || "food";
 
-  photoResult.innerHTML = `🍽 <b>${foodName}</b><br>Fetching nutrition info…`;
-  fetchNutrition(foodName);
+  showSpinner(`Detected <b>${foodName}</b><br>Fetching nutrition info...`);
+  await fetchNutrition(foodName);
 };
 
 // ==============================
@@ -123,7 +143,7 @@ analyzeBtn.onclick = async () => {
 // ==============================
 async function fetchNutrition(foodName) {
   try {
-    const apiKey = "DEMO_KEY"; // replace with your free key from fdc.nal.usda.gov
+    const apiKey = fy5rirXbJrdpYty9MBRYAQl1VsTUEhiRIpSPqkmE ; // replace with your free key from fdc.nal.usda.gov
     const url = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(
       foodName
     )}&pageSize=1&api_key=${apiKey}`;
@@ -149,7 +169,7 @@ async function fetchNutrition(foodName) {
 }
 
 // ==============================
-// MANUAL INPUT MODE (same logic)
+// MANUAL INPUT MODE
 // ==============================
 function addIngredientRow(name = "", grams = "") {
   const row = document.createElement("div");
