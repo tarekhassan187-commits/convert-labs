@@ -1,219 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calorie Calculator - Convert Labs</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calorie Calculator - Convert Labs</title>
 
-  <!-- 🌐 Meta -->
-  <meta name="description" content="Estimate calories from food photos or ingredients. Convert Labs Calorie Calculator uses AI to analyze meals instantly." />
-  <meta name="author" content="Convert Labs" />
+<!-- Global CSS -->
+<link rel="stylesheet" href="style.css" />
+<link rel="icon" href="/assets/favicon.png" />
 
-  <!-- 🎨 Main Stylesheet -->
-  <link rel="stylesheet" href="style.css" />
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
-   <!-- ✅ SEO -->
-  <meta name="description" content="Convert Labs is your free, all-in-one online converter for length, temperature, volume, container, kitchen, currency, and images. Fast, accurate, and easy to use." />
-  <meta name="keywords" content="unit converter, length converter, temperature converter, volume calculator, kitchen converter, currency converter, image converter, Convert Labs" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://convertlabs.online" />
-
-  <!-- ✅ Favicon -->
-  <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-
-  <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-    crossorigin="anonymous"></script>
-
-  <!-- ✅ Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P');
-  </script>
-
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- 🖋 Inline Style for responsiveness & layout -->
-  <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      margin: 0;
-      background: #f5f7fa;
-      color: #222;
-    }
-    header {
-      background: #123ba0;
-      color: white;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 600;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 15px;
-      font-size: 15px;
-    }
-    nav a.active {
-      text-decoration: underline;
-      font-weight: 600;
-    }
-    main {
-      max-width: 800px;
-      margin: 30px auto;
-      background: #fff;
-      border-radius: 10px;
-      padding: 25px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    }
-    h2 {
-      color: #123ba0;
-      margin-top: 0;
-      text-align: center;
-    }
-    button {
-      background: #123ba0;
-      color: #fff;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    button:hover {
-      background: #0f2f84;
-    }
-    #photoPreview img {
-      max-width: 200px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-    #photoResult, #manualResult {
-      background: #f9f9f9;
-      border: 1px solid #eee;
-      border-radius: 8px;
-      padding: 10px;
-      margin-top: 15px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background: #f0f0f0;
-      text-align: left;
-    }
-    footer {
-      text-align: center;
-      background: #123ba0;
-      color: white;
-      padding: 15px 10px;
-      margin-top: 40px;
-      font-size: 14px;
-    }
-    .mode-buttons {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .mode-buttons button.active {
-      background: #ff9800;
-    }
-    @media (max-width: 600px) {
-      main {
-        margin: 10px;
-        padding: 15px;
-      }
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      nav {
-        margin-top: 8px;
-      }
-    }
-  </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XXXXXXXXXX');
+</script>
 </head>
 <body>
 
-  <!-- 🧭 Header -->
-  <header>
+<header class="site-header">
+  <div class="logo">
+    <img src="/assets/logo.png" alt="Convert Labs" height="40" />
     <h1>Convert Labs</h1>
-    <nav>
-    
-  </header>
- <!-- Tabs -->
-<div class="tabs">
-  <button onclick="showConverter('length')">Length</button>
-  <button onclick="showConverter('temperature')">Temperature</button>
-  <button onclick="showConverter('volume')">Volume</button>
-  <button onclick="showConverter('container')">Container Volume</button>
-  <button onclick="showConverter('kitchen')">Kitchen</button>
-  <button onclick="window.location.href='tools/tools.html'">Tools</button>
-</div>
-  <!-- 🧮 Main Section -->
-  <main>
-    <h2>Calorie Calculator</h2>
-    <p style="text-align:center;">Estimate the calories in your meal by uploading a photo or entering ingredients manually.</p>
+  </div>
+  <nav>
+    <a href="/tools/currency-converter.html">Currency Converter</a>
+    <a href="/tools/image-converter.html">Image Converter</a>
+    <a href="/tools/calorie-calculator.html" class="active">Calorie Calculator</a>
+  </nav>
+</header>
 
-    <div class="mode-buttons">
-      <button id="photoModeBtn" class="active">📸 Take or Upload Photo</button>
-      <button id="manualModeBtn">🥗 Enter Ingredients Manually</button>
-    </div>
+<main class="tool-container">
+  <h2>Calorie Calculator</h2>
+  <p>Estimate calories in your meal by uploading a food photo or adding ingredients manually.</p>
 
-    <!-- Photo Upload Section -->
-    <section id="photoSection">
-      <div style="text-align:center;">
-        <input type="file" id="mealPhoto" accept="image/*" />
-        <button id="analyzePhotoBtn" style="margin-top:10px;">Analyze Photo</button>
-      </div>
-      <div id="photoPreview" style="text-align:center; margin-top:10px;"></div>
-      <div id="photoResult"></div>
-    </section>
-
-    <!-- Manual Entry Section -->
-    <section id="manualSection" style="display:none;">
-      <div id="ingredientList" style="margin:10px 0;"></div>
-      <button id="addIngredientBtn">➕ Add Ingredient</button>
-      <button id="calculateCaloriesBtn">🧮 Calculate Calories</button>
-      <div id="manualResult"></div>
-    </section>
-  </main>
-
-  <!-- 📢 AdSense Ad (optional placement) -->
-  <div style="text-align:center; margin: 25px 0;">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
-         data-ad-slot="1234567890"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  <div class="mode-buttons">
+    <button id="photoModeBtn" class="active">📸 Upload Photo</button>
+    <button id="manualModeBtn">🥗 Manual Input</button>
   </div>
 
-  <!-- ⚙️ Footer -->
-  <footer>
-    © 2025 Convert Labs. All rights reserved. |
-    <a href="/about.html" style="color:#ffcc00;">About</a> |
-    <a href="/privacy.html" style="color:#ffcc00;">Privacy Policy</a> |
-    <a href="/terms.html" style="color:#ffcc00;">Terms</a>
-  </footer>
+  <section id="photoSection">
+    <input type="file" id="mealPhoto" accept="image/*" />
+    <button id="analyzePhotoBtn">Analyze Photo</button>
+    <div id="photoPreview"></div>
+    <div id="photoResult"></div>
+  </section>
 
-  <!-- 🧠 Frontend Logic -->
-  <script src="/tools/calorie.js"></script>
+  <section id="manualSection" style="display:none;">
+    <div id="ingredientList"></div>
+    <button id="addIngredientBtn">Add Ingredient</button>
+    <button id="calculateCaloriesBtn">Calculate Calories</button>
+    <div id="manualResult"></div>
+  </section>
+
+  <div class="ads">
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
+      data-ad-slot="1234567890"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p>© 2025 Convert Labs | <a href="/privacy.html">Privacy</a> | <a href="/terms.html">Terms</a></p>
+</footer>
+
+<script src="/tools/calorie.js"></script>
 </body>
 </html>
