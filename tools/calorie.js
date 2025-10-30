@@ -76,7 +76,7 @@ analyzeBtn.onclick = async () => {
 // ===== Fetch nutrition from FoodData Central =====
 async function fetchNutrition(foodName) {
   try {
-    const apiKey = "DEMO_KEY"; // replace with your free key from fdc.nal.usda.gov
+    const apiKey = fy5rirXbJrdpYty9MBRYAQl1VsTUEhiRIpSPqkmE; // replace with your free key from fdc.nal.usda.gov
     const url = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(
       foodName
     )}&pageSize=1&api_key=${apiKey}`;
