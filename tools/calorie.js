@@ -1,6 +1,7 @@
 // ==========================================
 // Calorie Calculator Script (v2)
 // ==========================================
+Connect calorie calculator to Render API
 
 // ✅ Backend endpoint on Render
 const apiUrl = "https://convert-labs.onrender.com/api/calories";
