@@ -1,5 +1,5 @@
 // ==========================================
-// Convert Labs Calorie Proxy (with Smart Sanity Filter)
+// Convert Labs Calorie Proxy (improved normalization)
 // ==========================================
 
 import express from "express";
@@ -11,51 +11,37 @@ import dotenv from "dotenv";
 import sharp from "sharp";
 
 dotenv.config();
-
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
+
 app.use(cors());
 app.use(express.json());
 
-// ✅ Health check
 app.get("/", (req, res) => {
-  res.send("✅ Convert Labs proxy is online with smart calorie correction!");
+  res.send("✅ Convert Labs calorie proxy online");
 });
 
-// ==========================================
-// 🧠 Main Endpoint
-// ==========================================
 app.post("/api/calories", upload.single("image"), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No image uploaded" });
-    }
+    if (!req.file) return res.status(400).json({ error: "No image uploaded" });
 
     const apiKey = process.env.AZUMIO_API_KEY;
-    if (!apiKey) {
-      return res.status(500).json({ error: "Missing AZUMIO_API_KEY" });
-    }
+    if (!apiKey) return res.status(500).json({ error: "Missing AZUMIO_API_KEY" });
 
-    // ✅ Resize image automatically
+    // Resize to reasonable size (server-side) but allow images larger than 544
     const resizedBuffer = await sharp(req.file.buffer)
-      .resize({
-        width: 544,
-        height: 544,
-        fit: "inside",
-        withoutEnlargement: true
-      })
-      .jpeg({ quality: 90 })
+      .resize({ width: 1024, height: 1024, fit: "inside", withoutEnlargement: true })
+      .jpeg({ quality: 88 })
       .toBuffer();
 
     const formData = new FormData();
+    // CalorieMama expects field "media" (or "file") depending on doc — staying with "media"
     formData.append("media", resizedBuffer, {
       filename: req.file.originalname || "meal.jpg",
       contentType: "image/jpeg"
     });
 
     const endpoint = `https://api-2445582032290.production.gw.apicast.io/v1/foodrecognition?user_key=${apiKey}`;
-
-    console.log("📤 Sending image to Calorie Mama API...");
 
     const response = await fetch(endpoint, {
       method: "POST",
@@ -65,79 +51,80 @@ app.post("/api/calories", upload.single("image"), async (req, res) => {
 
     const text = await response.text();
     if (!response.ok) {
-      console.error("❌ Azumio API Error:", response.status, text);
+      console.error("Azumio API Error:", response.status, text);
       return res.status(response.status).json({ error: "Azumio API error", details: text });
     }
 
-    let data = {};
+    let data;
     try {
       data = JSON.parse(text);
-    } catch {
-      console.warn("⚠️ Could not parse JSON from Azumio:", text);
+    } catch (e) {
+      console.warn("Could not parse JSON from Azumio:", e, text);
+      return res.status(500).json({ error: "Invalid API response", details: text });
     }
 
-    const items = data.results?.[0]?.items || [];
+    const items = data?.results?.[0]?.items || [];
     if (items.length === 0) {
-      return res.json({
-        calories: 0,
-        description: "No recognizable food detected"
-      });
+      return res.json({ calories: 0, description: "No recognizable food detected" });
     }
 
-    // --- Aggregate results ---
-    let totalCalories = 0;
-    const descriptions = [];
+    // --- Aggregate raw calories for logging
+    const rawPerItem = items.map(i => ({
+      name: i?.name || "food",
+      calories: Number(i?.nutrition?.calories || 0)
+    }));
+    const rawTotal = rawPerItem.reduce((s, it) => s + it.calories, 0);
 
-    for (const item of items) {
-      const cal = item?.nutrition?.calories || 0;
-      const name = item?.name || "food";
-      totalCalories += cal;
-      descriptions.push(name);
+    // ============================
+    // Improved normalization logic
+    // ============================
+    // 1) Per-item clamp to avoid one item blowing everything up
+    const PER_ITEM_CAP = 1200; // max calories we accept per recognized item (adjustable)
+    const clampedPerItem = rawPerItem.map(it => ({
+      name: it.name,
+      original: it.calories,
+      clamped: Math.min(it.calories, PER_ITEM_CAP)
+    }));
+
+    let adjustedTotal = clampedPerItem.reduce((s, it) => s + it.clamped, 0);
+
+    // 2) If still unrealistic total (very large), scale down proportionally
+    const ABSOLUTE_HIGH = 4000; // anything > this is definitely too high for a single plate
+    const TARGET_TOP = 1200; // target upper bound if we must scale
+
+    let wasAdjusted = false;
+
+    if (adjustedTotal > ABSOLUTE_HIGH) {
+      // scale proportionally to bring the total into a reasonable range but keep proportions
+      const scaleFactor = TARGET_TOP / adjustedTotal; // <1
+      adjustedTotal = Math.round(adjustedTotal * scaleFactor);
+      wasAdjusted = true;
     }
 
-    console.log("📊 Raw API calories:", totalCalories);
-
-    // ==========================================
-    // ✅ Smart Sanity Check (auto-correction)
-    // ==========================================
-    // Realistic meal range: 150 – 1500 kcal (rarely 2500)
-    // If API gives absurdly high numbers (e.g., 10,000+), we correct proportionally.
-    let adjustedCalories = totalCalories;
-
-    if (totalCalories > 2500) {
-      // Heuristic correction: normalize to a realistic meal size
-      const scaleFactor = 800 / totalCalories; // aim near 800 kcal for large meals
-      adjustedCalories = Math.round(totalCalories * scaleFactor);
-
-      console.warn(
-        `⚠️ Unrealistic calorie count (${totalCalories} kcal). Adjusted to ${adjustedCalories} kcal.`
-      );
+    // 3) If extremely low (maybe API returned per-ingredient per-gram or something)
+    if (adjustedTotal < 120) {
+      adjustedTotal = 150 + Math.round(Math.random() * 80); // small boost
+      wasAdjusted = true;
     }
 
-    if (adjustedCalories < 100) {
-      // Avoid extremely low calorie readings for visible meals
-      adjustedCalories = 150 + Math.round(Math.random() * 100);
-    }
+    // Logging for debugging
+    console.log("Raw per-item:", rawPerItem);
+    console.log("Clamped per-item:", clampedPerItem);
+    console.log("Raw total:", rawTotal, "Adjusted total:", adjustedTotal, "WasAdjusted:", wasAdjusted);
 
-    console.log("✅ Final adjusted calories:", adjustedCalories);
+    const description = clampedPerItem.map(it => it.name).join(", ");
 
-    // Send result
-    res.json({
-      calories: adjustedCalories,
-      description: descriptions.join(", ") || "meal",
-      note:
-        totalCalories !== adjustedCalories
-          ? "(Auto-corrected for realistic portion size)"
-          : undefined
+    return res.json({
+      calories: adjustedTotal,
+      description: description || "meal",
+      adjusted: wasAdjusted ? true : false,
+      rawTotal
     });
   } catch (err) {
-    console.error("❌ Proxy Error:", err);
-    res.status(500).json({ error: "Internal server error", details: err.message });
+    console.error("Proxy Error:", err);
+    return res.status(500).json({ error: "Internal error", details: err.message });
   }
 });
 
-// ==========================================
-// 🚀 Server Start
-// ==========================================
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`🚀 Convert Labs smart proxy running on port ${port}`));
+const port = Number(process.env.PORT || 10000); // render binds random port; use env/auto
+app.listen(port, () => console.log(`Proxy running on port ${port}`));
