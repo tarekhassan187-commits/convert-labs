@@ -1,6 +1,6 @@
 // ==========================================
 // Calorie Calculator — Fast Free API Edition
-// Using Calorie Ninjas + Open Food Facts
+// With Smart Auto-Guess + Dropdown
 // ==========================================
 
 // === DOM Elements ===
@@ -20,6 +20,13 @@ const ingredientList = document.getElementById("ingredientList");
 // === Your free API key from https://api-ninjas.com/profile
 const CALORIE_NINJAS_KEY = "YOUR_API_NINJAS_KEY_HERE";
 
+// === Common food dropdown suggestions ===
+const COMMON_FOODS = [
+  "pizza","burger","pasta","rice","salad","sushi","sandwich","chicken",
+  "steak","fish","tacos","fries","ice cream","cake","curry","soup","eggs",
+  "bread","pancakes","falafel","shawarma","kebab","noodles","burrito","wrap"
+];
+
 // === Mode switching ===
 photoBtn.onclick = () => {
   manualSection.style.display = "none";
@@ -30,7 +37,7 @@ manualBtn.onclick = () => {
   manualSection.style.display = "block";
 };
 
-// === Preview uploaded image and ask for food name ===
+// === Preview uploaded image and get guess ===
 photoInput.onchange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -42,36 +49,39 @@ photoInput.onchange = (e) => {
   photoPreview.innerHTML = "";
   photoPreview.appendChild(img);
 
-  // Extract hint from file name
-  const guess = file.name.split(".")[0].replace(/[-_]/g, " ");
+  // Try to guess from file name if meaningful
+  let guess = file.name.split(".")[0].replace(/[-_]/g, " ").trim().toLowerCase();
+  if (/^(img|pxl|dsc|photo|202|jpg|jpeg|png|\d+|\W)/i.test(guess)) guess = "";
+
+  // Build a dropdown list
+  const dropdown = COMMON_FOODS.map(
+    (f) => `<option value="${f}">${f}</option>`
+  ).join("");
+
   photoResult.innerHTML = `
-    <p style="margin-top:10px;">Detected file name: <b>${guess}</b></p>
-    <label>What food is in this photo?</label><br>
-    <input id="foodNameInput" value="${guess}" style="padding:6px;border-radius:6px;width:200px;">
+    <label style="display:block;margin-top:10px;">What food is in this photo?</label>
+    <input id="foodNameInput" list="foodList" value="${guess}" 
+      placeholder="e.g., pizza, salad, rice" 
+      style="padding:6px;border-radius:6px;width:220px;">
+    <datalist id="foodList">${dropdown}</datalist>
   `;
 };
 
-// === Analyze using Calorie Ninjas + Open Food Facts ===
+// === Analyze with Calorie Ninjas + Open Food Facts fallback ===
 analyzeBtn.onclick = async () => {
   const input = document.getElementById("foodNameInput");
   if (!input) return alert("Please upload a photo first.");
   const query = input.value.trim();
-  if (!query) return alert("Please enter the food name.");
+  if (!query) return alert("Please enter or choose the food name.");
 
   showSpinner("Analyzing nutrition data…");
 
   const data = await getCaloriesFromNinjas(query);
-  if (data) {
-    displayNutrition(data, "Calorie Ninjas");
-    return;
-  }
+  if (data) return displayNutrition(data, "Calorie Ninjas");
 
   const fallback = await getFromOpenFoodFacts(query);
-  if (fallback) {
-    displayNutrition(fallback, "Open Food Facts");
-  } else {
-    photoResult.innerHTML = `⚠️ No data found for <b>${query}</b>. Try a different name.`;
-  }
+  if (fallback) displayNutrition(fallback, "Open Food Facts");
+  else photoResult.innerHTML = `⚠️ No data found for <b>${query}</b>. Try another name.`;
 };
 
 // === Spinner ===
@@ -87,12 +97,12 @@ const style = document.createElement("style");
 style.textContent = "@keyframes spin {from{transform:rotate(0deg)}to{transform:rotate(360deg)}}";
 document.head.appendChild(style);
 
-// === Call Calorie Ninjas API ===
+// === Calorie Ninjas API ===
 async function getCaloriesFromNinjas(food) {
   try {
     const res = await fetch(
       `https://api.api-ninjas.com/v1/nutrition?query=${encodeURIComponent(food)}`,
-      { headers: { "X-Api-Key": CY71CYQzW/IPaj4uZ7adgw==ZVWd8maEsi8V5Rri } }
+      { headers: { "X-Api-Key": "CY71CYQzW/IPaj4uZ7adgw==ZVWd8maEsi8V5Rri" } }
     );
     if (!res.ok) throw new Error("API error");
     const arr = await res.json();
@@ -111,7 +121,7 @@ async function getCaloriesFromNinjas(food) {
   }
 }
 
-// === Call Open Food Facts API as fallback ===
+// === Open Food Facts fallback ===
 async function getFromOpenFoodFacts(food) {
   try {
     const res = await fetch(
@@ -135,7 +145,7 @@ async function getFromOpenFoodFacts(food) {
   }
 }
 
-// === Display nutrition results ===
+// === Display Nutrition Results ===
 function displayNutrition(data, source) {
   photoResult.innerHTML = `
     <h3>${data.name}</h3>
@@ -143,11 +153,11 @@ function displayNutrition(data, source) {
     <p>Protein: ${data.protein.toFixed(1)} g</p>
     <p>Carbs: ${data.carbs.toFixed(1)} g</p>
     <p>Fat: ${data.fat.toFixed(1)} g</p>
-    <p style="font-size:12px;color:gray;">Data source: ${source}</p>
+    <p style="font-size:12px;color:gray;">Source: ${source}</p>
   `;
 }
 
-// === Manual input mode (unchanged) ===
+// === Manual Input Mode (unchanged) ===
 function addIngredientRow(name = "", grams = "") {
   const row = document.createElement("div");
   row.style.margin = "5px";
