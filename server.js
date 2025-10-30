@@ -38,7 +38,7 @@ app.post("/api/calories", upload.single("image"), async (req, res) => {
     const response = await fetch("https://api.azumio.com/v2/foodrecognition", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
+        "Authorization": `Token ${apiKey}`,
         "Content-Type": "application/octet-stream"
       },
       body: req.file.buffer
