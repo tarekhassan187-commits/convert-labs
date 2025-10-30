@@ -16,8 +16,8 @@ app.use(express.static("."));
 // API route to handle photo analysis
 app.post("/api/calories", upload.single("image"), async (req, res) => {
   try {
-    if (!req.file) return res.json({ error: "No image received"
-req.file.buffer, { filename: req.file.originalname });
+    const formData = new FormData();
+    formData.append("image", req.file.buffer, { filename: req.file.originalname });
     const response = await fetch("https://api-portal.azumio.com/v1/foodrecognition", {
       method: "POST",
       headers: { "Authorization": `Bearer ${AZUMIO_KEY}` },
