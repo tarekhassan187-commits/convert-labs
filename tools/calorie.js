@@ -1,27 +1,28 @@
 // ==========================================
-// Calorie Calculator Frontend (v4)
+// Calorie Calculator Frontend (v5)
 // ==========================================
 
-// Backend proxy endpoint on Render
-const apiUrl = "https://convert-labs.onrender.com/api/calories";
+// ===== CONFIG =====
+const VISION_API_KEY = "YOUR_GOOGLE_VISION_API_KEY";
+const EDAMAM_APP_ID = "YOUR_EDAMAM_APP_ID";
+const EDAMAM_APP_KEY = "YOUR_EDAMAM_APP_KEY";
+const fallbackApi = "https://convert-labs.onrender.com/api/calories";
 
-// === DOM Elements ===
+// ===== DOM ELEMENTS =====
 const photoBtn = document.getElementById("photoModeBtn");
 const manualBtn = document.getElementById("manualModeBtn");
 const photoSection = document.getElementById("photoSection");
 const manualSection = document.getElementById("manualSection");
-
 const photoInput = document.getElementById("mealPhoto");
 const analyzeBtn = document.getElementById("analyzePhotoBtn");
 const photoPreview = document.getElementById("photoPreview");
 const photoResult = document.getElementById("photoResult");
-
 const addIngredientBtn = document.getElementById("addIngredientBtn");
 const calcCaloriesBtn = document.getElementById("calculateCaloriesBtn");
 const manualResult = document.getElementById("manualResult");
 const ingredientList = document.getElementById("ingredientList");
 
-// === Mode switching ===
+// ===== MODE SWITCHING =====
 photoBtn.addEventListener("click", () => {
   manualSection.style.display = "none";
   photoSection.style.display = "block";
@@ -36,82 +37,129 @@ manualBtn.addEventListener("click", () => {
   photoBtn.classList.remove("active");
 });
 
-// === Preview uploaded photo ===
+// ===== PHOTO PREVIEW =====
 photoInput.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const img = document.createElement("img");
   img.src = URL.createObjectURL(file);
-  img.style.maxWidth = "220px";
+  img.style.maxWidth = "240px";
   img.style.borderRadius = "8px";
   photoPreview.innerHTML = "";
   photoPreview.appendChild(img);
 });
 
-// === Analyze uploaded image ===
-analyzeBtn.addEventListener("click", async () => {
+// ===== MAIN ANALYZE FUNCTION =====
+async function analyzeImage() {
   const file = photoInput.files[0];
   if (!file) return alert("Please upload a meal photo first.");
 
-  const formData = new FormData();
-  formData.append("image", file);
-  photoResult.innerHTML = "Analyzing photo...";
+  photoResult.innerHTML = "⏳ Analyzing photo... please wait.";
 
   try {
-    const res = await fetch(apiUrl, { method: "POST", body: formData });
-    const data = await res.json();
+    const base64 = await fileToBase64(file);
 
-    if (data.error) throw new Error(data.error);
+    // Step 1: Use Google Vision to detect foods
+    const visionRes = await fetch(
+      `https://vision.googleapis.com/v1/images:annotate?key=${VISION_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requests: [
+            {
+              image: { content: base64 },
+              features: [{ type: "LABEL_DETECTION", maxResults: 6 }],
+            },
+          ],
+        }),
+      }
+    );
 
-    let html = `<h3>🍽 Estimated total: ${data.calories} kcal</h3>
-      <div style="display:flex;gap:15px;margin:10px 0;font-size:15px">
-        <div>🔥 <b>${data.calories}</b> kcal</div>
-        <div>🥩 <b>${data.protein}</b> g Protein</div>
-        <div>🌾 <b>${data.carbs}</b> g Carbs</div>
-        <div>🥑 <b>${data.fat}</b> g Fat</div>
-      </div>`;
+    const visionData = await visionRes.json();
+    const labels = visionData.responses?.[0]?.labelAnnotations || [];
+    if (!labels.length) throw new Error("No food items detected.");
 
-    if (data.adjusted) {
-      html += `<p style="color:#b45f06;font-size:13px;">⚠️ Adjusted for realistic portion size</p>`;
-    }
+    const ingredients = labels
+      .map((l) => l.description)
+      .filter((word) =>
+        /(food|meal|dish|chicken|rice|meat|bread|salad|egg|pasta|fish|fruit|vegetable|burger|soup|pizza|cheese|potato)/i.test(
+          word
+        )
+      )
+      .slice(0, 5)
+      .join(", ");
 
-    if (data.breakdown?.length) {
-      html += `
-      <table style="width:100%;border-collapse:collapse;margin-top:10px;font-size:14px;">
-        <thead style="background:#f8f8f8;">
-          <tr>
-            <th style="text-align:left;padding:6px;">Food</th>
-            <th style="text-align:right;padding:6px;">Calories</th>
-            <th style="text-align:right;padding:6px;">Protein</th>
-            <th style="text-align:right;padding:6px;">Carbs</th>
-            <th style="text-align:right;padding:6px;">Fat</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${data.breakdown
-            .map(
-              (i) => `
-            <tr>
-              <td style="padding:6px;">${i.name}</td>
-              <td style="text-align:right;">${i.calories} kcal</td>
-              <td style="text-align:right;">${i.protein} g</td>
-              <td style="text-align:right;">${i.carbs} g</td>
-              <td style="text-align:right;">${i.fat} g</td>
-            </tr>`
-            )
-            .join("")}
-        </tbody>
-      </table>`;
-    }
+    if (!ingredients) throw new Error("No recognizable foods found in image.");
 
-    photoResult.innerHTML = html;
+    // Step 2: Send ingredients to Edamam Nutrition API
+    const edamamUrl = `https://api.edamam.com/api/nutrition-data?app_id=${EDAMAM_APP_ID}&app_key=${EDAMAM_APP_KEY}&ingr=${encodeURIComponent(
+      ingredients
+    )}`;
+
+    const nutriRes = await fetch(edamamUrl);
+    const nutriData = await nutriRes.json();
+
+    if (!nutriData.calories) throw new Error("No nutrition data received.");
+
+    // Step 3: Display result nicely
+    displayResult({
+      calories: nutriData.calories,
+      protein: nutriData.totalNutrients.PROCNT?.quantity.toFixed(1) || 0,
+      carbs: nutriData.totalNutrients.CHOCDF?.quantity.toFixed(1) || 0,
+      fat: nutriData.totalNutrients.FAT?.quantity.toFixed(1) || 0,
+      detected: ingredients,
+    });
   } catch (err) {
-    console.error(err);
-    photoResult.textContent = "❌ Could not analyze photo. Please try again later.";
-  }
-});
+    console.warn("Error analyzing photo:", err);
 
-// === Manual Input Section ===
+    // Fallback to your backend
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch(fallbackApi, { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.calories) {
+        displayResult(data);
+      } else {
+        throw new Error("Fallback failed too");
+      }
+    } catch (err2) {
+      photoResult.innerHTML =
+        "❌ Sorry, we couldn’t analyze this photo. Please try again later.";
+    }
+  }
+}
+
+// Convert file → Base64
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// Display results in formatted layout
+function displayResult(data) {
+  photoResult.innerHTML = `
+    <div style="background:var(--card-bg);border-radius:12px;padding:1rem;box-shadow:0 2px 8px var(--shadow-color);">
+      <h3>🍽 Estimated Total: ${Math.round(data.calories)} kcal</h3>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:0.5rem;">
+        <div>🥩 Protein: <b>${data.protein}</b> g</div>
+        <div>🌾 Carbs: <b>${data.carbs}</b> g</div>
+        <div>🥑 Fat: <b>${data.fat}</b> g</div>
+      </div>
+      ${
+        data.detected
+          ? `<p style="margin-top:0.8rem;font-size:0.9rem;color:var(--text-color);">Detected ingredients: ${data.detected}</p>`
+          : ""
+      }
+    </div>`;
+}
+
+// ===== Manual Input Section =====
 function addIngredientRow(name = "", grams = "") {
   const row = document.createElement("div");
   row.style.margin = "5px";
@@ -130,18 +178,14 @@ addIngredientRow("rice", 100);
 
 addIngredientBtn.addEventListener("click", () => addIngredientRow());
 
-// Example calorie data
+// Basic lookup table (as fallback)
 const sampleCalories = {
   rice: 1.3,
-  "cooked rice": 1.3,
   chicken: 1.65,
-  steak: 2.5,
   potato: 0.77,
   broccoli: 0.34,
-  salad: 0.2,
   pasta: 1.31,
   egg: 1.55,
-  milk: 0.64,
   butter: 7.17,
   bread: 2.65,
   cheese: 4.02,
@@ -160,3 +204,6 @@ calcCaloriesBtn.addEventListener("click", () => {
   });
   manualResult.textContent = `Total Calories: ${Math.round(total)} kcal`;
 });
+
+// Bind analyze button
+analyzeBtn.addEventListener("click", analyzeImage);
