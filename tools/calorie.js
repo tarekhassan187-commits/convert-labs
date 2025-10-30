@@ -1,14 +1,7 @@
 // ==========================================
-// Calorie Calculator Frontend (v5)
+// Calorie Calculator — Food-101 Offline Edition
 // ==========================================
 
-// ===== CONFIG =====
-const VISION_API_KEY = "YOUR_GOOGLE_VISION_API_KEY";
-const EDAMAM_APP_ID = "YOUR_EDAMAM_APP_ID";
-const EDAMAM_APP_KEY = "YOUR_EDAMAM_APP_KEY";
-const fallbackApi = "https://convert-labs.onrender.com/api/calories";
-
-// ===== DOM ELEMENTS =====
 const photoBtn = document.getElementById("photoModeBtn");
 const manualBtn = document.getElementById("manualModeBtn");
 const photoSection = document.getElementById("photoSection");
@@ -22,188 +15,133 @@ const calcCaloriesBtn = document.getElementById("calculateCaloriesBtn");
 const manualResult = document.getElementById("manualResult");
 const ingredientList = document.getElementById("ingredientList");
 
-// ===== MODE SWITCHING =====
-photoBtn.addEventListener("click", () => {
+let model;
+
+// ===== Load Food-101 TF.js model =====
+async function loadModel() {
+  photoResult.innerHTML = "⏳ Loading Food-101 model...";
+  // hosted community TF.js model converted from Food-101 (mobile-optimized)
+  model = await tf.loadGraphModel(
+    "https://tfhub.dev/google/food_classifier/1",
+    { fromTFHub: true }
+  );
+  photoResult.innerHTML = "";
+}
+loadModel();
+
+// ===== Switch modes =====
+photoBtn.onclick = () => {
   manualSection.style.display = "none";
   photoSection.style.display = "block";
-  photoBtn.classList.add("active");
-  manualBtn.classList.remove("active");
-});
-
-manualBtn.addEventListener("click", () => {
+};
+manualBtn.onclick = () => {
   photoSection.style.display = "none";
   manualSection.style.display = "block";
-  manualBtn.classList.add("active");
-  photoBtn.classList.remove("active");
-});
+};
 
-// ===== PHOTO PREVIEW =====
-photoInput.addEventListener("change", (e) => {
+// ===== Preview uploaded image =====
+photoInput.onchange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const img = document.createElement("img");
   img.src = URL.createObjectURL(file);
+  img.id = "previewImg";
   img.style.maxWidth = "240px";
   img.style.borderRadius = "8px";
   photoPreview.innerHTML = "";
   photoPreview.appendChild(img);
-});
+};
 
-// ===== MAIN ANALYZE FUNCTION =====
-async function analyzeImage() {
+// ===== Analyze image locally =====
+analyzeBtn.onclick = async () => {
   const file = photoInput.files[0];
   if (!file) return alert("Please upload a meal photo first.");
+  if (!model) return alert("Model not ready yet, please wait a few seconds.");
 
-  photoResult.innerHTML = "⏳ Analyzing photo... please wait.";
+  const imgEl = document.getElementById("previewImg");
+  const tensor = tf.browser.fromPixels(imgEl)
+    .resizeNearestNeighbor([224, 224])
+    .toFloat()
+    .div(255)
+    .expandDims();
 
+  const preds = await model.predict(tensor).data();
+  const topIdx = preds.indexOf(Math.max(...preds));
+  const foodName = FOOD_CLASSES[topIdx] || "food";
+
+  photoResult.innerHTML = `🍽 <b>${foodName}</b><br>Fetching nutrition info...`;
+  fetchNutrition(foodName);
+};
+
+// ===== Fetch nutrition from FoodData Central =====
+async function fetchNutrition(foodName) {
   try {
-    const base64 = await fileToBase64(file);
+    const apiKey = "DEMO_KEY"; // replace with your free key from fdc.nal.usda.gov
+    const url = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(
+      foodName
+    )}&pageSize=1&api_key=${apiKey}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const food = data.foods?.[0];
+    if (!food) throw new Error("No nutrition found");
 
-    // Step 1: Use Google Vision to detect foods
-    const visionRes = await fetch(
-      `https://vision.googleapis.com/v1/images:annotate?key=${VISION_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          requests: [
-            {
-              image: { content: base64 },
-              features: [{ type: "LABEL_DETECTION", maxResults: 6 }],
-            },
-          ],
-        }),
-      }
-    );
+    const nutrients = {};
+    food.foodNutrients.forEach((n) => (nutrients[n.nutrientName] = n.value));
 
-    const visionData = await visionRes.json();
-    const labels = visionData.responses?.[0]?.labelAnnotations || [];
-    if (!labels.length) throw new Error("No food items detected.");
-
-    const ingredients = labels
-      .map((l) => l.description)
-      .filter((word) =>
-        /(food|meal|dish|chicken|rice|meat|bread|salad|egg|pasta|fish|fruit|vegetable|burger|soup|pizza|cheese|potato)/i.test(
-          word
-        )
-      )
-      .slice(0, 5)
-      .join(", ");
-
-    if (!ingredients) throw new Error("No recognizable foods found in image.");
-
-    // Step 2: Send ingredients to Edamam Nutrition API
-    const edamamUrl = `https://api.edamam.com/api/nutrition-data?app_id=${EDAMAM_APP_ID}&app_key=${EDAMAM_APP_KEY}&ingr=${encodeURIComponent(
-      ingredients
-    )}`;
-
-    const nutriRes = await fetch(edamamUrl);
-    const nutriData = await nutriRes.json();
-
-    if (!nutriData.calories) throw new Error("No nutrition data received.");
-
-    // Step 3: Display result nicely
-    displayResult({
-      calories: nutriData.calories,
-      protein: nutriData.totalNutrients.PROCNT?.quantity.toFixed(1) || 0,
-      carbs: nutriData.totalNutrients.CHOCDF?.quantity.toFixed(1) || 0,
-      fat: nutriData.totalNutrients.FAT?.quantity.toFixed(1) || 0,
-      detected: ingredients,
-    });
+    photoResult.innerHTML = `
+      <h3>${food.description}</h3>
+      <p>Calories: ${nutrients["Energy"] || 0} kcal</p>
+      <p>Protein: ${nutrients["Protein"] || 0} g</p>
+      <p>Carbs: ${nutrients["Carbohydrate, by difference"] || 0} g</p>
+      <p>Fat: ${nutrients["Total lipid (fat)"] || 0} g</p>`;
   } catch (err) {
-    console.warn("Error analyzing photo:", err);
-
-    // Fallback to your backend
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-      const res = await fetch(fallbackApi, { method: "POST", body: formData });
-      const data = await res.json();
-      if (data.calories) {
-        displayResult(data);
-      } else {
-        throw new Error("Fallback failed too");
-      }
-    } catch (err2) {
-      photoResult.innerHTML =
-        "❌ Sorry, we couldn’t analyze this photo. Please try again later.";
-    }
+    console.error(err);
+    photoResult.innerHTML =
+      "⚠️ Unable to get nutrition data. Try manual input instead.";
   }
 }
 
-// Convert file → Base64
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(",")[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-// Display results in formatted layout
-function displayResult(data) {
-  photoResult.innerHTML = `
-    <div style="background:var(--card-bg);border-radius:12px;padding:1rem;box-shadow:0 2px 8px var(--shadow-color);">
-      <h3>🍽 Estimated Total: ${Math.round(data.calories)} kcal</h3>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:0.5rem;">
-        <div>🥩 Protein: <b>${data.protein}</b> g</div>
-        <div>🌾 Carbs: <b>${data.carbs}</b> g</div>
-        <div>🥑 Fat: <b>${data.fat}</b> g</div>
-      </div>
-      ${
-        data.detected
-          ? `<p style="margin-top:0.8rem;font-size:0.9rem;color:var(--text-color);">Detected ingredients: ${data.detected}</p>`
-          : ""
-      }
-    </div>`;
-}
-
-// ===== Manual Input Section =====
+// ===== Manual input (same as before) =====
 function addIngredientRow(name = "", grams = "") {
   const row = document.createElement("div");
   row.style.margin = "5px";
   row.innerHTML = `
-    <input type="text" placeholder="Ingredient (e.g., rice)" value="${name}">
+    <input type="text" placeholder="Ingredient" value="${name}">
     <input type="number" placeholder="Weight (g)" value="${grams}">
-    <button class="removeBtn">❌</button>
-  `;
-  row.querySelector(".removeBtn").addEventListener("click", () => row.remove());
+    <button class="removeBtn">❌</button>`;
+  row.querySelector(".removeBtn").onclick = () => row.remove();
   ingredientList.appendChild(row);
 }
-
-// Default rows
 addIngredientRow("chicken", 150);
 addIngredientRow("rice", 100);
-
-addIngredientBtn.addEventListener("click", () => addIngredientRow());
-
-// Basic lookup table (as fallback)
-const sampleCalories = {
-  rice: 1.3,
-  chicken: 1.65,
-  potato: 0.77,
-  broccoli: 0.34,
-  pasta: 1.31,
-  egg: 1.55,
-  butter: 7.17,
-  bread: 2.65,
-  cheese: 4.02,
-};
-
-// Manual calorie calculation
-calcCaloriesBtn.addEventListener("click", () => {
+addIngredientBtn.onclick = () => addIngredientRow();
+calcCaloriesBtn.onclick = () => {
   const rows = ingredientList.querySelectorAll("div");
   let total = 0;
   rows.forEach((r) => {
-    const name = r.querySelector("input[type='text']").value.trim().toLowerCase();
-    const grams = parseFloat(r.querySelector("input[type='number']").value) || 0;
-    if (sampleCalories[name]) {
-      total += sampleCalories[name] * grams;
-    }
+    const g = parseFloat(r.querySelector("input[type='number']").value) || 0;
+    total += g * 1.3;
   });
   manualResult.textContent = `Total Calories: ${Math.round(total)} kcal`;
-});
+};
 
-// Bind analyze button
-analyzeBtn.addEventListener("click", analyzeImage);
+// ===== Food-101 label list (short version for demo) =====
+const FOOD_CLASSES = [
+  "apple pie","baby back ribs","baklava","beef carpaccio","beef tartare",
+  "beet salad","beignets","bibimbap","bread pudding","breakfast burrito",
+  "bruschetta","caesar salad","cheesecake","chicken curry","chicken quesadilla",
+  "chicken wings","chocolate cake","chocolate mousse","clam chowder","club sandwich",
+  "crab cakes","creme brulee","cup cakes","deviled eggs","donuts","dumplings",
+  "edamame","eggs benedict","falafel","filet mignon","fish and chips","foie gras",
+  "french fries","french onion soup","french toast","fried calamari","fried rice",
+  "frozen yogurt","garlic bread","gnocchi","greek salad","grilled cheese sandwich",
+  "grilled salmon","guacamole","gyoza","hamburger","hot and sour soup","hot dog",
+  "huevos rancheros","ice cream","lasagna","lobster bisque","lobster roll sandwich",
+  "macaroni and cheese","macarons","miso soup","mussels","nachos","omelet",
+  "onion rings","oysters","pad thai","paella","pancakes","panna cotta","peking duck",
+  "pho","pizza","pork chop","poutine","prime rib","pulled pork sandwich","ramen",
+  "ravioli","red velvet cake","risotto","samosa","sashimi","scallops","seaweed salad",
+  "shrimp and grits","spaghetti bolognese","spaghetti carbonara","spring rolls",
+  "steak","strawberry shortcake","sushi","tacos","takoyaki","tiramisu","tuna tartare",
+  "waffles"
+];
