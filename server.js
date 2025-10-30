@@ -1,11 +1,11 @@
 // ==========================================
-// server.js - Render proxy for Azumio Calorie API
+// server.js - Convert Labs Calorie Proxy (Final Fixed Version)
 // ==========================================
-
 import express from "express";
 import cors from "cors";
 import multer from "multer";
 import fetch from "node-fetch";
+import FormData from "form-data";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -16,53 +16,65 @@ const upload = multer({ storage: multer.memoryStorage() });
 app.use(cors());
 app.use(express.json());
 
-// ✅ Root route for quick health check
+// ✅ Health check
 app.get("/", (req, res) => {
   res.send("✅ Convert Labs Calorie Proxy is running successfully!");
 });
 
-// ✅ Calorie Analysis Proxy Endpoint
+// ✅ Main API endpoint
 app.post("/api/calories", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: "No image file uploaded" });
+      return res.status(400).json({ error: "No image uploaded" });
     }
 
     const apiKey = process.env.AZUMIO_API_KEY;
     if (!apiKey) {
-      console.error("❌ Missing AZUMIO_API_KEY in environment variables");
+      console.error("❌ Missing AZUMIO_API_KEY");
       return res.status(500).json({ error: "Server misconfiguration" });
     }
 
-    // ✅ Use Azumio endpoint for food recognition
-    const response = await fetch("https://api.azumio.com/v2/foodrecognition", {
+    // ✅ Prepare multipart data
+    const formData = new FormData();
+    formData.append("image", req.file.buffer, {
+      filename: req.file.originalname || "meal.jpg",
+      contentType: req.file.mimetype,
+    });
+
+    // ✅ Correct Azumio endpoint for API key authentication
+    const response = await fetch("https://api.azumio.com/v1/foodrecognition/analyze", {
       method: "POST",
       headers: {
         "Authorization": `Token ${apiKey}`,
-        "Content-Type": "application/octet-stream"
       },
-      body: req.file.buffer
+      body: formData,
     });
 
+    const text = await response.text();
     if (!response.ok) {
-      const errText = await response.text();
-      console.error("❌ Azumio API Error:", response.status, errText);
-      return res.status(response.status).json({ error: "Azumio API request failed", details: errText });
+      console.error("❌ Azumio API Error:", response.status, text);
+      return res.status(response.status).json({ error: "Azumio API error", details: text });
     }
 
-    const data = await response.json();
-    console.log("✅ Azumio API response received:", data);
+    // ✅ Parse JSON safely
+    let data = {};
+    try { data = JSON.parse(text); } catch (err) {
+      console.error("⚠️ Could not parse JSON:", text);
+    }
+
+    console.log("✅ Azumio Response:", data);
 
     res.json({
-      calories: data?.totalCalories || 0,
-      description: data?.foodName || "meal"
+      calories: data?.summary?.totalCalories || data?.totalCalories || 0,
+      description: data?.foods?.map(f => f.name).join(", ") || "meal"
     });
 
-  } catch (error) {
-    console.error("❌ Server error:", error);
+  } catch (err) {
+    console.error("❌ Proxy Error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
+// ✅ Port
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`🚀 Proxy server running on port ${port}`));
+app.listen(port, () => console.log(`🚀 Proxy running on port ${port}`));
