@@ -18,7 +18,7 @@ const manualResult = document.getElementById("manualResult");
 const ingredientList = document.getElementById("ingredientList");
 
 // === Your free API key from https://api-ninjas.com/profile
-const CALORIE_NINJAS_KEY = "YOUR_API_NINJAS_KEY_HERE";
+const CALORIE_NINJAS_KEY = "CY71CYQzW/IPaj4uZ7adgw==ZVWd8maEsi8V5Rri";
 
 // === Common food dropdown suggestions ===
 const COMMON_FOODS = [
@@ -102,7 +102,7 @@ async function getCaloriesFromNinjas(food) {
   try {
     const res = await fetch(
       `https://api.api-ninjas.com/v1/nutrition?query=${encodeURIComponent(food)}`,
-      { headers: { "X-Api-Key": "CY71CYQzW/IPaj4uZ7adgw==ZVWd8maEsi8V5Rri" } }
+      { headers: { "X-Api-Key": CALORIE_NINJAS_KEY } }
     );
     if (!res.ok) throw new Error("API error");
     const arr = await res.json();
