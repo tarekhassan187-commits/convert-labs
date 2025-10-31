@@ -257,13 +257,13 @@ calcCaloriesBtn.onclick = () => {
 
 // === Share Function ===
 async function shareResult(summaryText) {
-  const shareText = `${summaryText}\nvia Convert Labs — https://convert-labs.github.io`;
+  const shareText = `${summaryText}\nvia Convert Labs — https://convertlabs.online`;
   try {
     if (navigator.share) {
       await navigator.share({
         title: "My Meal Nutrition",
         text: shareText,
-        url: "https://convert-labs.github.io"
+        url: "https://convertlabs.online"
       });
     } else {
       await navigator.clipboard.writeText(shareText);
@@ -277,7 +277,7 @@ async function shareResult(summaryText) {
 // === Copy site link only ===
 async function copySiteLink() {
   try {
-    await navigator.clipboard.writeText("https://convert-labs.github.io");
+    await navigator.clipboard.writeText("https://convertlabs.online");
     alert("🔗 Site link copied to clipboard!");
   } catch {
     alert("⚠️ Unable to copy link.");
