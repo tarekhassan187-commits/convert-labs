@@ -1,5 +1,5 @@
 // ==========================================
-// Convert Labs Calorie Calculator (Offline + Open Food Facts + AutoComplete)
+// Convert Labs Calorie Calculator (Final Edition)
 // ==========================================
 
 // === DOM Elements ===
@@ -52,42 +52,32 @@ const LOCAL_DB = {
   juice: { calories: 45, protein: 0.7, carbs: 10, fat: 0.1 },
   coffee: { calories: 2, protein: 0.3, carbs: 0, fat: 0 },
   tea: { calories: 1, protein: 0, carbs: 0, fat: 0 },
-  soda: { calories: 41, protein: 0, carbs: 10, fat: 0 }
+  soda: { calories: 41, protein: 0, carbs: 10, fat: 0 },
+  salad: { calories: 20, protein: 1, carbs: 3, fat: 0.2 },
+  mixedvegetables: { calories: 65, protein: 3, carbs: 11, fat: 1 }
 };
 
-// === Switch Modes ===
-photoBtn.onclick = () => {
-  manualSection.style.display = "none";
-  photoSection.style.display = "block";
-};
-manualBtn.onclick = () => {
-  photoSection.style.display = "none";
-  manualSection.style.display = "block";
-};
+// === Animations ===
+const fadeStyle = document.createElement("style");
+fadeStyle.textContent = `
+@keyframes spin {from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes fadeUpBounce {
+  0% { opacity: 0; transform: translateY(20px) scale(0.97); }
+  60% { opacity: 1; transform: translateY(-5px) scale(1.02); }
+  80% { transform: translateY(2px) scale(0.995); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.fade-up { animation: fadeUpBounce 0.8s cubic-bezier(0.22, 1.28, 0.36, 1) both; }
+button:hover { background:#1e40af !important; transform: scale(1.04); }
+button:active { transform: scale(0.96); }
+`;
+document.head.appendChild(fadeStyle);
 
-// === Photo upload preview ===
-photoInput.onchange = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const img = document.createElement("img");
-  img.src = URL.createObjectURL(file);
-  img.id = "previewImg";
-  img.style.maxWidth = "240px";
-  img.style.borderRadius = "8px";
-  photoPreview.innerHTML = "";
-  photoPreview.appendChild(img);
+// === Mode switching ===
+photoBtn.onclick = () => { manualSection.style.display = "none"; photoSection.style.display = "block"; };
+manualBtn.onclick = () => { photoSection.style.display = "none"; manualSection.style.display = "block"; };
 
-  let guess = file.name.split(".")[0].replace(/[-_]/g, " ");
-  if (/^\d+$/.test(guess) || guess.toLowerCase().startsWith("img")) guess = "";
-  photoResult.innerHTML = `
-    <label>What food is in this photo?</label><br>
-    <input id="foodNameInput" value="${guess}" 
-      placeholder="e.g., chicken and rice" 
-      style="padding:6px;border-radius:6px;width:220px;">
-  `;
-};
-
-// === Spinner animation ===
+// === Spinner ===
 function showSpinner(text) {
   photoResult.innerHTML = `
     <div style="display:flex;flex-direction:column;align-items:center;">
@@ -96,25 +86,22 @@ function showSpinner(text) {
       <p>${text}</p>
     </div>`;
 }
-const style = document.createElement("style");
-style.textContent = "@keyframes spin {from{transform:rotate(0deg)}to{transform:rotate(360deg)}}";
-document.head.appendChild(style);
 
-// === Analyze ===
-analyzeBtn.onclick = async () => {
-  const input = document.getElementById("foodNameInput");
-  if (!input) return alert("Please upload a photo first.");
-  let query = input.value.trim().toLowerCase();
-  if (!query || /^\d+$/.test(query)) query = "chicken and rice";
-
-  showSpinner("Analyzing nutrition data…");
-
-  const data = await getFromOpenFoodFacts(query);
-  if (data) return displayNutrition([data], "Open Food Facts");
-
-  const estimate = estimateFromLocalDB(query);
-  if (estimate) return displayNutrition([estimate], "Local Estimate");
-  photoResult.innerHTML = `⚠️ No data found for <b>${query}</b>.`;
+// === Photo Preview ===
+photoInput.onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(file);
+  img.style.maxWidth = "240px"; img.style.borderRadius = "8px";
+  photoPreview.innerHTML = ""; photoPreview.appendChild(img);
+  let guess = file.name.split(".")[0].replace(/[-_]/g, " ");
+  if (/^\d+$/.test(guess) || guess.toLowerCase().startsWith("img")) guess = "";
+  photoResult.innerHTML = `
+    <label>What food is in this photo?</label><br>
+    <input id="foodNameInput" value="${guess}" placeholder="e.g., chicken and rice" 
+    style="padding:6px;border-radius:6px;width:220px;">
+  `;
 };
 
 // === Open Food Facts API ===
@@ -133,22 +120,18 @@ async function getFromOpenFoodFacts(food) {
       carbs: p.nutriments.carbohydrates_100g || 0,
       fat: p.nutriments.fat_100g || 0
     };
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
-// === Local estimate function ===
+// === Local DB fallback ===
 function estimateFromLocalDB(query) {
   const parts = query.split(/,|and/).map(p => p.trim());
-  let total = { name: "", calories: 0, protein: 0, carbs: 0, fat: 0 };
-  let count = 0;
-
+  let total = { name: "", calories: 0, protein: 0, carbs: 0, fat: 0 }, count = 0;
   parts.forEach(word => {
-    const key = word.split(" ")[0];
+    const key = word.replace(/\s/g, "");
     const data = LOCAL_DB[key];
     if (data) {
-      total.name += (count ? ", " : "") + key;
+      total.name += (count ? ", " : "") + word;
       total.calories += data.calories;
       total.protein += data.protein;
       total.carbs += data.carbs;
@@ -160,29 +143,58 @@ function estimateFromLocalDB(query) {
   return total;
 }
 
-// === Display nutrition (with icons + card style) ===
+// === Analyze Button ===
+analyzeBtn.onclick = async () => {
+  const input = document.getElementById("foodNameInput");
+  if (!input) return alert("Please upload a photo first.");
+  let query = input.value.trim().toLowerCase();
+  if (!query || /^\d+$/.test(query)) query = "chicken and rice";
+  showSpinner("Analyzing nutrition data…");
+
+  const data = await getFromOpenFoodFacts(query);
+  if (data && data.name && data.name.toLowerCase().includes(query.split(" ")[0]) && data.calories > 20)
+    return displayNutrition([data], "Open Food Facts");
+
+  const estimate = estimateFromLocalDB(query);
+  if (estimate) return displayNutrition([estimate], "Local Estimate");
+  photoResult.innerHTML = `⚠️ No data found for <b>${query}</b>.`;
+};
+
+// === Unified Display Function (Card + Scroll + Share) ===
 function displayNutrition(items, source) {
   const item = items[0];
+  const prefersDark = document.body.classList.contains("dark") || window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const cardBg = prefersDark ? "#1e293b" : "#f1f5f9";
+  const textColor = prefersDark ? "#f8fafc" : "#0f172a";
+  const subText = prefersDark ? "#94a3b8" : "#475569";
+
+  const summary = `🍽️ ${item.name} — 🔥 ${item.calories.toFixed(0)} kcal | 💪 ${item.protein.toFixed(1)}g protein | 🍞 ${item.carbs.toFixed(1)}g carbs | 🥑 ${item.fat.toFixed(1)}g fat`;
+
   photoResult.innerHTML = `
-    <div style="
-      background:#1e293b;
-      color:white;
+    <div id="nutritionCard" class="fade-up" style="
+      background:${cardBg};
+      color:${textColor};
       padding:15px;
       border-radius:14px;
       box-shadow:0 4px 10px rgba(0,0,0,0.4);
-      max-width:320px;
-      margin:auto;
-      font-size:15px;">
+      max-width:340px;margin:auto;font-size:15px;text-align:left;">
       <h3 style="margin-bottom:10px;">🍽️ ${item.name}</h3>
       <p>🔥 <b>${item.calories.toFixed(0)}</b> kcal</p>
       <p>💪 <b>${item.protein.toFixed(1)}</b> g protein</p>
       <p>🍞 <b>${item.carbs.toFixed(1)}</b> g carbs</p>
       <p>🥑 <b>${item.fat.toFixed(1)}</b> g fat</p>
-      <p style="font-size:12px;color:#94a3b8;margin-top:5px;">Source: ${source}</p>
+      <p style="font-size:12px;color:${subText};margin-top:5px;">Source: ${source}</p>
+      <button onclick="shareResult('${summary}')" style="margin-top:10px;padding:8px 14px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;">📤 Share Result</button>
+      <button onclick="copySiteLink()" style="margin-left:6px;padding:8px 12px;background:#1e40af;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;">🔗 Copy Link</button>
     </div>`;
+
+  setTimeout(() => {
+    const card = document.getElementById("nutritionCard");
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 700);
 }
 
-// === Manual mode ===
+// === Manual Section ===
 function addIngredientRow(name = "", grams = "") {
   const row = document.createElement("div");
   row.style.margin = "6px";
@@ -203,7 +215,7 @@ calcCaloriesBtn.onclick = () => {
   rows.forEach(r => {
     const food = r.querySelector("input[type=text]").value.toLowerCase().trim();
     const grams = parseFloat(r.querySelector("input[type=number]").value) || 100;
-    const item = LOCAL_DB[food];
+    const item = LOCAL_DB[food.replace(/\s/g, "")];
     if (item) {
       total.calories += item.calories * (grams / 100);
       total.protein += item.protein * (grams / 100);
@@ -211,25 +223,68 @@ calcCaloriesBtn.onclick = () => {
       total.fat += item.fat * (grams / 100);
     }
   });
+
+  const prefersDark = document.body.classList.contains("dark") || window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const cardBg = prefersDark ? "#1e293b" : "#f1f5f9";
+  const textColor = prefersDark ? "#f8fafc" : "#0f172a";
+  const subText = prefersDark ? "#94a3b8" : "#475569";
+
+  const summary = `🍱 Total Meal — 🔥 ${total.calories.toFixed(0)} kcal | 💪 ${total.protein.toFixed(1)}g protein | 🍞 ${total.carbs.toFixed(1)}g carbs | 🥑 ${total.fat.toFixed(1)}g fat`;
+
   manualResult.innerHTML = `
-    <div style="
-      background:#1e293b;
-      color:white;
+    <div id="manualCard" class="fade-up" style="
+      background:${cardBg};
+      color:${textColor};
       padding:15px;
       border-radius:14px;
       box-shadow:0 4px 10px rgba(0,0,0,0.4);
-      max-width:320px;
-      margin:auto;
-      font-size:15px;">
+      max-width:340px;margin:auto;font-size:15px;text-align:left;">
       <h3>🍱 Total Meal</h3>
       <p>🔥 ${total.calories.toFixed(0)} kcal</p>
       <p>💪 ${total.protein.toFixed(1)} g protein</p>
       <p>🍞 ${total.carbs.toFixed(1)} g carbs</p>
       <p>🥑 ${total.fat.toFixed(1)} g fat</p>
+      <p style="font-size:12px;color:${subText};margin-top:5px;">Source: Manual Calculation</p>
+      <button onclick="shareResult('${summary}')" style="margin-top:10px;padding:8px 14px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;">📤 Share Result</button>
+      <button onclick="copySiteLink()" style="margin-left:6px;padding:8px 12px;background:#1e40af;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;">🔗 Copy Link</button>
     </div>`;
+
+  setTimeout(() => {
+    const card = document.getElementById("manualCard");
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 700);
 };
 
-// === Auto-complete food list ===
+// === Share Function ===
+async function shareResult(summaryText) {
+  const shareText = `${summaryText}\nvia Convert Labs — https://convert-labs.github.io`;
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: "My Meal Nutrition",
+        text: shareText,
+        url: "https://convert-labs.github.io"
+      });
+    } else {
+      await navigator.clipboard.writeText(shareText);
+      alert("✅ Result copied to clipboard!");
+    }
+  } catch {
+    alert("⚠️ Unable to share or copy the result.");
+  }
+}
+
+// === Copy site link only ===
+async function copySiteLink() {
+  try {
+    await navigator.clipboard.writeText("https://convert-labs.github.io");
+    alert("🔗 Site link copied to clipboard!");
+  } catch {
+    alert("⚠️ Unable to copy link.");
+  }
+}
+
+// === Auto-complete list ===
 const datalist = document.createElement("datalist");
 datalist.id = "foodList";
 Object.keys(LOCAL_DB).forEach(food => {
