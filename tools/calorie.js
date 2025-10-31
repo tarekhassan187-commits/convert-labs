@@ -293,6 +293,12 @@ calcCaloriesBtn.onclick=()=>{
 };
 
 // === Auto-complete ===
-const datalist=document.createElement("datalist");
-datalist.id="foodList";
-Object.keys(LOCAL_DB).forEach(f
+const datalist = document.createElement("datalist");
+datalist.id = "foodList";
+Object.keys(LOCAL_DB).forEach(f => {
+  const opt = document.createElement("option");
+  opt.value = f;
+  datalist.appendChild(opt);
+});
+document.body.appendChild(datalist);
+
