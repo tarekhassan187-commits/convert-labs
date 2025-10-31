@@ -306,12 +306,39 @@ function addToDailyTotal(i){
   saveTotals();updateDailyTracker();
 }
 
-// === Update & Render Daily Tracker (theme-adaptive) ===
-function updateDailyTracker(){
+// === Daily Tracker (Theme Adaptive, inside main) ===
+const dailyBox = document.getElementById("dailyTracker");
+let totals = JSON.parse(localStorage.getItem("convertlabs_totals")) || {
+  calories: 0, protein: 0, carbs: 0, fat: 0, date: new Date().toDateString()
+};
+
+function checkReset() {
+  const today = new Date().toDateString();
+  if (totals.date !== today) {
+    totals = { calories: 0, protein: 0, carbs: 0, fat: 0, date: today };
+    saveTotals();
+  }
+}
+
+function saveTotals() {
+  localStorage.setItem("convertlabs_totals", JSON.stringify(totals));
+}
+
+function addToDailyTotal(item) {
+  checkReset();
+  totals.calories += item.calories;
+  totals.protein += item.protein;
+  totals.carbs += item.carbs;
+  totals.fat += item.fat;
+  saveTotals();
+  updateDailyTracker();
+}
+
+function updateDailyTracker() {
   checkReset();
   const dark = window.matchMedia("(prefers-color-scheme: dark)").matches || document.body.classList.contains("dark");
 
-  // theme-adaptive styling
+  // Adapt theme
   dailyBox.style.background = dark ? "#0f172a" : "#f1f5f9";
   dailyBox.style.color = dark ? "#f8fafc" : "#0f172a";
 
@@ -329,28 +356,21 @@ function updateDailyTracker(){
     <p>🥑 ${totals.fat.toFixed(1)} g fat</p>
     <div style="margin-top:10px;">
       <button id="resetDailyBtn" style="
-        padding:6px 12px;
-        background:#2563eb;
-        color:#fff;
-        border:none;
-        border-radius:8px;
-        font-size:13px;
-        cursor:pointer;">🔄 Reset Today</button>
+        padding:6px 12px;background:#2563eb;
+        color:#fff;border:none;border-radius:8px;
+        font-size:13px;cursor:pointer;">🔄 Reset Today</button>
     </div>
   `;
-
-  // attach handler (in case it was re-rendered)
   const resetBtn = document.getElementById("resetDailyBtn");
   if (resetBtn) resetBtn.onclick = resetDailyTotals;
 }
 
-// === Reset function (exposed) ===
-window.resetDailyTotals = function(){
-  totals = { calories:0, protein:0, carbs:0, fat:0, date: new Date().toDateString() };
+window.resetDailyTotals = function() {
+  totals = { calories: 0, protein: 0, carbs: 0, fat: 0, date: new Date().toDateString() };
   saveTotals();
   updateDailyTracker();
-  try { alert("✅ Daily totals cleared."); } catch(e) { /* no-op on environments without alert */ }
+  alert("✅ Daily totals cleared.");
 };
 
-// initialize tracker display on load
+// Initialize on load
 updateDailyTracker();
