@@ -1,5 +1,5 @@
 // ==========================================
-// Convert Labs Calorie Calculator — Lightweight + Optional AI + Manual Fallback
+// Convert Labs Calorie Calculator — Fast + Smart + Daily Tracker + Theme Adaptive
 // ==========================================
 
 // === DOM Elements ===
@@ -44,16 +44,18 @@ const LOCAL_DB = {
   pizza:{calories:266,protein:11,carbs:33,fat:10}
 };
 
-// === UI Enhancements ===
+// === Styles and Animations ===
 const style=document.createElement("style");
 style.textContent=`
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @keyframes fadeUp{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:none}}
 .fade-up{animation:fadeUp .6s ease both}
+.fade-out{animation:fadeUp .4s reverse ease both}
 button:hover{transform:scale(1.05)}
 `;
 document.head.appendChild(style);
 
+// === Switch Modes ===
 photoBtn.onclick=()=>{manualSection.style.display="none";photoSection.style.display="block";};
 manualBtn.onclick=()=>{photoSection.style.display="none";manualSection.style.display="block";};
 
@@ -77,7 +79,7 @@ async function safeLoadTF(){
   }
 }
 
-// === Food-101 Model (lazy) ===
+// === Food-101 Model ===
 let aiModel=null,aiLabels=[];
 async function loadFoodModel(){
   if(aiModel) return;
@@ -102,7 +104,7 @@ async function recognizeFoodFromPhoto(file){
   return aiLabels[idx].replace(/_/g," ");
 }
 
-// === Photo Upload with AI fallback ===
+// === Photo Upload with fallback ===
 photoInput.onchange=async e=>{
   const file=e.target.files[0]; if(!file)return;
   const img=document.createElement("img");
@@ -119,7 +121,7 @@ photoInput.onchange=async e=>{
     }else throw new Error("No guess");
   }catch{
     photoResult.innerHTML=`<label>AI unavailable — enter manually:</label><br>
-    <input id="foodNameInput" placeholder="e.g., chicken and rice"
+    <input id="foodNameInput" placeholder="e.g., lamb chops and mixed vegetables"
     style="padding:6px;border-radius:6px;width:220px;">`;
   }
 };
@@ -138,16 +140,28 @@ async function getFromOpenFoodFacts(food){
   }catch{return null;}
 }
 
-// === Local DB Fallback ===
+// === Fuzzy Local Estimate ===
 function estimateFromLocalDB(q){
   const parts=q.split(/,|and/).map(p=>p.trim());
   let total={name:"",calories:0,protein:0,carbs:0,fat:0},c=0;
+
   parts.forEach(w=>{
-    const k=w.replace(/\s/g,"");
-    const d=LOCAL_DB[k];
-    if(d){total.name+=(c?", ":"")+w;
-      total.calories+=d.calories;total.protein+=d.protein;
-      total.carbs+=d.carbs;total.fat+=d.fat;c++;}});
+    const key=w.replace(/\s/g,"").toLowerCase();
+    let data=LOCAL_DB[key];
+    if(!data){
+      const found=Object.keys(LOCAL_DB).find(k=>key.includes(k));
+      if(found) data=LOCAL_DB[found];
+    }
+    if(data){
+      total.name+=(c?", ":"")+w;
+      total.calories+=data.calories;
+      total.protein+=data.protein;
+      total.carbs+=data.carbs;
+      total.fat+=data.fat;
+      c++;
+    }
+  });
+
   return c?total:null;
 }
 
@@ -193,6 +207,7 @@ function displayNutrition(items,src){
   <button onclick="shareResult('${summary}')" style="margin-top:8px;padding:8px 14px;background:#2563eb;color:#fff;border:none;border-radius:8px;">📤 Share</button>
   <button onclick="copySiteLink()" style="margin-left:6px;padding:8px 12px;background:#1e40af;color:#fff;border:none;border-radius:8px;">🔗 Copy Link</button>
   </div>`;
+  addToDailyTotal(i);
 }
 
 function closeNutritionCard(){
@@ -251,9 +266,10 @@ calcCaloriesBtn.onclick=()=>{
   <button onclick="shareResult('${s}')" style="margin-top:8px;padding:8px 14px;background:#2563eb;color:#fff;border:none;border-radius:8px;">📤 Share</button>
   <button onclick="copySiteLink()" style="margin-left:6px;padding:8px 12px;background:#1e40af;color:#fff;border:none;border-radius:8px;">🔗 Copy Link</button>
   </div>`;
+  addToDailyTotal(t);
 };
 
-// === Auto-complete list ===
+// === Auto-complete ===
 const datalist=document.createElement("datalist");
 datalist.id="foodList";
 Object.keys(LOCAL_DB).forEach(f=>{
@@ -262,3 +278,79 @@ Object.keys(LOCAL_DB).forEach(f=>{
   datalist.appendChild(opt);
 });
 document.body.appendChild(datalist);
+
+// === Daily Tracker ===
+const dailyBox=document.createElement("div");
+dailyBox.id="dailyTracker";
+dailyBox.style.cssText=`
+  margin-top:1.5rem;padding:15px;border-radius:14px;
+  text-align:center;max-width:340px;margin:auto;
+  box-shadow:0 4px 10px rgba(0,0,0,0.4);font-size:15px;display:none;
+`;
+document.body.appendChild(dailyBox);
+
+let totals=JSON.parse(localStorage.getItem("convertlabs_totals"))||{calories:0,protein:0,carbs:0,fat:0,date:new Date().toDateString()};
+
+function checkReset(){
+  const today=new Date().toDateString();
+  if(totals.date!==today){
+    totals={calories:0,protein:0,carbs:0,fat:0,date:today};
+    saveTotals();
+  }
+}
+function saveTotals(){localStorage.setItem("convertlabs_totals",JSON.stringify(totals));}
+function addToDailyTotal(i){
+  checkReset();
+  totals.calories+=i.calories;totals.protein+=i.protein;
+  totals.carbs+=i.carbs;totals.fat+=i.fat;
+  saveTotals();updateDailyTracker();
+}
+
+// === Update & Render Daily Tracker (theme-adaptive) ===
+function updateDailyTracker(){
+  checkReset();
+  const dark = window.matchMedia("(prefers-color-scheme: dark)").matches || document.body.classList.contains("dark");
+
+  // theme-adaptive styling
+  dailyBox.style.background = dark ? "#0f172a" : "#f1f5f9";
+  dailyBox.style.color = dark ? "#f8fafc" : "#0f172a";
+
+  if (!totals || totals.calories === 0) {
+    dailyBox.style.display = "none";
+    return;
+  }
+
+  dailyBox.style.display = "block";
+  dailyBox.innerHTML = `
+    <h3 style="margin-bottom:8px;">📅 Today’s Total</h3>
+    <p>🔥 <b>${totals.calories.toFixed(0)}</b> kcal</p>
+    <p>💪 ${totals.protein.toFixed(1)} g protein</p>
+    <p>🍞 ${totals.carbs.toFixed(1)} g carbs</p>
+    <p>🥑 ${totals.fat.toFixed(1)} g fat</p>
+    <div style="margin-top:10px;">
+      <button id="resetDailyBtn" style="
+        padding:6px 12px;
+        background:#2563eb;
+        color:#fff;
+        border:none;
+        border-radius:8px;
+        font-size:13px;
+        cursor:pointer;">🔄 Reset Today</button>
+    </div>
+  `;
+
+  // attach handler (in case it was re-rendered)
+  const resetBtn = document.getElementById("resetDailyBtn");
+  if (resetBtn) resetBtn.onclick = resetDailyTotals;
+}
+
+// === Reset function (exposed) ===
+window.resetDailyTotals = function(){
+  totals = { calories:0, protein:0, carbs:0, fat:0, date: new Date().toDateString() };
+  saveTotals();
+  updateDailyTracker();
+  try { alert("✅ Daily totals cleared."); } catch(e) { /* no-op on environments without alert */ }
+};
+
+// initialize tracker display on load
+updateDailyTracker();
