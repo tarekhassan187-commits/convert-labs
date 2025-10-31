@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.16.0/dist/tf.min.js"></script>
+<script>
+  window.addEventListener("error", (e) => {
+    if (e.message && e.message.includes("tf")) {
+      alert("⚠️ AI model failed to load. Please refresh or check your internet connection.");
+    }
+  });
+</script>
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -102,6 +109,6 @@
   </footer>
 
   <script src="../script.js"></script>
-  <script src="../tools/calorie.js"></script>
+  <script src="calorie.js"></script>
 </body>
 </html>
