@@ -50,41 +50,62 @@
     <button class="active">Calorie Calculator</button>
   </div>
 
-  <main>
-    <section class="converter">
-      <h1>🍽 Calorie Calculator</h1>
-      <p>Estimate calories in your meal by uploading a photo or entering ingredients manually.</p>
+ <main>
+  <section class="converter">
+    <h1>🍽 Calorie Calculator</h1>
+    <p>Estimate calories in your meal by uploading a photo or entering ingredients manually.</p>
 
-      <div style="text-align:center;margin-bottom:1.2rem;">
-        <button id="photoModeBtn" class="header-btn">📷 Upload Photo</button>
-        <button id="manualModeBtn" class="header-btn">🥗 Manual Input</button>
+    <div style="background:var(--card-bg,#f8fafc);color:var(--text-color,#0f172a);
+      border-radius:12px;padding:12px;margin:10px auto;max-width:700px;font-size:0.95rem;line-height:1.5;">
+      <b>🧭 How to Use:</b><br>
+      <ul style="margin-top:6px;margin-bottom:6px;padding-left:20px;">
+        <li>📷 <b>Photo Mode:</b> Upload a clear meal photo. The app will guess your main ingredient.
+            If unsure, type it manually (e.g. <b>“lamb”</b>, not <i>“lamb chops”</i>).</li>
+        <li>🥗 <b>Manual Mode:</b> Type simple food names only (<b>chicken</b>, <b>rice</b>, <b>mixed vegetables</b>),
+            and enter the grams for each item.</li>
+        <li>❌ Avoid long phrases like “roasted chicken with rice and vegetables”.
+            Instead write: <b>chicken</b>, <b>rice</b>, <b>mixed vegetables</b>.</li>
+        <li>💡 Tip: use commas or “and” to separate items (e.g. “chicken and rice”).</li>
+      </ul>
+    </div>
+
+    <div style="text-align:center;margin-bottom:1.2rem;">
+      <button id="photoModeBtn" class="header-btn">📷 Upload Photo</button>
+      <button id="manualModeBtn" class="header-btn">🥗 Manual Input</button>
+    </div>
+
+    <!-- Photo Mode -->
+    <div id="photoSection">
+      <input id="mealPhoto" type="file" accept="image/*" />
+      <button id="analyzePhotoBtn" class="header-btn" style="margin-top:8px;">Analyze Photo</button>
+      <div id="photoPreview" style="margin-top:1rem;"></div>
+      <div id="photoResult" class="calorie-result" style="margin-top:1rem;font-weight:600;"></div>
+    </div>
+
+    <!-- Manual Mode -->
+    <div id="manualSection" style="display:none;margin-top:1rem;">
+      <div id="ingredientList" style="display:flex;flex-direction:column;gap:8px;align-items:center;"></div>
+      <div style="margin-top:1rem;">
+        <button id="addIngredientBtn" class="header-btn">➕ Add Ingredient</button>
+        <button id="calculateCaloriesBtn" class="header-btn">Calculate</button>
       </div>
+      <div id="manualResult" class="calorie-result" style="margin-top:1rem;font-weight:600;"></div>
+    </div>
 
-      <!-- Photo Mode -->
-      <div id="photoSection">
-        <input id="mealPhoto" type="file" accept="image/*" />
-        <button id="analyzePhotoBtn" class="header-btn" style="margin-top:8px;">Analyze Photo</button>
-        <div id="photoPreview" style="margin-top:1rem;"></div>
-        <div id="photoResult" class="calorie-result" style="margin-top:1rem;font-weight:600;"></div>
-      </div>
+    <!-- Daily Tracker -->
+    <div id="dailyTracker" style="
+      margin-top:1.5rem;padding:15px;border-radius:14px;
+      text-align:center;max-width:340px;margin:auto;
+      box-shadow:0 4px 10px rgba(0,0,0,0.4);
+      font-size:15px;display:none;">
+    </div>
 
-      <!-- Manual Mode -->
-      <div id="manualSection" style="display:none;margin-top:1rem;">
-        <div id="ingredientList" style="display:flex;flex-direction:column;gap:8px;align-items:center;"></div>
+    <p style="margin-top:1rem;color:var(--text-color);font-size:0.9rem;">
+      🔒 Images are processed securely and not stored permanently.
+    </p>
+  </section>
+</main>
 
-        <div style="margin-top:1rem;">
-          <button id="addIngredientBtn" class="header-btn">➕ Add Ingredient</button>
-          <button id="calculateCaloriesBtn" class="header-btn">Calculate</button>
-        </div>
-
-        <div id="manualResult" class="calorie-result" style="margin-top:1rem;font-weight:600;"></div>
-      </div>
-
-      <p style="margin-top:1rem;color:var(--text-color);font-size:0.9rem;">
-        🔒 Images are processed securely and not stored permanently.
-      </p>
-    </section>
-  </main>
 
   <footer>
     <div class="footer-brand">
