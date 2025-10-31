@@ -107,24 +107,28 @@ async function recognizeFoodFromPhoto(file){
   }
 }
 
-// === Photo Upload ===
+// === Photo Upload (with AI fallback) ===
 photoInput.onchange=async(e)=>{
   const file=e.target.files[0]; if(!file)return;
   const img=document.createElement("img");
   img.src=URL.createObjectURL(file);
   img.style.maxWidth="240px"; img.style.borderRadius="8px";
   photoPreview.innerHTML=""; photoPreview.appendChild(img);
-  photoResult.innerHTML="<p>🔍 Detecting food from photo…</p>";
 
-  const guess=await recognizeFoodFromPhoto(file);
-  if(guess){
-    photoResult.innerHTML=`
-      <label>Detected food:</label><br>
-      <input id="foodNameInput" value="${guess}" style="padding:6px;border-radius:6px;width:220px;">
-    `;
-  }else{
-    photoResult.innerHTML=`
-      <label>What food is in this photo?</label><br>
+  photoResult.innerHTML = "<p>🔍 Detecting food from photo…</p>";
+  try {
+    const guess = await recognizeFoodFromPhoto(file);
+    if (guess) {
+      photoResult.innerHTML = `
+        <label>Detected food:</label><br>
+        <input id="foodNameInput" value="${guess}" style="padding:6px;border-radius:6px;width:220px;">
+      `;
+    } else {
+      throw new Error("AI failed");
+    }
+  } catch {
+    photoResult.innerHTML = `
+      <label>AI model unavailable — please enter manually:</label><br>
       <input id="foodNameInput" placeholder="e.g., chicken and rice" style="padding:6px;border-radius:6px;width:220px;">
     `;
   }
@@ -293,12 +297,11 @@ calcCaloriesBtn.onclick=()=>{
 };
 
 // === Auto-complete ===
-const datalist = document.createElement("datalist");
-datalist.id = "foodList";
-Object.keys(LOCAL_DB).forEach(f => {
-  const opt = document.createElement("option");
-  opt.value = f;
+const datalist=document.createElement("datalist");
+datalist.id="foodList";
+Object.keys(LOCAL_DB).forEach(f=>{
+  const opt=document.createElement("option");
+  opt.value=f;
   datalist.appendChild(opt);
 });
 document.body.appendChild(datalist);
-
