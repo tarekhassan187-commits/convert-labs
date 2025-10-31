@@ -1,5 +1,5 @@
 // ==========================================
-// Calorie Calculator — GitHub Edition (CORS Proxy + Fallback + Manual Input)
+// Calorie Calculator — GitHub Edition (AllOrigins Proxy + Smart Fallback)
 // ==========================================
 
 // === DOM Elements ===
@@ -42,29 +42,35 @@ photoInput.onchange = (e) => {
   photoPreview.innerHTML = "";
   photoPreview.appendChild(img);
 
-  const guess = file.name.split(".")[0].replace(/[-_]/g, " ");
+  let guess = file.name.split(".")[0].replace(/[-_]/g, " ");
+  // Ignore useless numeric names
+  if (/^\d+$/.test(guess) || guess.toLowerCase().startsWith("img")) guess = "";
+
   photoResult.innerHTML = `
     <label>What food is in this photo?</label><br>
     <input id="foodNameInput" value="${guess}" 
-      placeholder="e.g., pizza, salad, rice" 
+      placeholder="e.g., chicken and potato, pizza, salad"
       style="padding:6px;border-radius:6px;width:220px;">
   `;
 };
 
-// === Analyze using Calorie Ninjas + fallback to Open Food Facts ===
+// === Analyze using Calorie Ninjas + fallback ===
 analyzeBtn.onclick = async () => {
   const input = document.getElementById("foodNameInput");
   if (!input) return alert("Please upload a photo first.");
-  const query = input.value.trim();
-  if (!query) return alert("Please enter or type the food name.");
+  let query = input.value.trim();
+  if (!query || /^\d+$/.test(query)) query = "chicken and rice";
 
   showSpinner("Analyzing nutrition data…");
 
   const data = await getCaloriesFromNinjas(query);
-  if (data) return displayNutrition(data, "Calorie Ninjas");
+  if (data && data.length) {
+    displayNutrition(data, "Calorie Ninjas");
+    return;
+  }
 
   const fallback = await getFromOpenFoodFacts(query);
-  if (fallback) displayNutrition(fallback, "Open Food Facts");
+  if (fallback) displayNutrition([fallback], "Open Food Facts");
   else photoResult.innerHTML = `⚠️ No data found for <b>${query}</b>. Try another name.`;
 };
 
@@ -81,26 +87,36 @@ const style = document.createElement("style");
 style.textContent = "@keyframes spin {from{transform:rotate(0deg)}to{transform:rotate(360deg)}}";
 document.head.appendChild(style);
 
-// === Call Calorie Ninjas via free CORS proxy ===
+// === Calorie Ninjas via AllOrigins Proxy (CORS-safe) ===
 async function getCaloriesFromNinjas(food) {
   try {
-    const res = await fetch(
-      `https://corsproxy.io/?https://api.api-ninjas.com/v1/nutrition?query=${encodeURIComponent(food)}`,
-      { headers: { "X-Api-Key": CALORIE_NINJAS_KEY } }
-    );
+    const proxyUrl = "https://api.allorigins.win/get?url=";
+    const targetUrl = `https://api.api-ninjas.com/v1/nutrition?query=${encodeURIComponent(food)}`;
 
-    if (!res.ok) throw new Error("API error");
-    const arr = await res.json();
+    const res = await fetch(proxyUrl + encodeURIComponent(targetUrl), {
+      headers: { "X-Api-Key": CALORIE_NINJAS_KEY },
+    });
+
+    if (!res.ok) throw new Error("Proxy or API error");
+
+    const wrapped = await res.json();
+    const arr = JSON.parse(wrapped.contents);
+
     if (!arr || !arr.length) return null;
 
-    const item = arr[0];
-    return {
-      name: item.name,
-      calories: item.calories,
-      protein: item.protein_g,
-      carbs: item.carbohydrates_total_g,
-      fat: item.fat_total_g,
-    };
+    // Handle multiple foods: sum their values
+    const combined = arr.reduce(
+      (acc, f) => ({
+        name: (acc.name ? acc.name + ", " : "") + f.name,
+        calories: acc.calories + (f.calories || 0),
+        protein: acc.protein + (f.protein_g || 0),
+        carbs: acc.carbs + (f.carbohydrates_total_g || 0),
+        fat: acc.fat + (f.fat_total_g || 0),
+      }),
+      { name: "", calories: 0, protein: 0, carbs: 0, fat: 0 }
+    );
+
+    return [combined];
   } catch (err) {
     console.warn("Ninjas API failed", err);
     return null;
@@ -130,15 +146,22 @@ async function getFromOpenFoodFacts(food) {
   }
 }
 
-// === Display result ===
-function displayNutrition(data, source) {
+// === Display nutrition results ===
+function displayNutrition(items, source) {
+  if (!items.length) {
+    photoResult.innerHTML = "⚠️ No nutrition info available.";
+    return;
+  }
+
+  const item = items[0];
   photoResult.innerHTML = `
-    <h3>${data.name}</h3>
-    <p>Calories: ${data.calories.toFixed(0)} kcal</p>
-    <p>Protein: ${data.protein.toFixed(1)} g</p>
-    <p>Carbs: ${data.carbs.toFixed(1)} g</p>
-    <p>Fat: ${data.fat.toFixed(1)} g</p>
-    <p style="font-size:12px;color:gray;">Source: ${source}</p>`;
+    <h3>${item.name}</h3>
+    <p>Calories: ${item.calories.toFixed(0)} kcal</p>
+    <p>Protein: ${item.protein.toFixed(1)} g</p>
+    <p>Carbs: ${item.carbs.toFixed(1)} g</p>
+    <p>Fat: ${item.fat.toFixed(1)} g</p>
+    <p style="font-size:12px;color:gray;">Source: ${source}</p>
+  `;
 }
 
 // === Manual input mode ===
