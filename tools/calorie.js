@@ -1,5 +1,5 @@
 // ==========================================
-// Convert Labs Calorie Calculator — AI + Daily Tracker + Fade Edition
+// Convert Labs Calorie Calculator — AI + Smart Tracker + Adaptive Theme
 // ==========================================
 
 // === DOM Elements ===
@@ -197,7 +197,7 @@ analyzeBtn.onclick=async()=>{
 // === Unified Display Function ===
 function displayNutrition(items,source){
   const item=items[0];
-  const dark=document.body.classList.contains("dark")||window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const dark=window.matchMedia("(prefers-color-scheme: dark)").matches || document.body.classList.contains("dark");
   const bg=dark?"#1e293b":"#f1f5f9";
   const tc=dark?"#f8fafc":"#0f172a";
   const st=dark?"#94a3b8":"#475569";
@@ -222,7 +222,7 @@ function displayNutrition(items,source){
   setTimeout(()=>{document.getElementById("nutritionCard")?.scrollIntoView({behavior:"smooth",block:"center"});},700);
 }
 function closeNutritionCard(){
-  const card=document.getElementById("nutritionCard");
+  const card=document.querySelector("#nutritionCard, #manualCard");
   if(card){
     card.classList.add("fade-out");
     setTimeout(()=>card.remove(),400);
@@ -255,34 +255,44 @@ function addIngredientRow(name="",grams=""){const row=document.createElement("di
   <button class="removeBtn">❌</button>`;row.querySelector(".removeBtn").onclick=()=>row.remove();ingredientList.appendChild(row);}
 addIngredientRow();addIngredientBtn.onclick=()=>addIngredientRow();
 
-// === Daily Tracker ===
-const dailyBox=document.createElement("div");
-dailyBox.id="dailyTracker";
-dailyBox.style.cssText=`
-  margin-top:1.5rem;padding:15px;border-radius:14px;background:#0f172a;
-  color:#f8fafc;text-align:center;max-width:340px;margin:auto;box-shadow:0 4px 10px rgba(0,0,0,0.4);font-size:15px;display:none;`;
-document.body.appendChild(dailyBox);
-let totals=JSON.parse(localStorage.getItem("convertlabs_totals"))||{calories:0,protein:0,carbs:0,fat:0};
-function saveTotals(){localStorage.setItem("convertlabs_totals",JSON.stringify(totals));}
-function updateDailyTracker(){
-  if(totals.calories===0){dailyBox.style.display="none";return;}
-  dailyBox.style.display="block";
-  dailyBox.innerHTML=`
-    <h3 style="margin-bottom:8px;">📅 Today’s Total</h3>
-    <p>🔥 <b>${totals.calories.toFixed(0)}</b> kcal</p>
-    <p>💪 ${totals.protein.toFixed(1)} g protein</p>
-    <p>🍞 ${totals.carbs.toFixed(1)} g carbs</p>
-    <p>🥑 ${totals.fat.toFixed(1)} g fat</p>
-    <button onclick="resetDailyTotals()" style="margin-top:10px;padding:6px 12px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:13px;cursor:pointer;">🔄 Reset Today</button>`;
-}
-window.resetDailyTotals=function(){totals={calories:0,protein:0,carbs:0,fat:0};saveTotals();updateDailyTracker();alert("✅ Daily totals cleared.");};
-function addToDailyTotal(item){totals.calories+=item.calories;totals.protein+=item.protein;totals.carbs+=item.carbs;totals.fat+=item.fat;saveTotals();updateDailyTracker();}
-const oldDisplay=displayNutrition;
-displayNutrition=function(items,source){oldDisplay(items,source);addToDailyTotal(items[0]);};
-updateDailyTracker();
+calcCaloriesBtn.onclick=()=>{
+  const rows=ingredientList.querySelectorAll("div");
+  let total={calories:0,protein:0,carbs:0,fat:0};
+  rows.forEach(r=>{
+    const food=r.querySelector("input[type=text]").value.toLowerCase().trim();
+    const grams=parseFloat(r.querySelector("input[type=number]").value)||100;
+    const item=LOCAL_DB[food.replace(/\s/g,"")];
+    if(item){
+      total.calories+=item.calories*(grams/100);
+      total.protein+=item.protein*(grams/100);
+      total.carbs+=item.carbs*(grams/100);
+      total.fat+=item.fat*(grams/100);
+    }
+  });
+  const dark=window.matchMedia("(prefers-color-scheme: dark)").matches || document.body.classList.contains("dark");
+  const bg=dark?"#1e293b":"#f1f5f9";const tc=dark?"#f8fafc":"#0f172a";const st=dark?"#94a3b8":"#475569";
+  const summary=`🍱 Total Meal — 🔥 ${total.calories.toFixed(0)} kcal | 💪 ${total.protein.toFixed(1)}g protein | 🍞 ${total.carbs.toFixed(1)}g carbs | 🥑 ${total.fat.toFixed(1)}g fat`;
+
+  manualResult.innerHTML=`
+    <div id="manualCard" class="fade-up" style="
+      background:${bg};color:${tc};padding:15px;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,0.4);
+      max-width:340px;margin:auto;font-size:15px;text-align:left;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;">🍱 Total Meal</h3>
+        <button onclick="closeNutritionCard()" style="background:none;border:none;color:${tc};font-size:20px;cursor:pointer;line-height:1;">✖</button>
+      </div>
+      <p>🔥 ${total.calories.toFixed(0)} kcal</p>
+      <p>💪 ${total.protein.toFixed(1)} g protein</p>
+      <p>🍞 ${total.carbs.toFixed(1)} g carbs</p>
+      <p>🥑 ${total.fat.toFixed(1)} g fat</p>
+      <p style="font-size:12px;color:${st};margin-top:5px;">Source: Manual Calculation</p>
+      <button onclick="shareResult('${summary}')" style="margin-top:10px;padding:8px 14px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;">📤 Share Result</button>
+      <button onclick="copySiteLink()" style="margin-left:6px;padding:8px 12px;background:#1e40af;color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;">🔗 Copy Link</button>
+    </div>`;
+  setTimeout(()=>{document.getElementById("manualCard")?.scrollIntoView({behavior:"smooth",block:"center"});},700);
+};
 
 // === Auto-complete ===
 const datalist=document.createElement("datalist");
 datalist.id="foodList";
-Object.keys(LOCAL_DB).forEach(f=>{const opt=document.createElement("option");opt.value=f;datalist.appendChild(opt);});
-document.body.appendChild(datalist);
+Object.keys(LOCAL_DB).forEach(f
