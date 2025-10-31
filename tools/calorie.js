@@ -1,5 +1,5 @@
 // ==========================================
-// Calorie Calculator — Direct Key Edition (for testing)
+// Calorie Calculator — GitHub Edition (CORS Proxy + Fallback + Manual Input)
 // ==========================================
 
 // === DOM Elements ===
@@ -16,7 +16,7 @@ const calcCaloriesBtn = document.getElementById("calculateCaloriesBtn");
 const manualResult = document.getElementById("manualResult");
 const ingredientList = document.getElementById("ingredientList");
 
-// ✅ Put your Calorie Ninjas key *inside* the quotes:
+// ✅ Paste your Calorie Ninjas key inside the quotes
 const CALORIE_NINJAS_KEY = "CY71CYQzW/IPaj4uZ7adgw==ZVWd8maEsi8V5Rri";
 
 // === Mode switching ===
@@ -29,10 +29,11 @@ manualBtn.onclick = () => {
   manualSection.style.display = "block";
 };
 
-// === Preview and prompt for food name ===
+// === Preview uploaded image + ask for food name ===
 photoInput.onchange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
+
   const img = document.createElement("img");
   img.src = URL.createObjectURL(file);
   img.id = "previewImg";
@@ -44,7 +45,9 @@ photoInput.onchange = (e) => {
   const guess = file.name.split(".")[0].replace(/[-_]/g, " ");
   photoResult.innerHTML = `
     <label>What food is in this photo?</label><br>
-    <input id="foodNameInput" value="${guess}" style="padding:6px;border-radius:6px;width:220px;">
+    <input id="foodNameInput" value="${guess}" 
+      placeholder="e.g., pizza, salad, rice" 
+      style="padding:6px;border-radius:6px;width:220px;">
   `;
 };
 
@@ -78,16 +81,18 @@ const style = document.createElement("style");
 style.textContent = "@keyframes spin {from{transform:rotate(0deg)}to{transform:rotate(360deg)}}";
 document.head.appendChild(style);
 
-// === Call Calorie Ninjas directly ===
+// === Call Calorie Ninjas via free CORS proxy ===
 async function getCaloriesFromNinjas(food) {
   try {
     const res = await fetch(
-      `https://api.api-ninjas.com/v1/nutrition?query=${encodeURIComponent(food)}`,
+      `https://corsproxy.io/?https://api.api-ninjas.com/v1/nutrition?query=${encodeURIComponent(food)}`,
       { headers: { "X-Api-Key": CALORIE_NINJAS_KEY } }
     );
+
     if (!res.ok) throw new Error("API error");
     const arr = await res.json();
     if (!arr || !arr.length) return null;
+
     const item = arr[0];
     return {
       name: item.name,
@@ -110,6 +115,7 @@ async function getFromOpenFoodFacts(food) {
     );
     const data = await res.json();
     if (!data.products?.length) return null;
+
     const p = data.products[0];
     return {
       name: p.product_name || food,
@@ -135,7 +141,7 @@ function displayNutrition(data, source) {
     <p style="font-size:12px;color:gray;">Source: ${source}</p>`;
 }
 
-// === Manual input mode (unchanged) ===
+// === Manual input mode ===
 function addIngredientRow(name = "", grams = "") {
   const row = document.createElement("div");
   row.style.margin = "5px";
@@ -146,8 +152,10 @@ function addIngredientRow(name = "", grams = "") {
   row.querySelector(".removeBtn").onclick = () => row.remove();
   ingredientList.appendChild(row);
 }
+
 addIngredientRow("chicken", 150);
 addIngredientRow("rice", 100);
+
 addIngredientBtn.onclick = () => addIngredientRow();
 calcCaloriesBtn.onclick = () => {
   const rows = ingredientList.querySelectorAll("div");
