@@ -1,5 +1,5 @@
 /* ===========================
-   BASE
+   BASE COLORS & VARIABLES
 =========================== */
 :root {
   --primary: #1e40af;
@@ -22,6 +22,25 @@ html.dark {
   --shadow-color: rgba(0, 0, 0, 0.6);
   --header-bg: #0d1b3d;
   --footer-bg: #0d1b3d;
+/* Fix text in footer sections, captions, and note blocks */
+html.dark div,
+html.dark .guides-note,
+html.dark .intro-text,
+html.dark footer,
+html.dark footer p,
+html.dark footer a,
+html.dark .footer-text {
+  color: var(--text-color) !important;
+}
+
+/* Specifically for that line under the guides */
+html.dark .guides-note,
+html.dark .guide-footer-text,
+html.dark main > div:last-child {
+  color: var(--text-color) !important;
+  opacity: 0.95;
+}
+
 }
 
 html, body {
@@ -33,155 +52,110 @@ html, body {
 }
 
 /* ===========================
-   HEADER & FOOTER
+   NAVBAR
 =========================== */
-header, footer {
-  background-color: var(--header-bg);
+.navbar {
+  background: var(--header-bg);
   color: #fff;
-  text-align: center;
-  padding: 10px 0;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 0.75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.header-content {
+.nav-container {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  max-width: 960px;
-  margin: auto;
-  padding: 5px 15px;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.logo, .footer-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.brand {
+.logo a {
   display: flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
   color: inherit;
 }
 
+.logo-img {
+  width: 36px;
+  height: 36px;
+  margin-right: 8px;
+}
+
 .brand-text {
-  color: #fff;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
+  color: #fff;
 }
 
-.brand:hover .brand-text {
-  color: #e0e0e0;
+.nav-links ul {
+  list-style: none;
+  display: flex;
+  gap: 1.2rem;
+  margin: 0;
+  padding: 0;
 }
 
-.header-btn {
-  background: #fff;
-  color: var(--primary);
-  border: none;
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
+.nav-links a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #fff;
+  transition: opacity 0.2s;
 }
 
-.header-btn:hover {
-  background: #f1f1f1;
+.nav-links a:hover {
+  opacity: 0.8;
 }
 
 .theme-toggle {
+  border: none;
   background: none;
-  border: none;
-  font-size: 20px;
-  color: #fff;
   cursor: pointer;
-  margin-left: 10px;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-left: 1rem;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.15);
+  opacity: 0.9;
 }
 
 /* ===========================
-   TABS
+   HERO & HOMEPAGE
 =========================== */
-.tabs {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  background: #e5e7eb;
-  padding: 8px;
-  flex-wrap: wrap;
-  transition: background-color 0.4s ease;
-}
-html.dark .tabs {
-  background: #1e293b;
-}
-.tabs button {
-  padding: 8px 16px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-html.dark .tabs button {
-  background: #334155;
-  color: #f5f5f5;
-  border-color: #475569;
-}
-.tabs button.active {
-  background: var(--accent);
-  color: white;
-}
-
-/* ===== Dropdown Menu (Tools Tab) ===== */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropbtn {
-  background-color: var(--btn-bg, #1e40af);
+.hero {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
   color: #fff;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
+  text-align: center;
+  padding: 4rem 1rem 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
 }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: var(--card-bg, #fff);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  border-radius: 8px;
-  min-width: 220px;
-  z-index: 1000;
+html.dark .hero {
+  background: linear-gradient(135deg, #111827, #1e3a8a);
 }
 
-.dropdown-content a {
-  color: var(--text, #111);
-  padding: 10px 16px;
-  text-decoration: none;
-  display: block;
-  font-weight: 500;
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
-.dropdown-content a:hover {
-  background-color: var(--hover-bg, #e5e7eb);
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.dropdown:hover .dropbtn {
-  background-color: var(--hover-primary, #15389c);
+.hero p {
+  max-width: 700px;
+  margin: 0.5rem auto;
+  line-height: 1.6;
+  font-size: 1.05rem;
 }
 
 /* ===========================
-   CONVERTERS
+   MAIN CONTENT / CARDS
 =========================== */
 main {
   max-width: 960px;
@@ -205,7 +179,6 @@ main {
   border: 1px solid #ccc;
   background: var(--card-bg);
   color: var(--text-color);
-  transition: all 0.3s ease;
 }
 
 .converter button {
@@ -222,44 +195,69 @@ main {
   background: #1e3a8a;
 }
 
-.converter p {
-  font-weight: 600;
-  color: var(--text-color);
+/* ===========================
+   FIX: Ensure tool-page content overlays hero background
+=========================== */
+.tool-page {
+  position: relative;
+  z-index: 5 !important;
+  background: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  box-shadow: 0 0 10px var(--shadow-color);
+  border-radius: 12px;
+  max-width: 900px;
+  margin: 80px auto 60px;
+  padding: 2rem 1.5rem;
+  display: block;
+}
+body {
+  background: var(--bg-color) !important;
+  background-image: none !important;
 }
 
 /* ===========================
    FOOTER
 =========================== */
-footer {
-  margin-top: 20px;
-  padding: 20px 0;
-  background-color: var(--footer-bg);
+.footer {
+  background: var(--footer-bg);
   color: #fff;
-  transition: background-color 0.4s ease;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 3rem;
 }
 
 .footer-brand {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
 }
 
 .footer-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+  width: 28px;
+  height: 28px;
 }
 
 .footer-text {
-  color: #fff;
   font-weight: 600;
+  color: #fff;
+}
+
+.footer-links {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
 }
 
 .footer-links a {
-  color: white;
-  margin: 0 5px;
-  text-decoration: underline;
+  color: #fff;
+  text-decoration: none;
+  margin: 0 0.4rem;
+}
+
+.footer-links a:hover {
+  opacity: 0.8;
 }
 
 /* ===========================
@@ -273,7 +271,6 @@ footer {
   margin: 2rem auto;
   border-radius: 10px;
   box-shadow: 0 4px 10px var(--shadow-color);
-  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
 }
 
 .contact-section input,
@@ -286,13 +283,6 @@ footer {
   font-size: 1rem;
   background: var(--card-bg);
   color: var(--text-color);
-  transition: all 0.3s ease;
-}
-
-.contact-section input:focus,
-.contact-section textarea:focus {
-  border-color: var(--accent);
-  outline: none;
 }
 
 .send-btn {
@@ -313,10 +303,11 @@ footer {
 /* ===========================
    RESPONSIVE
 =========================== */
-@media (max-width: 600px) {
-  .tabs {
+@media (max-width: 700px) {
+  .nav-links ul {
     flex-direction: column;
     align-items: center;
+    gap: 0.6rem;
   }
   .converter input,
   .converter select,
@@ -324,32 +315,181 @@ footer {
     width: 90%;
     margin: 5px 0;
   }
+  .hero h1 {
+    font-size: 1.7rem;
+  }
 }
 
 /* ===========================
-   ADSENSE LAYOUT FIX
-   =========================== */
-
-/* Make ads responsive and centered */
+   ADSENSE
+=========================== */
 .adsbygoogle {
   display: block;
   text-align: center;
   width: 100%;
   margin: 1rem auto;
-  min-height: 0 !important;
-  transition: all 0.3s ease;
 }
 
-/* Hide empty ad containers (when no ad is served) */
 .adsbygoogle:empty {
   display: none !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
-/* Optional: reduce vertical space around ads */
-.adsbygoogle + h2 {
-  margin-top: 1.5rem !important;
+/* Fix dark mode content contrast */
+html.dark main,
+html.dark article,
+html.dark section {
+  background: var(--card-bg);
+  color: var(--text-color);
 }
 
+html.dark p,
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark li,
+html.dark span {
+  color: var(--text-color);
+}
+
+html.dark a {
+  color: #60a5fa;
+}
+
+html.dark a:hover {
+  color: #93c5fd;
+}
+
+/* Smooth transition for all */
+.theme-transition * {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+/* === Fix: ensure all intro / subheading text turns light in dark mode === */
+html.dark .intro-text,
+html.dark .guides-intro,
+html.dark .guides-header p,
+html.dark .guides-note,
+html.dark .hero p,
+html.dark main p,
+html.dark section p {
+  color: var(--text-color) !important;
+  opacity: 0.95;
+}
+
+/* Optional subtle difference for readability */
+html.dark .intro-text {
+  color: #dbeafe !important; /* light blue tone for top description */
+  opacity: 1;
+}
+/* ==========================================
+   ✅ UNIVERSAL DARK-MODE TEXT & ELEMENT FIX
+   ========================================== */
+
+/* General body and text colors in dark mode */
+html.dark, body.dark-mode {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* Ensure all standard text becomes light */
+html.dark p,
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6,
+html.dark li,
+html.dark ul,
+html.dark ol,
+html.dark span,
+html.dark em,
+html.dark strong,
+html.dark a {
+  color: var(--text-color) !important;
+  transition: color 0.3s ease;
+}
+
+/* Links stay visible and readable */
+html.dark a {
+  color: #93c5fd !important;
+}
+
+html.dark a:hover {
+  color: #bfdbfe !important;
+}
+
+/* Highlight secondary or descriptive text */
+html.dark .intro-text,
+html.dark .guides-intro,
+html.dark .guide-description,
+html.dark .footer p,
+html.dark main p {
+  color: #dbeafe !important;
+  opacity: 0.95;
+}
+
+/* Make input fields readable */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #1e293b !important;
+  color: #f5f5f5 !important;
+  border-color: #334155 !important;
+}
+
+/* Tables and cards stay readable */
+html.dark .card,
+html.dark .tool-card,
+html.dark .blog-card,
+html.dark .tool-page {
+  background-color: #1e293b !important;
+  color: #f5f5f5 !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4) !important;
+}
+
+/* Fix footer + navbar contrast */
+html.dark footer,
+html.dark header,
+html.dark .navbar,
+html.dark .footer {
+  background-color: #0f172a !important;
+  color: #f5f5f5 !important;
+}
+
+/* Ensure footer links are white in dark mode */
+html.dark .footer-links a {
+  color: #f5f5f5 !important;
+}
+
+html.dark .footer-links a:hover {
+  color: #93c5fd !important;
+}
+
+/* ===========================
+   TOOL PAGES LAYOUT FIX
+=========================== */
+.tool-page {
+  background: var(--card-bg);
+  color: var(--text-color);
+  max-width: 900px;
+  margin: 90px auto 60px;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px var(--shadow-color);
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.tool-page h1,
+.tool-page h2,
+.tool-page p,
+.tool-page li {
+  color: var(--text-color);
+}
+
+html.dark .tool-page {
+  background: #1e293b;
+  color: #f5f5f5;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}

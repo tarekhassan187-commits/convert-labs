@@ -3,19 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Terms of Use | Convert Labs</title>
+  <title>Terms of Use — Convert Labs</title>
 
   <!-- ✅ SEO -->
-  <meta name="description" content="Read the Terms of Use for Convert Labs — understand usage rights, disclaimers, and limitations." />
-  <meta name="keywords" content="Convert Labs terms of use, disclaimer, legal, user agreement" />
+  <meta name="description" content="Convert Labs Terms of Use — learn about accuracy, data sources, disclaimers, and responsible use of our free online conversion tools." />
+  <meta name="keywords" content="Convert Labs terms of use, website policy, user agreement, disclaimers, accuracy policy" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://convertlabs.online/terms.html" />
-  <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
+
+  <!-- ✅ Open Graph -->
+  <meta property="og:title" content="Terms of Use — Convert Labs" />
+  <meta property="og:description" content="Read the Terms of Use for Convert Labs — covering accuracy, data sources, and user responsibility." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://convertlabs.online/terms.html" />
+  <meta property="og:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <meta property="og:image:alt" content="Convert Labs logo" />
+  <meta property="og:site_name" content="Convert Labs" />
+
+  <!-- ✅ Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Terms of Use — Convert Labs" />
+  <meta name="twitter:description" content="Convert Labs Terms of Use — transparency and responsibility for our online conversion tools." />
+  <meta name="twitter:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
+
+  <!-- ✅ Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Terms of Use — Convert Labs",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://convertlabs.online/terms.html"
+    },
+    "description": "Convert Labs Terms of Use outlining acceptable use, accuracy disclaimers, and data source transparency.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Convert Labs",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://convertlabs.online/assets/convert-labs-icon.png"
+      }
+    }
+  }
+  </script>
+
+  <link rel="icon" href="assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
+  <link rel="stylesheet" href="style.css" />
 
   <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-    crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
 
   <!-- ✅ Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
@@ -26,82 +64,164 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- ✅ Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Terms of Use",
-    "url": "https://convertlabs.online/terms.html",
-    "description": "The Terms of Use for Convert Labs, detailing rights, usage, and disclaimers."
-  }
-  </script>
+  <!-- ✅ Page Styles -->
+  <style>
+    header.navbar {
+      background: #1e40af;
+      color: #fff;
+      padding: 10px 0;
+    }
+    .nav-container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-links ul {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover, .nav-links .active { opacity: 0.8; }
 
-  <link rel="stylesheet" href="style.css" />
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      line-height: 1.7;
+    }
+    h1, h2 { color: #111; }
+    ul { padding-left: 1.5rem; }
+
+    footer.footer {
+      background: #1e40af;
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+    }
+    footer.footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+    footer.footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 
 <body>
   <!-- ✅ Header -->
-  <header>
-    <div class="header-content">
-      <a href="index.html" class="brand" aria-label="Convert Labs home">
-        <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
-        <span class="brand-text">Convert Labs</span>
-      </a>
-
-      <div class="header-controls">
-        <a href="contact.html" class="header-btn">Contact Us</a>
-        <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo-img" style="height:32px;" loading="lazy">
+          <span class="brand-text">Convert Labs</span>
+        </a>
       </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="tools/tools.html">Tools</a></li>
+          <li><a href="guides.html">Blog</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
     </div>
-
-    <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
   </header>
 
   <!-- ✅ Main Content -->
-  <main style="padding:2rem 1rem; max-width:800px; margin:auto;">
+  <main>
     <h1>Terms of Use</h1>
-    <p>Welcome to Convert Labs. By accessing or using this website, you agree to comply with the following terms and conditions. Please read them carefully.</p>
+    <p><strong>Last updated:</strong> November 2025</p>
 
-    <h2>Acceptance of Terms</h2>
-    <p>By using Convert Labs, you acknowledge that you have read and agree to these terms. If you do not agree, please discontinue use of the site.</p>
+    <p>Welcome to <strong>Convert Labs</strong> (<a href="https://convertlabs.online">convertlabs.online</a>).  
+    By using our website or tools, you agree to comply with these Terms of Use. Please read them carefully.</p>
 
-    <h2>Use of the Service</h2>
-    <p>Convert Labs provides free online conversion tools for informational purposes only. We strive for accuracy but cannot guarantee that results are error-free or suitable for every use case.</p>
+    <h2>1. Acceptance of Terms</h2>
+    <p>By accessing Convert Labs, you confirm that you have read, understood, and agree to be bound by these Terms and our <a href="privacy.html">Privacy Policy</a>.  
+    If you do not agree, please discontinue using the site.</p>
 
-    <h2>Intellectual Property</h2>
-    <p>All content, design elements, and branding on Convert Labs are protected under copyright law. You may not reproduce, distribute, or modify our materials without permission.</p>
+    <h2>2. Purpose</h2>
+    <p>Convert Labs offers free educational and conversion tools for informational use only.  
+    Our calculators aim to simplify measurements and conversions for everyday and learning purposes.</p>
 
-    <h2>Disclaimer of Liability</h2>
-    <p>Convert Labs is provided “as is” without warranties of any kind. We are not liable for any damages arising from the use or inability to use our tools or website.</p>
+    <h2>3. Accuracy and Reliability</h2>
+    <p>While we strive for accuracy using verified data sources, small differences may occur due to rounding or international standards.  
+    Convert Labs does not guarantee absolute precision for professional, engineering, or medical purposes. Users should verify important results independently.</p>
 
-    <h2>Third-Party Services</h2>
-    <p>Some features (such as ads or analytics) are powered by third-party services like Google. Please refer to their respective privacy policies for more information.</p>
+    <h2>4. Data Sources & Transparency</h2>
+    <p>Our tools rely on public, reputable data such as:</p>
+    <ul>
+      <li>ISO & NIST conversion standards</li>
+      <li><a href="https://exchangerate.host/" target="_blank" rel="noopener">Exchangerate.host</a> and <a href="https://open.er-api.com/" target="_blank" rel="noopener">open.er-api.com</a> for live currency data</li>
+      <li>Scientific and educational databases for physical constants</li>
+    </ul>
 
-    <h2>Changes to These Terms</h2>
-    <p>We may update these Terms of Use at any time. Any changes will be posted on this page with a revised date.</p>
+    <h2>5. Disclaimer of Warranties</h2>
+    <p>All services and content on Convert Labs are provided “as is” without warranties of any kind, express or implied, including fitness for a particular purpose, accuracy, or uninterrupted service.</p>
 
-    <p><em>Last updated: October 2025</em></p>
+    <h2>6. Limitation of Liability</h2>
+    <p>Convert Labs, its contributors, or affiliates are not liable for any direct or indirect damages resulting from the use of the site, including data loss, business interruption, or reliance on inaccurate outputs.</p>
+
+    <h2>7. Intellectual Property</h2>
+    <p>All materials — including design, code, text, and graphics — are owned by Convert Labs unless otherwise credited.  
+    Reproduction or redistribution without written permission is prohibited.</p>
+
+    <h2>8. External Links</h2>
+    <p>Our site may contain external links for convenience. Convert Labs is not responsible for the content or practices of third-party websites.</p>
+
+    <h2>9. Advertising and Cookies</h2>
+    <p>We display ads through <strong>Google AdSense</strong>. Ads may be personalized using cookies.  
+    You may manage ad preferences at <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ad Settings</a>.  
+    Learn more in our <a href="privacy.html">Privacy Policy</a>.</p>
+
+    <h2>10. User Conduct</h2>
+    <p>You agree not to misuse this website, including by attempting to hack, spam, overload, or distribute malicious code.</p>
+
+    <h2>11. Modifications</h2>
+    <p>We may revise these Terms at any time. Updates will appear on this page with a new date. Continued use constitutes acceptance.</p>
+
+    <h2>12. Governing Law</h2>
+    <p>These Terms are governed by generally applicable international and local laws.  
+    Any dispute will be resolved in accordance with applicable jurisdiction and fairness principles.</p>
+
+    <h2>13. Contact</h2>
+    <p>For questions regarding these Terms, please contact us at <a href="mailto:thassan2010@live.com">thassan2010@live.com</a>.</p>
+
+    <p><em>By using Convert Labs, you agree to these Terms of Use in full.</em></p>
   </main>
 
   <!-- ✅ Footer -->
-  <footer>
+  <footer class="footer">
     <div class="footer-brand">
-      <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <img src="assets/convert-labs-icon.png" alt="Convert Labs footer logo" class="footer-logo" style="height:28px;" loading="lazy">
       <span class="footer-text">Convert Labs</span>
     </div>
-
     <p>© 2025 Convert Labs. All rights reserved.</p>
-    <div class="footer-links">
+    <nav class="footer-links">
       <a href="about.html">About</a> |
-      <a href="how-to.html">Guides</a> |
-      <a href="privacy.html">Privacy Policy</a> |
-      <a href="terms.html">Terms of Use</a> |
-      <a href="index.html">Home</a>
-    </div>
+      <a href="tools/tools.html">Tools</a> |
+      <a href="guides.html">Blog</a> |
+      <a href="privacy.html">Privacy</a> |
+      <a href="disclaimer.html">Disclaimer</a> |
+      <a href="contact.html">Contact</a>
+    </nav>
   </footer>
 
-  <!-- ✅ Global Script -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

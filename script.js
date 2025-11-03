@@ -1,520 +1,408 @@
-/* ============================================================================
-   Convert Labs - Unified client-side script (script.js)
-   - Theme toggle (persisted)
-   - Tab switching (showConverter)
-   - Populate dropdowns (length, temp, volume, kitchen)
-   - Container volume UI and calculation (box / cylinder + custom density)
-   - Kitchen converter (mass <-> volume using densities)
-   - Other converters (length, temp, volume) lightweight helpers
-   - Safe guards so pages without elements do not throw errors
-   ============================================================================ */
-
-/* ------------------
-   tiny helpers
-   ------------------ */
-const $ = (s) => document.querySelector(s);
-const $$ = (s) => Array.from(document.querySelectorAll(s));
-const on = (el, ev, fn) => el && el.addEventListener(ev, fn);
-
-function safeGet(id) { return document.getElementById(id) || null; }
-
-function formatNumber(n, digits = 6) {
-  if (!Number.isFinite(n)) return String(n);
-  return parseFloat(n.toPrecision(digits)).toString();
-}
+/* ===================================================
+   Convert Labs — Universal Script (2025 Clean Version)
+   - Theme toggle + nav highlight
+   - Safe per-page converter initializers:
+     initKitchenConverter(), initLengthConverter()
+   - Add new converters the same way (guarded by DOM checks)
+   =================================================== */
 
 /* =========================
-   THEME TOGGLE (persisted)
+   THEME & NAV HELPERS
    ========================= */
-(function themeSetup() {
-  const KEY = 'cl_theme';
-  const root = document.documentElement;
-  const btn = safeGet('themeToggle');
+const themeToggleBtn = document.getElementById("themeToggle");
 
-  function applyTheme(t) {
-    // Add small transition class for nicer switch
-    root.classList.add('theme-transition');
-    setTimeout(() => root.classList.remove('theme-transition'), 400);
-
-    if (t === 'dark') {
-      root.classList.add('dark');
-      root.classList.remove('light');
-      document.body.classList.add('dark');
-      document.body.classList.remove('light');
-      if (btn) btn.textContent = '☀️';
-    } else {
-      root.classList.remove('dark');
-      root.classList.add('light');
-      document.body.classList.remove('dark');
-      document.body.classList.add('light');
-      if (btn) btn.textContent = '🌙';
-    }
-    try { localStorage.setItem(KEY, t); } catch(e) {}
-  }
-
-  // read saved theme (safe)
-  const saved = (function(){
-    try { return localStorage.getItem(KEY) || 'light'; } catch(e){ return 'light'; }
-  })();
-  applyTheme(saved);
-
-  if (btn) {
-    on(btn, 'click', () => {
-      const current = (document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-      applyTheme(current === 'dark' ? 'light' : 'dark');
-    });
-  }
+(function initializeTheme() {
+  const savedTheme = localStorage.getItem("theme") || "light";
+  document.documentElement.classList.toggle("dark", savedTheme === "dark");
+  if (themeToggleBtn) themeToggleBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
 })();
 
-/* =========================
-   TAB SWITCHING
-   - showConverter(tabId)
-   - buttons call showConverter('length') etc via inline onclick
-   ========================= */
-(function tabSetup() {
-  // Expose global function so inline onclick in HTML works
-  window.showConverter = function showConverter(tabId) {
-    const converters = $$('.converter');
-    const tabs = $$('.tabs button');
-    converters.forEach(c => c.style.display = 'none');
-    tabs.forEach(b => b.classList.remove('active'));
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener("click", () => {
+    const isDark = document.documentElement.classList.toggle("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
+  });
+}
 
-    const target = document.getElementById(tabId);
-    if (target) target.style.display = 'block';
-
-    // mark button active (match by onclick attribute or text)
-    const activeBtn = tabs.find(b => {
-      // try to match onclick attribute exactly
-      try {
-        if (b.getAttribute && b.getAttribute('onclick') && b.getAttribute('onclick').includes(tabId)) return true;
-      } catch(e) {}
-      // fallback: match text (lowercase)
-      return b.textContent && b.textContent.trim().toLowerCase().includes(tabId);
-    });
-    if (activeBtn) activeBtn.classList.add('active');
-  };
-
-  // On DOMContentLoaded, initialize first tab if present
-  document.addEventListener('DOMContentLoaded', () => {
-    const converters = $$('.converter');
-    const tabs = $$('.tabs button');
-    if (converters.length > 0) {
-      converters.forEach(c => c.style.display = 'none');
-      converters[0].style.display = 'block';
-    }
-    if (tabs.length > 0) {
-      tabs.forEach(b => b.classList.remove('active'));
-      tabs[0].classList.add('active');
-    }
+(function highlightActiveNav() {
+  const currentPage = window.location.pathname.split("/").pop();
+  const navLinks = document.querySelectorAll(".nav-links a");
+  navLinks.forEach(link => {
+    const href = link.getAttribute("href") || "";
+    if (href.includes(currentPage)) link.classList.add("active");
+    else link.classList.remove("active");
   });
 })();
 
-/* =========================================================
-   POPULATE DROPDOWNS: length, temperature, volume, kitchen
-   (safe: only runs if elements exist)
-   ========================================================= */
-document.addEventListener('DOMContentLoaded', () => {
-  // LENGTH
-  const lengthUnits = [
-    'millimeter (mm)', 'centimeter (cm)', 'meter (m)', 'kilometer (km)',
-    'inch (in)', 'foot (ft)', 'yard (yd)', 'mile (mi)'
-  ];
-  const lengthFrom = $('#lengthFrom');
-  const lengthTo = $('#lengthTo');
-  if (lengthFrom && lengthTo) {
-    lengthFrom.innerHTML = ''; lengthTo.innerHTML = '';
-    lengthUnits.forEach(u => {
-      lengthFrom.appendChild(new Option(u, u));
-      lengthTo.appendChild(new Option(u, u));
+function formatNumber(num) {
+  // step-by-step numeric safety then format
+  if (Number.isFinite(num) === false) return String(num);
+  return Number(Math.round(num * 1000) / 1000).toLocaleString();
+}
+
+/* ===================================================
+   Per-page initializers (run only when DOM elements exist)
+   - They are isolated and won't touch pages without those elements.
+   =================================================== */
+
+window.addEventListener("DOMContentLoaded", () => {
+  initKitchenConverter();
+  initLengthConverter();
+  // you can add initVolumeConverter(), initTemperatureConverter(), etc. the same way
+});
+
+/* ===================================================
+   KITCHEN CONVERTER
+   Model:
+    - Units are either "volume" (ml base) or "mass" (g base).
+    - Ingredient densities are in g/ml (grams per milliliter).
+    - To convert volume->mass: mass_g = volume_ml * density_g_per_ml
+    - To convert mass->volume: volume_ml = mass_g / density_g_per_ml
+   =================================================== */
+function initKitchenConverter() {
+  const input = document.getElementById("kitchenInput");
+  const fromSel = document.getElementById("kitchenFrom");
+  const toSel = document.getElementById("kitchenTo");
+  const ingSel = document.getElementById("kitchenIngredient");
+  const resultP = document.getElementById("kitchenResult");
+  if (!input || !fromSel || !toSel || !ingSel || !resultP) return; // not this page
+
+  // Units definitions: factor to ml (for volume) or to g (for mass)
+  const UNITS = {
+    // volume units -> convert to ml
+    cup:        {type: "volume", ml: 240},
+    tablespoon: {type: "volume", ml: 15},
+    tsp:        {type: "volume", ml: 5},
+    milliliter: {type: "volume", ml: 1},
+    liter:      {type: "volume", ml: 1000},
+    "fluid-ounce": {type: "volume", ml: 29.5735}, // US fl oz
+    // mass units -> convert to g
+    gram:       {type: "mass", g: 1},
+    kilogram:   {type: "mass", g: 1000},
+    ounce:      {type: "mass", g: 28.349523125},
+    pound:      {type: "mass", g: 453.59237}
+  };
+
+  // ============================================
+// 🍳 Expanded Ingredient Density Table (g/ml)
+// ============================================
+const INGREDIENTS = [
+  {
+    group: "Baking Staples",
+    items: [
+      { key: "all-purpose-flour", label: "All-purpose Flour", density: 0.53 },
+      { key: "bread-flour", label: "Bread Flour", density: 0.57 },
+      { key: "cake-flour", label: "Cake Flour", density: 0.48 },
+      { key: "whole-wheat-flour", label: "Whole Wheat Flour", density: 0.55 },
+      { key: "granulated-sugar", label: "Granulated Sugar", density: 0.85 },
+      { key: "brown-sugar", label: "Brown Sugar (packed)", density: 0.9 },
+      { key: "powdered-sugar", label: "Powdered Sugar", density: 0.56 },
+      { key: "cocoa-powder", label: "Cocoa Powder", density: 0.44 },
+      { key: "baking-powder", label: "Baking Powder", density: 0.88 },
+      { key: "baking-soda", label: "Baking Soda", density: 2.2 },
+      { key: "cornstarch", label: "Cornstarch", density: 0.54 },
+      { key: "salt", label: "Salt (table)", density: 1.2 },
+      { key: "yeast", label: "Yeast (active dry)", density: 0.48 },
+      { key: "gelatin", label: "Gelatin Powder", density: 0.65 }
+    ]
+  },
+  {
+    group: "Dairy & Fats",
+    items: [
+      { key: "butter", label: "Butter (melted)", density: 0.91 },
+      { key: "margarine", label: "Margarine", density: 0.9 },
+      { key: "milk", label: "Milk (whole)", density: 1.03 },
+      { key: "skim-milk", label: "Milk (skim)", density: 1.035 },
+      { key: "cream", label: "Cream (heavy)", density: 0.994 },
+      { key: "cream-cheese", label: "Cream Cheese", density: 0.98 },
+      { key: "yogurt", label: "Yogurt (plain)", density: 1.03 },
+      { key: "condensed-milk", label: "Condensed Milk", density: 1.13 },
+      { key: "evaporated-milk", label: "Evaporated Milk", density: 1.07 },
+      { key: "grated-cheese", label: "Grated Cheese", density: 0.36 },
+      { key: "parmesan", label: "Parmesan (grated)", density: 0.45 }
+    ]
+  },
+  {
+    group: "Oils & Syrups",
+    items: [
+      { key: "olive-oil", label: "Olive Oil", density: 0.92 },
+      { key: "vegetable-oil", label: "Vegetable Oil", density: 0.92 },
+      { key: "canola-oil", label: "Canola Oil", density: 0.92 },
+      { key: "sunflower-oil", label: "Sunflower Oil", density: 0.92 },
+      { key: "coconut-oil", label: "Coconut Oil (liquid)", density: 0.92 },
+      { key: "maple-syrup", label: "Maple Syrup", density: 1.33 },
+      { key: "corn-syrup", label: "Corn Syrup", density: 1.36 },
+      { key: "molasses", label: "Molasses", density: 1.4 },
+      { key: "honey", label: "Honey", density: 1.42 }
+    ]
+  },
+  {
+    group: "Nuts, Seeds & Flours",
+    items: [
+      { key: "almond-flour", label: "Almond Flour", density: 0.44 },
+      { key: "coconut-flour", label: "Coconut Flour", density: 0.32 },
+      { key: "peanut-butter", label: "Peanut Butter", density: 1.0 },
+      { key: "ground-almonds", label: "Ground Almonds", density: 0.45 },
+      { key: "ground-hazelnuts", label: "Ground Hazelnuts", density: 0.6 },
+      { key: "chia-seeds", label: "Chia Seeds", density: 0.7 },
+      { key: "flaxseed-meal", label: "Flaxseed Meal", density: 0.58 }
+    ]
+  },
+  {
+    group: "Grains & Pasta",
+    items: [
+      { key: "rice-uncooked", label: "Rice (uncooked)", density: 0.85 },
+      { key: "cooked-rice", label: "Rice (cooked)", density: 1.08 },
+      { key: "oats-rolled", label: "Oats (rolled)", density: 0.45 },
+      { key: "oats-quick", label: "Oats (quick)", density: 0.4 },
+      { key: "quinoa", label: "Quinoa (uncooked)", density: 0.77 },
+      { key: "pasta-uncooked", label: "Pasta (uncooked)", density: 0.61 },
+      { key: "breadcrumbs", label: "Breadcrumbs (dried)", density: 0.39 }
+    ]
+  },
+  {
+    group: "Fruits & Vegetables",
+    items: [
+      { key: "banana", label: "Banana (mashed)", density: 1.09 },
+      { key: "apple-slices", label: "Apple Slices", density: 0.65 },
+      { key: "apple-sauce", label: "Apple Sauce", density: 1.03 },
+      { key: "avocado", label: "Avocado (mashed)", density: 1.03 },
+      { key: "pumpkin-puree", label: "Pumpkin Puree", density: 0.96 },
+      { key: "tomato-sauce", label: "Tomato Sauce", density: 1.03 },
+      { key: "tomato-paste", label: "Tomato Paste", density: 1.12 },
+      { key: "onion-chopped", label: "Onion (chopped)", density: 0.66 },
+      { key: "carrot-grated", label: "Carrot (grated)", density: 0.64 },
+      { key: "potato-mashed", label: "Potato (mashed)", density: 0.82 },
+      { key: "spinach-chopped", label: "Spinach (chopped)", density: 0.42 }
+    ]
+  },
+  {
+    group: "Liquids & Beverages",
+    items: [
+      { key: "water", label: "Water", density: 1.0 },
+      { key: "coffee-brewed", label: "Coffee (brewed)", density: 1.0 },
+      { key: "tea-brewed", label: "Tea (brewed)", density: 1.0 },
+      { key: "juice-orange", label: "Orange Juice", density: 1.04 },
+      { key: "juice-apple", label: "Apple Juice", density: 1.05 },
+      { key: "wine", label: "Wine", density: 0.99 },
+      { key: "beer", label: "Beer", density: 1.01 },
+      { key: "vinegar", label: "Vinegar", density: 1.01 },
+      { key: "soy-sauce", label: "Soy Sauce", density: 1.16 }
+    ]
+  },
+  {
+    group: "Condiments & Sauces",
+    items: [
+      { key: "ketchup", label: "Ketchup", density: 1.12 },
+      { key: "mayonnaise", label: "Mayonnaise", density: 0.94 },
+      { key: "mustard", label: "Mustard", density: 1.01 },
+      { key: "barbecue-sauce", label: "Barbecue Sauce", density: 1.05 },
+      { key: "salad-dressing", label: "Salad Dressing", density: 0.93 },
+      { key: "sour-cream", label: "Sour Cream", density: 0.97 }
+    ]
+  },
+  {
+    group: "Miscellaneous",
+    items: [
+      { key: "chocolate-chips", label: "Chocolate Chips", density: 0.6 },
+      { key: "shredded-coconut", label: "Shredded Coconut", density: 0.34 },
+      { key: "raisins", label: "Raisins", density: 0.62 },
+      { key: "gelatin-cooked", label: "Gelatin (set)", density: 1.04 },
+      { key: "egg-whole", label: "Egg (whole beaten)", density: 1.03 },
+      { key: "egg-white", label: "Egg White", density: 1.04 },
+      { key: "egg-yolk", label: "Egg Yolk", density: 1.06 }
+    ]
+  }
+];
+
+  // Populate unit selects
+  function fillUnitSelect(sel) {
+    sel.innerHTML = "";
+    const order = [
+      {key:"cup", label:"Cup (cup)"},
+      {key:"tablespoon", label:"Tablespoon (tbsp)"},
+      {key:"tsp", label:"Teaspoon (tsp)"},
+      {key:"milliliter", label:"Milliliter (ml)"},
+      {key:"liter", label:"Liter (L)"},
+      {key:"fluid-ounce", label:"Fluid ounce (fl oz)"},
+      {key:"gram", label:"Gram (g)"},
+      {key:"kilogram", label:"Kilogram (kg)"},
+      {key:"ounce", label:"Ounce (oz)"},
+      {key:"pound", label:"Pound (lb)"}
+    ];
+    order.forEach(u => {
+      const o = document.createElement("option");
+      o.value = u.key; o.textContent = u.label;
+      sel.appendChild(o);
     });
-    lengthFrom.value = 'meter (m)';
-    lengthTo.value = 'centimeter (cm)';
   }
 
-  // TEMPERATURE
-  const tempUnits = ['Celsius (°C)', 'Fahrenheit (°F)', 'Kelvin (K)'];
-  const tempFrom = $('#tempFrom');
-  const tempTo = $('#tempTo');
-  if (tempFrom && tempTo) {
-    tempFrom.innerHTML = ''; tempTo.innerHTML = '';
-    tempUnits.forEach(u => { tempFrom.appendChild(new Option(u, u)); tempTo.appendChild(new Option(u, u)); });
-    tempFrom.value = 'Celsius (°C)';
-    tempTo.value = 'Fahrenheit (°F)';
-  }
-
-  // VOLUME
-  const volumeUnits = [
-    'milliliter (ml)', 'liter (L)', 'cup', 'tablespoon (tbsp)',
-    'teaspoon (tsp)', 'fluid ounce (fl oz)', 'gallon (gal)', 'pint (pt)'
-  ];
-  const volumeFrom = $('#volumeFrom');
-  const volumeTo = $('#volumeTo');
-  if (volumeFrom && volumeTo) {
-    volumeFrom.innerHTML = ''; volumeTo.innerHTML = '';
-    volumeUnits.forEach(u => { volumeFrom.appendChild(new Option(u, u)); volumeTo.appendChild(new Option(u, u)); });
-    volumeFrom.value = 'milliliter (ml)';
-    volumeTo.value = 'liter (L)';
-  }
-
-  // KITCHEN: units + ingredients
-  const kitchenFrom = $('#kitchenFrom');
-  const kitchenTo = $('#kitchenTo');
-  const kitchenIngredient = $('#kitchenIngredient');
-
-  // units list (mass + volume), include both ml and gm (g)
-  const kitchenUnits = [
-    { value: 'g', text: 'Gram (g)' },
-    { value: 'kg', text: 'Kilogram (kg)' },
-    { value: 'oz', text: 'Ounce (oz)' },
-    { value: 'lb', text: 'Pound (lb)' },
-    { value: 'ml', text: 'Milliliter (ml)' },
-    { value: 'l', text: 'Liter (L)' },
-    { value: 'cup', text: 'Cup' },
-    { value: 'tbsp', text: 'Tablespoon (tbsp)' },
-    { value: 'tsp', text: 'Teaspoon (tsp)' },
-    { value: 'fl oz', text: 'Fluid ounce (fl oz)' }
-  ];
-
-  if (kitchenFrom && kitchenTo && kitchenIngredient) {
-    // populate units only if empty (avoid overwriting)
-    if (!kitchenFrom.options.length) {
-      kitchenUnits.forEach(u => {
-        const o = document.createElement('option'); o.value = u.value; o.textContent = u.text;
-        kitchenFrom.appendChild(o);
+  // Populate ingredient grouped select
+  function fillIngredientSelect() {
+    ingSel.innerHTML = "";
+    INGREDIENTS.forEach(group => {
+      const g = document.createElement("optgroup");
+      g.label = group.group;
+      group.items.forEach(it => {
+        const o = document.createElement("option");
+        o.value = `${it.key}::${it.density}`; // store density in value for simplicity
+        o.textContent = it.label;
+        g.appendChild(o);
       });
-    }
-    if (!kitchenTo.options.length) {
-      kitchenUnits.forEach(u => {
-        const o = document.createElement('option'); o.value = u.value; o.textContent = u.text;
-        kitchenTo.appendChild(o);
-      });
-    }
-    // sensible defaults
-    kitchenFrom.value = 'g';
-    kitchenTo.value = 'cup';
-  }
-});
-
-/* =========================================================
-   CONTAINER VOLUME UI & CALC
-   - toggles between boxInputs and cylinderInputs
-   - shows custom density input when 'custom' selected
-   ========================================================= */
-(function containerUI() {
-  const typeSel = safeGet('containerType');
-  const boxInputs = safeGet('boxInputs');
-  const cylInputs = safeGet('cylinderInputs');
-  const customDensity = safeGet('customDensity');
-  const liquidType = safeGet('liquidType');
-
-  if (!typeSel) return;
-
-  function adjustUI() {
-    if (typeSel.value === 'box') {
-      if (boxInputs) boxInputs.style.display = 'block';
-      if (cylInputs) cylInputs.style.display = 'none';
-    } else {
-      if (boxInputs) boxInputs.style.display = 'none';
-      if (cylInputs) cylInputs.style.display = 'block';
-    }
-  }
-  adjustUI();
-  on(typeSel, 'change', adjustUI);
-
-  // custom density toggle
-  function adjustCustomDensity() {
-    if (liquidType && customDensity) {
-      if (liquidType.value === 'custom') customDensity.style.display = 'inline-block';
-      else customDensity.style.display = 'none';
-    }
-  }
-  if (liquidType) {
-    on(liquidType, 'change', adjustCustomDensity);
-    adjustCustomDensity();
+      ingSel.appendChild(g);
+    });
   }
 
-  // calculation function (exposed globally)
-  window.calculateContainerVolume = function calculateContainerVolume() {
-    const outEl = safeGet('containerResult');
-    if (!outEl) return;
+  fillUnitSelect(fromSel);
+  fillUnitSelect(toSel);
+  fillIngredientSelect();
 
-    const type = typeSel.value;
-    let volCm3 = 0; // cubic centimeters
-
-    if (type === 'box') {
-      const l = parseFloat(safeGet('lengthBox')?.value || 0);
-      const w = parseFloat(safeGet('widthBox')?.value || 0);
-      const h = parseFloat(safeGet('heightBox')?.value || 0);
-      if (!(l > 0 && w > 0 && h > 0)) { outEl.textContent = 'Enter length, width, and height.'; return; }
-      volCm3 = l * w * h; // assuming cm inputs => cm^3
-    } else {
-      // cylinder: radius and height expected in cm
-      const r = parseFloat(safeGet('radiusCylinder')?.value || 0);
-      const h = parseFloat(safeGet('heightCylinder')?.value || 0);
-      if (!(r > 0 && h > 0)) { outEl.textContent = 'Enter radius and height.'; return; }
-      volCm3 = Math.PI * r * r * h;
-    }
-
-    const liters = volCm3 / 1000; // 1000 cm3 = 1 L
-
-    // decide density
-    const liquid = (safeGet('liquidType')?.value || 'water').toLowerCase();
-    let densityMap = {
-      'water': 1.00,
-      'milk': 1.03,
-      'oil': 0.92,
-      'honey': 1.42,
-      'custom': null
-    };
-    let density = densityMap[liquid];
-    if (liquid === 'custom') {
-      const cd = parseFloat(safeGet('customDensity')?.value || 0);
-      if (!(cd > 0)) { outEl.textContent = 'Enter a valid custom density (g/cm³).'; return; }
-      density = cd;
-    }
-
-    const grams = volCm3 * density;
-
-    outEl.innerHTML = `
-      <strong>Volume:</strong> ${formatNumber(volCm3, 6)} cm³
-      &nbsp;—&nbsp; ${formatNumber(liters, 4)} L
-      <br><strong>Mass (approx):</strong> ${formatNumber(grams, 4)} g of ${liquid}
-    `;
-  };
-})();
-
-/* =========================================================
-   KITCHEN CONVERTER (mass <-> volume using densities)
-   - run only if kitchen elements exist
-   - exposes window.convertKitchen() to be called by button onclick
-   ========================================================= */
-(function kitchenModule() {
-  const kitchenInput = safeGet('kitchenInput');
-  const kitchenFrom = safeGet('kitchenFrom');
-  const kitchenTo = safeGet('kitchenTo');
-  const kitchenIngredient = safeGet('kitchenIngredient');
-  const kitchenResult = safeGet('kitchenResult');
-
-  if (!kitchenInput || !kitchenFrom || !kitchenTo || !kitchenIngredient || !kitchenResult) {
-    // elements missing on this page - skip
-    return;
-  }
-
-  // unit <-> ml mapping for volume units
-  const unitToMl = {
-    ml: 1,
-    l: 1000,
-    'cup': 240,
-    'tbsp': 14.7868,
-    'tsp': 4.92892,
-    'fl oz': 29.5735
-  };
-  // unit <-> grams mapping for mass units
-  const unitToGram = {
-    g: 1,
-    kg: 1000,
-    oz: 28.3495231,
-    lb: 453.59237
-  };
-
-  // densities (g per ml ~ g/cm3). Add or tweak entries if you want.
-  const densities = {
-    'water': 1.00,
-    'milk (whole)': 1.03,
-    'milk': 1.03,
-    'butter': 0.96,
-    'olive oil': 0.91,
-    'oil': 0.92,
-    'honey': 1.42,
-    'maple syrup': 1.33,
-    'molasses': 1.45,
-    'corn syrup': 1.36,
-    'all-purpose flour': 0.53,
-    'almond flour': 0.48,
-    'coconut flour': 0.39,
-    'granulated sugar': 0.85,
-    'brown sugar (packed)': 0.95,
-    'brown sugar': 0.95,
-    'powdered sugar': 0.56,
-    'salt (table)': 1.20,
-    'salt': 1.20,
-    'baking powder': 0.93,
-    'baking soda': 0.96,
-    'cocoa powder': 0.64,
-    'cornstarch': 0.54,
-    'cream cheese': 0.97,
-    'yogurt (plain)': 1.03,
-    'cheese (grated)': 0.53,
-    'peanut butter': 1.05,
-    'rice (uncooked)': 0.85,
-    'oats (rolled)': 0.38,
-    'yeast (active dry)': 0.45,
-    'mayonnaise': 0.95,
-    'water (room temp)': 1.00
-  };
-
-  // utility to normalize ingredient key
-  function densFor(key) {
-    if (!key) return null;
-    const k = String(key).toLowerCase().trim();
-    // exact lookup
-    if (densities[k] !== undefined) return densities[k];
-    // small heuristics: handle "flour" => all-purpose flour
-    if (k.includes('flour') && densities['all-purpose flour'] !== undefined) return densities['all-purpose flour'];
-    if (k.includes('sugar') && densities['granulated sugar'] !== undefined) return densities['granulated sugar'];
-    if (k.includes('milk') && densities['milk (whole)'] !== undefined) return densities['milk (whole)'];
-    return null;
-  }
-
-  // expose convertKitchen function
+  // Conversion function
   window.convertKitchen = function convertKitchen() {
-    const val = parseFloat(kitchenInput.value || '0');
-    const from = kitchenFrom.value;
-    const to = kitchenTo.value;
-    const ingredient = kitchenIngredient.value || 'water';
-
-    kitchenResult.textContent = ''; // clear
-
-    if (!(val > 0)) { kitchenResult.textContent = 'Enter an amount > 0.'; return; }
-    if (!from || !to) { kitchenResult.textContent = 'Choose units.'; return; }
-
-    // decide categories
-    const isFromVolume = Object.keys(unitToMl).includes(from);
-    const isToVolume = Object.keys(unitToMl).includes(to);
-    const isFromMass = Object.keys(unitToGram).includes(from);
-    const isToMass = Object.keys(unitToGram).includes(to);
-
-    // get density (g per ml)
-    const d = densFor(ingredient) || 1.0; // fallback to water-like
-
-    let grams = 0, outVal = 0;
-
-    // convert input to grams (if necessary)
-    if (isFromVolume) {
-      // convert input -> ml -> grams via density
-      const ml = val * (unitToMl[from] || 1);
-      grams = ml * d;
-    } else if (isFromMass) {
-      grams = val * (unitToGram[from] || 1);
-    } else {
-      kitchenResult.textContent = 'Unsupported "from" unit.';
+    const raw = parseFloat(input.value);
+    if (Number.isFinite(raw) === false) {
+      resultP.textContent = "Enter a valid number.";
       return;
     }
 
-    // now convert grams -> target
-    if (isToMass) {
-      outVal = grams / (unitToGram[to] || 1);
-    } else if (isToVolume) {
-      // grams -> ml -> target unit
-      const ml = grams / d;
-      outVal = ml / (unitToMl[to] || 1);
-    } else {
-      kitchenResult.textContent = 'Unsupported "to" unit.';
-      return;
+    const from = fromSel.value;
+    const to = toSel.value;
+
+    // ingredient density parse
+    let density = 1.0;
+    const ingVal = ingSel.value;
+    if (ingVal && ingVal.includes("::")) {
+      density = parseFloat(ingVal.split("::")[1]);
     }
 
-    // friendly result
-    kitchenResult.innerHTML = `
-      <strong>${formatNumber(val, 6)}</strong> ${from} of <b>${ingredient}</b>
-      ≈ <strong>${formatNumber(outVal, 6)}</strong> ${to}
-    `;
-  };
-})();
+    // helper to get unit meta
+    function unitMeta(k) {
+      if (!UNITS[k]) throw new Error("Unknown unit: " + k);
+      return UNITS[k];
+    }
 
-/* =========================================================
-   SIMPLE CONVERTERS (Length, Temperature, Volume)
-   - Exposed functions: convertLength, convertTemperature, convertVolume
-   ========================================================= */
+    try {
+      const uFrom = unitMeta(from);
+      const uTo = unitMeta(to);
 
-/* LENGTH */
-function convertLength() {
-  const v = parseFloat($('#lengthInput')?.value || 0);
-  const f = $('#lengthFrom')?.value;
-  const t = $('#lengthTo')?.value;
-  const out = $('#lengthResult');
-  if (!v || !f || !t) { if(out) out.textContent = 'Please fill all fields.'; return; }
+      // both volume -> only ratio of ml
+      if (uFrom.type === "volume" && uTo.type === "volume") {
+        const ml = raw * uFrom.ml;
+        const out = ml / uTo.ml;
+        resultP.textContent = `${formatNumber(out)} ${uToLabel(to)}`;
+        return;
+      }
 
-  const map = {
-    'millimeter (mm)': 0.001,
-    'centimeter (cm)': 0.01,
-    'meter (m)': 1,
-    'kilometer (km)': 1000,
-    'inch (in)': 0.0254,
-    'foot (ft)': 0.3048,
-    'yard (yd)': 0.9144,
-    'mile (mi)': 1609.34
-  };
-  if (!map[f] || !map[t]) { if(out) out.textContent = 'Unsupported unit.'; return; }
-  const res = (v * map[f]) / map[t];
-  if(out) out.textContent = `${formatNumber(res)} ${t}`;
-}
+      // both mass -> grams ratio
+      if (uFrom.type === "mass" && uTo.type === "mass") {
+        const g = raw * uFrom.g;
+        const out = g / uTo.g;
+        resultP.textContent = `${formatNumber(out)} ${uToLabel(to)}`;
+        return;
+      }
 
-/* TEMPERATURE */
-function convertTemperature() {
-  const v = parseFloat($('#tempInput')?.value || 0);
-  const f = $('#tempFrom')?.value;
-  const t = $('#tempTo')?.value;
-  const out = $('#tempResult');
-  if (!f || !t) { if(out) out.textContent = 'Please select units.'; return; }
+      // Cross conversion -> need density
+      if (uFrom.type === "volume" && uTo.type === "mass") {
+        const ml = raw * uFrom.ml;
+        const g = ml * density;
+        const out = g / uTo.g;
+        resultP.textContent = `${formatNumber(out)} ${uToLabel(to)}`;
+        return;
+      }
 
-  // normalize to Celsius then convert
-  let c;
-  if (f.includes('Celsius')) c = v;
-  else if (f.includes('Fahrenheit')) c = (v - 32) * (5/9);
-  else if (f.includes('Kelvin')) c = v - 273.15;
-  else { if(out) out.textContent = 'Unsupported unit.'; return; }
+      if (uFrom.type === "mass" && uTo.type === "volume") {
+        const g = raw * uFrom.g;
+        const ml = g / density;
+        const out = ml / uTo.ml;
+        resultP.textContent = `${formatNumber(out)} ${uToLabel(to)}`;
+        return;
+      }
 
-  let final;
-  if (t.includes('Celsius')) final = c;
-  else if (t.includes('Fahrenheit')) final = (c * 9/5) + 32;
-  else if (t.includes('Kelvin')) final = c + 273.15;
-  else { if(out) out.textContent = 'Unsupported unit.'; return; }
-
-  if(out) out.textContent = `${formatNumber(final, 6)} ${t}`;
-}
-
-/* VOLUME (simple convert between listed units) */
-function convertVolume() {
-  const v = parseFloat($('#volumeInput')?.value || 0);
-  const f = $('#volumeFrom')?.value;
-  const t = $('#volumeTo')?.value;
-  const out = $('#volumeResult');
-  if (!v || !f || !t) { if(out) out.textContent = 'Please fill all fields.'; return; }
-
-  const map = {
-    'milliliter (ml)': 1,
-    'liter (L)': 1000,
-    'cup': 240,
-    'tablespoon (tbsp)': 14.7868,
-    'teaspoon (tsp)': 4.92892,
-    'fluid ounce (fl oz)': 29.5735,
-    'gallon (gal)': 3785.41,
-    'pint (pt)': 473.176
+      resultP.textContent = "Conversion not supported.";
+    } catch (err) {
+      console.error(err);
+      resultP.textContent = "An error occurred.";
+    }
   };
 
-  if (!map[f] || !map[t]) { if(out) out.textContent = 'Unsupported unit.'; return; }
-  const res = (v * map[f]) / map[t];
-  if(out) out.textContent = `${formatNumber(res, 6)} ${t}`;
+  function uToLabel(k) {
+    // display label for result
+    const map = {
+      cup: "cup(s)",
+      tablespoon: "tbsp",
+      tsp: "tsp",
+      milliliter: "ml",
+      liter: "L",
+      "fluid-ounce": "fl oz",
+      gram: "gram",
+      kilogram: "kg",
+      ounce: "oz",
+      pound: "lb"
+    };
+    return map[k] || k;
+  }
 }
 
-/* =========================================================
-   PAGE LOAD / graceful loader
-   - Shows #app and hides #loading-screen when DOM ready
-   - Also listens for window.onerror to ensure app shown
-   ========================================================= */
-document.addEventListener('DOMContentLoaded', () => {
-  const app = $('#app');
-  const loader = $('#loading-screen');
-  if (app) app.style.display = 'block';
-  if (loader) loader.style.display = 'none';
-  console.log('Convert Labs ready ✅');
-});
+/* ===================================================
+   LENGTH CONVERTER
+   - Converts via meters base
+   =================================================== */
+function initLengthConverter() {
+  const inEl = document.getElementById("lengthInput");
+  const fromSel = document.getElementById("lengthFrom");
+  const toSel = document.getElementById("lengthTo");
+  const resP = document.getElementById("lengthResult");
+  if (!inEl || !fromSel || !toSel || !resP) return;
 
-window.addEventListener('error', (e) => {
-  console.warn('⚠️ JS Error:', e && e.message ? e.message : e);
-  // ensure app shown even if error
-  const app = $('#app');
-  const loader = $('#loading-screen');
-  if (app) app.style.display = 'block';
-  if (loader) loader.style.display = 'none';
-});
+  const UNITS = {
+    m: 1,
+    cm: 0.01,
+    mm: 0.001,
+    km: 1000,
+    inch: 0.0254,
+    ft: 0.3048,
+    yard: 0.9144,
+    mile: 1609.344
+  };
+
+  function fill(sel) {
+    sel.innerHTML = "";
+    const list = [
+      ["m","Meter (m)"],
+      ["cm","Centimeter (cm)"],
+      ["mm","Millimeter (mm)"],
+      ["km","Kilometer (km)"],
+      ["inch","Inch (in)"],
+      ["ft","Foot (ft)"],
+      ["yard","Yard (yd)"],
+      ["mile","Mile (mi)"]
+    ];
+    list.forEach(li => {
+      const o = document.createElement("option");
+      o.value = li[0]; o.textContent = li[1];
+      sel.appendChild(o);
+    });
+  }
+
+  fill(fromSel);
+  fill(toSel);
+
+  window.convertLength = function convertLength() {
+    const v = parseFloat(inEl.value);
+    if (Number.isFinite(v) === false) { resP.textContent = "Enter a valid number."; return; }
+    const f = fromSel.value, t = toSel.value;
+    if (!UNITS[f] || !UNITS[t]) { resP.textContent = "Select units."; return; }
+    const meters = v * UNITS[f];
+    const out = meters / UNITS[t];
+    resP.textContent = `${formatNumber(out)} ${toSel.options[toSel.selectedIndex].text.split(" ")[0]}`;
+  };
+}
+
+/* ===================================================
+   Add new initializers for other tools here following
+   same pattern: query DOM, populate selects, expose
+   window.convertXXX functions for page buttons to call.
+   =================================================== */
+
+console.log("%cConvert Labs Script Loaded ✅", "color:#2563eb;font-weight:bold;");

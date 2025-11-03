@@ -2,22 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Convert Labs — Smart Unit Converter</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Convert Labs — Smart Online Converters & Tools</title>
 
-  <!-- ✅ SEO -->
-  <meta name="description" content="Convert Labs is your free, all-in-one online converter for length, temperature, volume, container, kitchen, currency, and images. Fast, accurate, and easy to use." />
-  <meta name="keywords" content="unit converter, length converter, temperature converter, volume calculator, kitchen converter, currency converter, image converter, Convert Labs" />
+  <!-- ✅ SEO META -->
+  <meta name="description" content="Convert Labs is your all-in-one online converter hub. Instantly convert units, currencies, calories, and more with accurate results — plus educational guides explaining how conversions work." />
+  <meta name="keywords" content="unit converter, kitchen converter, temperature converter, currency converter, volume calculator, calorie calculator, Convert Labs, online tools" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://convertlabs.online" />
 
-  <!-- ✅ Favicon -->
-  <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
+  <!-- ✅ OPEN GRAPH -->
+  <meta property="og:title" content="Convert Labs — Smart & Accurate Online Converters" />
+  <meta property="og:description" content="Explore smart, free tools for everyday use — from temperature and volume conversions to kitchen, calorie, and currency calculators. Learn and calculate instantly." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://convertlabs.online/" />
+  <meta property="og:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <meta property="og:image:alt" content="Convert Labs logo icon" />
+  <meta property="og:site_name" content="Convert Labs" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- ✅ TWITTER -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Convert Labs — Smart & Accurate Online Converters" />
+  <meta name="twitter:description" content="Free online converters with educational guides. Convert units, currency, and calories instantly with Convert Labs." />
+  <meta name="twitter:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
+
+  <link rel="canonical" href="https://convertlabs.online/" />
+  <link rel="icon" href="assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
+  <link rel="stylesheet" href="style.css" />
 
   <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-    crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
 
   <!-- ✅ Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
@@ -28,197 +43,237 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <link rel="stylesheet" href="style.css" />
+  <!-- ✅ STRUCTURED DATA -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Convert Labs",
+    "url": "https://convertlabs.online/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://convertlabs.online/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Convert Labs",
+      "logo": "https://convertlabs.online/assets/convert-labs-icon.png"
+    }
+  }
+  </script>
+
+  <!-- ✅ STYLE FIXES -->
+  <style>
+    header.navbar {
+      background: #1e40af;
+      color: #fff;
+      padding: 10px 0;
+    }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+    }
+    .logo a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-decoration: none;
+      color: #fff;
+    }
+    .nav-links ul {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover, .nav-links .active {
+      opacity: 0.8;
+    }
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .theme-toggle:hover { transform: scale(1.2); }
+
+    main { padding-top: 1rem; }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+      max-width: 900px;
+      margin: auto;
+    }
+    .intro { line-height: 1.7; margin-bottom: 1rem; }
+
+    .features, .tools-preview, .updates {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+    .tool-card {
+      display: block;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 1rem;
+      text-decoration: none;
+      color: #111;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .tool-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    }
+    footer.footer {
+      background: #1e40af;
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+    }
+    footer.footer a { color: #fff; text-decoration: none; }
+    footer.footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Splash Screen -->
-  <div id="loading-screen">
-    <h1>Loading Convert Labs...</h1>
-  </div>
-
-  <!-- Main App -->
-  <div id="app" style="display:none;">
-    <header>
-      <div class="header-content">
-        <a href="index.html" class="brand" aria-label="Convert Labs home">
-          <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
+  <!-- ✅ NAVBAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo-img" style="height:32px;" loading="lazy">
           <span class="brand-text">Convert Labs</span>
         </a>
-
-        <div class="header-controls">
-          <a href="contact.html" class="header-btn">Contact Us</a>
-          <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
-        </div>
       </div>
-
-      <p class="tagline">Welcome to Convert Labs — your smart all-in-one converter</p>
-      <p class="intro-text" style="max-width:900px; margin:auto; text-align:left; padding:0 1rem;">
-        Convert Labs makes conversions effortless across multiple categories — including Length, Temperature, Volume, Container measurements, Kitchen ingredients, Currency, and Images. 
-        All tools are fast, accurate, and free to use — whether you’re cooking, studying, or working on a project. Switch between converters using the tabs below.
-      </p>
-    </header>
-
-  <!-- Tabs -->
-<div class="tabs">
-  <button onclick="showConverter('length')">Length</button>
-  <button onclick="showConverter('temperature')">Temperature</button>
-  <button onclick="showConverter('volume')">Volume</button>
-  <button onclick="showConverter('container')">Container Volume</button>
-  <button onclick="showConverter('kitchen')">Kitchen</button>
-  <button onclick="window.location.href='tools/tools.html'">Tools</button>
-</div>
-
-</div>
-
+      <nav class="nav-links">
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="tools/tools.html">Tools</a></li>
+          <li><a href="guides.html">Blog</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Toggle Theme">🌙</button>
     </div>
+  </header>
 
-    <!-- Converters -->
-    <main>
-      <!-- Length -->
-      <section id="length" class="converter active">
-        <h2>Length Converter</h2>
-        <p>Easily convert between metric and imperial units — such as meters, kilometers, inches, and feet. Perfect for engineers, students, and everyday users.</p>
-        <input type="number" id="lengthInput" placeholder="Enter value" />
-        <select id="lengthFrom"></select>
-        <select id="lengthTo"></select>
-        <button onclick="convertLength()">Convert</button>
-        <p id="lengthResult"></p>
-      </section>
+  <!-- ✅ MAIN CONTENT -->
+  <main>
+    <section class="hero">
+      <h1>Welcome to Convert Labs</h1>
+      <p class="intro">
+        Convert Labs is your all-in-one online conversion platform for everyday and professional use.
+        From cooking to coding, we provide accurate, fast, and beautifully simple tools for units, currency, calories, and more — all free to use.
+      </p>
+      <p class="intro">
+        Our mission is to make complex conversions easy to understand. Each page includes not only calculators but also clear explanations, examples, and formulas — ensuring both practical and educational results.
+      </p>
+    </section>
 
-      <!-- Temperature -->
-      <section id="temperature" class="converter">
-        <h2>Temperature Converter</h2>
-        <p>Convert instantly between Celsius, Fahrenheit, and Kelvin — great for weather, cooking, or scientific use.</p>
-        <input type="number" id="tempInput" placeholder="Enter value" />
-        <select id="tempFrom"></select>
-        <select id="tempTo"></select>
-        <button onclick="convertTemperature()">Convert</button>
-        <p id="tempResult"></p>
-      </section>
+    <section class="about-convertlabs" style="max-width:900px;margin:auto;">
+      <h2>🌍 About Convert Labs</h2>
+      <p>
+        <strong>Convert Labs</strong> is an independent online platform designed to make everyday conversions faster,
+        clearer, and smarter. From cooking and studying to travel and engineering, our tools combine accuracy with simplicity.
+      </p>
+      <p>
+        Unlike other converter sites, Convert Labs doesn’t just display numbers — we explain the “why” behind each conversion.
+        Every page features guides and real-world examples to help you learn while you calculate.
+      </p>
+      <p>
+        <a href="about.html" class="btn-primary" style="background:#2563eb;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none;">
+          Learn more about our mission →
+        </a>
+      </p>
+    </section>
 
-      <!-- Volume -->
-      <section id="volume" class="converter">
-        <h2>Volume Converter</h2>
-        <p>Quickly convert between liters, milliliters, cups, and gallons — ideal for fluid and ingredient conversions.</p>
-        <input type="number" id="volumeInput" placeholder="Enter value" />
-        <select id="volumeFrom"></select>
-        <select id="volumeTo"></select>
-        <button onclick="convertVolume()">Convert</button>
-        <p id="volumeResult"></p>
-      </section>
+    <section class="features">
+      <h2>Why Choose Convert Labs?</h2>
+      <ul>
+        <li>⚡ <b>Fast & Accurate:</b> Instant results with scientific precision.</li>
+        <li>📚 <b>Educational:</b> Learn how conversions work with real examples and formulas.</li>
+        <li>💡 <b>Practical:</b> Ideal for cooking, engineering, travel, and study.</li>
+        <li>🪶 <b>Lightweight:</b> No login or tracking — your privacy comes first.</li>
+      </ul>
+    </section>
 
-      <!-- Container -->
-      <section id="container" class="converter">
-        <h2>Container Volume Calculator</h2>
-        <p>Estimate the volume of boxes and cylinders using simple dimensions. Great for packaging, shipping, or DIY projects.</p>
-        <select id="containerType">
-          <option value="box">Box (L×W×H)</option>
-          <option value="cylinder">Cylinder (r×h)</option>
-        </select>
-
-        <div id="boxInputs">
-          <input type="number" id="lengthBox" placeholder="Length (cm)" />
-          <input type="number" id="widthBox" placeholder="Width (cm)" />
-          <input type="number" id="heightBox" placeholder="Height (cm)" />
-        </div>
-
-        <div id="cylinderInputs" style="display:none;">
-          <input type="number" id="radiusCylinder" placeholder="Radius (cm)" />
-          <input type="number" id="heightCylinder" placeholder="Height (cm)" />
-        </div>
-
-        <select id="liquidType">
-          <option value="water">Water</option>
-          <option value="milk">Milk</option>
-          <option value="oil">Oil</option>
-          <option value="honey">Honey</option>
-          <option value="custom">Custom (enter density)</option>
-        </select>
-
-        <input type="number" id="customDensity" placeholder="Custom density (g/cm³)" style="display:none;" />
-        <button onclick="calculateContainerVolume()">Calculate</button>
-        <p id="containerResult"></p>
-      </section>
-
-      <!-- Kitchen -->
-      <section id="kitchen" class="converter">
-        <h2>Kitchen Converter</h2>
-        <p>Convert cooking ingredients between grams, cups, tablespoons, and teaspoons — with built-in ingredient densities for accurate recipe scaling.</p>
-        <input type="number" id="kitchenInput" placeholder="Enter amount" />
-       <select id="kitchenFrom"></select>
-<select id="kitchenTo"></select>
-
-<select id="kitchenIngredient">
-  <optgroup label="Baking Staples">
-    <option value="all-purpose flour">All-purpose Flour</option>
-    <option value="brown sugar packed">Brown Sugar</option>
-    <option value="granulated sugar">Granulated Sugar</option>
-    <option value="powdered sugar">Powdered Sugar</option>
-    <option value="salt (table)">Salt</option>
-    <option value="baking powder">Baking Powder</option>
-    <option value="baking soda">Baking Soda</option>
-    <option value="cocoa powder">Cocoa Powder</option>
-    <option value="cornstarch">Cornstarch</option>
-  </optgroup>
-
-  <optgroup label="Dairy & Fats">
-    <option value="butter">Butter</option>
-    <option value="milk (whole)">Milk</option>
-    <option value="cream cheese">Cream Cheese</option>
-    <option value="yogurt (plain)">Yogurt</option>
-    <option value="cheese (grated)">Grated Cheese</option>
-  </optgroup>
-
-  <optgroup label="Oils & Syrups">
-    <option value="olive oil">Olive Oil</option>
-    <option value="maple syrup">Maple Syrup</option>
-    <option value="honey">Honey</option>
-    <option value="molasses">Molasses</option>
-    <option value="corn syrup">Corn Syrup</option>
-  </optgroup>
-
-  <optgroup label="Nuts & Flours">
-    <option value="almond flour">Almond Flour</option>
-    <option value="coconut flour">Coconut Flour</option>
-    <option value="peanut butter">Peanut Butter</option>
-  </optgroup>
-
-  <optgroup label="Miscellaneous">
-    <option value="rice (uncooked)">Rice</option>
-    <option value="oats (rolled)">Oats</option>
-    <option value="yeast (active dry)">Yeast</option>
-    <option value="mayonnaise">Mayonnaise</option>
-    <option value="water">Water</option>
-  </optgroup>
-</select>
-
-        <button onclick="convertKitchen()">Convert</button>
-        <p id="kitchenResult"></p>
-      </section>
-    </main>
-
-    <footer>
-      <div class="footer-brand">
-        <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
-        <span class="footer-text">Convert Labs</span>
+    <section class="tools-preview">
+      <h2>Explore Our Most Popular Tools</h2>
+      <div class="tool-grid">
+        <a href="tools/length-converter.html" class="tool-card"><h3>📏 Length Converter</h3><p>Convert meters, inches, feet, miles, and more.</p></a>
+        <a href="tools/temperature-converter.html" class="tool-card"><h3>🌡 Temperature Converter</h3><p>Switch between Celsius, Fahrenheit, and Kelvin.</p></a>
+        <a href="tools/volume-converter.html" class="tool-card"><h3>🧴 Volume Converter</h3><p>Convert liters, cups, and gallons easily.</p></a>
+        <a href="tools/container-calculator.html" class="tool-card"><h3>📦 Container Calculator</h3><p>Find box or cylinder volumes with density options.</p></a>
+        <a href="tools/kitchen-converter.html" class="tool-card"><h3>🥣 Kitchen Converter</h3><p>Convert ingredients between grams, cups, and spoons.</p></a>
+        <a href="tools/currency-converter.html" class="tool-card"><h3>💱 Currency Converter</h3><p>Check exchange rates instantly and globally.</p></a>
+        <a href="tools/image-converter.html" class="tool-card"><h3>🖼 Image Converter</h3><p>Convert images between JPG, PNG, and WEBP.</p></a>
+        <a href="tools/calorie-calculator.html" class="tool-card"><h3>🔥 Calorie Calculator</h3><p>Estimate meal calories using ingredient data.</p></a>
       </div>
-      <p>© 2025 Convert Labs. All rights reserved.</p>
-      <div class="footer-links">
-        <a href="about.html">About</a> |
-        <a href="how-to.html">Guides</a> |
-        <a href="privacy.html">Privacy Policy</a> |
-        <a href="terms.html">Terms of Use</a> |
-        <a href="contact.html">Contact</a>
-      </div>
-    </footer>
-  </div>
+    </section>
 
-  <script src="script.js"></script>
+    <section class="updates">
+      <h2>🆕 News & Updates</h2>
+      <article>
+        <h3>📅 October 2025 — New Educational Guides</h3>
+        <p>We’ve launched our <a href="guides.html">Guides & Learning Center</a> with step-by-step tutorials.</p>
+      </article>
+      <article>
+        <h3>🚀 November 2025 — Website Optimization</h3>
+        <p>Improved loading speed and Google AdSense compliance across all pages.</p>
+      </article>
+    </section>
+  </main>
+
+  <!-- ✅ FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="assets/convert-labs-icon.png" alt="Convert Labs footer logo" class="footer-logo" style="height:28px;" loading="lazy">
+      <span class="footer-text">Convert Labs</span>
+    </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <nav class="footer-links">
+      <a href="about.html">About</a> |
+      <a href="tools/tools.html">Tools</a> |
+      <a href="guides.html">Blog</a> |
+      <a href="privacy.html">Privacy</a> |
+      <a href="terms.html">Terms</a> |
+      <a href="disclaimer.html">Disclaimer</a> |
+      <a href="contact.html">Contact</a>
+    </nav>
+  </footer>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
-
-
-
-
-

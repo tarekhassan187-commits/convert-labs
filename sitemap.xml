@@ -1,58 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset 
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
-    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- Root pages -->
   <url>
     <loc>https://convertlabs.online/</loc>
-    <lastmod>2025-10-26</lastmod>
-    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
   </url>
-
   <url>
     <loc>https://convertlabs.online/about.html</loc>
-    <lastmod>2025-10-26</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
-
   <url>
-    <loc>https://convertlabs.online/how-to.html</loc>
-    <lastmod>2025-10-26</lastmod>
+    <loc>https://convertlabs.online/contact.html</loc>
+    <priority>0.7</priority>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
-
+  <url>
+    <loc>https://convertlabs.online/guides.html</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
   <url>
     <loc>https://convertlabs.online/privacy.html</loc>
-    <lastmod>2025-10-26</lastmod>
-    <changefreq>yearly</changefreq>
     <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
   </url>
-
   <url>
     <loc>https://convertlabs.online/terms.html</loc>
-    <lastmod>2025-10-26</lastmod>
-    <changefreq>yearly</changefreq>
     <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
   </url>
-
   <url>
-    <loc>https://convertlabs.online/image-converter.html</loc>
-    <lastmod>2025-10-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://convertlabs.online/disclaimer.html</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
   </url>
 
-<url>
-  <loc>https://convertlabs.online/currency-converter.html</loc>
-  <lastmod>2025-10-27</lastmod>
-  <changefreq>daily</changefreq>
-  <priority>0.9</priority>
-</url>
+  <!-- Tools -->
+  <url>
+    <loc>https://convertlabs.online/tools/tools.html</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/tools/length-converter.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/tools/temperature-converter.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/tools/volume-converter.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/tools/container-calculator.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/tools/kitchen-converter.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/tools/currency-converter.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/tools/image-converter.html</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/tools/calorie-calculator.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
 
+  <!-- (Optional future articles in /guides/) -->
+  <url>
+    <loc>https://convertlabs.online/guides/how-to-calculate-container-volume.html</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/how-to-convert-kitchen-units.html</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/understanding-temperature-scales.html</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
 
 </urlset>

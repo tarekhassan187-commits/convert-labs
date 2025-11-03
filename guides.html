@@ -2,137 +2,236 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How to Use Convert Labs | Step-by-Step Guides</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Guides & Tutorials — Convert Labs</title>
 
   <!-- ✅ SEO -->
-  <meta name="description" content="Learn how to use Convert Labs to convert between units of length, volume, temperature, kitchen measurements, currency, and more — quickly and accurately." />
-  <meta name="keywords" content="how to use Convert Labs, unit converter guide, converter tutorial, Convert Labs help" />
+  <meta name="description" content="Learn with Convert Labs guides — explore formulas, real-world examples, and conversion tips for length, volume, temperature, currency, kitchen conversions, images, calories, and container volume." />
+  <meta name="keywords" content="unit conversion guide, tutorials, measurement tips, length conversion, volume conversion, kitchen measurements, currency conversion, image conversion, calorie estimation" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://convertlabs.online/how-to.html" />
-  <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
+  <link rel="canonical" href="https://convertlabs.online/guides.html" />
+  <link rel="icon" href="assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
-
-  <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-    crossorigin="anonymous"></script>
-
-  <!-- ✅ Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P');
-  </script>
-
-  <!-- ✅ Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Use Convert Labs",
-    "description": "A simple step-by-step guide for using Convert Labs converters including length, temperature, volume, kitchen, currency, and image tools.",
-    "totalTime": "PT2M",
-    "supply": "A device with internet access",
-    "tool": "Convert Labs",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "Open Convert Labs",
-        "text": "Visit https://convertlabs.online in your browser."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Choose Converter Type",
-        "text": "Select between Length, Temperature, Volume, Container, Kitchen, or Tools for currency and image conversions."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Enter Value and Units",
-        "text": "Type your value, pick input and output units, then click Convert."
-      }
-    ]
-  }
-  </script>
-
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* --- Guides Page Layout --- */
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    /* --- Card Grid --- */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    .blog-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 1rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
+      min-height: 400px;
+      border: 1px solid rgba(30,64,175,0.05);
+    }
+
+    .blog-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+    }
+
+    .blog-card h3 {
+      font-size: 1rem;
+      color: #1e40af;
+      margin: 0.5rem 0;
+      transition: color 0.2s ease;
+    }
+
+    .blog-card h3 a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.2s ease;
+    }
+
+    .blog-card p {
+      flex-grow: 1;
+      color: #333;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .blog-card small {
+      display: block;
+      margin-top: 0.8rem;
+      color: #666;
+      font-size: 0.85rem;
+    }
+
+    /* --- Hover Effect --- */
+    .blog-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 16px rgba(37,99,235,0.15);
+      border: 1px solid rgba(37,99,235,0.25);
+    }
+
+    .blog-card:hover h3 a {
+      color: #2563eb;
+    }
+
+    /* --- Button --- */
+    .cta-secondary {
+      background: #2563eb;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      transition: background 0.25s;
+    }
+
+    .cta-secondary:hover {
+      background: #1e3a8a;
+    }
+
+    /* --- Responsive tweaks --- */
+    @media (max-width: 600px) {
+      main {
+        padding: 1.5rem 0.8rem;
+      }
+      .blog-card {
+        min-height: auto;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <!-- ✅ Header -->
-  <header>
-    <div class="header-content">
-      <a href="index.html" class="brand" aria-label="Convert Labs home">
-        <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
-        <span class="brand-text">Convert Labs</span>
-      </a>
-
-      <div class="header-controls">
-        <a href="contact.html" class="header-btn">Contact Us</a>
-        <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+  <!-- ✅ NAVBAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
+          <span class="brand-text">Convert Labs</span>
+        </a>
       </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="tools/tools.html">Tools</a></li>
+          <li><a href="guides.html" class="active">Guides</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle">🌙</button>
     </div>
-    <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
   </header>
 
-  <!-- ✅ Main Content -->
-  <main style="padding: 2rem 1rem; max-width: 800px; margin: auto;">
-    <h1>How to Use Convert Labs</h1>
-    <p>
-      Convert Labs is designed to make every type of unit conversion quick and accurate. Whether you need to
-      convert between measurements, cooking ingredients, or file formats, our tools are free and easy to use.
-      Here’s a step-by-step overview:
+  <!-- ✅ MAIN CONTENT -->
+  <main>
+    <h1>Convert Labs Guides & Tutorials</h1>
+    <p style="text-align:center;max-width:700px;margin:auto;margin-bottom:2rem;">
+      Learn the science behind everyday conversions. Our practical guides explain formulas, logic, and real-world applications — so you can calculate smarter, not just faster.
     </p>
 
-    <h2>1. Length Converter</h2>
-    <p>Enter the numeric value you wish to convert, choose your input and target units (like meters to feet), and click <strong>Convert</strong>. Perfect for engineers, builders, and students.</p>
+    <section class="blog-grid">
+      <article class="blog-card">
+        <img src="assets/guide-length.png" alt="Length conversion guide">
+        <h3><a href="tools/length-converter.html">Understanding Length Conversions</a></h3>
+        <p>Convert meters, centimeters, inches, feet, and miles — learn common formulas, examples, and practical tips for measurement accuracy.</p>
+        <small>📅 Updated: November 2025</small>
+      </article>
 
-    <h2>2. Temperature Converter</h2>
-    <p>Switch between Celsius, Fahrenheit, and Kelvin effortlessly. Great for cooking, weather checks, and lab work.</p>
+      <article class="blog-card">
+        <img src="assets/thermometer.jpg" alt="Temperature conversion guide">
+        <h3><a href="tools/temperature-converter.html">Temperature Scales Explained</a></h3>
+        <p>Understand Celsius, Fahrenheit, Kelvin, and how to convert between them — including Rankine and Réaumur notes for completeness.</p>
+        <small>📅 Updated: November 2025</small>
+      </article>
 
-    <h2>3. Volume & Container Converter</h2>
-    <p>Use it to calculate volumes for boxes and cylinders or to find fluid mass by selecting a liquid density. Ideal for packaging, mixing, and DIY applications.</p>
+      <article class="blog-card">
+        <img src="assets/guide-volume.png" alt="Volume conversion guide">
+        <h3><a href="tools/volume-converter.html">Understanding Volume Conversions</a></h3>
+        <p>Learn liters, milliliters, cups, US/UK gallons, cubic meters, cubic feet and more — with real-world cooking and shipping examples.</p>
+        <small>📅 Updated: November 2025</small>
+      </article>
 
-    <h2>4. Kitchen Converter</h2>
-    <p>Pick an ingredient (like flour, sugar, or milk) and convert between grams, cups, tablespoons, or teaspoons. Designed for accurate recipe conversions.</p>
+      <article class="blog-card">
+        <img src="assets/container-volume.jpg" alt="Container volume guide">
+        <h3><a href="tools/container-calculator.html">How to Calculate Container Volume</a></h3>
+        <p>Step-by-step guide to compute box and cylinder volumes, unit conversions, and estimate mass using densities for common liquids.</p>
+        <small>📅 Updated: November 2025</small>
+      </article>
 
-    <h2>5. Tools — Currency & Image Converters</h2>
-    <p>
-      Access the <strong>Tools</strong> tab for advanced converters:
-      <ul style="text-align:left;">
-        <li><strong>Currency Converter</strong> — Get real-time exchange rates updated from global financial APIs.</li>
-        <li><strong>Image Converter</strong> — Convert images between JPG, PNG, WebP, and GIF formats easily with preview and download.</li>
-      </ul>
-    </p>
+      <article class="blog-card">
+        <img src="assets/kitchen-measuring.jpg" alt="Kitchen measurements guide">
+        <h3><a href="tools/kitchen-converter.html">Cooking Measurements Made Easy</a></h3>
+        <p>From grams to cups — understand ingredient density, packing differences, and tips for accurate baking and cooking conversions.</p>
+        <small>📅 Updated: November 2025</small>
+      </article>
 
-    <h2>Pro Tips</h2>
-    <ul style="text-align:left;">
-      <li>Click the 🌙 icon to switch between light and dark mode for comfortable viewing.</li>
-      <li>All your most-used converters remember preferences automatically in your browser.</li>
-      <li>Bookmark Convert Labs on your phone or desktop for quick access anytime.</li>
-    </ul>
+      <article class="blog-card">
+        <img src="assets/guide-currency.png" alt="Currency conversion guide">
+        <h3><a href="tools/currency-converter.html">Smart Currency Conversion Tips</a></h3>
+        <p>Learn how exchange rates work, what affects them, and how to read live rates safely for travel and small business transactions.</p>
+        <small>📅 Updated: November 2025</small>
+      </article>
 
-    <p><em>Last updated: October 2025</em></p>
+      <article class="blog-card">
+        <img src="assets/guide-image.png" alt="Image format converter guide">
+        <h3><a href="tools/image-converter.html">Image Format Conversion Guide</a></h3>
+        <p>Know when to use JPG, PNG, WEBP, or GIF — file size vs quality, transparency, and best use cases for web publishing.</p>
+        <small>📅 Updated: November 2025</small>
+      </article>
+
+      <article class="blog-card">
+        <img src="assets/guide-calories.png" alt="Calorie calculator guide">
+        <h3><a href="tools/calorie-calculator.html">Calorie Calculation Explained</a></h3>
+        <p>Discover how calorie estimation works using ingredient composition and densities — practical methods and limitations to be aware of.</p>
+        <small>📅 Updated: November 2025</small>
+      </article>
+    </section>
+
+    <section style="text-align:center;margin-top:3rem;">
+      <h2>Want More In-Depth Guides?</h2>
+      <p>We regularly add new articles about conversion accuracy, formulas, and unit history. Suggest a topic anytime via our <a href="contact.html">contact page</a> — your ideas shape our next updates!</p>
+      <a href="tools/tools.html" class="cta-secondary">Explore All Tools</a>
+    </section>
   </main>
 
-  <!-- ✅ Footer -->
-  <footer>
+  <!-- ✅ FOOTER -->
+  <footer class="footer">
     <div class="footer-brand">
       <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <span class="footer-text">Convert Labs</span>
     </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
-    <div class="footer-links">
+    <nav class="footer-links">
       <a href="about.html">About</a> |
-      <a href="guides.html">Guides</a> |
+      <a href="tools/tools.html">Tools</a> |
       <a href="privacy.html">Privacy Policy</a> |
       <a href="terms.html">Terms of Use</a> |
-      <a href="index.html">Home</a>
-    </div>
+      <a href="disclaimer.html">Disclaimer</a> |
+      <a href="contact.html">Contact</a>
+    </nav>
   </footer>
 
-  <!-- ✅ Script -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
-    </html>
+</html>

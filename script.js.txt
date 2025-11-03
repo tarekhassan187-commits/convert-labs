@@ -1,0 +1,169 @@
+/* =========================================================
+   Convert Labs – Unified Site Script
+   Includes:
+   - Theme Toggle (persisted)
+   - Smart UI initialization
+   - Converter functions (auto-run only when elements exist)
+   - Dark mode styling hooks
+   ========================================================= */
+
+// Safe element selector shortcuts
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+/* ============================
+   THEME TOGGLE (Persistent)
+   ============================ */
+document.addEventListener("DOMContentLoaded", () => {
+  const THEME_KEY = "cl_theme";
+  const btn = document.getElementById("themeToggle");
+  const root = document.documentElement;
+
+  function applyTheme(mode) {
+    root.classList.add("theme-transition");
+    setTimeout(() => root.classList.remove("theme-transition"), 300);
+
+    // ✅ Toggle class on <html>
+    if (mode === "dark") {
+      root.classList.add("dark");
+      if (btn) btn.textContent = "☀️";
+    } else {
+      root.classList.remove("dark");
+      if (btn) btn.textContent = "🌙";
+    }
+
+    localStorage.setItem(THEME_KEY, mode);
+  }
+
+  // ✅ Load stored theme or auto-detect
+  const saved = localStorage.getItem(THEME_KEY) ||
+    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+  applyTheme(saved);
+
+  if (btn) {
+    btn.addEventListener("click", () => {
+      const newMode = root.classList.contains("dark") ? "light" : "dark";
+      applyTheme(newMode);
+    });
+  }
+});
+
+
+/* ============================================
+   PAGE LOADER (show app / hide splash safely)
+   ============================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  const loader = $("#loading-screen");
+  const app = $("#app");
+  if (loader) loader.style.display = "none";
+  if (app) app.style.display = "block";
+});
+
+/* ============================================
+   TAB SWITCHING (legacy for multi-converter pages)
+   ============================================ */
+window.showConverter = function (tabId) {
+  const sections = $$(".converter");
+  const tabs = $$(".tabs button");
+  sections.forEach((s) => (s.style.display = "none"));
+  tabs.forEach((b) => b.classList.remove("active"));
+
+  const target = document.getElementById(tabId);
+  if (target) target.style.display = "block";
+
+  const activeBtn = tabs.find(
+    (b) => b.getAttribute("onclick")?.includes(tabId)
+  );
+  if (activeBtn) activeBtn.classList.add("active");
+};
+
+/* =========================================================
+   CONVERTERS (Initialize only if their elements exist)
+   ========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  // === Length Converter ===
+  if ($("#lengthInput") && $("#lengthFrom") && $("#lengthTo")) {
+    const map = {
+      "millimeter (mm)": 0.001,
+      "centimeter (cm)": 0.01,
+      "meter (m)": 1,
+      "kilometer (km)": 1000,
+      "inch (in)": 0.0254,
+      "foot (ft)": 0.3048,
+      "yard (yd)": 0.9144,
+      "mile (mi)": 1609.34,
+    };
+    const from = $("#lengthFrom");
+    const to = $("#lengthTo");
+    for (const u in map) {
+      from.appendChild(new Option(u, u));
+      to.appendChild(new Option(u, u));
+    }
+    from.value = "meter (m)";
+    to.value = "centimeter (cm)";
+
+    window.convertLength = function () {
+      const v = parseFloat($("#lengthInput").value) || 0;
+      const res = (v * map[from.value]) / map[to.value];
+      $("#lengthResult").textContent = isFinite(res)
+        ? `${res.toFixed(6)} ${to.value}`
+        : "Invalid input.";
+    };
+  }
+
+  // === Temperature Converter ===
+  if ($("#tempInput") && $("#tempFrom") && $("#tempTo")) {
+    const from = $("#tempFrom");
+    const to = $("#tempTo");
+    ["Celsius (°C)", "Fahrenheit (°F)", "Kelvin (K)"].forEach((u) => {
+      from.appendChild(new Option(u, u));
+      to.appendChild(new Option(u, u));
+    });
+    from.value = "Celsius (°C)";
+    to.value = "Fahrenheit (°F)";
+
+    window.convertTemperature = function () {
+      const v = parseFloat($("#tempInput").value) || 0;
+      let c;
+      if (from.value.includes("Celsius")) c = v;
+      else if (from.value.includes("Fahrenheit")) c = (v - 32) * (5 / 9);
+      else if (from.value.includes("Kelvin")) c = v - 273.15;
+
+      let final;
+      if (to.value.includes("Celsius")) final = c;
+      else if (to.value.includes("Fahrenheit")) final = c * (9 / 5) + 32;
+      else if (to.value.includes("Kelvin")) final = c + 273.15;
+
+      $("#tempResult").textContent = `${final.toFixed(3)} ${to.value}`;
+    };
+  }
+
+  // === Volume Converter ===
+  if ($("#volumeInput") && $("#volumeFrom") && $("#volumeTo")) {
+    const map = {
+      "milliliter (ml)": 1,
+      "liter (L)": 1000,
+      cup: 240,
+      "tablespoon (tbsp)": 14.7868,
+      "teaspoon (tsp)": 4.92892,
+      "fluid ounce (fl oz)": 29.5735,
+      "gallon (gal)": 3785.41,
+      "pint (pt)": 473.176,
+    };
+    const from = $("#volumeFrom");
+    const to = $("#volumeTo");
+    for (const u in map) {
+      from.appendChild(new Option(u, u));
+      to.appendChild(new Option(u, u));
+    }
+    from.value = "milliliter (ml)";
+    to.value = "liter (L)";
+
+    window.convertVolume = function () {
+      const v = parseFloat($("#volumeInput").value) || 0;
+      const res = (v * map[from.value]) / map[to.value];
+      $("#volumeResult").textContent = `${res.toFixed(6)} ${to.value}`;
+    };
+  }
+});

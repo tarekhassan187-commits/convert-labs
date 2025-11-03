@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow any admin or temporary directories (if you add them later)
+Disallow: /admin/
+Disallow: /temp/
+Disallow: /drafts/
+
+# Point crawlers to your sitemap
+Sitemap: https://convertlabs.online/sitemap.xml

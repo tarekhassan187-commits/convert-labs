@@ -2,124 +2,222 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About – Convert Labs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About Convert Labs — Learn & Calculate Smarter</title>
 
-  <!-- ✅ SEO -->
-  <meta name="description" content="Learn about Convert Labs — the free online platform for accurate, fast, and user-friendly conversions. Discover our mission, vision, and story." />
-  <meta name="keywords" content="about Convert Labs, online converters, free tools, unit conversion, converter website, Convert Labs story" />
+  <!-- ✅ SEO META -->
+  <meta name="description" content="Learn about Convert Labs — our mission to make online conversions fast, accurate, and educational. Discover how we simplify measurements and help users worldwide." />
+  <meta name="keywords" content="Convert Labs, about Convert Labs, online converters, educational tools, unit conversions, mission" />
   <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="About Convert Labs" />
-  <meta property="og:description" content="Convert Labs provides free, accurate, and easy-to-use conversion tools for students, professionals, and everyday users." />
+  <link rel="canonical" href="https://convertlabs.online/about.html" />
+
+  <!-- ✅ OPEN GRAPH -->
+  <meta property="og:title" content="About Convert Labs — Learn & Calculate Smarter" />
+  <meta property="og:description" content="Learn about Convert Labs, our mission to make online conversions fast, accurate, and educational for users worldwide." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://convertlabs.online/about.html" />
   <meta property="og:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <link rel="canonical" href="https://convertlabs.online/about.html" />
+  <meta property="og:image:alt" content="Convert Labs logo" />
+  <meta property="og:site_name" content="Convert Labs" />
+  <meta property="og:locale" content="en_US" />
 
-  <!-- ✅ Favicon -->
-  <link rel="icon" type="image/png" href="assets/convert-labs-icon.png" />
+  <!-- ✅ TWITTER -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="About Convert Labs — Learn & Calculate Smarter" />
+  <meta name="twitter:description" content="Discover Convert Labs’ mission to make online conversions fast, accurate, and educational." />
+  <meta name="twitter:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
+
+  <!-- ✅ STRUCTURED DATA -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Convert Labs",
+    "url": "https://convertlabs.online/about.html",
+    "description": "Convert Labs provides accurate, educational, and fast online conversion tools for daily and professional use.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Convert Labs",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://convertlabs.online/assets/convert-labs-icon.png"
+      }
+    },
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Convert Labs",
+      "founder": {
+        "@type": "Person",
+        "name": "Independent Developer & Creator"
+      },
+      "foundingDate": "2024",
+      "url": "https://convertlabs.online/",
+      "sameAs": ["https://convertlabs.online"]
+    }
+  }
+  </script>
+
+  <link rel="icon" href="assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
+  <link rel="stylesheet" href="style.css" />
 
-  <!-- ✅ Google AdSense (main global script only) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-    crossorigin="anonymous"></script>
+  <!-- ✅ Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
 
   <!-- ✅ Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <link rel="stylesheet" href="style.css" />
+  <!-- ✅ PAGE STYLES -->
+  <style>
+    header.navbar {
+      background: #1e40af;
+      color: #fff;
+      padding: 10px 0;
+    }
+    .nav-container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-links ul {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover, .nav-links .active { opacity: 0.8; }
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      line-height: 1.75;
+    }
+    main h1, main h2 {
+      color: #111;
+    }
+    main ul {
+      padding-left: 1.5rem;
+    }
+    footer.footer {
+      background: #1e40af;
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+    }
+    footer.footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+    footer.footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Header -->
-  <header>
-    <div class="header-content">
-      <a href="index.html" class="brand" aria-label="Convert Labs home">
-        <img src="assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo" />
-        <span class="brand-text">Convert Labs</span>
-      </a>
-
-      <div class="header-controls">
-        <a href="contact.html" class="header-btn">Contact Us</a>
-        <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+  <!-- ✅ HEADER -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo-img" style="height:32px;" loading="lazy">
+          <span class="brand-text">Convert Labs</span>
+        </a>
       </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="tools/tools.html">Tools</a></li>
+          <li><a href="guides.html">Blog</a></li>
+          <li><a href="about.html" class="active">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
     </div>
-
-    <p class="tagline">Welcome to Convert Labs — your smart all-in-one unit converter</p>
   </header>
 
-  <!-- Main content -->
-  <main class="content-section">
+  <!-- ✅ MAIN CONTENT -->
+  <main>
     <h1>About Convert Labs</h1>
-    <p>
-      Convert Labs is a modern web-based platform built to simplify your everyday calculations.
-      Whether you’re converting temperature, currency, length, or kitchen measurements, our mission is
-      to make every conversion fast, accurate, and effortless.
-    </p>
+    <p><strong>Last updated:</strong> November 2025</p>
 
-    <h2>Our Vision</h2>
-    <p>
-      We believe that information should be simple and accessible. Convert Labs was created to
-      help people across the world handle daily calculations without frustration. With an intuitive interface,
-      accurate algorithms, and responsive design, our goal is to become your trusted digital conversion assistant.
-    </p>
+    <p><strong>Convert Labs</strong> is an independent online platform dedicated to helping people make sense of everyday measurements.  
+    From cooking and studying to travel and design, we believe that understanding conversions makes life simpler and smarter.</p>
 
-    <!-- ✅ AdSense placeholder (non-intrusive, optional) -->
-    <div style="margin: 1.5rem 0; text-align: center;">
-      <ins class="adsbygoogle"
-        style="display:block; text-align:center;"
-        data-ad-layout="in-article"
-        data-ad-format="fluid"
-        data-ad-client="ca-pub-2490597435056272"
-        data-ad-slot="4799999999"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
+    <h2>Our Mission</h2>
+    <p>Our goal is to make accurate, fast, and educational online converters available to everyone — for free.  
+    We go beyond simple calculators by including short guides and practical examples that explain how conversions actually work.  
+    Whether you’re learning units for school, checking recipe measurements, or estimating container volume, Convert Labs is built to help.</p>
 
-    <h2>Our Story</h2>
-    <p>
-      Convert Labs was founded with the idea that essential tools should be freely available and
-      beautifully simple to use. Instead of complex formulas or ads that get in the way, we focused
-      on a clean experience that helps users get instant results. The website now serves thousands
-      of daily visitors worldwide.
-    </p>
+    <h2>What Makes Convert Labs Different</h2>
+    <ul>
+      <li>✅ <strong>Educational value</strong> — each converter includes clear explanations, not just results.</li>
+      <li>⚙️ <strong>Accurate tools</strong> — verified formulas and density data for reliable outputs.</li>
+      <li>📱 <strong>Mobile-friendly design</strong> — smooth experience across all devices.</li>
+      <li>🧠 <strong>Free and privacy-respectful</strong> — no accounts, no tracking beyond Google Analytics.</li>
+      <li>💬 <strong>Constant updates</strong> — we regularly publish new guides and improve performance.</li>
+    </ul>
 
-    <h2>Our Commitment</h2>
-    <p>
-      We’re committed to continuous improvement. We regularly update our tools to include new
-      unit types, optimize accuracy, and provide a great experience across all devices.
-      We also value user privacy and transparency — your data is never stored or sold.
-    </p>
+    <h2>Who We Are</h2>
+    <p>Convert Labs was founded by an independent developer and content creator passionate about simplifying numbers and measurements online.  
+    What started as a small hobby project for quick conversions has grown into a globally trusted platform for accessible, educational tools.</p>
 
-    <h2>Contact Us</h2>
-    <p>
-      If you have suggestions, feedback, or want to collaborate, please reach out through our
-      <a href="contact.html">Contact page</a>. We’d love to hear from you!
-    </p>
+    <h2>Transparency and Trust</h2>
+    <p>Convert Labs operates transparently: all data is processed client-side whenever possible, and cookies are used only for analytics and ad personalization.  
+    You can learn more in our <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms of Use</a>.</p>
+
+    <h2>Get in Touch</h2>
+    <p>We love feedback, suggestions, and collaboration ideas.  
+    If you have questions or requests, feel free to contact us at:  
+    <a href="mailto:thassan2010@live.com">thassan2010@live.com</a>.</p>
+
+    <p><em>Convert Labs — Learn & Calculate Smarter.</em><br>Helping users understand conversions since 2024.</p>
   </main>
 
-  <!-- Footer -->
-  <footer>
+  <!-- ✅ FOOTER -->
+  <footer class="footer">
     <div class="footer-brand">
-      <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <img src="assets/convert-labs-icon.png" alt="Convert Labs footer logo" class="footer-logo" style="height:28px;" loading="lazy">
       <span class="footer-text">Convert Labs</span>
     </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
-    <div class="footer-links">
-      <a href="index.html">Home</a> |
-      <a href="how-to.html">Guides</a> |
-      <a href="privacy.html">Privacy Policy</a> |
-      <a href="terms.html">Terms of Use</a> |
+    <nav class="footer-links">
+      <a href="about.html">About</a> |
+      <a href="tools/tools.html">Tools</a> |
+      <a href="guides.html">Blog</a> |
+      <a href="privacy.html">Privacy</a> |
+      <a href="terms.html">Terms</a> |
+      <a href="disclaimer.html">Disclaimer</a> |
       <a href="contact.html">Contact</a>
-    </div>
+    </nav>
   </footer>
 
-  <!-- ✅ Global script (theme toggle, etc.) -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
