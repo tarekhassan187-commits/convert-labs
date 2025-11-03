@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Container Volume Calculator — Convert Labs</title>
+  <meta name="description" content="Calculate the volume of boxes and cylinders in liters, milliliters, or cubic centimeters. Includes density-based mass estimation and real-world examples — by Convert Labs." />
+  <link rel="icon" href="../assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <!-- ✅ HEADER -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="../index.html">
+          <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="tools.html" class="active">Tools</a></li>
+          <li><a href="../guides.html">Blog</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle">🌙</button>
+    </div>
+  </header>
+
+  <!-- ✅ MAIN TOOL -->
+  <main class="tool-page" style="max-width:900px;margin:auto;padding:2rem 1rem;text-align:left;">
+    <h1>Container Volume Calculator</h1>
+    <p>
+      Calculate the volume of boxes and cylinders in <strong>liters, milliliters, or cubic centimeters</strong>.
+      You can also estimate the mass of common liquids like water, oil, or honey using their densities.
+    </p>
+
+    <section>
+      <h2>Formulas</h2>
+      <ul>
+        <li><strong>Box:</strong> Volume = Length × Width × Height</li>
+        <li><strong>Cylinder:</strong> Volume = π × Radius² × Height</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Interactive Calculator</h2>
+
+      <label for="containerType"><b>Select Container Type:</b></label>
+      <select id="containerType">
+        <option value="box">Box</option>
+        <option value="cylinder">Cylinder</option>
+      </select>
+
+      <!-- Box Inputs -->
+      <div id="boxInputs">
+        <input type="number" id="lengthBox" placeholder="Length (cm)" />
+        <input type="number" id="widthBox" placeholder="Width (cm)" />
+        <input type="number" id="heightBox" placeholder="Height (cm)" />
+      </div>
+
+      <!-- Cylinder Inputs -->
+      <div id="cylinderInputs" style="display:none;">
+        <input type="number" id="radiusCylinder" placeholder="Radius (cm)" />
+        <input type="number" id="heightCylinder" placeholder="Height (cm)" />
+      </div>
+
+      <label for="liquidType"><b>Choose Liquid Type (optional):</b></label>
+      <select id="liquidType">
+        <option value="water">Water (1.00 g/cm³)</option>
+        <option value="milk">Milk (1.03 g/cm³)</option>
+        <option value="oil">Oil (0.92 g/cm³)</option>
+        <option value="honey">Honey (1.42 g/cm³)</option>
+        <option value="custom">Custom</option>
+      </select>
+
+      <input type="number" id="customDensity" placeholder="Enter density (g/cm³)" style="display:none;" />
+
+      <button id="calcBtn">Calculate</button>
+      <p id="containerResult"></p>
+    </section>
+
+    <section>
+      <h2>Examples</h2>
+      <p><b>Example 1:</b> Box 10×10×10 cm = 1000 cm³ = 1 L of water (≈ 1 kg).</p>
+      <p><b>Example 2:</b> Cylinder with radius 5 cm and height 20 cm = 1570.8 cm³ = 1.57 L.</p>
+    </section>
+
+    <section>
+      <h2>Understanding Container Volume</h2>
+      <p>
+        Volume represents the space a shape or container can hold. It’s measured in cubic units such as <strong>cm³</strong> or <strong>m³</strong>.
+        When filled with liquid, it also determines how many <strong>liters</strong> or <strong>milliliters</strong> it can contain.
+      </p>
+      <p>
+        The <strong>Box Volume</strong> formula applies to rectangular shapes like packages and tanks,
+        while the <strong>Cylinder Volume</strong> formula works for bottles, cans, and pipes.
+      </p>
+      <p>
+        To estimate the <strong>mass</strong> of a liquid, multiply the volume in cm³ by its density (in g/cm³).
+        For instance, 1000 cm³ of water equals 1000 g, or 1 kg.
+      </p>
+    </section>
+  </main>
+
+  
+  <!-- ✅ FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" style="height:28px;">
+      <span class="footer-text">Convert Labs</span>
+    </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <nav class="footer-links">
+      <a href="../about.html">About</a> |
+      <a href="tools.html">Tools</a> |
+      <a href="../guides.html">Blog</a> |
+      <a href="../privacy.html">Privacy Policy</a> |
+       <a href="disclaimer.html">Disclaimer</a> |
+      <a href="../terms.html">Terms of Use</a> |
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </footer>
+
+  <!-- ✅ SCRIPT -->
+  <script>
+    const containerType = document.getElementById("containerType");
+    const boxInputs = document.getElementById("boxInputs");
+    const cylinderInputs = document.getElementById("cylinderInputs");
+    const liquidType = document.getElementById("liquidType");
+    const customDensity = document.getElementById("customDensity");
+    const result = document.getElementById("containerResult");
+
+    // Handle container type change
+    containerType.addEventListener("change", () => {
+      if (containerType.value === "box") {
+        boxInputs.style.display = "block";
+        cylinderInputs.style.display = "none";
+      } else {
+        boxInputs.style.display = "none";
+        cylinderInputs.style.display = "block";
+      }
+    });
+
+    // Handle liquid type change
+    liquidType.addEventListener("change", () => {
+      customDensity.style.display = liquidType.value === "custom" ? "inline-block" : "none";
+    });
+
+    document.getElementById("calcBtn").addEventListener("click", () => {
+      let volumeCm3 = 0;
+
+      if (containerType.value === "box") {
+        const l = parseFloat(document.getElementById("lengthBox").value);
+        const w = parseFloat(document.getElementById("widthBox").value);
+        const h = parseFloat(document.getElementById("heightBox").value);
+        if (isNaN(l) || isNaN(w) || isNaN(h)) {
+          result.textContent = "⚠️ Please enter valid box dimensions.";
+          return;
+        }
+        volumeCm3 = l * w * h;
+      } else {
+        const r = parseFloat(document.getElementById("radiusCylinder").value);
+        const h = parseFloat(document.getElementById("heightCylinder").value);
+        if (isNaN(r) || isNaN(h)) {
+          result.textContent = "⚠️ Please enter valid cylinder dimensions.";
+          return;
+        }
+        volumeCm3 = Math.PI * r * r * h;
+      }
+
+      const liters = volumeCm3 / 1000;
+      const milliliters = volumeCm3;
+
+      // Determine density
+      let density = 1.0;
+      switch (liquidType.value) {
+        case "milk": density = 1.03; break;
+        case "oil": density = 0.92; break;
+        case "honey": density = 1.42; break;
+        case "custom":
+          density = parseFloat(customDensity.value);
+          if (isNaN(density)) {
+            result.textContent = "⚠️ Please enter a valid custom density.";
+            return;
+          }
+          break;
+      }
+
+      const massGrams = volumeCm3 * density;
+      const massKg = massGrams / 1000;
+
+      result.innerHTML = `
+        <strong>Results:</strong><br>
+        Volume = ${volumeCm3.toFixed(2)} cm³<br>
+        = ${liters.toFixed(3)} L (${milliliters.toFixed(1)} mL)<br>
+        Estimated Mass = ${massGrams.toFixed(1)} g (${massKg.toFixed(3)} kg)
+      `;
+    });
+  </script>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>

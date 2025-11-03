@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Volume Converter — Convert Labs</title>
+
+  <meta name="description" content="Convert liters, milliliters, gallons (US & UK), cups, pints, and cubic units accurately. Perfect for cooking, lab work, and industrial use." />
+  <meta name="keywords" content="volume converter, liters to gallons, gallons to liters, cubic meters, cups, pints, Convert Labs" />
+
+  <link rel="icon" href="../assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="../index.html">
+          <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="tools.html" class="active">Tools</a></li>
+          <li><a href="../guides.html">Blog</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle">🌙</button>
+    </div>
+  </header>
+
+  <main class="tool-page" style="max-width:900px;margin:auto;padding:2rem 1rem;text-align:left;">
+    <h1>Volume Converter</h1>
+    <p>
+      Convert between <strong>liters, milliliters, US & UK gallons, cups, pints, and cubic units</strong> with precise accuracy.
+      Ideal for recipes, science, and industry.
+    </p>
+
+    <section>
+      <h2>Quick Reference</h2>
+      <ul>
+        <li>1 L = 1000 mL</li>
+        <li>1 m³ = 1000 L</li>
+        <li>1 US gallon = 3.78541 L</li>
+        <li>1 UK gallon = 4.54609 L</li>
+        <li>1 ft³ = 28.3168 L</li>
+        <li>1 in³ = 0.0163871 L</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Interactive Volume Converter</h2>
+      <div class="converter" style="text-align:center;margin-top:1rem;">
+        <input type="number" id="volumeInput" placeholder="Enter value" />
+        <select id="volumeFrom"></select>
+        <select id="volumeTo"></select>
+        <button id="convertBtn">Convert</button>
+        <p id="volumeResult"></p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Examples</h2>
+      <p><strong>Example 1:</strong> 1 US gallon = 3.78541 L</p>
+      <p><strong>Example 2:</strong> 1 ft³ = 28.3168 L</p>
+      <p><strong>Example 3:</strong> 2 cups (US) = 480 mL</p>
+    </section>
+  </main>
+
+   <!-- ✅ FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" style="height:28px;">
+      <span class="footer-text">Convert Labs</span>
+    </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <nav class="footer-links">
+      <a href="../about.html">About</a> |
+      <a href="tools.html">Tools</a> |
+      <a href="../guides.html">Blog</a> |
+      <a href="../privacy.html">Privacy Policy</a> |
+      <a href="../terms.html">Terms of Use</a> |
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </footer>
+
+  <script>
+    // ✅ Base reference: 1 Liter (L)
+    const volumeUnits = {
+      "Liters (L)": 1,
+      "Milliliters (mL)": 0.001,
+      "Cubic Meters (m³)": 1000,
+      "Cubic Centimeters (cm³)": 0.001,
+      "Cubic Inches (in³)": 0.0163871,
+      "Cubic Feet (ft³)": 28.3168,
+      "Cups (US)": 0.24,
+      "Pints (US)": 0.473176,
+      "Gallons (US)": 3.78541,
+      "Pints (UK)": 0.568261,
+      "Gallons (UK)": 4.54609
+    };
+
+    const fromSelect = document.getElementById("volumeFrom");
+    const toSelect = document.getElementById("volumeTo");
+    const input = document.getElementById("volumeInput");
+    const result = document.getElementById("volumeResult");
+
+    // ✅ Populate dropdowns only once
+    Object.keys(volumeUnits).forEach(unit => {
+      const opt1 = document.createElement("option");
+      const opt2 = document.createElement("option");
+      opt1.value = unit;
+      opt2.value = unit;
+      opt1.textContent = unit;
+      opt2.textContent = unit;
+      fromSelect.appendChild(opt1);
+      toSelect.appendChild(opt2);
+    });
+
+    fromSelect.value = "Liters (L)";
+    toSelect.value = "Milliliters (mL)";
+
+    document.getElementById("convertBtn").addEventListener("click", () => {
+      const val = parseFloat(input.value);
+      const from = fromSelect.value;
+      const to = toSelect.value;
+
+      if (isNaN(val)) {
+        result.textContent = "⚠️ Please enter a valid number.";
+        return;
+      }
+
+      const inLiters = val * volumeUnits[from]; // convert to liters
+      const converted = inLiters / volumeUnits[to]; // convert from liters to target unit
+
+      result.textContent = `${val} ${from} = ${converted.toFixed(6)} ${to}`;
+    });
+  </script>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>

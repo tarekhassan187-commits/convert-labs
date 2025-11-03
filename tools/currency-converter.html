@@ -3,23 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Currency Converter – Convert Labs Tools</title>
+  <title>Currency Converter — Convert Labs</title>
 
   <!-- ✅ SEO -->
-  <meta name="description" content="Convert Labs Currency Converter — fast, real-time exchange rates for USD, EUR, GBP, AED, SAR, EGP, and more. Simple, accurate, and free." />
-  <meta name="keywords" content="currency converter, online currency exchange, USD to EGP, AED to SAR, Convert Labs tools" />
+  <meta name="description" content="Convert Labs Currency Converter — real-time exchange rates for USD, EUR, GBP, AED, SAR, EGP, and 30+ currencies. Accurate, simple, and free." />
+  <meta name="keywords" content="currency converter, real-time exchange rates, USD to EUR, AED to EGP, Convert Labs, online converters" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://convertlabs.online/tools/currency-converter.html" />
 
   <!-- ✅ Favicon -->
-  <link rel="icon" type="image/png" href="../assets/convert-labs-icon.png" />
+  <link rel="icon" href="../assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
 
-  <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-    crossorigin="anonymous"></script>
-
-  <!-- ✅ Google Analytics -->
+  <!-- ✅ Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -32,140 +28,171 @@
 </head>
 
 <body>
-  <!-- Header -->
-  <header>
-    <div class="header-content">
-      <a href="../index.html" class="brand" aria-label="Convert Labs home">
-        <img src="../assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
-        <span class="brand-text">Convert Labs</span>
-      </a>
-
-      <div class="header-controls">
-        <a href="../contact.html" class="header-btn">Contact Us</a>
-        <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+  <!-- ✅ Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="../index.html" aria-label="Convert Labs Home">
+          <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
+          <span class="brand-text">Convert Labs</span>
+        </a>
       </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="tools.html" class="active">Tools</a></li>
+          <li><a href="../guides.html">Blog</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
     </div>
-    <p class="tagline">Welcome to Convert Labs Tools — quick, accurate, and free converters</p>
   </header>
 
-  <!-- Tools Tabs -->
-  <div class="tabs">
-    <button class="active" onclick="window.location.href='currency-converter.html'">Currency Converter</button>
-    <button onclick="window.location.href='image-converter.html'">Image Converter</button>
-    <button onclick="window.location.href='../index.html'">Back to Home</button>
-  </div>
-
-  <main class="converter">
+  <!-- ✅ Main Content -->
+  <main class="tool-page">
     <h1>Currency Converter</h1>
-    <p style="max-width:800px;margin:auto;text-align:left;">
-      Instantly convert between world currencies with real-time exchange rates powered by reliable APIs.
-      Choose from over 30 major global currencies, including USD, EUR, GBP, AED, SAR, EGP, and more.
+    <p>
+      Instantly convert between global currencies with <strong>real-time exchange rates</strong>.  
+      Choose from over 30 major currencies, including <b>USD</b>, <b>EUR</b>, <b>GBP</b>, <b>AED</b>, <b>SAR</b>, and <b>EGP</b>.
     </p>
 
-    <div style="margin-top:1rem;">
-      <input type="number" id="currencyAmount" placeholder="Enter amount" />
+    <section style="margin-top: 1.5rem;">
+      <h2>Interactive Currency Converter</h2>
+      <p>Enter an amount and choose currencies to convert:</p>
+
+      <input type="number" id="currencyAmount" placeholder="Enter amount" min="0" />
       <select id="currencyFrom"></select>
       <select id="currencyTo"></select>
-      <button id="currencyConvertBtn">Convert</button>
-      <p id="currencyResult"></p>
-    </div>
+      <div style="margin-top:1rem;">
+        <button id="currencyConvertBtn" class="send-btn">Convert</button>
+        <button id="refreshRatesBtn" class="send-btn" style="background:#64748b;">🔄 Refresh Rates</button>
+      </div>
 
-    <p style="margin-top:2rem; font-size:0.95rem; color:gray;">
-      💡 Tip: Conversion rates are fetched in real-time from <b>Exchangerate.host</b> — no sign-up required.
+      <p id="currencyStatus" style="margin-top:0.7rem;color:gray;font-size:0.9rem;"></p>
+      <p id="currencyResult" style="margin-top:1rem;font-weight:600;"></p>
+    </section>
+
+    <p style="margin-top:1rem; font-size:0.9rem; color:gray;">
+      💡 <b>Tip:</b> Live data is fetched securely from <b>Exchangerate.host</b> and <b>ER-API</b> (for backup).
     </p>
+
+    <!-- ✅ Educational Section -->
+    <section style="margin-top:2rem;">
+      <h2>Understanding Currency Exchange</h2>
+      <p>
+        Currency exchange rates represent how much one currency is worth compared to another.  
+        For example, if <b>1 USD = 47.28 EGP</b>, that means 1 US Dollar equals 47.28 Egyptian Pounds.
+      </p>
+      <p>
+        Exchange rates fluctuate constantly due to market forces such as inflation, interest rates, trade, and global demand.
+        Real-time converters help individuals, businesses, and travelers get accurate conversions for global transactions.
+      </p>
+      <p>
+        Convert Labs provides live data directly from trusted APIs — ensuring accuracy without tracking or account setup.
+      </p>
+    </section>
   </main>
 
-  <footer>
+  <!-- ✅ Footer -->
+  <footer class="footer">
     <div class="footer-brand">
       <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <span class="footer-text">Convert Labs</span>
     </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
-    <div class="footer-links">
+    <nav class="footer-links">
       <a href="../about.html">About</a> |
-      <a href="../how-to.html">Guides</a> |
-      <a href="../privacy.html">Privacy Policy</a> |
-      <a href="../terms.html">Terms of Use</a> |
+      <a href="tools.html">Tools</a> |
+      <a href="../privacy.html">Privacy</a> |
+       <a href="disclaimer.html">Disclaimer</a> |
+      <a href="../terms.html">Terms</a> |
       <a href="../contact.html">Contact</a>
-    </div>
+    </nav>
   </footer>
 
- <script src="../script.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const fromSel = document.getElementById("currencyFrom");
-  const toSel = document.getElementById("currencyTo");
-  const amountInput = document.getElementById("currencyAmount");
-  const convertBtn = document.getElementById("currencyConvertBtn");
-  const result = document.getElementById("currencyResult");
+  <!-- ✅ Script -->
+  <script src="../script.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const fromSel = document.getElementById("currencyFrom");
+      const toSel = document.getElementById("currencyTo");
+      const amountInput = document.getElementById("currencyAmount");
+      const convertBtn = document.getElementById("currencyConvertBtn");
+      const refreshBtn = document.getElementById("refreshRatesBtn");
+      const result = document.getElementById("currencyResult");
+      const statusText = document.getElementById("currencyStatus");
 
-  const currencyList = [
-    "USD","EUR","GBP","JPY","CNY","INR","EGP","AUD","CAD","CHF","SGD","KWD","AED",
-    "SAR","QAR","OMR","BHD","TRY","BRL","RUB","MXN","PKR","NOK","SEK","DKK","ZAR",
-    "HKD","THB","MYR","IDR","PLN","PHP","ILS","NZD","VND","KES","NGN","ARS"
-  ];
+      const currencyList = [
+        "USD","EUR","GBP","JPY","CNY","INR","EGP","AUD","CAD","CHF","SGD","KWD","AED",
+        "SAR","QAR","OMR","BHD","TRY","BRL","RUB","MXN","PKR","NOK","SEK","DKK","ZAR",
+        "HKD","THB","MYR","IDR","PLN","PHP","ILS","NZD","VND","KES","NGN","ARS"
+      ];
 
-  // Populate dropdowns
-  currencyList.forEach(c => {
-    const o1 = document.createElement("option");
-    o1.value = c;
-    o1.textContent = c;
-    const o2 = o1.cloneNode(true);
-    fromSel.appendChild(o1);
-    toSel.appendChild(o2);
-  });
-  fromSel.value = "USD";
-  toSel.value = "EUR";
+      // Populate dropdowns
+      currencyList.forEach(c => {
+        const option = document.createElement("option");
+        option.value = c;
+        option.textContent = c;
+        fromSel.appendChild(option);
+        toSel.appendChild(option.cloneNode(true));
+      });
+      fromSel.value = "USD";
+      toSel.value = "EUR";
 
-  // Unified Fetch Function
-  async function fetchRate(from, to) {
-    // Primary API: exchangerate.host
-    try {
-      const r1 = await fetch(`https://api.exchangerate.host/latest?base=${from}`);
-      const data1 = await r1.json();
-      if (data1 && data1.rates && data1.rates[to]) return data1.rates[to];
-    } catch (e) {
-      console.warn("Primary API failed", e);
-    }
+      // ✅ Auto proxy detection for localhost
+      async function fetchRate(from, to) {
+        const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+        const proxy = isLocal ? "https://api.allorigins.win/raw?url=" : "";
 
-    // Fallback API: open.er-api.com (very stable)
-    try {
-      const r2 = await fetch(`https://open.er-api.com/v6/latest/${from}`);
-      const data2 = await r2.json();
-      if (data2 && data2.rates && data2.rates[to]) return data2.rates[to];
-    } catch (e) {
-      console.warn("Fallback API failed", e);
-    }
+        try {
+          const res = await fetch(`${proxy}https://api.exchangerate.host/latest?base=${from}`);
+          const data = await res.json();
+          if (data && data.rates && data.rates[to]) return data.rates[to];
+        } catch (err) {
+          console.warn("Primary API failed:", err);
+        }
 
-    throw new Error("No valid exchange rate available");
-  }
+        try {
+          const res2 = await fetch(`${proxy}https://open.er-api.com/v6/latest/${from}`);
+          const data2 = await res2.json();
+          if (data2 && data2.rates && data2.rates[to]) return data2.rates[to];
+        } catch (err) {
+          console.warn("Fallback API failed:", err);
+        }
 
-  convertBtn.addEventListener("click", async () => {
-    const amount = parseFloat(amountInput.value);
-    const from = fromSel.value;
-    const to = toSel.value;
+        throw new Error("No valid exchange rate available");
+      }
 
-    if (!amount || amount <= 0) {
-      result.textContent = "Please enter a valid amount.";
-      return;
-    }
+      async function convertCurrency() {
+        const amount = parseFloat(amountInput.value);
+        const from = fromSel.value;
+        const to = toSel.value;
+        if (!amount || amount <= 0) {
+          result.textContent = "⚠️ Please enter a valid amount.";
+          return;
+        }
 
-    result.textContent = "Fetching latest exchange rate...";
+        statusText.textContent = "🔄 Fetching latest exchange rates...";
+        result.textContent = "";
 
-    try {
-      const rate = await fetchRate(from, to);
-      const converted = (amount * rate).toFixed(4);
-      result.innerHTML = `
-        <b>${amount}</b> ${from} = <b>${converted}</b> ${to}<br>
-        <small>Exchange Rate: ${rate.toFixed(4)}</small>
-      `;
-    } catch (err) {
-      console.error(err);
-      result.textContent = "Could not fetch conversion rate. Try again later.";
-    }
-  });
-});
-</script>
+        try {
+          const rate = await fetchRate(from, to);
+          const converted = (amount * rate).toFixed(3);
+          result.innerHTML = `
+            <b>${amount}</b> ${from} = <b>${converted}</b> ${to}<br>
+            <small>Exchange Rate: ${rate.toFixed(4)} (${new Date().toLocaleString()})</small>
+          `;
+          statusText.textContent = "✅ Rates updated successfully!";
+        } catch {
+          statusText.textContent = "❌ Could not fetch rates. Please try again later.";
+        }
+      }
 
+      convertBtn.addEventListener("click", convertCurrency);
+      refreshBtn.addEventListener("click", convertCurrency);
+    });
+  </script>
 </body>
 </html>

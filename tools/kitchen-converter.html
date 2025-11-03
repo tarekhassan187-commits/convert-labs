@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kitchen Converter — Convert Labs</title>
+
+  <meta name="description" content="Convert between cups, tablespoons, teaspoons, grams, liters, and more — with ingredient density accuracy. Includes baking and cooking examples by Convert Labs." />
+  <meta name="keywords" content="kitchen converter, cups to grams, tablespoons to teaspoons, liters to ounces, baking converter, cooking measurements" />
+  <link rel="icon" href="../assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="canonical" href="https://convertlabs.online/tools/kitchen-converter.html" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- ✅ Social Meta -->
+  <meta property="og:title" content="Kitchen Converter — Convert Labs" />
+  <meta property="og:description" content="Smart kitchen converter for cups, grams, and liters. Perfect for baking and recipe scaling." />
+  <meta property="og:image" content="https://convertlabs.online/assets/kitchen-converter.jpg" />
+  <meta property="og:url" content="https://convertlabs.online/tools/kitchen-converter.html" />
+  <meta property="og:type" content="website" />
+
+  <!-- ✅ AdSense & Analytics -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P');
+  </script>
+
+  <!-- ✅ Breadcrumb JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://convertlabs.online/" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://convertlabs.online/tools/tools.html" },
+      { "@type": "ListItem", "position": 3, "name": "Kitchen Converter" }
+    ]
+  }
+  </script>
+
+  <style>
+    main.tool-page {
+      max-width: 900px;
+      margin: 120px auto 60px;
+      padding: 2rem 1.5rem;
+      background: var(--card-bg, #fff);
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.06);
+      line-height: 1.6;
+    }
+
+    .converter-ui {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .converter-ui input, .converter-ui select, .converter-ui button {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .converter-ui button {
+      background: var(--accent, #2563eb);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .converter-ui button:hover {
+      background: #1e3a8a;
+    }
+
+    @media (max-width:700px) {
+      .converter-ui { flex-direction: column; align-items: stretch; }
+      main.tool-page { margin: 100px 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ✅ Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="../index.html">
+          <img src="../assets/convert-labs-icon.png" alt="" class="logo-img">
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="tools.html" class="active">Tools</a></li>
+          <li><a href="../guides.html">Blog</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+    </div>
+  </header>
+
+  <!-- ✅ Main -->
+  <main class="tool-page">
+    <h1>Kitchen Converter</h1>
+    <p>Convert kitchen ingredients between <strong>cups</strong>, <strong>tablespoons</strong>, <strong>teaspoons</strong>, <strong>grams</strong>, <strong>liters</strong>, and more — using accurate ingredient densities for better baking and cooking results.</p>
+
+    <section>
+      <h2>How It Works</h2>
+      <p>The converter uses ingredient densities (grams per milliliter) to relate weight and volume. For example:</p>
+      <ul>
+        <li>1 cup flour ≈ 125 g</li>
+        <li>1 cup sugar ≈ 200 g</li>
+        <li>1 cup honey ≈ 340 g</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Kitchen Converter Tool</h2>
+      <div class="converter-ui">
+        <input type="number" id="kitchenInput" placeholder="Enter amount" />
+
+        <select id="kitchenFrom">
+          <option value="cup">Cup (cup)</option>
+          <option value="tablespoon">Tablespoon (tbsp)</option>
+          <option value="teaspoon">Teaspoon (tsp)</option>
+          <option value="gram">Gram (g)</option>
+          <option value="kilogram">Kilogram (kg)</option>
+          <option value="liter">Liter (L)</option>
+          <option value="milliliter">Milliliter (mL)</option>
+          <option value="pound">Pound (lb)</option>
+          <option value="ounce">Ounce (oz)</option>
+          <option value="fluid_ounce">Fluid Ounce (fl oz)</option>
+        </select>
+
+        <select id="kitchenTo">
+          <option value="cup">Cup (cup)</option>
+          <option value="tablespoon">Tablespoon (tbsp)</option>
+          <option value="teaspoon">Teaspoon (tsp)</option>
+          <option value="gram">Gram (g)</option>
+          <option value="kilogram">Kilogram (kg)</option>
+          <option value="liter">Liter (L)</option>
+          <option value="milliliter">Milliliter (mL)</option>
+          <option value="pound">Pound (lb)</option>
+          <option value="ounce">Ounce (oz)</option>
+          <option value="fluid_ounce">Fluid Ounce (fl oz)</option>
+        </select>
+
+        <select id="kitchenIngredient">
+          <optgroup label="Baking Staples">
+            <option value="all-purpose flour">All-purpose Flour</option>
+            <option value="bread flour">Bread Flour</option>
+            <option value="cake flour">Cake Flour</option>
+            <option value="granulated sugar">Granulated Sugar</option>
+            <option value="brown sugar packed">Brown Sugar (packed)</option>
+            <option value="powdered sugar">Powdered Sugar</option>
+            <option value="salt (table)">Salt (table)</option>
+            <option value="baking powder">Baking Powder</option>
+            <option value="baking soda">Baking Soda</option>
+            <option value="cocoa powder">Cocoa Powder</option>
+            <option value="cornstarch">Cornstarch</option>
+          </optgroup>
+
+          <optgroup label="Dairy & Fats">
+            <option value="butter">Butter</option>
+            <option value="milk (whole)">Milk (whole)</option>
+            <option value="cream cheese">Cream Cheese</option>
+            <option value="yogurt (plain)">Yogurt (plain)</option>
+            <option value="cheese (grated)">Grated Cheese</option>
+            <option value="mayonnaise">Mayonnaise</option>
+          </optgroup>
+
+          <optgroup label="Oils & Syrups">
+            <option value="olive oil">Olive Oil</option>
+            <option value="maple syrup">Maple Syrup</option>
+            <option value="honey">Honey</option>
+            <option value="molasses">Molasses</option>
+            <option value="corn syrup">Corn Syrup</option>
+          </optgroup>
+
+          <optgroup label="Nuts & Flours">
+            <option value="almond flour">Almond Flour</option>
+            <option value="coconut flour">Coconut Flour</option>
+            <option value="peanut butter">Peanut Butter</option>
+          </optgroup>
+
+          <optgroup label="Miscellaneous">
+            <option value="rice (uncooked)">Rice</option>
+            <option value="oats (rolled)">Oats</option>
+            <option value="yeast (active dry)">Yeast</option>
+            <option value="water">Water</option>
+          </optgroup>
+        </select>
+
+        <button onclick="convertKitchen()">Convert</button>
+      </div>
+
+      <p id="kitchenResult" style="margin-top:1rem;font-weight:600;"></p>
+    </section>
+
+    <section>
+      <h2>Tips</h2>
+      <ul>
+        <li>Use level measuring cups for dry ingredients.</li>
+        <li>Select the correct ingredient for best precision.</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- ✅ Footer -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="../assets/convert-labs-icon.png" alt="" class="footer-logo" />
+      <span class="footer-text">Convert Labs</span>
+    </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <nav class="footer-links">
+      <a href="../about.html">About</a> |
+      <a href="tools.html">Tools</a> |
+      <a href="../guides.html">Blog</a> |
+      <a href="../privacy.html">Privacy Policy</a>
+    </nav>
+  </footer>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>

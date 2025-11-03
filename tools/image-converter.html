@@ -3,21 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Image Converter – Convert Labs Tools</title>
+  <title>Image Converter — Convert Labs</title>
 
   <!-- ✅ SEO -->
-  <meta name="description" content="Convert Labs Image Converter — convert and preview images instantly between JPG, PNG, WEBP, and GIF formats online for free." />
-  <meta name="keywords" content="image converter, jpg to png, png to webp, online image tools, Convert Labs, convert images online" />
-  <meta name="robots" content="index, follow" />
+  <meta name="description" content="Convert Labs Image Converter — convert JPG, PNG, WEBP, and GIF images instantly and securely in your browser. No upload needed." />
+  <meta name="keywords" content="image converter, jpg to png, png to webp, convert images online, free image tools, convert labs" />
   <link rel="canonical" href="https://convertlabs.online/tools/image-converter.html" />
-
-  <!-- ✅ Favicon -->
-  <link rel="icon" type="image/png" href="../assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
 
-  <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272"
-    crossorigin="anonymous"></script>
+  <!-- ✅ Favicon -->
+  <link rel="icon" href="../assets/convert-labs-icon.png" />
 
   <!-- ✅ Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
@@ -32,90 +27,108 @@
 </head>
 
 <body>
-  <!-- Header -->
-  <header>
-    <div class="header-content">
-      <a href="../index.html" class="brand" aria-label="Convert Labs home">
-        <img src="../assets/convert-labs-icon.png" alt="Convert Labs icon" class="logo">
-        <span class="brand-text">Convert Labs</span>
-      </a>
-
-      <div class="header-controls">
-        <a href="../contact.html" class="header-btn">Contact Us</a>
-        <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+  <!-- ✅ Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="../index.html" aria-label="Convert Labs Home">
+          <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img">
+          <span class="brand-text">Convert Labs</span>
+        </a>
       </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="tools.html" class="active">Tools</a></li>
+          <li><a href="../guides.html">Blog</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
     </div>
-    <p class="tagline">Welcome to Convert Labs Tools — smart and simple online converters</p>
   </header>
 
-  <!-- Tools Tabs -->
-  <div class="tabs">
-    <button onclick="window.location.href='currency-converter.html'">Currency Converter</button>
-    <button class="active" onclick="window.location.href='image-converter.html'">Image Converter</button>
-    <button onclick="window.location.href='../index.html'">Back to Home</button>
-  </div>
-
-  <!-- Main Section -->
-  <main class="converter">
+  <!-- ✅ Main Content -->
+  <main class="tool-page">
     <h1>Image Converter</h1>
-    <p style="max-width:800px;margin:auto;text-align:left;">
-      Convert your images instantly between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and <b>GIF</b> formats.  
-      No upload to servers — conversions happen securely in your browser.  
-      Preview your image before and after conversion, then download it in one click.
+    <p>
+      Convert your images quickly and securely between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and <b>GIF</b> formats.
+      All conversions happen <strong>locally in your browser</strong> — no files are uploaded to any server.
     </p>
 
-    <div style="margin-top:1.5rem;">
-      <input type="file" id="imageInput" accept="image/*" />
-      <select id="formatSelect">
+    <section style="margin-top: 1.5rem;">
+      <h2>Interactive Image Converter</h2>
+      <p>Upload an image and choose your desired output format:</p>
+
+      <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" />
+      <select id="formatSelect" aria-label="Select output format">
         <option value="image/jpeg">JPG</option>
         <option value="image/png">PNG</option>
         <option value="image/webp">WEBP</option>
         <option value="image/gif">GIF</option>
       </select>
-      <button id="convertBtn">Convert Image</button>
-    </div>
+      <button id="convertBtn" class="send-btn">Convert Image</button>
+    </section>
 
-    <div id="previewSection" style="margin-top:2rem; display:none;">
-      <h3>Preview</h3>
-      <div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;">
+    <!-- ✅ Preview -->
+    <section id="previewSection" style="display:none; margin-top:2rem;">
+      <h2>Preview & Download</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:25px;justify-content:center;">
         <div>
           <p><b>Original</b></p>
-          <img id="originalImg" style="max-width:300px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.2);" />
+          <img id="originalImg" alt="Original image preview" style="max-width:300px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" />
         </div>
         <div>
           <p><b>Converted</b></p>
-          <img id="convertedImg" style="max-width:300px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.2);" />
+          <img id="convertedImg" alt="Converted image preview" style="max-width:300px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" />
         </div>
       </div>
-      <a id="downloadLink" download="converted-image" class="send-btn" style="margin-top:20px;display:inline-block;">Download Image</a>
-    </div>
+      <a id="downloadLink" download="converted-image" class="send-btn" style="margin-top:20px;display:inline-block;">Download Converted Image</a>
+    </section>
 
-    <p style="margin-top:2rem; font-size:0.95rem; color:gray;">
-      💡 Tip: GIF output will use still-frame conversion (not animation). For animated GIFs, try desktop converters.
+    <p style="margin-top:1.5rem;font-size:0.9rem;color:gray;">
+      💡 <strong>Note:</strong> GIF output is a single still frame. For animated conversions, use a desktop or specialized GIF tool.
     </p>
+
+    <!-- ✅ Educational Section -->
+    <section style="margin-top:2rem;">
+      <h2>Understanding Image Formats</h2>
+      <p>
+        <b>JPG</b> (or JPEG) is ideal for photos and web use because it compresses images efficiently, slightly reducing quality to save space.
+      </p>
+      <p>
+        <b>PNG</b> retains full quality and supports transparency, making it perfect for graphics, logos, and screenshots.
+      </p>
+      <p>
+        <b>WEBP</b> is a modern format created by Google — offering smaller file sizes than JPG or PNG with excellent quality.
+      </p>
+      <p>
+        <b>GIF</b> supports simple animations but limited colors (256 only). It’s best for short clips, icons, and simple illustrations.
+      </p>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer>
+  <!-- ✅ Footer -->
+  <footer class="footer">
     <div class="footer-brand">
       <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <span class="footer-text">Convert Labs</span>
     </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
-    <div class="footer-links">
+    <nav class="footer-links">
       <a href="../about.html">About</a> |
-      <a href="../how-to.html">Guides</a> |
+      <a href="tools.html">Tools</a> |
       <a href="../privacy.html">Privacy Policy</a> |
+       <a href="disclaimer.html">Disclaimer</a> |
       <a href="../terms.html">Terms of Use</a> |
       <a href="../contact.html">Contact</a>
-    </div>
+    </nav>
   </footer>
 
-  <script src="../script.js"></script>
+  <!-- ✅ Script -->
+  <script src="../script.js" defer></script>
   <script>
-    // =============================
-    // Image Conversion Logic
-    // =============================
     const input = document.getElementById("imageInput");
     const convertBtn = document.getElementById("convertBtn");
     const formatSelect = document.getElementById("formatSelect");
@@ -125,6 +138,7 @@
     const downloadLink = document.getElementById("downloadLink");
     let originalFile = null;
 
+    // Show preview of uploaded image
     input.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -137,26 +151,33 @@
       reader.readAsDataURL(file);
     });
 
+    // Convert image
     convertBtn.addEventListener("click", () => {
       if (!originalFile) {
-        alert("Please select an image first.");
+        alert("Please upload an image first.");
         return;
       }
 
       const targetFormat = formatSelect.value;
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
       const img = new Image();
+      img.crossOrigin = "anonymous";
 
       img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
-        const convertedData = canvas.toDataURL(targetFormat);
-        convertedImg.src = convertedData;
-        downloadLink.href = convertedData;
-        const ext = targetFormat.split("/")[1];
-        downloadLink.download = `converted-image.${ext}`;
+
+        try {
+          const convertedData = canvas.toDataURL(targetFormat, 0.95);
+          convertedImg.src = convertedData;
+          downloadLink.href = convertedData;
+          const ext = targetFormat.split("/")[1];
+          downloadLink.download = `converted-image.${ext}`;
+        } catch (error) {
+          alert("⚠️ This browser may not fully support this conversion type.");
+        }
       };
       img.src = URL.createObjectURL(originalFile);
     });

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Temperature Converter — Convert Labs</title>
+  <meta name="description" content="Convert between Celsius, Fahrenheit, Kelvin, Rankine, and Réaumur instantly. Includes formulas, examples, and educational notes — by Convert Labs." />
+  <link rel="icon" href="../assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <!-- ✅ HEADER -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="../index.html">
+          <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="tools.html" class="active">Tools</a></li>
+          <li><a href="../guides.html">Guides</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle">🌙</button>
+    </div>
+  </header>
+
+  <!-- ✅ MAIN CONTENT -->
+  <main class="tool-page" style="max-width:900px;margin:auto;padding:2rem 1rem;text-align:left;">
+    <h1>Temperature Converter</h1>
+    <p>
+      Instantly convert between <strong>Celsius, Fahrenheit, Kelvin, Rankine, and Réaumur</strong>.
+      This converter helps scientists, students, and everyday users switch between temperature scales with accuracy.
+    </p>
+
+    <section>
+      <h2>Conversion Formulas</h2>
+      <ul>
+        <li>°C → °F = (°C × 9/5) + 32</li>
+        <li>°F → °C = (°F − 32) × 5/9</li>
+        <li>°C → K = °C + 273.15</li>
+        <li>K → °C = K − 273.15</li>
+        <li>°C → °R = (°C + 273.15) × 9/5</li>
+        <li>°R → °C = (°R × 5/9) − 273.15</li>
+        <li>°C → °Ré = °C × 0.8</li>
+        <li>°Ré → °C = °Ré / 0.8</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Interactive Temperature Converter</h2>
+      <div class="converter" style="text-align:center;margin-top:1rem;">
+        <input type="number" id="tempInput" placeholder="Enter value" />
+        <select id="tempFrom"></select>
+        <select id="tempTo"></select>
+        <button id="convertBtn">Convert</button>
+        <p id="tempResult"></p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Examples</h2>
+      <p><strong>Example 1:</strong> 25°C = 77°F</p>
+      <p><strong>Example 2:</strong> 100°C = 373.15 K</p>
+      <p><strong>Example 3:</strong> 300 K = 26.85°C</p>
+      <p><strong>Example 4:</strong> 0°C = 0°Ré = 491.67°R</p>
+    </section>
+
+<section>
+  <h2>Understanding Temperature Scales</h2>
+
+  <h3>Kelvin (K)</h3>
+  <p>
+    The <strong>Kelvin scale</strong> is the absolute temperature scale used in science and engineering.
+    It starts at <b>0 K</b>, known as <em>absolute zero</em> — the point at which all molecular motion stops.
+    The Kelvin scale increases linearly with Celsius (1 K = 1°C change), but it has no negative numbers.
+    For example, water freezes at <b>273.15 K</b> and boils at <b>373.15 K</b>.
+  </p>
+
+  <h3>Rankine (°R)</h3>
+  <p>
+    The <strong>Rankine scale</strong> is mainly used in <b>thermodynamics</b> and by some U.S. engineering fields.
+    It’s similar to Kelvin but uses Fahrenheit-sized degrees instead of Celsius-sized ones.
+    Absolute zero is <b>0°R</b>, and water freezes at <b>491.67°R</b>.
+    It bridges the gap between U.S. customary units and absolute temperature.
+  </p>
+
+  <h3>Réaumur (°Ré)</h3>
+  <p>
+    The <strong>Réaumur scale</strong> was once widely used in Europe, especially in food and industry thermometers.
+    It sets the freezing point of water at <b>0°Ré</b> and boiling at <b>80°Ré</b>.
+    Although it’s now mostly historical, it’s still referenced in some traditional recipes and scientific archives.
+  </p>
+</section>
+
+    <section>
+      <h2>FAQs</h2>
+      <p><b>Q:</b> What is absolute zero?<br>
+      <b>A:</b> Absolute zero is 0 K (−273.15°C), where molecular motion stops completely.</p>
+
+      <p><b>Q:</b> Why are there so many temperature scales?<br>
+      <b>A:</b> Each scale was developed for different contexts — Kelvin for science, Fahrenheit for US daily use, and Celsius for global standardization.</p>
+    </section>
+  </main>
+
+  <!-- ✅ FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <span class="footer-text">Convert Labs</span>
+    </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <nav class="footer-links">
+      <a href="../about.html">About</a> |
+      <a href="tools.html">Tools</a> |
+      <a href="../privacy.html">Privacy</a>
+    </nav>
+  </footer>
+
+  <!-- ✅ SCRIPT -->
+  <script>
+    const tempUnits = ["Celsius (°C)", "Fahrenheit (°F)", "Kelvin (K)", "Rankine (°R)", "Réaumur (°Ré)"];
+
+    const fromSelect = document.getElementById("tempFrom");
+    const toSelect = document.getElementById("tempTo");
+    const input = document.getElementById("tempInput");
+    const result = document.getElementById("tempResult");
+
+    // Populate dropdowns
+    tempUnits.forEach(unit => {
+      const opt1 = document.createElement("option");
+      const opt2 = document.createElement("option");
+      opt1.value = unit;
+      opt2.value = unit;
+      opt1.textContent = unit;
+      opt2.textContent = unit;
+      fromSelect.appendChild(opt1);
+      toSelect.appendChild(opt2);
+    });
+
+    fromSelect.value = "Celsius (°C)";
+    toSelect.value = "Fahrenheit (°F)";
+
+    document.getElementById("convertBtn").addEventListener("click", () => {
+      const val = parseFloat(input.value);
+      const from = fromSelect.value;
+      const to = toSelect.value;
+
+      if (isNaN(val)) {
+        result.textContent = "⚠️ Please enter a valid number.";
+        return;
+      }
+
+      const celsius = toCelsius(val, from);
+      const converted = fromCelsius(celsius, to);
+
+      result.textContent = `${val} ${from} = ${converted.toFixed(2)} ${to}`;
+    });
+
+    // --- Helper: Convert any unit to Celsius ---
+    function toCelsius(value, unit) {
+      switch (unit) {
+        case "Celsius (°C)": return value;
+        case "Fahrenheit (°F)": return (value - 32) * 5/9;
+        case "Kelvin (K)": return value - 273.15;
+        case "Rankine (°R)": return (value - 491.67) * 5/9;
+        case "Réaumur (°Ré)": return value / 0.8;
+        default: return NaN;
+      }
+    }
+
+    // --- Helper: Convert Celsius to target unit ---
+    function fromCelsius(value, unit) {
+      switch (unit) {
+        case "Celsius (°C)": return value;
+        case "Fahrenheit (°F)": return (value * 9/5) + 32;
+        case "Kelvin (K)": return value + 273.15;
+        case "Rankine (°R)": return (value + 273.15) * 9/5;
+        case "Réaumur (°Ré)": return value * 0.8;
+        default: return NaN;
+      }
+    }
+  </script>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>

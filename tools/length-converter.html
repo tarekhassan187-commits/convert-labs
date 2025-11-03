@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Length Converter — Convert Labs</title>
+  <meta name="description" content="Convert between meters, kilometers, inches, feet, and more. Includes formulas, examples, and quick converter — by Convert Labs." />
+  <link rel="icon" href="../assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="../index.html">
+          <img src="../assets/convert-labs-icon.png" alt="" class="logo-img">
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="tools.html" class="active">Tools</a></li>
+          <li><a href="../guides.html">Blog</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+    </div>
+  </header>
+
+  <main class="tool-page">
+    <h1>Length Converter</h1>
+    <p>The Convert Labs Length Converter lets you quickly switch between metric and imperial units such as meters, centimeters, inches, feet, and miles. Whether you’re a student, traveler, or engineer, this page helps you understand and calculate accurate length conversions easily.</p>
+
+    <section>
+      <h2>How It Works</h2>
+      <p>Length is a linear measurement — meaning each unit changes by a fixed factor. Converting between units simply requires multiplying or dividing by a known constant. For instance:</p>
+      <ul>
+        <li>1 meter = 100 centimeters</li>
+        <li>1 inch = 2.54 centimeters</li>
+        <li>1 foot = 12 inches = 0.3048 meters</li>
+        <li>1 mile = 1.609 kilometers</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Examples</h2>
+      <ul>
+        <li>To convert <b>2.5 meters</b> to feet: 2.5 × 3.28084 = <b>8.2 ft</b>.</li>
+        <li>To convert <b>36 inches</b> to centimeters: 36 × 2.54 = <b>91.44 cm</b>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Length Converter Tool</h2>
+      <div class="converter-ui">
+        <input type="number" id="lengthInput" placeholder="Enter value" />
+        <select id="lengthFrom"></select>
+        <select id="lengthTo"></select>
+        <button onclick="convertLength()">Convert</button>
+        <p id="lengthResult"></p>
+      </div>
+    </section>
+
+    <section>
+      <h2>FAQs</h2>
+      <p><b>Q:</b> What’s the most accurate way to measure length?<br>
+      <b>A:</b> Use metric units for precision (meters, centimeters) and ensure your measuring tool is calibrated.</p>
+
+      <p><b>Q:</b> Do these conversions apply to both 2D and 3D measurements?<br>
+      <b>A:</b> Yes — the conversions themselves are universal; just apply them per dimension when measuring areas or volumes.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="../assets/convert-labs-icon.png" alt="" class="footer-logo" />
+      <span class="footer-text">Convert Labs</span>
+    </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <nav class="footer-links">
+      <a href="../about.html">About</a> |
+      <a href="tools.html">Tools</a> |
+      <a href="../guides.html">Blog</a> |
+      <a href="../privacy.html">Privacy Policy</a>
+    </nav>
+  </footer>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>
