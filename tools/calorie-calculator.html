@@ -1,90 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Calorie Calculator — Convert Labs</title>
-
-  <meta name="description" content="Estimate meal calories instantly by entering ingredients and weights. Simple, accurate, and privacy-friendly calorie calculator by Convert Labs." />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://convertlabs.online/tools/calorie-calculator.html" />
-  <link rel="icon" type="image/png" href="../assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
+  <meta name="description" content="Search food calories and nutrients instantly. Convert Labs Calorie Calculator uses verified USDA data for accurate results." />
+  <meta name="keywords" content="calorie calculator, food nutrition, protein carbs fat sugar, calorie counter, Convert Labs" />
+  <link rel="icon" href="../assets/convert-labs-icon.png" />
   <link rel="stylesheet" href="../style.css" />
 </head>
 
 <body>
-  <!-- ✅ NAVBAR -->
+  <!-- ✅ Header -->
   <header class="navbar">
     <div class="nav-container">
       <div class="logo">
         <a href="../index.html">
-          <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img">
+          <img src="../assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo-img" />
           <span class="brand-text">Convert Labs</span>
         </a>
       </div>
-
       <nav class="nav-links">
         <ul>
           <li><a href="../index.html">Home</a></li>
-          <li class="dropdown">
-            <a href="tools.html" class="active">Tools ▾</a>
-            
-          </li>
+          <li><a href="tools.html" class="active">Tools</a></li>
           <li><a href="../guides.html">Blog</a></li>
           <li><a href="../about.html">About</a></li>
           <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
-
-      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+      <button id="themeToggle" class="theme-toggle">🌙</button>
     </div>
   </header>
 
-  <!-- ✅ MAIN SECTION -->
-  <main class="tool-page">
+  <!-- ✅ Main Content -->
+  <main class="tool-page" style="max-width:800px;margin:auto;padding:2rem 1rem;">
     <h1>Calorie Calculator</h1>
     <p>
-      Enter your meal ingredients and their weights to estimate calories, protein, carbohydrates, and fat.
-      This calculator uses standard nutrition averages from reliable sources and stores your daily totals locally on your device.
+      Type any food name (like <b>ketchup</b>, <b>greek yogurt</b>, <b>rice</b>, or <b>biscuits</b>) to get instant nutrition data.
+      Powered by verified <b>USDA food composition</b> for accuracy.
     </p>
 
-    <div class="manual-section">
-      <h2>Enter Ingredients</h2>
-      <p>Add foods below — you can include multiple items like <em>chicken, rice, salad</em> — and their portion sizes in grams.</p>
+    <form id="calorieSearchForm" class="converter" style="margin-top:1.5rem;">
+      <input type="text" id="foodQuery" placeholder="Enter a food name (e.g. chicken, mayonnaise)" required />
+      <button type="submit">Search</button>
+    </form>
 
-      <div id="ingredientList"></div>
-      <button id="addIngredientBtn" class="btn-primary">➕ Add Ingredient</button>
-      <button id="calculateCaloriesBtn" class="btn-primary">⚡ Calculate Total</button>
+    <div id="calorieResult" style="margin-top:2rem; text-align:left;"></div>
 
-      <div id="manualResult" style="margin-top:1rem;"></div>
-    </div>
-
-    <section class="info-section">
-      <h2>How It Works</h2>
+    <section style="margin-top:3rem;">
+      <h2>About This Tool</h2>
       <p>
-        Each food item is matched to an average value per 100 g from standard nutritional data.
-        When you enter multiple items, the calculator combines them to estimate total calories and macros.
+        This calorie calculator retrieves real food data from the official USDA nutrient database (2021–2023 FNDDS).
+        Each result includes the energy (kcal) and macronutrients per 100 g of edible portion.
       </p>
-
-      <h2>Tips for Better Accuracy</h2>
       <ul>
-        <li>Weigh foods before cooking for consistent tracking.</li>
-        <li>Cooking methods and ingredients may slightly change calorie values.</li>
-        <li>Use <b>Reset Today</b> to clear daily totals at any time.</li>
+        <li>⚡ <b>Calories (kcal)</b> — energy per 100 g</li>
+        <li>🍗 <b>Protein</b> — grams of protein</li>
+        <li>🍞 <b>Carbs</b> — grams of carbohydrate</li>
+        <li>🧈 <b>Fat</b> — grams of total fat</li>
+        <li>🍬 <b>Sugar</b> — grams of total sugars</li>
       </ul>
-
-      <h2>Disclaimer</h2>
-      <p>
-        Results are estimates for educational purposes only. For medical or dietary advice, please consult a certified nutritionist.
-      </p>
     </section>
-
-    <!-- ✅ Daily Tracker -->
-    <div id="dailyTracker" style="margin-top:2rem;display:none;"></div>
   </main>
 
-  <!-- ✅ FOOTER -->
+  <!-- ✅ Footer -->
   <footer class="footer">
     <div class="footer-brand">
       <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
@@ -94,15 +74,97 @@
     <nav class="footer-links">
       <a href="../about.html">About</a> |
       <a href="tools.html">Tools</a> |
-      <a href="../guides.html">Blog</a> |
+      <a href="../guides.html">Guides</a> |
       <a href="../privacy.html">Privacy Policy</a> |
- <a href="disclaimer.html">Disclaimer</a> |
-      <a href="../terms.html">Terms of Use</a> |
+      <a href="../terms.html">Terms</a> |
       <a href="../contact.html">Contact</a>
     </nav>
   </footer>
 
-  <script src="../tools/calorie.js"></script>
-  <script src="../script.js"></script>
+  <!-- ✅ Script -->
+  <script src="../script.js" defer></script>
+  <script>
+  let foodData = [];
+  let fullFoodData = [];
+  let isFullLoaded = false;
+
+  // === Load lite data first ===
+  async function loadFoodData() {
+    try {
+      const res = await fetch("../assets/foods-lite.json");
+      foodData = await res.json();
+      console.log("Lite food data loaded (" + foodData.length + " items)");
+    } catch (err) {
+      console.error("Error loading foods-lite.json:", err);
+    }
+  }
+  loadFoodData();
+
+  // === Load full dataset lazily ===
+  async function loadFullData() {
+    if (isFullLoaded) return;
+    try {
+      const res = await fetch("../assets/foods-full.json");
+      fullFoodData = await res.json();
+      isFullLoaded = true;
+      console.log("Full food database loaded ✅ (" + fullFoodData.length + " items)");
+    } catch (err) {
+      console.error("Error loading foods-full.json:", err);
+    }
+  }
+
+  // === Find a food in datasets ===
+  function findFood(query) {
+    query = query.trim().toLowerCase();
+    let match = foodData.find(f => f.name.includes(query));
+
+    if (!match && isFullLoaded) {
+      match = fullFoodData.find(f => f.name.includes(query));
+    }
+
+    // If not found and full data isn't loaded yet
+    if (!match && !isFullLoaded) {
+      loadFullData().then(() => {
+        const found = fullFoodData.find(f => f.name.includes(query));
+        if (found) displayFoodResult(found);
+        else showNotFound(query);
+      });
+      return null;
+    }
+
+    return match;
+  }
+
+  // === Display the found food ===
+  function displayFoodResult(food) {
+    const result = document.getElementById("calorieResult");
+    result.innerHTML = `
+      <div class="card" style="padding:1rem;border-radius:10px;background:var(--card-bg);box-shadow:0 2px 5px var(--shadow-color);">
+        <h2 style="text-transform:capitalize;">${food.name}</h2>
+        <p><b>Calories:</b> ${food.kcal} kcal</p>
+        <p><b>Protein:</b> ${food.protein} g</p>
+        <p><b>Carbohydrates:</b> ${food.carbs} g</p>
+        <p><b>Sugar:</b> ${food.sugar} g</p>
+        <p><b>Fat:</b> ${food.fat} g</p>
+        <small>Per 100 g (USDA FNDDS 2021–2023)</small>
+      </div>
+    `;
+  }
+
+  function showNotFound(query) {
+    document.getElementById("calorieResult").innerHTML = `
+      <p style="color:#b91c1c;">❌ No match found for <b>${query}</b>. Try a simpler name or spelling.</p>
+    `;
+  }
+
+  // === Handle form ===
+  document.getElementById("calorieSearchForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const query = document.getElementById("foodQuery").value;
+    const match = findFood(query);
+    if (match) displayFoodResult(match);
+    else showNotFound(query);
+  });
+  </script>
 </body>
 </html>
