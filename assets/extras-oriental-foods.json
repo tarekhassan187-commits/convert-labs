@@ -1,0 +1,22 @@
+[
+  { "name": "falafel", "kcal": 333, "protein": 13.3, "carbs": 31.8, "sugar": 2.1, "fat": 17.8 },
+  { "name": "hummus", "kcal": 166, "protein": 7.9, "carbs": 14.3, "sugar": 0.3, "fat": 9.6 },
+  { "name": "tahini", "kcal": 595, "protein": 17.0, "carbs": 21.0, "sugar": 0.5, "fat": 53.8 },
+  { "name": "shawarma chicken", "kcal": 237, "protein": 25.0, "carbs": 2.0, "sugar": 0.0, "fat": 14.0 },
+  { "name": "shawarma beef", "kcal": 250, "protein": 26.0, "carbs": 3.0, "sugar": 0.0, "fat": 15.0 },
+  { "name": "kofta grilled", "kcal": 290, "protein": 18.0, "carbs": 3.5, "sugar": 0.0, "fat": 23.0 },
+  { "name": "kebab lamb", "kcal": 282, "protein": 25.0, "carbs": 3.0, "sugar": 0.0, "fat": 18.0 },
+  { "name": "molokhia cooked", "kcal": 46, "protein": 4.1, "carbs": 5.6, "sugar": 0.5, "fat": 1.2 },
+  { "name": "foul medames", "kcal": 120, "protein": 8.0, "carbs": 17.0, "sugar": 1.0, "fat": 2.5 },
+  { "name": "lentil soup", "kcal": 113, "protein": 7.0, "carbs": 16.0, "sugar": 2.5, "fat": 2.0 },
+  { "name": "pita bread", "kcal": 275, "protein": 9.0, "carbs": 55.0, "sugar": 1.2, "fat": 1.0 },
+  { "name": "basmati rice cooked", "kcal": 130, "protein": 2.7, "carbs": 28.0, "sugar": 0.1, "fat": 0.3 },
+  { "name": "white rice cooked", "kcal": 130, "protein": 2.4, "carbs": 28.2, "sugar": 0.1, "fat": 0.3 },
+  { "name": "brown rice cooked", "kcal": 111, "protein": 2.6, "carbs": 23.0, "sugar": 0.4, "fat": 0.9 },
+  { "name": "tamiya", "kcal": 320, "protein": 13.0, "carbs": 30.0, "sugar": 1.8, "fat": 18.0 },
+  { "name": "stuffed grape leaves", "kcal": 125, "protein": 2.3, "carbs": 16.7, "sugar": 1.1, "fat": 5.3 },
+  { "name": "tabbouleh", "kcal": 120, "protein": 3.0, "carbs": 18.0, "sugar": 1.8, "fat": 4.5 },
+  { "name": "baklava", "kcal": 430, "protein": 6.0, "carbs": 46.0, "sugar": 28.0, "fat": 24.0 },
+  { "name": "knafeh", "kcal": 350, "protein": 9.0, "carbs": 38.0, "sugar": 26.0, "fat": 17.0 },
+  { "name": "egyptian salad", "kcal": 65, "protein": 1.2, "carbs": 7.2, "sugar": 4.5, "fat": 3.2 }
+]
