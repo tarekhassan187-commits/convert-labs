@@ -2,27 +2,112 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Calorie Calculator — Convert Labs</title>
-  <meta name="description" content="Estimate calories, protein, carbs, sugar, and fat for thousands of foods. Smart database with serving-size calculator — by Convert Labs." />
+
+  <meta name="description" content="Estimate calories, protein, carbs, sugar, and fat for thousands of foods from the USDA database. Accurate nutrition info per 100 g or custom serving size." />
   <link rel="icon" href="../assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
   <link rel="stylesheet" href="../style.css" />
+
+  <style>
+    .calculator-container {
+      max-width: 720px;
+      margin: 2rem auto;
+      background: var(--bg, #fff);
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 2rem;
+      text-align: center;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 10px;
+      width: 70%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: .8rem;
+    }
+    button {
+      padding: 10px 20px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-left: .5rem;
+    }
+    button:hover { background: #1d4ed8; }
+    .suggestions {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 70%;
+      margin: 0 auto;
+      text-align: left;
+      max-height: 220px;
+      overflow-y: auto;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+    }
+    .suggestions div {
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+    .suggestions div:hover {
+      background: #f1f5f9;
+    }
+    .result-card {
+      background: #f9fafb;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+    .serving-input {
+      margin-top: 1rem;
+      font-size: .95rem;
+    }
+    .serving-input input {
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-left: .5rem;
+      width: 100px;
+    }
+    .about-section {
+      text-align: left;
+      margin-top: 2rem;
+      line-height: 1.6;
+    }
+    body.dark {
+      --bg: #1e293b;
+      color: #f1f5f9;
+      background: #0f172a;
+    }
+    body.dark input, body.dark button, body.dark .suggestions {
+      background: #334155;
+      color: #fff;
+      border-color: #475569;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- ✅ NAVBAR -->
+  <!-- Header -->
   <header class="navbar">
     <div class="nav-container">
       <div class="logo">
         <a href="../index.html">
-          <img src="../assets/convert-labs-icon.png" alt="Convert Labs" class="logo-img" />
+          <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
           <span class="brand-text">Convert Labs</span>
         </a>
       </div>
       <nav class="nav-links">
         <ul>
           <li><a href="../index.html">Home</a></li>
-          <li><a href="tools.html">Tools</a></li>
+          <li><a href="tools.html" class="active">Tools</a></li>
           <li><a href="../guides.html">Blog</a></li>
           <li><a href="../about.html">About</a></li>
           <li><a href="../contact.html">Contact</a></li>
@@ -32,269 +117,174 @@
     </div>
   </header>
 
-  <!-- ✅ MAIN CONTENT -->
-  <main class="tool-page" style="text-align:center;">
-    <h1>🔥 Calorie Calculator</h1>
-    <p>Search thousands of foods to estimate calories, protein, carbs, sugar, and fat per serving.</p>
+  <!-- Main -->
+  <main>
+    <section class="calculator-container">
+      <h1>🔥 Calorie Calculator</h1>
+      <p>Search thousands of foods to estimate calories, protein, carbs, sugar, and fat per 100 g serving.</p>
 
-    <form id="calorieSearchForm" style="max-width:400px;margin:2rem auto;position:relative;">
-      <input id="foodQuery" type="text" placeholder="Search food (e.g., falafel, chicken, yogurt)" autocomplete="off" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border-color);" />
-      <button type="submit" style="margin-top:10px;padding:10px 14px;border:none;background:#2563eb;color:#fff;border-radius:8px;cursor:pointer;">Search</button>
-    </form>
+      <div style="position: relative;">
+        <input type="text" id="foodInput" placeholder="Enter food name (e.g., chicken breast, rice, falafel)" />
+        <button id="searchBtn">Search</button>
+        <div id="suggestions" class="suggestions" style="display:none;"></div>
+      </div>
 
-    <div id="calorieResult" style="max-width:420px;margin:auto;text-align:left;"></div>
+      <div class="serving-input">
+        <label for="servingSize"><strong>Serving Size (grams):</strong></label>
+        <input type="number" id="servingSize" value="100" min="1" />
+      </div>
 
-  <section style="margin-top:3rem;">
-      <h2>About This Tool</h2>
-      <p>
-        This calorie calculator retrieves real food data from the official USDA nutrient database (2021–2023 FNDDS).
-        Each result includes the energy (kcal) and macronutrients per 100 g of edible portion.
-      </p>
-      <ul>
-        <li>⚡ <b>Calories (kcal)</b> — energy per 100 g</li>
-        <li>🍗 <b>Protein</b> — grams of protein</li>
-        <li>🍞 <b>Carbs</b> — grams of carbohydrate</li>
-        <li>🧈 <b>Fat</b> — grams of total fat</li>
-        <li>🍬 <b>Sugar</b> — grams of total sugars</li>
-      </ul>
+      <div id="resultContainer"></div>
+
+      <div class="about-section">
+        <h2>About This Tool</h2>
+        <p>
+          This calorie calculator retrieves real food data from the official USDA nutrient database (2021–2023 FNDDS).
+          Each result includes the energy (kcal) and macronutrients per 100 g of edible portion.
+        </p>
+        <ul>
+          <li>⚡ <strong>Calories (kcal)</strong> — energy per 100 g</li>
+          <li>🍗 <strong>Protein</strong> — grams of protein</li>
+          <li>🥖 <strong>Carbs</strong> — grams of carbohydrate</li>
+          <li>🥑 <strong>Fat</strong> — grams of total fat</li>
+          <li>🍯 <strong>Sugar</strong> — grams of total sugars</li>
+        </ul>
+      </div>
     </section>
-</main>
+  </main>
 
-  <!-- ✅ FOOTER -->
+  <!-- Footer -->
   <footer class="footer">
     <div class="footer-brand">
-      <img src="../assets/convert-labs-icon.png" alt="Convert Labs" class="footer-logo" />
+      <img src="../assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <span class="footer-text">Convert Labs</span>
     </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
     <nav class="footer-links">
       <a href="../about.html">About</a> |
       <a href="tools.html">Tools</a> |
-      <a href="../guides.html">Blog</a> |
       <a href="../privacy.html">Privacy Policy</a> |
       <a href="../terms.html">Terms</a> |
       <a href="../contact.html">Contact</a>
     </nav>
   </footer>
 
-  <!-- ✅ SCRIPT -->
-  <script src="../script.js" defer></script>
+  <!-- Script -->
+    <style>
+    body.dark {
+      --bg: #1e293b;
+      color: #f1f5f9;
+      background: #0f172a;
+    }
+    body.dark input, body.dark button, body.dark .suggestions, body.dark .result-card {
+      background: #334155;
+      color: #f1f5f9;
+      border-color: #475569;
+    }
+    body.dark .result-card p, 
+    body.dark .result-card h3, 
+    body.dark .about-section, 
+    body.dark .about-section h2, 
+    body.dark .about-section li {
+      color: #f1f5f9;
+    }
+  </style>
+
   <script>
-  let foodData = [];
-  let fullFoodData = [];
-  let extraFoods = [];
-  let isFullLoaded = false;
-  let suggestionsBox;
-  let selectedFood = null;
+    const themeBtn = document.getElementById("themeToggle");
+    themeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+    });
 
-  // === Load lite dataset ===
-  async function loadFoodData() {
-    try {
-      const res = await fetch("../assets/foods-lite.json");
-      foodData = await res.json();
-      console.log("Lite data loaded:", foodData.length);
-    } catch (err) {
-      console.error("Error loading foods-lite.json", err);
+    const foodInput = document.getElementById("foodInput");
+    const servingInput = document.getElementById("servingSize");
+    const suggestionsBox = document.getElementById("suggestions");
+    const resultContainer = document.getElementById("resultContainer");
+    let foodData = [];
+    let currentFood = null;
+
+    // Load all datasets (USDA + extras)
+    Promise.all([
+      fetch("../assets/usda_food_nutrition.json").then(r => r.json()),
+      fetch("../assets/food-nutrition-data.json").then(r => r.json()).catch(() => []),
+      fetch("../assets/extras-oriental-foods.json").then(r => r.json()).catch(() => [])
+    ])
+    .then(dataArrays => {
+      foodData = dataArrays.flat();
+    });
+
+    function fuzzyMatch(term, target) {
+      term = term.toLowerCase();
+      target = target.toLowerCase();
+      return target.includes(term) || target.replace(/[^a-z]/g, "").includes(term.replace(/[^a-z]/g, ""));
     }
-  }
-  loadFoodData();
 
-  // === Load full dataset ===
-  async function loadFullData() {
-    if (isFullLoaded) return;
-    try {
-      const res = await fetch("../assets/foods-full.json");
-      fullFoodData = await res.json();
-      isFullLoaded = true;
-      console.log("Full data loaded:", fullFoodData.length);
-    } catch (err) {
-      console.error("Error loading foods-full.json", err);
-    }
-  }
+    // Auto-suggestions
+    foodInput.addEventListener("input", () => {
+      const term = foodInput.value.trim().toLowerCase();
+      if (!term) return suggestionsBox.style.display = "none";
 
-  // === Load oriental extras ===
-  async function loadExtras() {
-    try {
-      const res = await fetch("../assets/extras-oriental-foods.json");
-      extraFoods = await res.json();
-      console.log("Oriental foods loaded:", extraFoods.length);
-    } catch (err) {
-      console.error("Error loading extras-oriental-foods.json", err);
-    }
-  }
-  loadExtras();
+      const matches = foodData
+        .filter(item => fuzzyMatch(term, item.name))
+        .slice(0, 8);
 
-  // === Normalize ===
-  function normalize(text) {
-    return text.toLowerCase().replace(/[^\w\s]/g, " ").replace(/\s+/g, " ").trim();
-  }
-
-  // === Suggestions ===
- // === Fuzzy Suggestions (handles typos & close matches) ===
-function getSuggestions(query, data) {
-  query = normalize(query);
-  if (!query) return [];
-  const words = query.split(" ");
-
-  // Calculate Levenshtein distance between 2 words
-  function levenshtein(a, b) {
-    const m = a.length, n = b.length;
-    const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
-    for (let i = 0; i <= m; i++) dp[i][0] = i;
-    for (let j = 0; j <= n; j++) dp[0][j] = j;
-    for (let i = 1; i <= m; i++) {
-      for (let j = 1; j <= n; j++) {
-        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-        dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+      if (matches.length === 0) {
+        suggestionsBox.style.display = "none";
+        return;
       }
-    }
-    return dp[m][n];
-  }
 
-  // Check if query roughly matches a name (within 2 edits)
-  return data
-    .map(f => {
-      const name = normalize(f.name);
-      const distance = levenshtein(query, name);
-      return { ...f, score: distance };
-    })
-    .filter(f => f.name.includes(query) || f.score <= 2) // <= 2 allows minor typos
-    .sort((a, b) => a.score - b.score)
-    .slice(0, 10);
-}
-
-
-  // === Show suggestions ===
-  function showSuggestions(matches) {
-    if (!suggestionsBox) return;
-    suggestionsBox.innerHTML = "";
-    matches.forEach(food => {
-      const item = document.createElement("div");
-      item.className = "suggestion-item";
-      item.textContent = food.name;
-      item.onclick = () => {
-        document.getElementById("foodQuery").value = food.name;
-        suggestionsBox.innerHTML = "";
-        selectedFood = food;
-        displayFoodResult(food);
-      };
-      suggestionsBox.appendChild(item);
+      suggestionsBox.innerHTML = matches.map(m => `<div>${m.name}</div>`).join("");
+      suggestionsBox.style.display = "block";
     });
-    suggestionsBox.style.display = matches.length ? "block" : "none";
-  }
 
-  // === Display result with serving input ===
-  function displayFoodResult(food) {
-    selectedFood = food;
-    const { name, kcal = 0, protein = 0, carbs = 0, fat = 0, sugar = 0 } = food;
-
-    const result = document.getElementById("calorieResult");
-    result.innerHTML = `
-      <div class="card" style="padding:1.2rem;border-radius:12px;background:var(--card-bg);box-shadow:0 3px 6px var(--shadow-color);">
-        <h2 style="text-transform:capitalize;">${name}</h2>
-        <label for="servingInput"><b>Serving size (grams):</b></label>
-        <input id="servingInput" type="number" min="1" value="100" style="width:120px;margin:6px 0;padding:4px;border-radius:6px;">
-        <div id="nutritionValues">${generateNutritionHTML(100, kcal, protein, carbs, sugar, fat)}</div>
-        <small style="opacity:0.8;">Per serving — USDA + World Foods Database</small>
-      </div>
-    `;
-
-    document.getElementById("servingInput").addEventListener("input", e => {
-      const grams = parseFloat(e.target.value) || 0;
-      updateServingValues(grams);
+    suggestionsBox.addEventListener("click", e => {
+      if (e.target.tagName === "DIV") {
+        foodInput.value = e.target.textContent;
+        suggestionsBox.style.display = "none";
+        searchFood();
+      }
     });
-  }
 
-  // === Generate nutrition HTML ===
-  function generateNutritionHTML(grams, kcal, protein, carbs, sugar, fat) {
-    const factor = grams / 100;
-    return `
-      <ul style="list-style:none;padding:0;line-height:1.6;">
-        <li>🔥 <b>Calories:</b> ${(kcal * factor).toFixed(1)} kcal</li>
-        <li>🍗 <b>Protein:</b> ${(protein * factor).toFixed(1)} g</li>
-        <li>🍞 <b>Carbohydrates:</b> ${(carbs * factor).toFixed(1)} g</li>
-        <li>🍬 <b>Sugar:</b> ${(sugar * factor).toFixed(1)} g</li>
-        <li>🧈 <b>Fat:</b> ${(fat * factor).toFixed(1)} g</li>
-      </ul>
-    `;
-  }
+    document.getElementById("searchBtn").addEventListener("click", searchFood);
 
-  // === Update serving values ===
-  function updateServingValues(grams) {
-    if (!selectedFood) return;
-    const { kcal, protein, carbs, fat, sugar } = selectedFood;
-    document.getElementById("nutritionValues").innerHTML = generateNutritionHTML(
-      grams, kcal, protein, carbs, sugar, fat
-    );
-  }
+    function searchFood() {
+      const term = foodInput.value.trim().toLowerCase();
+      const match = foodData.find(item => item.name.toLowerCase() === term)
+        || foodData.find(item => fuzzyMatch(term, item.name));
 
-  // === No result ===
-  function showNotFound(query) {
-    document.getElementById("calorieResult").innerHTML = `
-      <p style="color:#b91c1c;font-weight:500;">❌ No results for <b>${query}</b>. Try simpler or different spelling.</p>`;
-  }
+      if (!match) {
+        resultContainer.innerHTML = `<p style="color:#b91c1c;">❌ No results for <strong>${term}</strong>. Try a simpler or different name.</p>`;
+        currentFood = null;
+        return;
+      }
 
-  // === Search input ===
-  const input = document.getElementById("foodQuery");
-  input.addEventListener("input", async e => {
-    const query = e.target.value;
-    if (query.length < 3) {
-      suggestionsBox.style.display = "none";
-      return;
+      currentFood = match;
+      displayResult(match);
     }
 
-    let matches = getSuggestions(query, [...foodData, ...extraFoods]);
-    if (matches.length < 5 && !isFullLoaded) {
-      await loadFullData();
-      matches = getSuggestions(query, [...foodData, ...fullFoodData, ...extraFoods]);
+    function displayResult(food) {
+      const serving = parseFloat(servingInput.value) || 100;
+      const factor = serving / 100;
+      const html = `
+        <div class="result-card">
+          <h3>${food.name}</h3>
+          <p><strong>Serving Size:</strong> ${serving} g</p>
+          <p><strong>Calories:</strong> ${(food.kcal * factor).toFixed(1)} kcal</p>
+          <p><strong>Protein:</strong> ${(food.protein * factor).toFixed(1)} g</p>
+          <p><strong>Carbs:</strong> ${(food.carbs * factor).toFixed(1)} g</p>
+          <p><strong>Fat:</strong> ${(food.fat * factor).toFixed(1)} g</p>
+          <p><strong>Sugar:</strong> ${(food.sugar * factor).toFixed(1)} g</p>
+        </div>
+      `;
+      resultContainer.innerHTML = html;
     }
-    showSuggestions(matches);
-  });
 
-  // === Form submit ===
-  document.getElementById("calorieSearchForm").addEventListener("submit", e => {
-    e.preventDefault();
-    const query = document.getElementById("foodQuery").value;
-    const allData = [...foodData, ...fullFoodData, ...extraFoods];
-    const matches = getSuggestions(query, allData);
-    if (matches.length) displayFoodResult(matches[0]);
-    else showNotFound(query);
-  });
-
-  // === Suggestions container ===
-  document.addEventListener("DOMContentLoaded", () => {
-    suggestionsBox = document.createElement("div");
-    suggestionsBox.id = "suggestionsBox";
-    suggestionsBox.style.cssText = `
-      position:absolute;
-      background:var(--card-bg);
-      box-shadow:0 4px 8px rgba(0,0,0,0.1);
-      border-radius:6px;
-      width:100%;
-      max-height:240px;
-      overflow-y:auto;
-      display:none;
-      z-index:999;
-    `;
-    input.parentNode.style.position = "relative";
-    input.parentNode.appendChild(suggestionsBox);
-  });
-
-  // === Style ===
-  const style = document.createElement("style");
-  style.textContent = `
-  .suggestion-item {
-    padding:8px 10px;
-    cursor:pointer;
-    border-bottom:1px solid rgba(0,0,0,0.05);
-  }
-  .suggestion-item:hover {
-    background:#e0e7ff;
-  }
-  html.dark .suggestion-item:hover {
-    background:#334155;
-  }`;
-  document.head.appendChild(style);
+    // 🔁 Live recalculation on serving size change
+    servingInput.addEventListener("input", () => {
+      if (currentFood) displayResult(currentFood);
+    });
   </script>
+
 </body>
 </html>
