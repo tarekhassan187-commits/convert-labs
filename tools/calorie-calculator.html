@@ -190,101 +190,139 @@
     }
   </style>
 
-  <script>
-    const themeBtn = document.getElementById("themeToggle");
-    themeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-    });
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const themeBtn = document.getElementById("themeToggle");
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+  });
 
-    const foodInput = document.getElementById("foodInput");
-    const servingInput = document.getElementById("servingSize");
-    const suggestionsBox = document.getElementById("suggestions");
-    const resultContainer = document.getElementById("resultContainer");
-    let foodData = [];
-    let currentFood = null;
+  const foodInput = document.getElementById("foodInput");
+  const servingInput = document.getElementById("servingSize");
+  const suggestionsBox = document.getElementById("suggestions");
+  const resultContainer = document.getElementById("resultContainer");
+  const searchBtn = document.getElementById("searchBtn");
+  let foodData = [];
+  let currentFood = null;
+  let chart = null;
 
-    // Load all datasets (USDA + extras)
-    Promise.all([
-      fetch("../assets/usda_food_nutrition.json").then(r => r.json()),
-      fetch("../assets/food-nutrition-data.json").then(r => r.json()).catch(() => []),
-      fetch("../assets/extras-oriental-foods.json").then(r => r.json()).catch(() => [])
-    ])
-    .then(dataArrays => {
-      foodData = dataArrays.flat();
-    });
+  // Load datasets
+  Promise.all([
+    fetch("../assets/usda_food_nutrition.json").then(r => r.json()),
+    fetch("../assets/food-nutrition-data.json").then(r => r.json()).catch(() => []),
+    fetch("../assets/extras-oriental-foods.json").then(r => r.json()).catch(() => [])
+  ])
+  .then(dataArrays => { foodData = dataArrays.flat(); });
 
-    function fuzzyMatch(term, target) {
-      term = term.toLowerCase();
-      target = target.toLowerCase();
-      return target.includes(term) || target.replace(/[^a-z]/g, "").includes(term.replace(/[^a-z]/g, ""));
+  function fuzzyMatch(term, target) {
+    term = term.toLowerCase();
+    target = target.toLowerCase();
+    return target.includes(term) || target.replace(/[^a-z]/g, "").includes(term.replace(/[^a-z]/g, ""));
+  }
+
+  // Suggestions
+  foodInput.addEventListener("input", () => {
+    const term = foodInput.value.trim().toLowerCase();
+    if (!term) return suggestionsBox.style.display = "none";
+
+    const matches = foodData.filter(item => fuzzyMatch(term, item.name)).slice(0, 8);
+    if (!matches.length) return suggestionsBox.style.display = "none";
+
+    suggestionsBox.innerHTML = matches.map(m => `<div>${m.name}</div>`).join("");
+    suggestionsBox.style.display = "block";
+  });
+
+  suggestionsBox.addEventListener("click", e => {
+    if (e.target.tagName === "DIV") {
+      foodInput.value = e.target.textContent;
+      suggestionsBox.style.display = "none";
+      searchFood();
+    }
+  });
+
+  searchBtn.addEventListener("click", searchFood);
+
+  function searchFood() {
+    const term = foodInput.value.trim().toLowerCase();
+    const match = foodData.find(item => item.name.toLowerCase() === term)
+      || foodData.find(item => fuzzyMatch(term, item.name));
+
+    if (!match) {
+      resultContainer.innerHTML = `<p style="color:#b91c1c;">❌ No results for <strong>${term}</strong>. Try a simpler or different name.</p>`;
+      currentFood = null;
+      if (chart) chart.destroy();
+      return;
     }
 
-    // Auto-suggestions
-    foodInput.addEventListener("input", () => {
-      const term = foodInput.value.trim().toLowerCase();
-      if (!term) return suggestionsBox.style.display = "none";
+    currentFood = match;
+    displayResult(match);
+  }
 
-      const matches = foodData
-        .filter(item => fuzzyMatch(term, item.name))
-        .slice(0, 8);
+  function displayResult(food) {
+    const serving = parseFloat(servingInput.value) || 100;
+    const factor = serving / 100;
+    const scaled = {
+      kcal: food.kcal * factor,
+      protein: food.protein * factor,
+      carbs: food.carbs * factor,
+      fat: food.fat * factor,
+      sugar: food.sugar * factor
+    };
 
-      if (matches.length === 0) {
-        suggestionsBox.style.display = "none";
-        return;
-      }
+    resultContainer.innerHTML = `
+      <div class="result-card">
+        <h3>${food.name}</h3>
+        <p><strong>Serving Size:</strong> ${serving} g</p>
+        <p><strong>Calories:</strong> ${scaled.kcal.toFixed(1)} kcal</p>
+        <p><strong>Protein:</strong> ${scaled.protein.toFixed(1)} g</p>
+        <p><strong>Carbs:</strong> ${scaled.carbs.toFixed(1)} g</p>
+        <p><strong>Fat:</strong> ${scaled.fat.toFixed(1)} g</p>
+        <p><strong>Sugar:</strong> ${scaled.sugar.toFixed(1)} g</p>
+        <canvas id="nutrientChart" height="120"></canvas>
+        <button id="clearBtn" style="margin-top:1rem;background:#ef4444;">Clear</button>
+      </div>
+    `;
 
-      suggestionsBox.innerHTML = matches.map(m => `<div>${m.name}</div>`).join("");
-      suggestionsBox.style.display = "block";
+    drawChart(scaled);
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      foodInput.value = "";
+      servingInput.value = 100;
+      resultContainer.innerHTML = "";
+      if (chart) chart.destroy();
     });
+  }
 
-    suggestionsBox.addEventListener("click", e => {
-      if (e.target.tagName === "DIV") {
-        foodInput.value = e.target.textContent;
-        suggestionsBox.style.display = "none";
-        searchFood();
+  function drawChart(data) {
+    const ctx = document.getElementById("nutrientChart").getContext("2d");
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Calories", "Protein", "Carbs", "Fat", "Sugar"],
+        datasets: [{
+          label: "Per Serving",
+          data: [data.kcal, data.protein, data.carbs, data.fat, data.sugar],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true }
+        }
       }
     });
+  }
 
-    document.getElementById("searchBtn").addEventListener("click", searchFood);
+  // Recalculate when serving size changes
+  servingInput.addEventListener("input", () => {
+    if (currentFood) displayResult(currentFood);
+  });
+</script>
 
-    function searchFood() {
-      const term = foodInput.value.trim().toLowerCase();
-      const match = foodData.find(item => item.name.toLowerCase() === term)
-        || foodData.find(item => fuzzyMatch(term, item.name));
-
-      if (!match) {
-        resultContainer.innerHTML = `<p style="color:#b91c1c;">❌ No results for <strong>${term}</strong>. Try a simpler or different name.</p>`;
-        currentFood = null;
-        return;
-      }
-
-      currentFood = match;
-      displayResult(match);
-    }
-
-    function displayResult(food) {
-      const serving = parseFloat(servingInput.value) || 100;
-      const factor = serving / 100;
-      const html = `
-        <div class="result-card">
-          <h3>${food.name}</h3>
-          <p><strong>Serving Size:</strong> ${serving} g</p>
-          <p><strong>Calories:</strong> ${(food.kcal * factor).toFixed(1)} kcal</p>
-          <p><strong>Protein:</strong> ${(food.protein * factor).toFixed(1)} g</p>
-          <p><strong>Carbs:</strong> ${(food.carbs * factor).toFixed(1)} g</p>
-          <p><strong>Fat:</strong> ${(food.fat * factor).toFixed(1)} g</p>
-          <p><strong>Sugar:</strong> ${(food.sugar * factor).toFixed(1)} g</p>
-        </div>
-      `;
-      resultContainer.innerHTML = html;
-    }
-
-    // 🔁 Live recalculation on serving size change
-    servingInput.addEventListener("input", () => {
-      if (currentFood) displayResult(currentFood);
-    });
-  </script>
 
 </body>
 </html>
