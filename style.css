@@ -506,7 +506,7 @@ body.dark textarea,
 body.dark select {
   background-color: #1f2937; /* Dark gray input background */
   color: #f9fafb;           /* Light text */
-  border: 1px solid #374151; /* Softer border */
+  border: 1px solid #4b5563; /* Softer border */
 }
 
 body.dark input::placeholder,
@@ -544,4 +544,5 @@ body.dark .send-btn:hover {
     height: 160px;  /* ✅ Smaller for mobile */
   }
 }
+
 
