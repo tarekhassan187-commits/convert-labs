@@ -190,14 +190,13 @@
     }
   </style>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  const themeBtn = document.getElementById("themeToggle");
-  themeBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-  });
+  <!-- Load Chart.js safely from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+
+  const themeBtn = document.getElementById("themeToggle");
   const foodInput = document.getElementById("foodInput");
   const servingInput = document.getElementById("servingSize");
   const suggestionsBox = document.getElementById("suggestions");
@@ -215,17 +214,23 @@
   ])
   .then(dataArrays => { foodData = dataArrays.flat(); });
 
+  // Theme toggle
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+    if (chart) updateChartColors(); // auto update colors when theme toggles
+  });
+
   function fuzzyMatch(term, target) {
     term = term.toLowerCase();
     target = target.toLowerCase();
     return target.includes(term) || target.replace(/[^a-z]/g, "").includes(term.replace(/[^a-z]/g, ""));
   }
 
-  // Suggestions
+  // Suggestions dropdown
   foodInput.addEventListener("input", () => {
     const term = foodInput.value.trim().toLowerCase();
     if (!term) return suggestionsBox.style.display = "none";
-
     const matches = foodData.filter(item => fuzzyMatch(term, item.name)).slice(0, 8);
     if (!matches.length) return suggestionsBox.style.display = "none";
 
@@ -249,7 +254,7 @@
       || foodData.find(item => fuzzyMatch(term, item.name));
 
     if (!match) {
-      resultContainer.innerHTML = `<p style="color:#b91c1c;">❌ No results for <strong>${term}</strong>. Try a simpler or different name.</p>`;
+      resultContainer.innerHTML = `<p style="color:#b91c1c;">❌ No results for <strong>${term}</strong>.</p>`;
       currentFood = null;
       if (chart) chart.destroy();
       return;
@@ -298,6 +303,10 @@
     const ctx = document.getElementById("nutrientChart").getContext("2d");
     if (chart) chart.destroy();
 
+    const darkMode = document.body.classList.contains("dark");
+    const textColor = darkMode ? "#f1f5f9" : "#111";
+    const barColor = darkMode ? "#60a5fa" : "#2563eb";
+
     chart = new Chart(ctx, {
       type: "bar",
       data: {
@@ -305,23 +314,37 @@
         datasets: [{
           label: "Per Serving",
           data: [data.kcal, data.protein, data.carbs, data.fat, data.sugar],
-          borderRadius: 6
+          borderRadius: 6,
+          backgroundColor: barColor
         }]
       },
       options: {
         plugins: { legend: { display: false } },
         scales: {
-          y: { beginAtZero: true }
+          x: { ticks: { color: textColor } },
+          y: { beginAtZero: true, ticks: { color: textColor } }
         }
       }
     });
   }
 
-  // Recalculate when serving size changes
+  function updateChartColors() {
+    if (!chart) return;
+    const darkMode = document.body.classList.contains("dark");
+    const textColor = darkMode ? "#f1f5f9" : "#111";
+    const barColor = darkMode ? "#60a5fa" : "#2563eb";
+    chart.data.datasets[0].backgroundColor = barColor;
+    chart.options.scales.x.ticks.color = textColor;
+    chart.options.scales.y.ticks.color = textColor;
+    chart.update();
+  }
+
   servingInput.addEventListener("input", () => {
     if (currentFood) displayResult(currentFood);
   });
+});
 </script>
+
 
 
 </body>
