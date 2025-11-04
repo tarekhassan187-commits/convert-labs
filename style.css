@@ -500,8 +500,48 @@ html.dark .tool-page {
   margin-top: 1rem;
 }
 
+/* 🌙 Dark mode fixes for the contact form and general inputs */
+body.dark input,
+body.dark textarea,
+body.dark select {
+  background-color: #1f2937; /* Dark gray input background */
+  color: #f9fafb;           /* Light text */
+  border: 1px solid #374151; /* Softer border */
+}
+
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: #9ca3af; /* Muted placeholder */
+}
+
+body.dark .contact-section {
+  background-color: #111827; /* Dark page background */
+  color: #f3f4f6;
+}
+
+body.dark label,
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark p,
+body.dark strong {
+  color: #f3f4f6;
+}
+
+body.dark .send-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+}
+
+body.dark .send-btn:hover {
+  background-color: #1d4ed8;
+}
+
+
 @media (max-width: 600px) {
   .chart-container {
     height: 160px;  /* ✅ Smaller for mobile */
   }
 }
+
