@@ -136,6 +136,13 @@
 
       <div id="resultContainer"></div>
 
+<!-- Daily Summary Card -->
+<section id="dailySummary" class="result-card" style="display:none; margin-top:1rem;">
+  <h3>Daily Summary</h3>
+  <div id="dailyTotals"></div>
+  <button id="clearAllBtn" style="margin-top:1rem; background:#ef4444;">Clear All</button>
+</section>
+
       <div class="about-section">
         <h2>About This Tool</h2>
         <p>
@@ -189,24 +196,27 @@
       color: #f1f5f9;
     }
   </style>
-
-<!-- Load Chart.js safely from CDN -->
+<!-- Load Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 <script>
 window.addEventListener("DOMContentLoaded", () => {
-
   const themeBtn = document.getElementById("themeToggle");
   const foodInput = document.getElementById("foodInput");
   const servingInput = document.getElementById("servingSize");
   const suggestionsBox = document.getElementById("suggestions");
   const resultContainer = document.getElementById("resultContainer");
+  const dailySummary = document.getElementById("dailySummary");
+  const dailyTotalsDiv = document.getElementById("dailyTotals");
+  const clearAllBtn = document.getElementById("clearAllBtn");
   const searchBtn = document.getElementById("searchBtn");
+
   let foodData = [];
   let currentFood = null;
   let chart = null;
+  let dailyTotals = { kcal:0, protein:0, carbs:0, fat:0, sugar:0 };
 
-  // Load datasets
+  // Load all data files
   Promise.all([
     fetch("../assets/usda_food_nutrition.json").then(r => r.json()),
     fetch("../assets/food-nutrition-data.json").then(r => r.json()).catch(() => []),
@@ -218,7 +228,7 @@ window.addEventListener("DOMContentLoaded", () => {
   themeBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark");
     themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-    if (chart) updateChartColors(); // auto update colors when theme toggles
+    if (chart) updateChartColors();
   });
 
   function fuzzyMatch(term, target) {
@@ -227,13 +237,12 @@ window.addEventListener("DOMContentLoaded", () => {
     return target.includes(term) || target.replace(/[^a-z]/g, "").includes(term.replace(/[^a-z]/g, ""));
   }
 
-  // Suggestions dropdown
+  // Suggestions
   foodInput.addEventListener("input", () => {
     const term = foodInput.value.trim().toLowerCase();
     if (!term) return suggestionsBox.style.display = "none";
     const matches = foodData.filter(item => fuzzyMatch(term, item.name)).slice(0, 8);
     if (!matches.length) return suggestionsBox.style.display = "none";
-
     suggestionsBox.innerHTML = matches.map(m => `<div>${m.name}</div>`).join("");
     suggestionsBox.style.display = "block";
   });
@@ -284,12 +293,20 @@ window.addEventListener("DOMContentLoaded", () => {
         <p><strong>Carbs:</strong> ${scaled.carbs.toFixed(1)} g</p>
         <p><strong>Fat:</strong> ${scaled.fat.toFixed(1)} g</p>
         <p><strong>Sugar:</strong> ${scaled.sugar.toFixed(1)} g</p>
-        <canvas id="nutrientChart" height="120"></canvas>
+        <div class="chart-container">
+  <canvas id="nutrientChart"></canvas>
+</div>
+
+        <button id="addToTotalBtn" style="margin-top:1rem;background:#22c55e;">Add to Daily Summary</button>
         <button id="clearBtn" style="margin-top:1rem;background:#ef4444;">Clear</button>
       </div>
     `;
 
     drawChart(scaled);
+
+    document.getElementById("addToTotalBtn").addEventListener("click", () => {
+      addToDailyTotal(scaled);
+    });
 
     document.getElementById("clearBtn").addEventListener("click", () => {
       foodInput.value = "";
@@ -319,6 +336,8 @@ window.addEventListener("DOMContentLoaded", () => {
         }]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
           x: { ticks: { color: textColor } },
@@ -327,6 +346,32 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  function addToDailyTotal(data) {
+    dailyTotals.kcal += data.kcal;
+    dailyTotals.protein += data.protein;
+    dailyTotals.carbs += data.carbs;
+    dailyTotals.fat += data.fat;
+    dailyTotals.sugar += data.sugar;
+
+    updateDailySummary();
+  }
+
+  function updateDailySummary() {
+    dailySummary.style.display = "block";
+    dailyTotalsDiv.innerHTML = `
+      <p><strong>Calories:</strong> ${dailyTotals.kcal.toFixed(1)} kcal</p>
+      <p><strong>Protein:</strong> ${dailyTotals.protein.toFixed(1)} g</p>
+      <p><strong>Carbs:</strong> ${dailyTotals.carbs.toFixed(1)} g</p>
+      <p><strong>Fat:</strong> ${dailyTotals.fat.toFixed(1)} g</p>
+      <p><strong>Sugar:</strong> ${dailyTotals.sugar.toFixed(1)} g</p>
+    `;
+  }
+
+  clearAllBtn.addEventListener("click", () => {
+    dailyTotals = { kcal:0, protein:0, carbs:0, fat:0, sugar:0 };
+    dailySummary.style.display = "none";
+  });
 
   function updateChartColors() {
     if (!chart) return;
@@ -344,6 +389,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
 
 </body>
 </html>
