@@ -232,5 +232,21 @@
   </footer>
 
   <script src="../script.js" defer></script>
+  <script>
+function sendToolEvent(tool) {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'tool_convert', {
+      tool_name: tool,
+      page_location: window.location.href,
+      timestamp: new Date().toISOString()
+    });
+    console.log("GA4 event sent:", tool);
+  } else {
+    console.warn("gtag not loaded, event not sent");
+  }
+}
+</script>
+
 </body>
 </html>
+
