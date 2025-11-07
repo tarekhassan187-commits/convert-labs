@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="index, follow" />
@@ -12,7 +11,6 @@
   <link rel="stylesheet" href="/style.css" />
 
   <script>
-    // preload dark theme
     (function(){
       try {
         var t = localStorage.getItem('theme');
@@ -25,15 +23,14 @@
     })();
   </script>
 
-  <!-- ✅ SEO & OG -->
+  <!-- ✅ SEO + OG -->
   <meta property="og:title" content="Image Converter — Convert Labs" />
   <meta property="og:description" content="Convert JPG, PNG, WEBP, and GIF images instantly in your browser — secure, fast, and private with Convert Labs." />
   <meta property="og:image" content="https://convertlabs.online/assets/image-converter.jpg" />
   <meta property="og:url" content="https://convertlabs.online/tools/image-converter.html" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Convert Labs" />
 
-  <!-- ✅ Breadcrumb & Structured Data -->
+  <!-- ✅ JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -45,6 +42,7 @@
     ]
   }
   </script>
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -55,7 +53,7 @@
   }
   </script>
 
-  <!-- ✅ AdSense + Analytics -->
+  <!-- ✅ Analytics + AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
@@ -76,11 +74,9 @@
     #convertMsg { margin-top:8px; font-weight:600; }
     body.dark .drop-zone { border-color: #60a5fa; color: #e6eefc; background: rgba(96,165,250,0.04); }
   </style>
-
 </head>
 
 <body>
-
   <header class="navbar">
     <div class="nav-container">
       <div class="logo">
@@ -104,7 +100,7 @@
 
   <main class="tool-page" style="max-width:900px;margin:auto;padding:2rem 1rem;">
     <h1>Image Converter</h1>
-    <p>Convert images locally between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and <b>GIF</b>. Everything runs in your browser — no uploads.</p>
+    <p>Convert images locally between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and <b>GIF</b>. All conversions happen entirely in your browser — nothing uploaded.</p>
 
     <section style="margin-top:1.5rem;">
       <h2>Interactive Image Converter</h2>
@@ -138,8 +134,8 @@
     <p>© 2025 Convert Labs. All rights reserved.</p>
   </footer>
 
-  <!-- ✅ FIXED: Ensure GIF encoder loads before main script -->
-  <script src="https://cdn.jsdelivr.net/npm/gif-encoder-2/browser.js"></script>
+  <!-- ✅ Working lightweight GIF encoder -->
+  <script src="https://cdn.jsdelivr.net/npm/omggif@1.0.10/omggif.js"></script>
 
   <script>
   (function(){
@@ -155,12 +151,6 @@
     const themeToggle=document.getElementById("themeToggle");
 
     let originalDataURL=null, originalFileSize=0;
-
-    // Fix GIFEncoder detection
-    const EncoderClass = window.GIFEncoder || window.GIFEncoder2;
-    if (!EncoderClass) {
-      console.error("GIFEncoder library not loaded");
-    }
 
     // Theme toggle
     function applyTheme(isDark){
@@ -206,6 +196,7 @@
       r.readAsDataURL(file);
     }
 
+    // Conversion
     convertBtn.onclick=async ()=>{
       if(!originalDataURL){alert("Upload an image first.");return;}
       const target=formatSelect.value;
@@ -219,14 +210,13 @@
         let resultData=null, ext='png';
         try{
           if(target==='image/gif'){
-            if(!EncoderClass){alert("GIF encoder not available.");return;}
-            const encoder=new EncoderClass(img.width,img.height);
-            encoder.start();encoder.setRepeat(0);encoder.setDelay(0);
-            const pixels=ctx.getImageData(0,0,img.width,img.height).data;
-            encoder.addFrame(pixels,true);
-            encoder.finish();
-            const binary=encoder.out.getData();
-            const blob=new Blob([binary],{type:'image/gif'});
+            // create single-frame GIF
+            const gifData=new Uint8Array(img.width*img.height*5);
+            const gifWriter=new GifWriter(gifData,img.width,img.height,{loop:0});
+            const frame=ctx.getImageData(0,0,img.width,img.height);
+            gifWriter.addFrame(0,0,img.width,img.height,frame.data);
+            const out=gifData.subarray(0,gifWriter.end());
+            const blob=new Blob([out],{type:'image/gif'});
             resultData=URL.createObjectURL(blob);
             ext='gif';
           }else{
@@ -247,6 +237,5 @@
     };
   })();
   </script>
-
 </body>
 </html>
