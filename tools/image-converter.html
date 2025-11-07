@@ -3,26 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Put immediately after your viewport/meta tags in <head> -->
-<script>
-  (function(){
-    try {
-      var theme = localStorage.getItem('theme');
-      if (theme === 'dark') {
-        // add class to both root and body for maximum compatibility
-        document.documentElement.classList.add('dark');
-        // if body exists already, add to it; if not, add when DOM ready
-        if (document.body) document.body.classList.add('dark');
-        else document.addEventListener('DOMContentLoaded', function(){ document.body.classList.add('dark'); });
-      } else if (theme === 'light') {
-        // ensure light class removed
-        document.documentElement.classList.remove('dark');
-        if (document.body) document.body.classList.remove('dark');
-        else document.addEventListener('DOMContentLoaded', function(){ document.body.classList.remove('dark'); });
-      }
-    } catch(e) { /* ignore storage errors */ }
-  })();
-</script>
+
+  <!-- Apply saved theme immediately to avoid flash -->
+  <script>
+    (function(){
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          if (document.body) document.body.classList.add('dark');
+          else document.addEventListener('DOMContentLoaded', function(){ document.body.classList.add('dark'); });
+        } else if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+          if (document.body) document.body.classList.remove('dark');
+          else document.addEventListener('DOMContentLoaded', function(){ document.body.classList.remove('dark'); });
+        }
+      } catch(e) { /* ignore */ }
+    })();
+  </script>
 
   <meta name="robots" content="index, follow" />
   <title>Image Converter — Convert Labs</title>
@@ -32,14 +30,14 @@
   <link rel="icon" href="/assets/convert-labs-icon.png" />
   <link rel="stylesheet" href="/style.css" />
 
-  <!-- ✅ Social Meta -->
+  <!-- Social Meta -->
   <meta property="og:title" content="Image Converter — Convert Labs" />
   <meta property="og:description" content="Convert JPG, PNG, WEBP, and GIF images instantly in your browser — secure, fast, and private with Convert Labs." />
   <meta property="og:image" content="https://convertlabs.online/assets/image-converter.jpg" />
   <meta property="og:url" content="https://convertlabs.online/tools/image-converter.html" />
   <meta property="og:type" content="website" />
 
-  <!-- ✅ Breadcrumb JSON-LD -->
+  <!-- Breadcrumb JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -52,7 +50,7 @@
   }
   </script>
 
-  <!-- ✅ Structured Data -->
+  <!-- WebPage JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -63,7 +61,7 @@
   }
   </script>
 
-  <!-- ✅ AdSense & Analytics -->
+  <!-- AdSense & Analytics -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
@@ -72,32 +70,54 @@
     gtag('js', new Date());
     gtag('config', 'G-Z88B03WV7P');
   </script>
+
+  <style>
+    /* small inline styles for the drag area and messages (you can keep in style.css later) */
+    .drop-zone {
+      border: 2px dashed #2563eb;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      margin-top: 1rem;
+      color: gray;
+      transition: background 0.15s ease, border-color 0.15s ease;
+      cursor: pointer;
+    }
+    .drop-zone.dragover {
+      background: #e0e7ff;
+      border-color: #1e40af;
+    }
+    #previewSection img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+    #convertMsg { margin-top: 8px; font-weight: 600; }
+    body.dark .drop-zone { border-color: #60a5fa; color: #e6eefc; background: rgba(96,165,250,0.04); }
+  </style>
 </head>
+
 <body>
-  <!-- ✅ Header -->
+  <!-- Header -->
   <header class="navbar">
     <div class="nav-container">
       <div class="logo">
-        <a href="/index.html" aria-label="Convert Labs Home">
-          <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img">
+        <a href="/" aria-label="Convert Labs Home">
+          <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
           <span class="brand-text">Convert Labs</span>
         </a>
       </div>
       <nav class="nav-links">
         <ul>
-          <li><a href="/index.html">Home</a></li>
-          <li><a href="tools.html" class="active">Tools</a></li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/tools/tools.html" class="active">Tools</a></li>
           <li><a href="/guides.html">Blog</a></li>
           <li><a href="/about.html">About</a></li>
           <li><a href="/contact.html">Contact</a></li>
         </ul>
       </nav>
-      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme" aria-label="Toggle theme">🌙</button>
     </div>
   </header>
 
-  <!-- ✅ Main Content -->
-  <main class="tool-page">
+  <!-- Main Content -->
+  <main class="tool-page" style="max-width:900px;margin:auto;padding:2rem 1rem;">
     <h1>Image Converter</h1>
     <p>
       Convert your images quickly and securely between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and <b>GIF</b> formats.
@@ -109,55 +129,52 @@
       <p>Upload an image and choose your desired output format:</p>
 
       <input type="file" id="imageInput" accept="image/*" aria-label="Upload image" />
-      <select id="formatSelect" aria-label="Select output format">
-        <option value="image/jpeg">JPG</option>
-        <option value="image/png">PNG</option>
-        <option value="image/webp">WEBP</option>
-        <option value="image/gif">GIF</option>
-      </select>
-      <button id="convertBtn" class="send-btn">Convert Image</button>
+      <div id="dropZone" class="drop-zone" tabindex="0">📂 Drag & Drop image here or click to choose a file</div>
+
+      <div style="margin-top:12px;">
+        <select id="formatSelect" aria-label="Select output format">
+          <option value="image/jpeg">JPG</option>
+          <option value="image/png">PNG</option>
+          <option value="image/webp">WEBP</option>
+          <option value="image/gif">GIF</option>
+        </select>
+        <button id="convertBtn" class="send-btn" style="margin-left:8px;">Convert Image</button>
+      </div>
     </section>
 
-    <!-- ✅ Preview -->
+    <!-- Preview -->
     <section id="previewSection" style="display:none; margin-top:2rem;">
       <h2>Preview & Download</h2>
       <div style="display:flex;flex-wrap:wrap;gap:25px;justify-content:center;">
-        <div>
+        <div style="max-width:320px;width:100%;">
           <p><b>Original</b></p>
           <img id="originalImg" alt="Original image preview" style="max-width:300px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" />
         </div>
-        <div>
+        <div style="max-width:320px;width:100%;">
           <p><b>Converted</b></p>
           <img id="convertedImg" alt="Converted image preview" style="max-width:300px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" />
         </div>
       </div>
       <a id="downloadLink" download="converted-image" class="send-btn" style="margin-top:20px;display:inline-block;">Download Converted Image</a>
+      <p id="convertMsg"></p>
     </section>
 
     <p style="margin-top:1.5rem;font-size:0.9rem;color:gray;">
       💡 <strong>Note:</strong> GIF output is a single still frame. For animated conversions, use a desktop or specialized GIF tool.
     </p>
 
-    <!-- ✅ Educational Section -->
+    <!-- Educational -->
     <section style="margin-top:2rem;">
       <h2>Understanding Image Formats</h2>
-      <p>
-        <b>JPG</b> (or JPEG) is ideal for photos and web use because it compresses images efficiently, slightly reducing quality to save space.
-      </p>
-      <p>
-        <b>PNG</b> retains full quality and supports transparency, making it perfect for graphics, logos, and screenshots.
-      </p>
-      <p>
-        <b>WEBP</b> is a modern format created by Google — offering smaller file sizes than JPG or PNG with excellent quality.
-      </p>
-      <p>
-        <b>GIF</b> supports simple animations but limited colors (256 only). It’s best for short clips, icons, and simple illustrations.
-      </p>
+      <p><b>JPG</b> is ideal for photos and web use because it compresses images efficiently.</p>
+      <p><b>PNG</b> retains full quality and supports transparency.</p>
+      <p><b>WEBP</b> offers smaller file sizes with good quality.</p>
+      <p><b>GIF</b> supports simple animations but limited colors (256 only).</p>
     </section>
   </main>
 
-  <!-- ✅ Footer -->
-  <footer class="footer">
+  <!-- Footer -->
+  <footer class="footer" style="margin-top:2rem;">
     <div class="footer-brand">
       <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <span class="footer-text">Convert Labs</span>
@@ -165,33 +182,34 @@
     <p>© 2025 Convert Labs. All rights reserved.</p>
     <nav class="footer-links">
       <a href="/about.html">About</a> |
-      <a href="tools.html">Tools</a> |
+      <a href="/tools/tools.html">Tools</a> |
+      <a href="/guides.html">Blog</a> |
       <a href="/privacy.html">Privacy Policy</a> |
-       <a href="disclaimer.html">Disclaimer</a> |
+      <a href="/disclaimer.html">Disclaimer</a> |
       <a href="/terms.html">Terms of Use</a> |
       <a href="/contact.html">Contact</a>
     </nav>
   </footer>
 
-<script>
-(function() {
-  const input = document.getElementById("imageInput");
-  const convertBtn = document.getElementById("convertBtn");
-  const formatSelect = document.getElementById("formatSelect");
-  const preview = document.getElementById("previewSection");
-  const originalImg = document.getElementById("originalImg");
-  const convertedImg = document.getElementById("convertedImg");
-  const downloadLink = document.getElementById("downloadLink");
-  const themeToggle = document.getElementById("themeToggle");
-
-  let originalDataURL = null;
-  let originalFileSize = 0;
-
+  <!-- Page script: theme toggle, drag/drop, conversion -->
   <script>
-  // --- THEME TOGGLE (replace your existing theme toggle code with this) ---
-  (function(){
-    const themeToggle = document.getElementById('themeToggle');
+  (function() {
+    // Elements
+    const input = document.getElementById("imageInput");
+    const convertBtn = document.getElementById("convertBtn");
+    const formatSelect = document.getElementById("formatSelect");
+    const preview = document.getElementById("previewSection");
+    const originalImg = document.getElementById("originalImg");
+    const convertedImg = document.getElementById("convertedImg");
+    const downloadLink = document.getElementById("downloadLink");
+    const themeToggle = document.getElementById("themeToggle");
+    const dropZone = document.getElementById("dropZone");
+    const convertMsgEl = document.getElementById("convertMsg");
 
+    let originalDataURL = null;
+    let originalFileSize = 0;
+
+    // ---------- Theme toggle ----------
     function applyTheme(isDark) {
       if (isDark) {
         document.documentElement.classList.add('dark');
@@ -204,25 +222,17 @@
       }
     }
 
-    // init button state after DOM ready (in case this script runs before the button exists)
     function initThemeToggle() {
-      // read stored pref (default: light)
       const stored = localStorage.getItem('theme');
       const isDark = stored === 'dark';
       applyTheme(isDark);
 
-      if (!themeToggle) return; // no button found
-
+      if (!themeToggle) return;
       themeToggle.addEventListener('click', () => {
         const nowDark = document.documentElement.classList.toggle('dark');
-        // also toggle body for compatibility with your CSS
         if (nowDark) document.body.classList.add('dark');
         else document.body.classList.remove('dark');
-
-        // persist
         localStorage.setItem('theme', nowDark ? 'dark' : 'light');
-
-        // update icon
         themeToggle.textContent = nowDark ? '☀️' : '🌙';
       });
     }
@@ -232,158 +242,141 @@
     } else {
       initThemeToggle();
     }
-  })();
-</script>
 
-  // ===============================
-  // ✅ HELPER FUNCTIONS
-  // ===============================
-  function dataURLBytes(dataURL) {
-    const idx = dataURL.indexOf(",");
-    if (idx === -1) return 0;
-    const base64 = dataURL.slice(idx + 1);
-    const padding = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
-    return Math.ceil((base64.length * 3) / 4) - padding;
-  }
-
-  function humanSize(bytes) {
-    if (bytes < 1024) return bytes + " B";
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
-  }
-
-  let msgEl = document.getElementById("convertMsg");
-  if (!msgEl) {
-    msgEl = document.createElement("p");
-    msgEl.id = "convertMsg";
-    msgEl.style.fontWeight = "600";
-    msgEl.style.marginTop = "8px";
-    preview.parentNode.insertBefore(msgEl, preview.nextSibling);
-  }
-
-  // ===============================
-  // ✅ FILE INPUT + DRAG & DROP
-  // ===============================
-  const dropZone = document.createElement("div");
-  dropZone.textContent = "📂 Drag & Drop image here or click above to choose a file";
-  dropZone.style.border = "2px dashed #2563eb";
-  dropZone.style.borderRadius = "10px";
-  dropZone.style.padding = "1rem";
-  dropZone.style.textAlign = "center";
-  dropZone.style.marginTop = "1rem";
-  dropZone.style.color = "gray";
-  input.insertAdjacentElement("afterend", dropZone);
-
-  ["dragenter", "dragover"].forEach(eventName => {
-    dropZone.addEventListener(eventName, e => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropZone.style.background = "#e0e7ff";
-    });
-  });
-
-  ["dragleave", "drop"].forEach(eventName => {
-    dropZone.addEventListener(eventName, e => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropZone.style.background = "transparent";
-    });
-  });
-
-  dropZone.addEventListener("drop", e => {
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
-  });
-
-  input.addEventListener("change", e => {
-    const file = e.target.files[0];
-    if (file) handleFile(file);
-  });
-
-  // Handle both drag/drop or input upload
-  function handleFile(file) {
-    if (!file.type.startsWith("image/")) {
-      alert("Please upload a valid image file.");
-      return;
+    // ---------- Helpers ----------
+    function dataURLBytes(dataURL) {
+      const idx = dataURL.indexOf(",");
+      if (idx === -1) return 0;
+      const base64 = dataURL.slice(idx + 1);
+      const padding = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
+      return Math.ceil((base64.length * 3) / 4) - padding;
     }
 
-    originalFileSize = file.size || 0;
-    const reader = new FileReader();
-    reader.onload = e => {
-      originalDataURL = e.target.result;
-      originalImg.src = originalDataURL;
-      preview.style.display = "block";
-      convertedImg.src = "";
-      downloadLink.href = "";
-      msgEl.textContent = `Original size: ${humanSize(originalFileSize)}`;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  // ===============================
-  // ✅ CONVERSION LOGIC
-  // ===============================
-  convertBtn.addEventListener("click", () => {
-    if (!originalDataURL) {
-      alert("Please upload or drop an image first.");
-      return;
+    function humanSize(bytes) {
+      if (!bytes) return "0 B";
+      if (bytes < 1024) return bytes + " B";
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+      return (bytes / (1024 * 1024)).toFixed(2) + " MB";
     }
 
-    const targetFormat = formatSelect.value;
-    const img = new Image();
+    // ---------- Drag & drop area ----------
+    function highlightDrop() { dropZone.classList.add('dragover'); }
+    function unhighlightDrop() { dropZone.classList.remove('dragover'); }
 
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+    ['dragenter', 'dragover'].forEach(evt => {
+      dropZone.addEventListener(evt, (e) => {
+        e.preventDefault(); e.stopPropagation();
+        highlightDrop();
+      });
+    });
+    ['dragleave', 'drop'].forEach(evt => {
+      dropZone.addEventListener(evt, (e) => {
+        e.preventDefault(); e.stopPropagation();
+        unhighlightDrop();
+      });
+    });
 
-      let convertedData = null;
-      try {
-        convertedData = canvas.toDataURL(targetFormat, 0.95);
-        if (!convertedData.startsWith("data:")) throw new Error("Bad DataURL");
-      } catch (err) {
-        console.warn("Conversion failed for", targetFormat, err);
+    // click drop zone -> open file chooser
+    dropZone.addEventListener('click', () => input.click());
+
+    dropZone.addEventListener('drop', (e) => {
+      const file = e.dataTransfer.files && e.dataTransfer.files[0];
+      if (file) handleFile(file);
+    });
+
+    // file input change
+    input.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) handleFile(file);
+    });
+
+    function handleFile(file) {
+      if (!file || !file.type || !file.type.startsWith('image/')) {
+        alert('Please upload a valid image file.');
+        return;
       }
+      originalFileSize = file.size || 0;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        originalDataURL = ev.target.result;
+        originalImg.src = originalDataURL;
+        preview.style.display = 'block';
+        convertedImg.src = '';
+        downloadLink.href = '';
+        convertMsgEl.textContent = `Original size: ${humanSize(originalFileSize)}`;
+      };
+      reader.readAsDataURL(file);
+    }
 
-      if (!convertedData) {
+    // ---------- Conversion ----------
+    convertBtn.addEventListener('click', () => {
+      if (!originalDataURL) {
+        alert('Please upload or drop an image first.');
+        return;
+      }
+      const targetFormat = formatSelect.value || 'image/png';
+      const img = new Image();
+      img.onload = () => {
         try {
-          convertedData = canvas.toDataURL("image/png", 0.95);
-          msgEl.textContent = `⚠️ Requested format not supported. Converted to PNG instead.`;
-        } catch (err2) {
-          alert("Your browser cannot perform this conversion.");
-          return;
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+
+          let convertedData = null;
+          try {
+            convertedData = canvas.toDataURL(targetFormat, 0.95);
+            if (!convertedData || !convertedData.startsWith('data:')) convertedData = null;
+          } catch (e) {
+            convertedData = null;
+          }
+
+          if (!convertedData) {
+            // fallback to PNG
+            try {
+              convertedData = canvas.toDataURL('image/png', 0.95);
+              convertMsgEl.textContent = '⚠️ Requested format not supported. Converted to PNG instead.';
+            } catch (e2) {
+              alert('Conversion failed — this browser may not support the requested output format.');
+              return;
+            }
+          } else {
+            convertMsgEl.textContent = '✅ Conversion complete.';
+          }
+
+          convertedImg.src = convertedData;
+          downloadLink.href = convertedData;
+          let mime = convertedData.substring(5, convertedData.indexOf(';'));
+          let ext = (mime.split('/')[1] || 'png').replace('x-icon', 'png');
+          downloadLink.download = `converted-image.${ext}`;
+
+          const origBytes = originalFileSize || dataURLBytes(originalDataURL);
+          const convBytes = dataURLBytes(convertedData);
+          const diff = origBytes - convBytes;
+          const pct = origBytes ? ((diff / origBytes) * 100).toFixed(1) : 0;
+          convertMsgEl.innerHTML = `✅ Conversion complete. Original: <strong>${humanSize(origBytes)}</strong> — Converted: <strong>${humanSize(convBytes)}</strong> (${pct > 0 ? '↓' + pct + '% smaller' : '≈ same size'}). <br><small>Click Download to save.</small>`;
+        } catch (err) {
+          console.error('Conversion error:', err);
+          alert('An unexpected error occurred during conversion.');
         }
+      };
+      img.onerror = () => {
+        alert('Failed to load the image for conversion. Try re-uploading or use a different file.');
+      };
+      // use the in-memory Data URL to avoid CORS problems
+      img.src = originalDataURL;
+    });
+
+    // Keyboard accessibility: allow drop zone activation via Enter/Space
+    dropZone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        input.click();
       }
+    });
+  })();
+  </script>
 
-      convertedImg.src = convertedData;
-      downloadLink.href = convertedData;
-      const ext = (targetFormat.split("/")[1] || "png").replace("x-icon", "png");
-      downloadLink.download = `converted-image.${ext}`;
-
-      const origBytes = originalFileSize || dataURLBytes(originalDataURL);
-      const convBytes = dataURLBytes(convertedData);
-      const diff = origBytes - convBytes;
-      const pct = ((diff / origBytes) * 100).toFixed(1);
-      msgEl.innerHTML = `✅ Conversion complete. Original: <strong>${humanSize(origBytes)}</strong> — Converted: <strong>${humanSize(convBytes)}</strong> (${pct > 0 ? "↓" + pct + "% smaller" : "≈ same size"}).`;
-    };
-
-    img.onerror = () => {
-      alert("Could not read the image for conversion.");
-    };
-
-    img.src = originalDataURL;
-  });
-})();
-</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
