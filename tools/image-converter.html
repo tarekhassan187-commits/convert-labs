@@ -133,109 +133,130 @@
   <footer class="footer" style="margin-top:2rem;">
     <p>© 2025 Convert Labs. All rights reserved.</p>
   </footer>
+<!-- ✅ Working GIF Encoder with Palette -->
+<script src="https://cdn.jsdelivr.net/npm/omggif@1.0.10/omggif.js"></script>
 
-  <!-- ✅ Working lightweight GIF encoder -->
-  <script src="https://cdn.jsdelivr.net/npm/omggif@1.0.10/omggif.js"></script>
+<script>
+(function(){
+  const input=document.getElementById("imageInput");
+  const dropZone=document.getElementById("dropZone");
+  const formatSelect=document.getElementById("formatSelect");
+  const convertBtn=document.getElementById("convertBtn");
+  const preview=document.getElementById("previewSection");
+  const originalImg=document.getElementById("originalImg");
+  const convertedImg=document.getElementById("convertedImg");
+  const downloadLink=document.getElementById("downloadLink");
+  const msg=document.getElementById("convertMsg");
+  const themeToggle=document.getElementById("themeToggle");
 
-  <script>
-  (function(){
-    const input=document.getElementById("imageInput");
-    const dropZone=document.getElementById("dropZone");
-    const formatSelect=document.getElementById("formatSelect");
-    const convertBtn=document.getElementById("convertBtn");
-    const preview=document.getElementById("previewSection");
-    const originalImg=document.getElementById("originalImg");
-    const convertedImg=document.getElementById("convertedImg");
-    const downloadLink=document.getElementById("downloadLink");
-    const msg=document.getElementById("convertMsg");
-    const themeToggle=document.getElementById("themeToggle");
+  let originalDataURL=null, originalFileSize=0;
 
-    let originalDataURL=null, originalFileSize=0;
+  // Theme toggle
+  function applyTheme(isDark){
+    if(isDark){document.documentElement.classList.add('dark');document.body.classList.add('dark');themeToggle.textContent='☀️';}
+    else{document.documentElement.classList.remove('dark');document.body.classList.remove('dark');themeToggle.textContent='🌙';}
+  }
+  applyTheme(localStorage.getItem('theme')==='dark');
+  themeToggle.onclick=()=>{
+    const nowDark=document.documentElement.classList.toggle('dark');
+    document.body.classList.toggle('dark',nowDark);
+    localStorage.setItem('theme',nowDark?'dark':'light');
+    themeToggle.textContent=nowDark?'☀️':'🌙';
+  };
 
-    // Theme toggle
-    function applyTheme(isDark){
-      if(isDark){document.documentElement.classList.add('dark');document.body.classList.add('dark');themeToggle.textContent='☀️';}
-      else{document.documentElement.classList.remove('dark');document.body.classList.remove('dark');themeToggle.textContent='🌙';}
-    }
-    applyTheme(localStorage.getItem('theme')==='dark');
-    themeToggle.onclick=()=>{
-      const nowDark=document.documentElement.classList.toggle('dark');
-      document.body.classList.toggle('dark',nowDark);
-      localStorage.setItem('theme',nowDark?'dark':'light');
-      themeToggle.textContent=nowDark?'☀️':'🌙';
+  // Drag/drop
+  ['dragenter','dragover'].forEach(evt=>{
+    dropZone.addEventListener(evt,e=>{e.preventDefault();dropZone.classList.add('dragover');});
+  });
+  ['dragleave','drop'].forEach(evt=>{
+    dropZone.addEventListener(evt,e=>{e.preventDefault();dropZone.classList.remove('dragover');});
+  });
+  dropZone.addEventListener('drop', e=>{
+    const f=e.dataTransfer.files[0];
+    if(f)handleFile(f);
+  });
+  input.addEventListener('change', e=>{
+    const f=e.target.files[0];
+    if(f)handleFile(f);
+  });
+
+  function handleFile(file){
+    if(!file.type.startsWith("image/")){alert("Please upload an image file.");return;}
+    originalFileSize=file.size;
+    const r=new FileReader();
+    r.onload=e=>{
+      originalDataURL=e.target.result;
+      originalImg.src=originalDataURL;
+      preview.style.display='block';
+      convertedImg.src='';
+      downloadLink.href='';
+      msg.textContent=`Original size: ${(file.size/1024).toFixed(1)} KB`;
     };
+    r.readAsDataURL(file);
+  }
 
-    // Drag/drop
-    ['dragenter','dragover'].forEach(evt=>{
-      dropZone.addEventListener(evt,e=>{e.preventDefault();dropZone.classList.add('dragover');});
-    });
-    ['dragleave','drop'].forEach(evt=>{
-      dropZone.addEventListener(evt,e=>{e.preventDefault();dropZone.classList.remove('dragover');});
-    });
-    dropZone.addEventListener('drop', e=>{
-      const f=e.dataTransfer.files[0];
-      if(f)handleFile(f);
-    });
-    input.addEventListener('change', e=>{
-      const f=e.target.files[0];
-      if(f)handleFile(f);
-    });
-
-    function handleFile(file){
-      if(!file.type.startsWith("image/")){alert("Please upload an image file.");return;}
-      originalFileSize=file.size;
-      const r=new FileReader();
-      r.onload=e=>{
-        originalDataURL=e.target.result;
-        originalImg.src=originalDataURL;
-        preview.style.display='block';
-        convertedImg.src='';
-        downloadLink.href='';
-        msg.textContent=`Original size: ${(file.size/1024).toFixed(1)} KB`;
-      };
-      r.readAsDataURL(file);
+  // Simple function to make grayscale palette
+  function makeGrayPalette(){
+    const palette=[];
+    for(let i=0;i<256;i++){
+      palette.push(i,i,i); // R,G,B same
     }
+    return new Uint8Array(palette);
+  }
 
-    // Conversion
-    convertBtn.onclick=async ()=>{
-      if(!originalDataURL){alert("Upload an image first.");return;}
-      const target=formatSelect.value;
-      const img=new Image();
-      img.onload=async()=>{
-        const canvas=document.createElement('canvas');
-        const ctx=canvas.getContext('2d');
-        canvas.width=img.width;canvas.height=img.height;
-        ctx.drawImage(img,0,0);
+  // Convert RGBA → grayscale index
+  function rgbaToGrayIndexes(rgba){
+    const len=rgba.length/4;
+    const out=new Uint8Array(len);
+    for(let i=0;i<len;i++){
+      const r=rgba[i*4],g=rgba[i*4+1],b=rgba[i*4+2];
+      out[i]=(0.3*r+0.59*g+0.11*b)|0; // grayscale
+    }
+    return out;
+  }
 
-        let resultData=null, ext='png';
-        try{
-          if(target==='image/gif'){
-            // create single-frame GIF
-            const gifData=new Uint8Array(img.width*img.height*5);
-            const gifWriter=new GifWriter(gifData,img.width,img.height,{loop:0});
-            const frame=ctx.getImageData(0,0,img.width,img.height);
-            gifWriter.addFrame(0,0,img.width,img.height,frame.data);
-            const out=gifData.subarray(0,gifWriter.end());
-            const blob=new Blob([out],{type:'image/gif'});
-            resultData=URL.createObjectURL(blob);
-            ext='gif';
-          }else{
-            resultData=canvas.toDataURL(target,0.95);
-            ext=(target.split('/')[1]||'png').replace('x-icon','png');
-          }
-        }catch(err){
-          alert("Conversion failed: "+err.message);
-          return;
+  // Conversion
+  convertBtn.onclick=async ()=>{
+    if(!originalDataURL){alert("Upload an image first.");return;}
+    const target=formatSelect.value;
+    const img=new Image();
+    img.onload=async()=>{
+      const canvas=document.createElement('canvas');
+      const ctx=canvas.getContext('2d');
+      canvas.width=img.width;canvas.height=img.height;
+      ctx.drawImage(img,0,0);
+
+      let resultData=null, ext='png';
+      try{
+        if(target==='image/gif'){
+          const rgba=ctx.getImageData(0,0,img.width,img.height).data;
+          const indexes=rgbaToGrayIndexes(rgba);
+          const palette=makeGrayPalette();
+          const gifData=new Uint8Array(img.width*img.height*5);
+          const gifWriter=new GifWriter(gifData,img.width,img.height,{palette:palette,loop:0});
+          gifWriter.addFrame(0,0,img.width,img.height,indexes);
+          const out=gifData.subarray(0,gifWriter.end());
+          const blob=new Blob([out],{type:'image/gif'});
+          resultData=URL.createObjectURL(blob);
+          ext='gif';
+        }else{
+          resultData=canvas.toDataURL(target,0.95);
+          ext=(target.split('/')[1]||'png').replace('x-icon','png');
         }
+      }catch(err){
+        alert("Conversion failed: "+err.message);
+        return;
+      }
 
-        convertedImg.src=resultData;
-        downloadLink.href=resultData;
-        downloadLink.download=`converted-image.${ext}`;
-        msg.textContent='✅ Conversion complete.';
-      };
-      img.src=originalDataURL;
+      convertedImg.src=resultData;
+      downloadLink.href=resultData;
+      downloadLink.download=`converted-image.${ext}`;
+      msg.textContent='✅ Conversion complete.';
     };
-  })();
-  </script>
+    img.src=originalDataURL;
+  };
+})();
+</script>
+
 </body>
 </html>
