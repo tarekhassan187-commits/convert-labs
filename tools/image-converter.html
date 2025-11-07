@@ -227,27 +227,45 @@
       ctx.drawImage(img,0,0);
 
       let resultData=null, ext='png';
-      try{
-        if(target==='image/gif'){
-          const rgba=ctx.getImageData(0,0,img.width,img.height).data;
-          const indexes=rgbaToGrayIndexes(rgba);
-          const palette=makeGrayPalette();
-          const gifData=new Uint8Array(img.width*img.height*5);
-          const gifWriter=new GifWriter(gifData,img.width,img.height,{palette:palette,loop:0});
-          gifWriter.addFrame(0,0,img.width,img.height,indexes);
-          const out=gifData.subarray(0,gifWriter.end());
-          const blob=new Blob([out],{type:'image/gif'});
-          resultData=URL.createObjectURL(blob);
-          ext='gif';
-        }else{
-          resultData=canvas.toDataURL(target,0.95);
-          ext=(target.split('/')[1]||'png').replace('x-icon','png');
-        }
-      }catch(err){
-        alert("Conversion failed: "+err.message);
-        return;
-      }
+      try {
+  if (target === 'image/gif') {
+    const rgba = ctx.getImageData(0, 0, img.width, img.height).data;
 
+    // --- build 256-color grayscale palette (3 × 256 = 768 bytes) ---
+    const palette = new Uint8Array(256 * 3);
+    for (let i = 0; i < 256; i++) {
+      palette[i * 3] = palette[i * 3 + 1] = palette[i * 3 + 2] = i;
+    }
+
+    // --- map RGBA → palette indexes (grayscale) ---
+    const len = rgba.length / 4;
+    const indexes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      const r = rgba[i * 4], g = rgba[i * 4 + 1], b = rgba[i * 4 + 2];
+      indexes[i] = (0.3 * r + 0.59 * g + 0.11 * b) | 0;
+    }
+
+    // --- write GIF with explicit paletteSize:256 ---
+    const gifData = new Uint8Array(img.width * img.height * 5);
+    const gifWriter = new GifWriter(
+      gifData,
+      img.width,
+      img.height,
+      { palette: palette, paletteSize: 256, loop: 0 }
+    );
+    gifWriter.addFrame(0, 0, img.width, img.height, indexes);
+    const out = gifData.subarray(0, gifWriter.end());
+    const blob = new Blob([out], { type: 'image/gif' });
+    resultData = URL.createObjectURL(blob);
+    ext = 'gif';
+  } else {
+    resultData = canvas.toDataURL(target, 0.95);
+    ext = (target.split('/')[1] || 'png').replace('x-icon', 'png');
+  }
+} catch (err) {
+  alert("Conversion failed: " + err.message);
+  return;
+}
       convertedImg.src=resultData;
       downloadLink.href=resultData;
       downloadLink.download=`converted-image.${ext}`;
