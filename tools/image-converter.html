@@ -3,6 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Put immediately after your viewport/meta tags in <head> -->
+<script>
+  (function(){
+    try {
+      var theme = localStorage.getItem('theme');
+      if (theme === 'dark') {
+        // add class to both root and body for maximum compatibility
+        document.documentElement.classList.add('dark');
+        // if body exists already, add to it; if not, add when DOM ready
+        if (document.body) document.body.classList.add('dark');
+        else document.addEventListener('DOMContentLoaded', function(){ document.body.classList.add('dark'); });
+      } else if (theme === 'light') {
+        // ensure light class removed
+        document.documentElement.classList.remove('dark');
+        if (document.body) document.body.classList.remove('dark');
+        else document.addEventListener('DOMContentLoaded', function(){ document.body.classList.remove('dark'); });
+      }
+    } catch(e) { /* ignore storage errors */ }
+  })();
+</script>
+
   <meta name="robots" content="index, follow" />
   <title>Image Converter — Convert Labs</title>
   <meta name="description" content="Free online image converter — instantly change JPG, PNG, WEBP, or GIF formats locally in your browser with Convert Labs. No uploads, no tracking." />
@@ -166,21 +187,53 @@
   let originalDataURL = null;
   let originalFileSize = 0;
 
-  // ===============================
-  // ✅ THEME TOGGLE RESTORED
-  // ===============================
-  themeToggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    const isDark = document.body.classList.contains("dark");
-    themeToggle.textContent = isDark ? "☀️" : "🌙";
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-  });
+  <script>
+  // --- THEME TOGGLE (replace your existing theme toggle code with this) ---
+  (function(){
+    const themeToggle = document.getElementById('themeToggle');
 
-  // Apply saved theme on load
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
-    themeToggle.textContent = "☀️";
-  }
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        if (document.body) document.body.classList.add('dark');
+        themeToggle && (themeToggle.textContent = '☀️');
+      } else {
+        document.documentElement.classList.remove('dark');
+        if (document.body) document.body.classList.remove('dark');
+        themeToggle && (themeToggle.textContent = '🌙');
+      }
+    }
+
+    // init button state after DOM ready (in case this script runs before the button exists)
+    function initThemeToggle() {
+      // read stored pref (default: light)
+      const stored = localStorage.getItem('theme');
+      const isDark = stored === 'dark';
+      applyTheme(isDark);
+
+      if (!themeToggle) return; // no button found
+
+      themeToggle.addEventListener('click', () => {
+        const nowDark = document.documentElement.classList.toggle('dark');
+        // also toggle body for compatibility with your CSS
+        if (nowDark) document.body.classList.add('dark');
+        else document.body.classList.remove('dark');
+
+        // persist
+        localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+
+        // update icon
+        themeToggle.textContent = nowDark ? '☀️' : '🌙';
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initThemeToggle);
+    } else {
+      initThemeToggle();
+    }
+  })();
+</script>
 
   // ===============================
   // ✅ HELPER FUNCTIONS
@@ -326,6 +379,7 @@
 </script>
 </body>
 </html>
+
 
 
 
