@@ -2,9 +2,6 @@
 <html lang="en">
 <head>
 
-  <!-- ===============================
-       ✅ BASIC META + SEO
-  ================================ -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="index, follow" />
@@ -14,10 +11,8 @@
   <link rel="icon" href="/assets/convert-labs-icon.png" />
   <link rel="stylesheet" href="/style.css" />
 
-  <!-- ===============================
-       ✅ THEME PREF APPLY (for no flicker)
-  ================================ -->
   <script>
+    // preload dark theme
     (function(){
       try {
         var t = localStorage.getItem('theme');
@@ -30,9 +25,7 @@
     })();
   </script>
 
-  <!-- ===============================
-       ✅ SOCIAL META TAGS
-  ================================ -->
+  <!-- ✅ SEO & OG -->
   <meta property="og:title" content="Image Converter — Convert Labs" />
   <meta property="og:description" content="Convert JPG, PNG, WEBP, and GIF images instantly in your browser — secure, fast, and private with Convert Labs." />
   <meta property="og:image" content="https://convertlabs.online/assets/image-converter.jpg" />
@@ -40,9 +33,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Convert Labs" />
 
-  <!-- ===============================
-       ✅ STRUCTURED DATA — BREADCRUMB + WEBPAGE
-  ================================ -->
+  <!-- ✅ Breadcrumb & Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -54,7 +45,6 @@
     ]
   }
   </script>
-
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -65,9 +55,7 @@
   }
   </script>
 
-  <!-- ===============================
-       ✅ GOOGLE ADSENSE + ANALYTICS
-  ================================ -->
+  <!-- ✅ AdSense + Analytics -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
@@ -77,9 +65,6 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- ===============================
-       ✅ LOCAL STYLES
-  ================================ -->
   <style>
     .drop-zone {
       border: 2px dashed #2563eb; border-radius: 10px;
@@ -96,14 +81,11 @@
 
 <body>
 
-  <!-- ===============================
-       ✅ HEADER
-  ================================ -->
   <header class="navbar">
     <div class="nav-container">
       <div class="logo">
         <a href="/" aria-label="Convert Labs Home">
-          <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
+          <img src="/assets/convert-labs-icon.png" class="logo-img" alt="Convert Labs Icon" />
           <span class="brand-text">Convert Labs</span>
         </a>
       </div>
@@ -120,24 +102,16 @@
     </div>
   </header>
 
-  <!-- ===============================
-       ✅ MAIN CONTENT
-  ================================ -->
   <main class="tool-page" style="max-width:900px;margin:auto;padding:2rem 1rem;">
     <h1>Image Converter</h1>
-    <p>Convert images locally between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and <b>GIF</b>. All processing stays private in your browser — no uploads.</p>
+    <p>Convert images locally between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and <b>GIF</b>. Everything runs in your browser — no uploads.</p>
 
     <section style="margin-top:1.5rem;">
       <h2>Interactive Image Converter</h2>
-      <p>Select or drag an image:</p>
-
-      <!-- ✅ Clickable Zone + Hidden Input -->
       <div id="dropZone" class="drop-zone">
-        📂 Click here or drag & drop an image
-        <input type="file" id="imageInput" accept="image/*"
-          style="opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer;" />
+        📂 Click or drag an image here
+        <input type="file" id="imageInput" accept="image/*" style="opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer;" />
       </div>
-
       <div style="margin-top:1rem;">
         <select id="formatSelect">
           <option value="image/jpeg">JPG</option>
@@ -149,7 +123,6 @@
       </div>
     </section>
 
-    <!-- ✅ Preview Section -->
     <section id="previewSection" style="display:none; margin-top:2rem;">
       <h2>Preview & Download</h2>
       <div style="display:flex;flex-wrap:wrap;gap:25px;justify-content:center;">
@@ -161,27 +134,11 @@
     </section>
   </main>
 
-  <!-- ===============================
-       ✅ FOOTER
-  ================================ -->
   <footer class="footer" style="margin-top:2rem;">
-    <div class="footer-brand">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
-      <span class="footer-text">Convert Labs</span>
-    </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
-    <nav class="footer-links">
-      <a href="/about.html">About</a> |
-      <a href="/tools/tools.html">Tools</a> |
-      <a href="/privacy.html">Privacy</a> |
-      <a href="/terms.html">Terms</a> |
-      <a href="/contact.html">Contact</a>
-    </nav>
   </footer>
 
-  <!-- ===============================
-       ✅ GIF ENCODER + LOGIC SCRIPT
-  ================================ -->
+  <!-- ✅ FIXED: Ensure GIF encoder loads before main script -->
   <script src="https://cdn.jsdelivr.net/npm/gif-encoder-2/browser.js"></script>
 
   <script>
@@ -199,7 +156,13 @@
 
     let originalDataURL=null, originalFileSize=0;
 
-    // THEME TOGGLE
+    // Fix GIFEncoder detection
+    const EncoderClass = window.GIFEncoder || window.GIFEncoder2;
+    if (!EncoderClass) {
+      console.error("GIFEncoder library not loaded");
+    }
+
+    // Theme toggle
     function applyTheme(isDark){
       if(isDark){document.documentElement.classList.add('dark');document.body.classList.add('dark');themeToggle.textContent='☀️';}
       else{document.documentElement.classList.remove('dark');document.body.classList.remove('dark');themeToggle.textContent='🌙';}
@@ -212,7 +175,7 @@
       themeToggle.textContent=nowDark?'☀️':'🌙';
     };
 
-    // DRAG/DROP
+    // Drag/drop
     ['dragenter','dragover'].forEach(evt=>{
       dropZone.addEventListener(evt,e=>{e.preventDefault();dropZone.classList.add('dragover');});
     });
@@ -243,7 +206,6 @@
       r.readAsDataURL(file);
     }
 
-    // CONVERSION
     convertBtn.onclick=async ()=>{
       if(!originalDataURL){alert("Upload an image first.");return;}
       const target=formatSelect.value;
@@ -257,7 +219,8 @@
         let resultData=null, ext='png';
         try{
           if(target==='image/gif'){
-            const encoder=new GIFEncoder(img.width,img.height);
+            if(!EncoderClass){alert("GIF encoder not available.");return;}
+            const encoder=new EncoderClass(img.width,img.height);
             encoder.start();encoder.setRepeat(0);encoder.setDelay(0);
             const pixels=ctx.getImageData(0,0,img.width,img.height).data;
             encoder.addFrame(pixels,true);
