@@ -268,9 +268,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Load all data files
   Promise.all([
-    fetch("../assets/usda_food_nutrition.json").then(r => r.json()),
-    fetch("../assets/food-nutrition-data.json").then(r => r.json()).catch(() => []),
-    fetch("../assets/extras-oriental-foods.json").then(r => r.json()).catch(() => [])
+    fetch("/assets/usda_food_nutrition.json").then(r => r.json()),
+    fetch("/assets/food-nutrition-data.json").then(r => r.json()).catch(() => []),
+    fetch("/assets/extras-oriental-foods.json").then(r => r.json()).catch(() => [])
   ])
   .then(dataArrays => { foodData = dataArrays.flat(); });
 
@@ -443,6 +443,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
