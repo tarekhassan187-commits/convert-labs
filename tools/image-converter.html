@@ -152,64 +152,68 @@
     </nav>
   </footer>
 
-  <!-- ✅ Script -->
-  <script src="/script.js" defer></script>
-  <script>
-    const input = document.getElementById("imageInput");
-    const convertBtn = document.getElementById("convertBtn");
-    const formatSelect = document.getElementById("formatSelect");
-    const preview = document.getElementById("previewSection");
-    const originalImg = document.getElementById("originalImg");
-    const convertedImg = document.getElementById("convertedImg");
-    const downloadLink = document.getElementById("downloadLink");
-    let originalFile = null;
+ <script>
+  const input = document.getElementById("imageInput");
+  const convertBtn = document.getElementById("convertBtn");
+  const formatSelect = document.getElementById("formatSelect");
+  const preview = document.getElementById("previewSection");
+  const originalImg = document.getElementById("originalImg");
+  const convertedImg = document.getElementById("convertedImg");
+  const downloadLink = document.getElementById("downloadLink");
+  let originalDataURL = null;
 
-    // Show preview of uploaded image
-    input.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      originalFile = file;
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        originalImg.src = event.target.result;
-        preview.style.display = "block";
-      };
-      reader.readAsDataURL(file);
-    });
+  // ✅ Show preview of uploaded image
+  input.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    // Convert image
-    convertBtn.addEventListener("click", () => {
-      if (!originalFile) {
-        alert("Please upload an image first.");
-        return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      originalDataURL = event.target.result;
+      originalImg.src = originalDataURL;
+      preview.style.display = "block";
+      convertedImg.src = ""; // reset previous conversion
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ✅ Convert image directly from DataURL
+  convertBtn.addEventListener("click", () => {
+    if (!originalDataURL) {
+      alert("Please upload an image first.");
+      return;
+    }
+
+    const targetFormat = formatSelect.value;
+    const img = new Image();
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      try {
+        const convertedData = canvas.toDataURL(targetFormat, 0.95);
+        convertedImg.src = convertedData;
+        downloadLink.href = convertedData;
+        const ext = targetFormat.split("/")[1];
+        downloadLink.download = `converted-image.${ext}`;
+      } catch (error) {
+        console.error(error);
+        alert("⚠️ This browser may not fully support this conversion type.");
       }
+    };
 
-      const targetFormat = formatSelect.value;
-      const img = new Image();
-      img.crossOrigin = "anonymous";
+    // Load from in-memory DataURL (no CORS issue)
+    img.src = originalDataURL;
+  });
+</script>
 
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-
-        try {
-          const convertedData = canvas.toDataURL(targetFormat, 0.95);
-          convertedImg.src = convertedData;
-          downloadLink.href = convertedData;
-          const ext = targetFormat.split("/")[1];
-          downloadLink.download = `converted-image.${ext}`;
-        } catch (error) {
-          alert("⚠️ This browser may not fully support this conversion type.");
-        }
-      };
-      img.src = URL.createObjectURL(originalFile);
-    });
-  </script>
 </body>
 </html>
+
 
 
 
