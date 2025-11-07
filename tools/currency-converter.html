@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+
   <title>Currency Converter — Convert Labs</title>
-
   <meta name="description" content="Convert currencies in real time between USD, EUR, GBP, AED, SAR, EGP, and more. Live exchange rates powered by Exchangerate.host and ER-API — by Convert Labs." />
-<meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://convertlabs.online/tools/currency-converter.html" />
 
+  <link rel="icon" href="/assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="/style.css" />
 
   <!-- ✅ Social Meta -->
   <meta property="og:title" content="Currency Converter — Convert Labs" />
-<meta property="og:description" content="Instantly convert between over 30 global currencies with live exchange rates from trusted APIs. Fast, accurate, and ad-free — by Convert Labs." />
-<meta property="og:image" content="https://convertlabs.online/assets/currency-converter.jpg" />
-<meta property="og:url" content="https://convertlabs.online/tools/currency-converter.html" />
-<meta property="og:type" content="website" />
+  <meta property="og:description" content="Instantly convert between over 30 global currencies with live exchange rates from trusted APIs. Fast, accurate, and privacy-friendly — by Convert Labs." />
+  <meta property="og:image" content="https://convertlabs.online/assets/currency-converter.jpg" />
+  <meta property="og:url" content="https://convertlabs.online/tools/currency-converter.html" />
+  <meta property="og:type" content="website" />
 
   <!-- ✅ Breadcrumb JSON-LD -->
   <script type="application/ld+json">
@@ -28,27 +31,27 @@
     ]
   }
   </script>
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Currency Converter — Convert Labs",
-  "url": "https://convertlabs.online/tools/currency-converter.html",
-  "description": "Instantly convert between over 30 global currencies using real-time exchange rates — by Convert Labs."
-}
-</script>
 
- <!-- ✅ AdSense & Analytics -->
+  <!-- ✅ Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Currency Converter — Convert Labs",
+    "url": "https://convertlabs.online/tools/currency-converter.html",
+    "description": "Instantly convert between over 30 global currencies using real-time exchange rates from trusted APIs — by Convert Labs."
+  }
+  </script>
+
+  <!-- ✅ AdSense & Analytics -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P', { debug_mode: true });
-
+    gtag('config', 'G-Z88B03WV7P');
   </script>
-  <link rel="stylesheet" href="/style.css" />
 </head>
 
 <body>
@@ -64,7 +67,7 @@
       <nav class="nav-links">
         <ul>
           <li><a href="/index.html">Home</a></li>
-          <li><a href="tools.html" class="active">Tools</a></li>
+          <li><a href="/tools/tools.html" class="active">Tools</a></li>
           <li><a href="/guides.html">Blog</a></li>
           <li><a href="/about.html">About</a></li>
           <li><a href="/contact.html">Contact</a></li>
@@ -78,17 +81,18 @@
   <main class="tool-page">
     <h1>Currency Converter</h1>
     <p>
-      Instantly convert between global currencies with <strong>real-time exchange rates</strong>.  
+      Instantly convert between global currencies with <strong>real-time exchange rates</strong>.
       Choose from over 30 major currencies, including <b>USD</b>, <b>EUR</b>, <b>GBP</b>, <b>AED</b>, <b>SAR</b>, and <b>EGP</b>.
     </p>
 
-    <section style="margin-top: 1.5rem;">
+    <section style="margin-top:1.5rem;">
       <h2>Interactive Currency Converter</h2>
       <p>Enter an amount and choose currencies to convert:</p>
 
-      <input type="number" id="currencyAmount" placeholder="Enter amount" min="0" />
-      <select id="currencyFrom"></select>
-      <select id="currencyTo"></select>
+      <input type="number" id="currencyAmount" placeholder="Enter amount" min="0" aria-label="Amount to convert" />
+      <select id="currencyFrom" aria-label="From currency"></select>
+      <select id="currencyTo" aria-label="To currency"></select>
+
       <div style="margin-top:1rem;">
         <button id="currencyConvertBtn" class="send-btn">Convert</button>
         <button id="refreshRatesBtn" class="send-btn" style="background:#64748b;">🔄 Refresh Rates</button>
@@ -98,23 +102,22 @@
       <p id="currencyResult" style="margin-top:1rem;font-weight:600;"></p>
     </section>
 
-    <p style="margin-top:1rem; font-size:0.9rem; color:gray;">
-      💡 <b>Tip:</b> Live data is fetched securely from <b>Exchangerate.host</b> and <b>ER-API</b> (for backup).
+    <p style="margin-top:1rem;font-size:0.9rem;color:gray;">
+      💡 <strong>Note:</strong> Live data is fetched securely from <b>Exchangerate.host</b> and <b>ER-API</b> (for backup reliability).
     </p>
 
-    <!-- ✅ Educational Section -->
     <section style="margin-top:2rem;">
       <h2>Understanding Currency Exchange</h2>
       <p>
-        Currency exchange rates represent how much one currency is worth compared to another.  
-        For example, if <b>1 USD = 47.28 EGP</b>, that means 1 US Dollar equals 47.28 Egyptian Pounds.
+        Exchange rates show how much one currency is worth compared to another.
+        For example, if <b>1 USD = 47.28 EGP</b>, then 1 US Dollar equals 47.28 Egyptian Pounds.
       </p>
       <p>
-        Exchange rates fluctuate constantly due to market forces such as inflation, interest rates, trade, and global demand.
-        Real-time converters help individuals, businesses, and travelers get accurate conversions for global transactions.
+        Exchange rates fluctuate constantly due to inflation, trade, and global market demand.
+        Real-time converters like Convert Labs help ensure accurate conversions for individuals, businesses, and travelers.
       </p>
       <p>
-        Convert Labs provides live data directly from trusted APIs — ensuring accuracy without tracking or account setup.
+        Convert Labs provides live rates directly from trusted APIs — no tracking, no accounts, and full privacy.
       </p>
     </section>
   </main>
@@ -128,10 +131,11 @@
     <p>© 2025 Convert Labs. All rights reserved.</p>
     <nav class="footer-links">
       <a href="/about.html">About</a> |
-      <a href="tools.html">Tools</a> |
-      <a href="/privacy.html">Privacy</a> |
-       <a href="disclaimer.html">Disclaimer</a> |
-      <a href="/terms.html">Terms</a> |
+      <a href="/tools/tools.html">Tools</a> |
+      <a href="/guides.html">Blog</a> |
+      <a href="/privacy.html">Privacy Policy</a> |
+      <a href="/disclaimer.html">Disclaimer</a> |
+      <a href="/terms.html">Terms of Use</a> |
       <a href="/contact.html">Contact</a>
     </nav>
   </footer>
@@ -154,7 +158,6 @@
         "HKD","THB","MYR","IDR","PLN","PHP","ILS","NZD","VND","KES","NGN","ARS"
       ];
 
-      // Populate dropdowns
       currencyList.forEach(c => {
         const option = document.createElement("option");
         option.value = c;
@@ -165,11 +168,8 @@
       fromSel.value = "USD";
       toSel.value = "EUR";
 
-      // ✅ Auto proxy detection for localhost
       async function fetchRate(from, to) {
-        const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-        const proxy = isLocal ? "https://api.allorigins.win/raw?url=" : "";
-
+        const proxy = "";
         try {
           const res = await fetch(`${proxy}https://api.exchangerate.host/latest?base=${from}`);
           const data = await res.json();
@@ -193,6 +193,7 @@
         const amount = parseFloat(amountInput.value);
         const from = fromSel.value;
         const to = toSel.value;
+
         if (!amount || amount <= 0) {
           result.textContent = "⚠️ Please enter a valid amount.";
           return;
@@ -220,8 +221,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
