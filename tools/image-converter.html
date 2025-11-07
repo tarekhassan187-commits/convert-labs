@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+  <!-- ===============================
+       ✅ BASIC META + SEO
+  ================================ -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+  <title>Image Converter — Convert Labs</title>
+  <meta name="description" content="Free online image converter — instantly convert JPG, PNG, WEBP, and GIF formats locally in your browser with Convert Labs. 100% private and secure, no uploads required." />
+  <link rel="canonical" href="https://convertlabs.online/tools/image-converter.html" />
+  <link rel="icon" href="/assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- ===============================
+       ✅ THEME PREF APPLY (for no flicker)
+  ================================ -->
   <script>
-    // apply saved theme early
     (function(){
       try {
         var t = localStorage.getItem('theme');
@@ -17,31 +30,80 @@
     })();
   </script>
 
-  <title>Image Converter — Convert Labs</title>
-  <meta name="description" content="Free online image converter — JPG, PNG, WEBP, and now GIF — fully private and runs in your browser. No uploads, no tracking." />
-  <link rel="canonical" href="https://convertlabs.online/tools/image-converter.html" />
-  <meta name="robots" content="index, follow" />
-  <link rel="icon" href="/assets/convert-labs-icon.png" />
-  <link rel="stylesheet" href="/style.css" />
+  <!-- ===============================
+       ✅ SOCIAL META TAGS
+  ================================ -->
+  <meta property="og:title" content="Image Converter — Convert Labs" />
+  <meta property="og:description" content="Convert JPG, PNG, WEBP, and GIF images instantly in your browser — secure, fast, and private with Convert Labs." />
+  <meta property="og:image" content="https://convertlabs.online/assets/image-converter.jpg" />
+  <meta property="og:url" content="https://convertlabs.online/tools/image-converter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Convert Labs" />
 
+  <!-- ===============================
+       ✅ STRUCTURED DATA — BREADCRUMB + WEBPAGE
+  ================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://convertlabs.online/" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://convertlabs.online/tools/tools.html" },
+      { "@type": "ListItem", "position": 3, "name": "Image Converter" }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Image Converter — Convert Labs",
+    "url": "https://convertlabs.online/tools/image-converter.html",
+    "description": "Convert JPG, PNG, WEBP, and GIF images instantly in your browser — secure, fast, and private with Convert Labs."
+  }
+  </script>
+
+  <!-- ===============================
+       ✅ GOOGLE ADSENSE + ANALYTICS
+  ================================ -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P');
+  </script>
+
+  <!-- ===============================
+       ✅ LOCAL STYLES
+  ================================ -->
   <style>
     .drop-zone {
       border: 2px dashed #2563eb; border-radius: 10px;
       padding: 1rem; text-align: center; margin-top: 1rem;
-      color: gray; cursor: pointer; transition: .15s;
+      color: gray; cursor: pointer; position: relative;
+      transition: .15s;
     }
     .drop-zone.dragover { background: #e0e7ff; border-color: #1e40af; }
     #convertMsg { margin-top:8px; font-weight:600; }
     body.dark .drop-zone { border-color: #60a5fa; color: #e6eefc; background: rgba(96,165,250,0.04); }
   </style>
+
 </head>
 
 <body>
+
+  <!-- ===============================
+       ✅ HEADER
+  ================================ -->
   <header class="navbar">
     <div class="nav-container">
       <div class="logo">
         <a href="/" aria-label="Convert Labs Home">
-          <img src="/assets/convert-labs-icon.png" class="logo-img" alt="Convert Labs Icon" />
+          <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
           <span class="brand-text">Convert Labs</span>
         </a>
       </div>
@@ -58,16 +120,23 @@
     </div>
   </header>
 
+  <!-- ===============================
+       ✅ MAIN CONTENT
+  ================================ -->
   <main class="tool-page" style="max-width:900px;margin:auto;padding:2rem 1rem;">
     <h1>Image Converter</h1>
-    <p>Convert your images locally between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and now <b>GIF</b>. All processing stays private in your browser.</p>
+    <p>Convert images locally between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and <b>GIF</b>. All processing stays private in your browser — no uploads.</p>
 
     <section style="margin-top:1.5rem;">
       <h2>Interactive Image Converter</h2>
-      <p>Upload an image or drag it below:</p>
+      <p>Select or drag an image:</p>
 
-      <input type="file" id="imageInput" accept="image/*" hidden />
-      <div id="dropZone" class="drop-zone">📂 Drag & Drop image here or click to choose</div>
+      <!-- ✅ Clickable Zone + Hidden Input -->
+      <div id="dropZone" class="drop-zone">
+        📂 Click here or drag & drop an image
+        <input type="file" id="imageInput" accept="image/*"
+          style="opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer;" />
+      </div>
 
       <div style="margin-top:1rem;">
         <select id="formatSelect">
@@ -80,6 +149,7 @@
       </div>
     </section>
 
+    <!-- ✅ Preview Section -->
     <section id="previewSection" style="display:none; margin-top:2rem;">
       <h2>Preview & Download</h2>
       <div style="display:flex;flex-wrap:wrap;gap:25px;justify-content:center;">
@@ -91,58 +161,75 @@
     </section>
   </main>
 
+  <!-- ===============================
+       ✅ FOOTER
+  ================================ -->
   <footer class="footer" style="margin-top:2rem;">
+    <div class="footer-brand">
+      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <span class="footer-text">Convert Labs</span>
+    </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
+    <nav class="footer-links">
+      <a href="/about.html">About</a> |
+      <a href="/tools/tools.html">Tools</a> |
+      <a href="/privacy.html">Privacy</a> |
+      <a href="/terms.html">Terms</a> |
+      <a href="/contact.html">Contact</a>
+    </nav>
   </footer>
 
-  <!-- lightweight GIF encoder -->
+  <!-- ===============================
+       ✅ GIF ENCODER + LOGIC SCRIPT
+  ================================ -->
   <script src="https://cdn.jsdelivr.net/npm/gif-encoder-2/browser.js"></script>
 
   <script>
   (function(){
-    const input = document.getElementById("imageInput");
-    const dropZone = document.getElementById("dropZone");
-    const formatSelect = document.getElementById("formatSelect");
-    const convertBtn = document.getElementById("convertBtn");
-    const preview = document.getElementById("previewSection");
-    const originalImg = document.getElementById("originalImg");
-    const convertedImg = document.getElementById("convertedImg");
-    const downloadLink = document.getElementById("downloadLink");
-    const msg = document.getElementById("convertMsg");
-    const themeToggle = document.getElementById("themeToggle");
+    const input=document.getElementById("imageInput");
+    const dropZone=document.getElementById("dropZone");
+    const formatSelect=document.getElementById("formatSelect");
+    const convertBtn=document.getElementById("convertBtn");
+    const preview=document.getElementById("previewSection");
+    const originalImg=document.getElementById("originalImg");
+    const convertedImg=document.getElementById("convertedImg");
+    const downloadLink=document.getElementById("downloadLink");
+    const msg=document.getElementById("convertMsg");
+    const themeToggle=document.getElementById("themeToggle");
 
-    let originalDataURL = null, originalFileSize = 0;
+    let originalDataURL=null, originalFileSize=0;
 
-    // --- Theme toggle ---
+    // THEME TOGGLE
     function applyTheme(isDark){
-      if(isDark){
-        document.documentElement.classList.add('dark');
-        document.body.classList.add('dark');
-        themeToggle.textContent = '☀️';
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.body.classList.remove('dark');
-        themeToggle.textContent = '🌙';
-      }
+      if(isDark){document.documentElement.classList.add('dark');document.body.classList.add('dark');themeToggle.textContent='☀️';}
+      else{document.documentElement.classList.remove('dark');document.body.classList.remove('dark');themeToggle.textContent='🌙';}
     }
-    const stored = localStorage.getItem('theme');
-    applyTheme(stored==='dark');
-    themeToggle.onclick = ()=>{
-      const nowDark = document.documentElement.classList.toggle('dark');
-      document.body.classList.toggle('dark', nowDark);
-      localStorage.setItem('theme', nowDark?'dark':'light');
-      themeToggle.textContent = nowDark?'☀️':'🌙';
+    applyTheme(localStorage.getItem('theme')==='dark');
+    themeToggle.onclick=()=>{
+      const nowDark=document.documentElement.classList.toggle('dark');
+      document.body.classList.toggle('dark',nowDark);
+      localStorage.setItem('theme',nowDark?'dark':'light');
+      themeToggle.textContent=nowDark?'☀️':'🌙';
     };
 
-    // --- Drag/drop ---
-    dropZone.onclick = ()=>input.click();
-    ['dragenter','dragover'].forEach(e=>dropZone.addEventListener(e,ev=>{ev.preventDefault();dropZone.classList.add('dragover');}));
-    ['dragleave','drop'].forEach(e=>dropZone.addEventListener(e,ev=>{ev.preventDefault();dropZone.classList.remove('dragover');}));
-    dropZone.addEventListener('drop', e=>{const f=e.dataTransfer.files[0];if(f)handleFile(f);});
-    input.addEventListener('change',e=>{const f=e.target.files[0];if(f)handleFile(f);});
+    // DRAG/DROP
+    ['dragenter','dragover'].forEach(evt=>{
+      dropZone.addEventListener(evt,e=>{e.preventDefault();dropZone.classList.add('dragover');});
+    });
+    ['dragleave','drop'].forEach(evt=>{
+      dropZone.addEventListener(evt,e=>{e.preventDefault();dropZone.classList.remove('dragover');});
+    });
+    dropZone.addEventListener('drop', e=>{
+      const f=e.dataTransfer.files[0];
+      if(f)handleFile(f);
+    });
+    input.addEventListener('change', e=>{
+      const f=e.target.files[0];
+      if(f)handleFile(f);
+    });
 
     function handleFile(file){
-      if(!file.type.startsWith("image/")){alert("Invalid file.");return;}
+      if(!file.type.startsWith("image/")){alert("Please upload an image file.");return;}
       originalFileSize=file.size;
       const r=new FileReader();
       r.onload=e=>{
@@ -156,7 +243,7 @@
       r.readAsDataURL(file);
     }
 
-    // --- Conversion logic ---
+    // CONVERSION
     convertBtn.onclick=async ()=>{
       if(!originalDataURL){alert("Upload an image first.");return;}
       const target=formatSelect.value;
@@ -170,14 +257,10 @@
         let resultData=null, ext='png';
         try{
           if(target==='image/gif'){
-            // encode real GIF
             const encoder=new GIFEncoder(img.width,img.height);
-            encoder.start();
-            encoder.setRepeat(0);
-            encoder.setDelay(0);
-            const ctx2=canvas.getContext('2d');
-            const imageData=ctx2.getImageData(0,0,canvas.width,canvas.height).data;
-            encoder.addFrame(imageData,true);
+            encoder.start();encoder.setRepeat(0);encoder.setDelay(0);
+            const pixels=ctx.getImageData(0,0,img.width,img.height).data;
+            encoder.addFrame(pixels,true);
             encoder.finish();
             const binary=encoder.out.getData();
             const blob=new Blob([binary],{type:'image/gif'});
@@ -201,5 +284,6 @@
     };
   })();
   </script>
+
 </body>
 </html>
