@@ -85,21 +85,7 @@
     <changefreq>monthly</changefreq>
   </url>
 
-  <!-- (Optional future articles in /guides/) -->
-  <url>
-    <loc>https://convertlabs.online/guides/how-to-calculate-container-volume.html</loc>
-    <priority>0.5</priority>
-    <changefreq>yearly</changefreq>
-  </url>
-  <url>
-    <loc>https://convertlabs.online/guides/how-to-convert-kitchen-units.html</loc>
-    <priority>0.5</priority>
-    <changefreq>yearly</changefreq>
-  </url>
-  <url>
-    <loc>https://convertlabs.online/guides/understanding-temperature-scales.html</loc>
-    <priority>0.5</priority>
-    <changefreq>yearly</changefreq>
-  </url>
+ 
 
 </urlset>
+
