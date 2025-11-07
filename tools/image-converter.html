@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    // apply saved theme early
+    (function(){
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark') {
+          document.documentElement.classList.add('dark');
+          if (document.body) document.body.classList.add('dark');
+          else document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('dark'));
+        }
+      } catch(e){}
+    })();
+  </script>
+
+  <title>Image Converter — Convert Labs</title>
+  <meta name="description" content="Free online image converter — JPG, PNG, WEBP, and now GIF — fully private and runs in your browser. No uploads, no tracking." />
+  <link rel="canonical" href="https://convertlabs.online/tools/image-converter.html" />
+  <meta name="robots" content="index, follow" />
+  <link rel="icon" href="/assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="/style.css" />
+
+  <style>
+    .drop-zone {
+      border: 2px dashed #2563eb; border-radius: 10px;
+      padding: 1rem; text-align: center; margin-top: 1rem;
+      color: gray; cursor: pointer; transition: .15s;
+    }
+    .drop-zone.dragover { background: #e0e7ff; border-color: #1e40af; }
+    #convertMsg { margin-top:8px; font-weight:600; }
+    body.dark .drop-zone { border-color: #60a5fa; color: #e6eefc; background: rgba(96,165,250,0.04); }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/" aria-label="Convert Labs Home">
+          <img src="/assets/convert-labs-icon.png" class="logo-img" alt="Convert Labs Icon" />
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/tools/tools.html" class="active">Tools</a></li>
+          <li><a href="/guides.html">Blog</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+    </div>
+  </header>
+
+  <main class="tool-page" style="max-width:900px;margin:auto;padding:2rem 1rem;">
+    <h1>Image Converter</h1>
+    <p>Convert your images locally between <b>JPG</b>, <b>PNG</b>, <b>WEBP</b>, and now <b>GIF</b>. All processing stays private in your browser.</p>
+
+    <section style="margin-top:1.5rem;">
+      <h2>Interactive Image Converter</h2>
+      <p>Upload an image or drag it below:</p>
+
+      <input type="file" id="imageInput" accept="image/*" hidden />
+      <div id="dropZone" class="drop-zone">📂 Drag & Drop image here or click to choose</div>
+
+      <div style="margin-top:1rem;">
+        <select id="formatSelect">
+          <option value="image/jpeg">JPG</option>
+          <option value="image/png">PNG</option>
+          <option value="image/webp">WEBP</option>
+          <option value="image/gif">GIF</option>
+        </select>
+        <button id="convertBtn" class="send-btn" style="margin-left:8px;">Convert Image</button>
+      </div>
+    </section>
+
+    <section id="previewSection" style="display:none; margin-top:2rem;">
+      <h2>Preview & Download</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:25px;justify-content:center;">
+        <div><p><b>Original</b></p><img id="originalImg" style="max-width:300px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" /></div>
+        <div><p><b>Converted</b></p><img id="convertedImg" style="max-width:300px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);" /></div>
+      </div>
+      <a id="downloadLink" download="converted-image" class="send-btn" style="margin-top:20px;display:inline-block;">Download Converted Image</a>
+      <p id="convertMsg"></p>
+    </section>
+  </main>
+
+  <footer class="footer" style="margin-top:2rem;">
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+  </footer>
+
+  <!-- lightweight GIF encoder -->
+  <script src="https://cdn.jsdelivr.net/npm/gif-encoder-2/browser.js"></script>
+
+  <script>
+  (function(){
+    const input = document.getElementById("imageInput");
+    const dropZone = document.getElementById("dropZone");
+    const formatSelect = document.getElementById("formatSelect");
+    const convertBtn = document.getElementById("convertBtn");
+    const preview = document.getElementById("previewSection");
+    const originalImg = document.getElementById("originalImg");
+    const convertedImg = document.getElementById("convertedImg");
+    const downloadLink = document.getElementById("downloadLink");
+    const msg = document.getElementById("convertMsg");
+    const themeToggle = document.getElementById("themeToggle");
+
+    let originalDataURL = null, originalFileSize = 0;
+
+    // --- Theme toggle ---
+    function applyTheme(isDark){
+      if(isDark){
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+        themeToggle.textContent = '☀️';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+        themeToggle.textContent = '🌙';
+      }
+    }
+    const stored = localStorage.getItem('theme');
+    applyTheme(stored==='dark');
+    themeToggle.onclick = ()=>{
+      const nowDark = document.documentElement.classList.toggle('dark');
+      document.body.classList.toggle('dark', nowDark);
+      localStorage.setItem('theme', nowDark?'dark':'light');
+      themeToggle.textContent = nowDark?'☀️':'🌙';
+    };
+
+    // --- Drag/drop ---
+    dropZone.onclick = ()=>input.click();
+    ['dragenter','dragover'].forEach(e=>dropZone.addEventListener(e,ev=>{ev.preventDefault();dropZone.classList.add('dragover');}));
+    ['dragleave','drop'].forEach(e=>dropZone.addEventListener(e,ev=>{ev.preventDefault();dropZone.classList.remove('dragover');}));
+    dropZone.addEventListener('drop', e=>{const f=e.dataTransfer.files[0];if(f)handleFile(f);});
+    input.addEventListener('change',e=>{const f=e.target.files[0];if(f)handleFile(f);});
+
+    function handleFile(file){
+      if(!file.type.startsWith("image/")){alert("Invalid file.");return;}
+      originalFileSize=file.size;
+      const r=new FileReader();
+      r.onload=e=>{
+        originalDataURL=e.target.result;
+        originalImg.src=originalDataURL;
+        preview.style.display='block';
+        convertedImg.src='';
+        downloadLink.href='';
+        msg.textContent=`Original size: ${(file.size/1024).toFixed(1)} KB`;
+      };
+      r.readAsDataURL(file);
+    }
+
+    // --- Conversion logic ---
+    convertBtn.onclick=async ()=>{
+      if(!originalDataURL){alert("Upload an image first.");return;}
+      const target=formatSelect.value;
+      const img=new Image();
+      img.onload=async()=>{
+        const canvas=document.createElement('canvas');
+        const ctx=canvas.getContext('2d');
+        canvas.width=img.width;canvas.height=img.height;
+        ctx.drawImage(img,0,0);
+
+        let resultData=null, ext='png';
+        try{
+          if(target==='image/gif'){
+            // encode real GIF
+            const encoder=new GIFEncoder(img.width,img.height);
+            encoder.start();
+            encoder.setRepeat(0);
+            encoder.setDelay(0);
+            const ctx2=canvas.getContext('2d');
+            const imageData=ctx2.getImageData(0,0,canvas.width,canvas.height).data;
+            encoder.addFrame(imageData,true);
+            encoder.finish();
+            const binary=encoder.out.getData();
+            const blob=new Blob([binary],{type:'image/gif'});
+            resultData=URL.createObjectURL(blob);
+            ext='gif';
+          }else{
+            resultData=canvas.toDataURL(target,0.95);
+            ext=(target.split('/')[1]||'png').replace('x-icon','png');
+          }
+        }catch(err){
+          alert("Conversion failed: "+err.message);
+          return;
+        }
+
+        convertedImg.src=resultData;
+        downloadLink.href=resultData;
+        downloadLink.download=`converted-image.${ext}`;
+        msg.textContent='✅ Conversion complete.';
+      };
+      img.src=originalDataURL;
+    };
+  })();
+  </script>
+</body>
+</html>
