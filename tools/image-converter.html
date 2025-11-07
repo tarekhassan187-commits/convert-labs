@@ -152,67 +152,156 @@
     </nav>
   </footer>
 
- <script>
-  const input = document.getElementById("imageInput");
-  const convertBtn = document.getElementById("convertBtn");
-  const formatSelect = document.getElementById("formatSelect");
-  const preview = document.getElementById("previewSection");
-  const originalImg = document.getElementById("originalImg");
-  const convertedImg = document.getElementById("convertedImg");
-  const downloadLink = document.getElementById("downloadLink");
-  let originalDataURL = null;
+<script>
+  (function(){
+    const input = document.getElementById("imageInput");
+    const convertBtn = document.getElementById("convertBtn");
+    const formatSelect = document.getElementById("formatSelect");
+    const preview = document.getElementById("previewSection");
+    const originalImg = document.getElementById("originalImg");
+    const convertedImg = document.getElementById("convertedImg");
+    const downloadLink = document.getElementById("downloadLink");
 
-  // ✅ Show preview of uploaded image
-  input.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    let originalDataURL = null;
+    let originalFileSize = 0; // bytes
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      originalDataURL = event.target.result;
-      originalImg.src = originalDataURL;
-      preview.style.display = "block";
-      convertedImg.src = ""; // reset previous conversion
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // ✅ Convert image directly from DataURL
-  convertBtn.addEventListener("click", () => {
-    if (!originalDataURL) {
-      alert("Please upload an image first.");
-      return;
+    // helper to compute bytes from dataURL
+    function dataURLBytes(dataURL) {
+      const idx = dataURL.indexOf(',');
+      if (idx === -1) return 0;
+      const base64 = dataURL.slice(idx + 1);
+      // bytes ≈ (base64 length * 3) / 4 - padding
+      const padding = (base64.endsWith('==') ? 2 : (base64.endsWith('=') ? 1 : 0));
+      return Math.ceil((base64.length * 3) / 4) - padding;
     }
 
-    const targetFormat = formatSelect.value;
-    const img = new Image();
+    function humanSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+      return (bytes/(1024*1024)).toFixed(2) + ' MB';
+    }
 
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+    // ensure we have a place to show messages
+    let msgEl = document.getElementById("convertMsg");
+    if (!msgEl) {
+      msgEl = document.createElement("p");
+      msgEl.id = "convertMsg";
+      msgEl.style.fontWeight = "600";
+      msgEl.style.marginTop = "8px";
+      preview.parentNode.insertBefore(msgEl, preview.nextSibling);
+    }
 
-      try {
-        const convertedData = canvas.toDataURL(targetFormat, 0.95);
-        convertedImg.src = convertedData;
-        downloadLink.href = convertedData;
-        const ext = targetFormat.split("/")[1];
-        downloadLink.download = `converted-image.${ext}`;
-      } catch (error) {
-        console.error(error);
-        alert("⚠️ This browser may not fully support this conversion type.");
+    // Show preview of uploaded image
+    input.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) {
+        originalDataURL = null;
+        originalFileSize = 0;
+        preview.style.display = "none";
+        convertedImg.src = "";
+        downloadLink.href = "";
+        msgEl.textContent = "";
+        return;
       }
-    };
 
-    // Load from in-memory DataURL (no CORS issue)
-    img.src = originalDataURL;
-  });
+      originalFileSize = file.size || 0;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        originalDataURL = event.target.result;
+        originalImg.src = originalDataURL;
+        preview.style.display = "block";
+        convertedImg.src = ""; // reset previous conversion
+        downloadLink.href = "";
+        msgEl.textContent = `Original size: ${humanSize(originalFileSize)}`;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Convert image
+    convertBtn.addEventListener("click", () => {
+      if (!originalDataURL) {
+        alert("Please upload an image first.");
+        return;
+      }
+
+      const targetFormat = formatSelect.value; // e.g. image/png
+      const img = new Image();
+
+      // load the image from the in-memory dataURL to avoid CORS issues
+      img.onload = () => {
+        try {
+          // create canvas sized to the image
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+
+          // attempt conversion
+          let convertedData = null;
+          try {
+            convertedData = canvas.toDataURL(targetFormat, 0.95);
+            // Some browsers may silently return PNG for unsupported mime types; we check
+            if (!convertedData.startsWith("data:")) throw new Error("Invalid dataURL");
+          } catch (err) {
+            // If direct conversion fails (e.g. GIF not supported), fallback to PNG
+            console.warn("Direct toDataURL failed for", targetFormat, err);
+          }
+
+          // If conversion failed or resulted in same as original and target was GIF, try PNG fallback
+          if (!convertedData) {
+            const fallbackType = "image/png";
+            try {
+              convertedData = canvas.toDataURL(fallbackType, 0.95);
+              msgEl.textContent = `⚠️ Requested format not supported by this browser. Converted to PNG as fallback.`;
+            } catch (err2) {
+              console.error("Fallback conversion failed:", err2);
+            }
+          } else {
+            msgEl.textContent = `✅ Conversion complete.`;
+          }
+
+          if (!convertedData) {
+            alert("Conversion failed — this browser might not support the requested output format.");
+            return;
+          }
+
+          // Set preview and download link
+          convertedImg.src = convertedData;
+          downloadLink.href = convertedData;
+          // decide extension from MIME
+          let mime = convertedData.substring(5, convertedData.indexOf(';'));
+          let ext = mime.split('/')[1] || 'png';
+          // normalize gif fallback case
+          if (mime === 'image/x-icon') ext = 'png';
+          downloadLink.download = `converted-image.${ext}`;
+
+          // show size comparison (original file size vs converted dataURL size)
+          const convertedBytes = dataURLBytes(convertedData);
+          const origBytes = originalFileSize || dataURLBytes(originalDataURL);
+          msgEl.innerHTML = `✅ Conversion complete. Original: <strong>${humanSize(origBytes)}</strong> — Converted: <strong>${humanSize(convertedBytes)}</strong>. <br><small>Click Download to save.</small>`;
+
+        } catch (finalErr) {
+          console.error("Conversion error:", finalErr);
+          alert("An unexpected error occurred while converting the image.");
+        }
+      };
+
+      // load image from the in-memory Data URL (avoids createObjectURL/CORS pitfalls)
+      img.onerror = () => {
+        alert("Failed to load the image for conversion. Try re-uploading or use a different image.");
+      };
+      img.src = originalDataURL;
+    });
+
+  })();
 </script>
+
 
 </body>
 </html>
+
 
 
 
