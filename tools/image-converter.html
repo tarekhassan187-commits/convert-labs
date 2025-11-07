@@ -153,154 +153,180 @@
   </footer>
 
 <script>
-  (function(){
-    const input = document.getElementById("imageInput");
-    const convertBtn = document.getElementById("convertBtn");
-    const formatSelect = document.getElementById("formatSelect");
-    const preview = document.getElementById("previewSection");
-    const originalImg = document.getElementById("originalImg");
-    const convertedImg = document.getElementById("convertedImg");
-    const downloadLink = document.getElementById("downloadLink");
+(function() {
+  const input = document.getElementById("imageInput");
+  const convertBtn = document.getElementById("convertBtn");
+  const formatSelect = document.getElementById("formatSelect");
+  const preview = document.getElementById("previewSection");
+  const originalImg = document.getElementById("originalImg");
+  const convertedImg = document.getElementById("convertedImg");
+  const downloadLink = document.getElementById("downloadLink");
+  const themeToggle = document.getElementById("themeToggle");
 
-    let originalDataURL = null;
-    let originalFileSize = 0; // bytes
+  let originalDataURL = null;
+  let originalFileSize = 0;
 
-    // helper to compute bytes from dataURL
-    function dataURLBytes(dataURL) {
-      const idx = dataURL.indexOf(',');
-      if (idx === -1) return 0;
-      const base64 = dataURL.slice(idx + 1);
-      // bytes ≈ (base64 length * 3) / 4 - padding
-      const padding = (base64.endsWith('==') ? 2 : (base64.endsWith('=') ? 1 : 0));
-      return Math.ceil((base64.length * 3) / 4) - padding;
-    }
+  // ===============================
+  // ✅ THEME TOGGLE RESTORED
+  // ===============================
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    const isDark = document.body.classList.contains("dark");
+    themeToggle.textContent = isDark ? "☀️" : "🌙";
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
 
-    function humanSize(bytes) {
-      if (bytes < 1024) return bytes + ' B';
-      if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
-      return (bytes/(1024*1024)).toFixed(2) + ' MB';
-    }
+  // Apply saved theme on load
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️";
+  }
 
-    // ensure we have a place to show messages
-    let msgEl = document.getElementById("convertMsg");
-    if (!msgEl) {
-      msgEl = document.createElement("p");
-      msgEl.id = "convertMsg";
-      msgEl.style.fontWeight = "600";
-      msgEl.style.marginTop = "8px";
-      preview.parentNode.insertBefore(msgEl, preview.nextSibling);
-    }
+  // ===============================
+  // ✅ HELPER FUNCTIONS
+  // ===============================
+  function dataURLBytes(dataURL) {
+    const idx = dataURL.indexOf(",");
+    if (idx === -1) return 0;
+    const base64 = dataURL.slice(idx + 1);
+    const padding = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
+    return Math.ceil((base64.length * 3) / 4) - padding;
+  }
 
-    // Show preview of uploaded image
-    input.addEventListener("change", (e) => {
-      const file = e.target.files && e.target.files[0];
-      if (!file) {
-        originalDataURL = null;
-        originalFileSize = 0;
-        preview.style.display = "none";
-        convertedImg.src = "";
-        downloadLink.href = "";
-        msgEl.textContent = "";
-        return;
-      }
+  function humanSize(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+  }
 
-      originalFileSize = file.size || 0;
+  let msgEl = document.getElementById("convertMsg");
+  if (!msgEl) {
+    msgEl = document.createElement("p");
+    msgEl.id = "convertMsg";
+    msgEl.style.fontWeight = "600";
+    msgEl.style.marginTop = "8px";
+    preview.parentNode.insertBefore(msgEl, preview.nextSibling);
+  }
 
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        originalDataURL = event.target.result;
-        originalImg.src = originalDataURL;
-        preview.style.display = "block";
-        convertedImg.src = ""; // reset previous conversion
-        downloadLink.href = "";
-        msgEl.textContent = `Original size: ${humanSize(originalFileSize)}`;
-      };
-      reader.readAsDataURL(file);
+  // ===============================
+  // ✅ FILE INPUT + DRAG & DROP
+  // ===============================
+  const dropZone = document.createElement("div");
+  dropZone.textContent = "📂 Drag & Drop image here or click above to choose a file";
+  dropZone.style.border = "2px dashed #2563eb";
+  dropZone.style.borderRadius = "10px";
+  dropZone.style.padding = "1rem";
+  dropZone.style.textAlign = "center";
+  dropZone.style.marginTop = "1rem";
+  dropZone.style.color = "gray";
+  input.insertAdjacentElement("afterend", dropZone);
+
+  ["dragenter", "dragover"].forEach(eventName => {
+    dropZone.addEventListener(eventName, e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.style.background = "#e0e7ff";
     });
+  });
 
-    // Convert image
-    convertBtn.addEventListener("click", () => {
-      if (!originalDataURL) {
-        alert("Please upload an image first.");
-        return;
+  ["dragleave", "drop"].forEach(eventName => {
+    dropZone.addEventListener(eventName, e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.style.background = "transparent";
+    });
+  });
+
+  dropZone.addEventListener("drop", e => {
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+  });
+
+  input.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (file) handleFile(file);
+  });
+
+  // Handle both drag/drop or input upload
+  function handleFile(file) {
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload a valid image file.");
+      return;
+    }
+
+    originalFileSize = file.size || 0;
+    const reader = new FileReader();
+    reader.onload = e => {
+      originalDataURL = e.target.result;
+      originalImg.src = originalDataURL;
+      preview.style.display = "block";
+      convertedImg.src = "";
+      downloadLink.href = "";
+      msgEl.textContent = `Original size: ${humanSize(originalFileSize)}`;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ===============================
+  // ✅ CONVERSION LOGIC
+  // ===============================
+  convertBtn.addEventListener("click", () => {
+    if (!originalDataURL) {
+      alert("Please upload or drop an image first.");
+      return;
+    }
+
+    const targetFormat = formatSelect.value;
+    const img = new Image();
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      let convertedData = null;
+      try {
+        convertedData = canvas.toDataURL(targetFormat, 0.95);
+        if (!convertedData.startsWith("data:")) throw new Error("Bad DataURL");
+      } catch (err) {
+        console.warn("Conversion failed for", targetFormat, err);
       }
 
-      const targetFormat = formatSelect.value; // e.g. image/png
-      const img = new Image();
-
-      // load the image from the in-memory dataURL to avoid CORS issues
-      img.onload = () => {
+      if (!convertedData) {
         try {
-          // create canvas sized to the image
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx.drawImage(img, 0, 0);
-
-          // attempt conversion
-          let convertedData = null;
-          try {
-            convertedData = canvas.toDataURL(targetFormat, 0.95);
-            // Some browsers may silently return PNG for unsupported mime types; we check
-            if (!convertedData.startsWith("data:")) throw new Error("Invalid dataURL");
-          } catch (err) {
-            // If direct conversion fails (e.g. GIF not supported), fallback to PNG
-            console.warn("Direct toDataURL failed for", targetFormat, err);
-          }
-
-          // If conversion failed or resulted in same as original and target was GIF, try PNG fallback
-          if (!convertedData) {
-            const fallbackType = "image/png";
-            try {
-              convertedData = canvas.toDataURL(fallbackType, 0.95);
-              msgEl.textContent = `⚠️ Requested format not supported by this browser. Converted to PNG as fallback.`;
-            } catch (err2) {
-              console.error("Fallback conversion failed:", err2);
-            }
-          } else {
-            msgEl.textContent = `✅ Conversion complete.`;
-          }
-
-          if (!convertedData) {
-            alert("Conversion failed — this browser might not support the requested output format.");
-            return;
-          }
-
-          // Set preview and download link
-          convertedImg.src = convertedData;
-          downloadLink.href = convertedData;
-          // decide extension from MIME
-          let mime = convertedData.substring(5, convertedData.indexOf(';'));
-          let ext = mime.split('/')[1] || 'png';
-          // normalize gif fallback case
-          if (mime === 'image/x-icon') ext = 'png';
-          downloadLink.download = `converted-image.${ext}`;
-
-          // show size comparison (original file size vs converted dataURL size)
-          const convertedBytes = dataURLBytes(convertedData);
-          const origBytes = originalFileSize || dataURLBytes(originalDataURL);
-          msgEl.innerHTML = `✅ Conversion complete. Original: <strong>${humanSize(origBytes)}</strong> — Converted: <strong>${humanSize(convertedBytes)}</strong>. <br><small>Click Download to save.</small>`;
-
-        } catch (finalErr) {
-          console.error("Conversion error:", finalErr);
-          alert("An unexpected error occurred while converting the image.");
+          convertedData = canvas.toDataURL("image/png", 0.95);
+          msgEl.textContent = `⚠️ Requested format not supported. Converted to PNG instead.`;
+        } catch (err2) {
+          alert("Your browser cannot perform this conversion.");
+          return;
         }
-      };
+      }
 
-      // load image from the in-memory Data URL (avoids createObjectURL/CORS pitfalls)
-      img.onerror = () => {
-        alert("Failed to load the image for conversion. Try re-uploading or use a different image.");
-      };
-      img.src = originalDataURL;
-    });
+      convertedImg.src = convertedData;
+      downloadLink.href = convertedData;
+      const ext = (targetFormat.split("/")[1] || "png").replace("x-icon", "png");
+      downloadLink.download = `converted-image.${ext}`;
 
-  })();
+      const origBytes = originalFileSize || dataURLBytes(originalDataURL);
+      const convBytes = dataURLBytes(convertedData);
+      const diff = origBytes - convBytes;
+      const pct = ((diff / origBytes) * 100).toFixed(1);
+      msgEl.innerHTML = `✅ Conversion complete. Original: <strong>${humanSize(origBytes)}</strong> — Converted: <strong>${humanSize(convBytes)}</strong> (${pct > 0 ? "↓" + pct + "% smaller" : "≈ same size"}).`;
+    };
+
+    img.onerror = () => {
+      alert("Could not read the image for conversion.");
+    };
+
+    img.src = originalDataURL;
+  });
+})();
 </script>
-
-
 </body>
 </html>
+
 
 
 
