@@ -3,50 +3,78 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+
   <title>Length Converter — Convert Labs</title>
-  <meta name="description" content="Convert between meters, kilometers, inches, feet, and more. Includes formulas, examples, and quick converter — by Convert Labs." />
+  <meta name="description" content="Free online length converter — convert between meters, kilometers, inches, feet, and miles. Includes instant calculator and unit conversion formulas by Convert Labs." />
+  <meta name="keywords" content="length converter, meter to foot, inch to cm, km to mile, unit converter, Convert Labs" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://convertlabs.online/tools/length-converter.html" />
+  <meta name="theme-color" content="#1e40af" />
+
+  <!-- ✅ Icons & Styles -->
   <link rel="icon" href="/assets/convert-labs-icon.png" />
   <link rel="stylesheet" href="/style.css" />
 
-   <!-- ✅ SEO META -->
-  <meta name="description" content="Convert Labs is your all-in-one online converter hub. Instantly convert units, currencies, calories, and more with accurate results — plus educational guides explaining how conversions work." />
-  <meta name="keywords" content="unit converter, kitchen converter, temperature converter, currency converter, volume calculator, calorie calculator, Convert Labs, online tools" />
-  <meta name="robots" content="index, follow" />
-
-  <!-- ✅ OPEN GRAPH -->
-  <meta property="og:title" content="Convert Labs — Smart & Accurate Online Converters" />
-  <meta property="og:description" content="Explore smart, free tools for everyday use — from temperature and volume conversions to kitchen, calorie, and currency calculators. Learn and calculate instantly." />
+  <!-- ✅ Open Graph -->
+  <meta property="og:title" content="Length Converter — Convert Labs" />
+  <meta property="og:description" content="Convert between meters, kilometers, inches, feet, and miles — accurate, fast, and easy with Convert Labs." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://convertlabs.online/" />
-  <meta property="og:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <meta property="og:image:alt" content="Convert Labs logo icon" />
+  <meta property="og:url" content="https://convertlabs.online/tools/length-converter.html" />
+  <meta property="og:image" content="https://convertlabs.online/assets/length-converter.jpg" />
+  <meta property="og:image:alt" content="Length converter illustration — Convert Labs" />
   <meta property="og:site_name" content="Convert Labs" />
   <meta property="og:locale" content="en_US" />
 
-  <!-- ✅ TWITTER -->
+  <!-- ✅ Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Convert Labs — Smart & Accurate Online Converters" />
-  <meta name="twitter:description" content="Free online converters with educational guides. Convert units, currency, and calories instantly with Convert Labs." />
-  <meta name="twitter:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <meta name="twitter:title" content="Length Converter — Convert Labs" />
+  <meta name="twitter:description" content="Instantly convert meters, inches, feet, and more with Convert Labs — your smart online conversion hub." />
+  <meta name="twitter:image" content="https://convertlabs.online/assets/length-converter.jpg" />
 
-  <link rel="canonical" href="https://convertlabs.online/" />
-  <link rel="icon" href="assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-  <link rel="stylesheet" href="style.css" />
+  <!-- ✅ Breadcrumb JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://convertlabs.online/" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://convertlabs.online/tools/tools.html" },
+      { "@type": "ListItem", "position": 3, "name": "Length Converter" }
+    ]
+  }
+  </script>
+
+  <!-- ✅ WebPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Length Converter — Convert Labs",
+    "url": "https://convertlabs.online/tools/length-converter.html",
+    "description": "Free online length converter — instantly switch between meters, feet, inches, miles, and centimeters. Learn how conversions work with simple formulas."
+  }
+  </script>
 
   <!-- ✅ Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
 
   <!-- ✅ Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P');
+  </script>
 </head>
+
 <body>
+  <!-- ✅ Header -->
   <header class="navbar">
     <div class="nav-container">
       <div class="logo">
-        <a href="/index.html">
-          <img src="/assets/convert-labs-icon.png" alt="" class="logo-img">
+        <a href="/index.html" aria-label="Convert Labs Home">
+          <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img">
           <span class="brand-text">Convert Labs</span>
         </a>
       </div>
@@ -63,9 +91,10 @@
     </div>
   </header>
 
+  <!-- ✅ Main Content -->
   <main class="tool-page">
     <h1>Length Converter</h1>
-    <p>The Convert Labs Length Converter lets you quickly switch between metric and imperial units such as meters, centimeters, inches, feet, and miles. Whether you’re a student, traveler, or engineer, this page helps you understand and calculate accurate length conversions easily.</p>
+    <p><strong>Convert Labs Length Converter</strong> is a free online tool that lets you instantly switch between metric and imperial length units — meters, inches, feet, miles, and more.</p>
 
     <section>
       <h2>How It Works</h2>
@@ -93,7 +122,7 @@
         <select id="lengthFrom"></select>
         <select id="lengthTo"></select>
         <button onclick="convertLength()">Convert</button>
-        <p id="lengthResult"></p>
+        <p id="lengthResult" style="font-weight:600;margin-top:10px;"></p>
       </div>
     </section>
 
@@ -116,9 +145,9 @@
     <p>© 2025 Convert Labs. All rights reserved.</p>
     <nav class="footer-links">
       <a href="/about.html">About</a> |
-      <a href="/tools/tools.html">Tools</a> |
+      <a href="tools.html">Tools</a> |
       <a href="/guides.html">Blog</a> |
-      <a href="/privacy.html">Privacy</a> |
+      <a href="/privacy.html">Privacy Policy</a> |
       <a href="/disclaimer.html">Disclaimer</a> |
       <a href="/terms.html">Terms of Use</a> |
       <a href="/contact.html">Contact</a>
@@ -128,5 +157,3 @@
   <script src="/script.js" defer></script>
 </body>
 </html>
-
-
