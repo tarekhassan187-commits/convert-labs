@@ -149,18 +149,19 @@ const INGREDIENTS = [
       { key: "flaxseed-meal", label: "Flaxseed Meal", density: 0.58 }
     ]
   },
-  {
-    group: "Grains & Pasta",
-    items: [
-      { key: "rice-uncooked", label: "Rice (uncooked)", density: 0.85 },
-      { key: "cooked-rice", label: "Rice (cooked)", density: 1.08 },
-      { key: "oats-rolled", label: "Oats (rolled)", density: 0.45 },
-      { key: "oats-quick", label: "Oats (quick)", density: 0.4 },
-      { key: "quinoa", label: "Quinoa (uncooked)", density: 0.77 },
-      { key: "pasta-uncooked", label: "Pasta (uncooked)", density: 0.61 },
-      { key: "breadcrumbs", label: "Breadcrumbs (dried)", density: 0.39 }
-    ]
-  },
+{
+  group: "Grains & Pasta",
+  items: [
+    { key: "rice-uncooked", label: "Rice (uncooked)", density: 0.85 },
+    { key: "cooked-rice", label: "Rice (cooked)", density: 1.08 },
+    { key: "oats-rolled", label: "Oats (rolled)", density: 0.45 },
+    { key: "oats-quick", label: "Oats (quick)", density: 0.4 },
+    { key: "quinoa", label: "Quinoa (uncooked)", density: 0.77 },
+    { key: "pasta-uncooked", label: "Pasta (uncooked)", density: 0.61 },
+    { key: "pasta-cooked", label: "Pasta (cooked)", density: 1.04 },
+    { key: "breadcrumbs", label: "Breadcrumbs (dried)", density: 0.39 }
+  ]
+},
   {
     group: "Fruits & Vegetables",
     items: [
@@ -406,3 +407,4 @@ function initLengthConverter() {
    =================================================== */
 
 console.log("%cConvert Labs Script Loaded ✅", "color:#2563eb;font-weight:bold;");
+
