@@ -56,9 +56,9 @@
   <title>Calorie Calculator — Convert Labs</title>
 
   <meta name="description" content="Estimate calories, protein, carbs, sugar, and fat for thousands of foods from the USDA database. Accurate nutrition info per 100 g or custom serving size." />
-  <link rel="icon" href="/assets/convert-labs-icon.png" />
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
   <style>
     .calculator-container {
@@ -150,17 +150,17 @@
     <div class="nav-container">
       <div class="logo">
         <a href="/index.html">
-          <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
           <span class="brand-text">Convert Labs</span>
         </a>
       </div>
       <nav class="nav-links">
         <ul>
-          <li><a href="/index.html">Home</a></li>
-          <li><a href="tools.html" class="active">Tools</a></li>
-          <li><a href="/guides.html">Blog</a></li>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="https://convertlabs.online/index.html">Home</a></li>
+          <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
+          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
+          <li><a href="https://convertlabs.online/about.html">About</a></li>
+          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
         </ul>
       </nav>
       <button id="themeToggle" class="theme-toggle">🌙</button>
@@ -213,16 +213,16 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-brand">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
       <span class="footer-text">Convert Labs</span>
     </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
     <nav class="footer-links">
-      <a href="/about.html">About</a> |
-      <a href="tools.html">Tools</a> |
-      <a href="/privacy.html">Privacy Policy</a> |
-      <a href="/terms.html">Terms</a> |
-      <a href="/contact.html">Contact</a>
+      <a href="https://convertlabs.online/about.html">About</a> |
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
+      <a href="https://convertlabs.online/privacy.html">Privacy Policy</a> |
+      <a href="https://convertlabs.online/terms.html">Terms</a> |
+      <a href="https://convertlabs.online/contact.html">Contact</a>
     </nav>
   </footer>
 
@@ -268,9 +268,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Load all data files
   Promise.all([
-    fetch("/assets/usda_food_nutrition.json").then(r => r.json()),
-    fetch("/assets/food-nutrition-data.json").then(r => r.json()).catch(() => []),
-    fetch("/assets/extras-oriental-foods.json").then(r => r.json()).catch(() => [])
+    fetch("https://convertlabs.online/assets/usda_food_nutrition.json").then(r => r.json()),
+    fetch("https://convertlabs.online/assets/food-nutrition-data.json").then(r => r.json()).catch(() => []),
+    fetch("https://convertlabs.online/assets/extras-oriental-foods.json").then(r => r.json()).catch(() => [])
   ])
   .then(dataArrays => { foodData = dataArrays.flat(); });
 
@@ -443,6 +443,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
