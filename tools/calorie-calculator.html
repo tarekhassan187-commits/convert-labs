@@ -288,6 +288,85 @@ Promise.all([
 
   const total = foodData.length.toLocaleString(); // adds commas for readability
   console.log(`✅ Food data loaded: ${total} unique items total`);
+// 🔍 Build quick-search index once data is ready
+let foodIndex = [];
+
+function normalizeText(s) {
+  return String(s || "")
+    .normalize("NFKD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .trim();
+}
+
+function buildIndex(data) {
+  foodIndex = data.map(item => {
+    const name = item.name || item.food || "";
+    const normName = normalizeText(name);
+    const tokens = Array.from(new Set(normName.split(/\s+/).filter(Boolean)));
+    return { name, normName, tokens, original: item };
+  });
+  console.log(`🔎 Search index built (${foodIndex.length} items)`);
+}
+
+// Call buildIndex after loading
+buildIndex(foodData);
+
+// Weighted scoring
+function scoreItem(qNorm, item) {
+  const n = item.normName;
+  const tokens = item.tokens;
+  if (n === qNorm) return 100;
+  if (n.startsWith(qNorm)) return 85;
+  for (const t of tokens) if (t === qNorm) return 75;
+  if (n.includes(qNorm)) return 55;
+  return 0;
+}
+
+// Get top matches
+function getSuggestions(q, max = 20) {
+  const qNorm = normalizeText(q);
+  if (!qNorm) return [];
+  const scored = [];
+  for (const item of foodIndex) {
+    const s = scoreItem(qNorm, item);
+    if (s > 0) scored.push({ item, score: s });
+  }
+  scored.sort((a,b) => b.score - a.score);
+  return scored.slice(0, max).map(s => s.item);
+}
+
+// Update suggestions in UI
+function renderSuggestions(q) {
+  const results = getSuggestions(q);
+  if (results.length === 0) {
+    suggestionsBox.style.display = "none";
+    return;
+  }
+  suggestionsBox.innerHTML = results.map(r => `<div>${r.name}</div>`).join("");
+  suggestionsBox.style.display = "block";
+}
+
+// Input listener (debounced)
+let debounceTimer;
+foodInput.addEventListener("input", e => {
+  const q = e.target.value.trim();
+  clearTimeout(debounceTimer);
+  if (!q) {
+    suggestionsBox.style.display = "none";
+    return;
+  }
+  debounceTimer = setTimeout(() => renderSuggestions(q), 200);
+});
+
+// Click to select
+suggestionsBox.addEventListener("click", e => {
+  if (e.target.tagName === "DIV") {
+    foodInput.value = e.target.textContent;
+    suggestionsBox.style.display = "none";
+    searchFood();
+  }
+});
 
   // ✅ Show it to users once loaded
   if (dataStatusEl) {
@@ -317,23 +396,7 @@ Promise.all([
     return target.includes(term) || target.replace(/[^a-z]/g, "").includes(term.replace(/[^a-z]/g, ""));
   }
 
-  // Suggestions
-  foodInput.addEventListener("input", () => {
-    const term = foodInput.value.trim().toLowerCase();
-    if (!term) return suggestionsBox.style.display = "none";
-    const matches = foodData.filter(item => fuzzyMatch(term, item.name)).slice(0, 8);
-    if (!matches.length) return suggestionsBox.style.display = "none";
-    suggestionsBox.innerHTML = matches.map(m => `<div>${m.name}</div>`).join("");
-    suggestionsBox.style.display = "block";
-  });
-
-  suggestionsBox.addEventListener("click", e => {
-    if (e.target.tagName === "DIV") {
-      foodInput.value = e.target.textContent;
-      suggestionsBox.style.display = "none";
-      searchFood();
-    }
-  });
+ 
 
   searchBtn.addEventListener("click", searchFood);
 
@@ -473,6 +536,7 @@ Promise.all([
 
 </body>
 </html>
+
 
 
 
