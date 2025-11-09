@@ -212,6 +212,30 @@ body, input, button, .calculator-container, .result-card {
     margin-top: 10px;
   }
 }
+/* Match Serving Size input with main search box design */
+#servingSize {
+  width: 120px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#servingSize:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 4px rgba(37, 99, 235, 0.4);
+}
+
+/* On mobile: make it a bit wider for easier touch input */
+@media (max-width: 600px) {
+  #servingSize {
+    width: 100%;
+    margin-top: 6px;
+  }
+}
 
   </style>
 </head>
@@ -652,6 +676,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
