@@ -181,6 +181,37 @@ body.dark .theme-toggle {
 body, input, button, .calculator-container, .result-card {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+/* 🔹 Make search input and button align nicely */
+#foodInput {
+  width: 280px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  vertical-align: middle;
+}
+
+#searchBtn {
+  margin-left: 6px;
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 8px;
+  vertical-align: middle;
+}
+
+/* 🧩 Responsive design — stack vertically on small screens */
+@media (max-width: 600px) {
+  #foodInput, #searchBtn {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+  }
+  #searchBtn {
+    margin-top: 10px;
+  }
+}
 
   </style>
 </head>
@@ -621,6 +652,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
