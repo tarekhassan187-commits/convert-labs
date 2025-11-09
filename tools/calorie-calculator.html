@@ -62,6 +62,35 @@
 
   <style>
    /* 🌙 Improved & Fixed Dark Mode Theme — Convert Labs */
+    /* ☀️ Light Mode Buttons — Convert Labs Blue */
+button,
+.theme-toggle {
+  background-color: #2563eb;  /* Convert Labs blue */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1e40af;
+}
+
+/* Green & red action buttons */
+#addToTotalBtn {
+  background-color: #16a34a;
+}
+#clearBtn {
+  background-color: #dc2626;
+}
+
+/* Make sure search button stays blue even if browser overrides */
+#searchBtn {
+  background-color: #2563eb !important;
+  color: #fff !important;
+}
+
 body.dark {
   background-color: #0b1220 !important;
   color: #e2e8f0 !important;
@@ -567,6 +596,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
