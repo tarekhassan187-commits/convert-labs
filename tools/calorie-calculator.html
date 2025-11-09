@@ -394,12 +394,18 @@ window.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(modal);
 
     box.querySelectorAll(".suggestion-item").forEach(div => {
-      div.addEventListener("click", () => {
-        foodInput.value = div.textContent;
-        document.body.removeChild(modal);
-        searchFood();
-      });
-    });
+  div.addEventListener("click", () => {
+    foodInput.value = div.textContent;
+    document.body.removeChild(modal);
+
+    // ✅ close the suggestions dropdown if open
+    suggestionsBox.style.display = "none";
+
+    // ✅ run the search
+    searchFood();
+  });
+});
+
 
     document.getElementById("closeModalBtn").addEventListener("click", () => {
       document.body.removeChild(modal);
@@ -549,6 +555,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
