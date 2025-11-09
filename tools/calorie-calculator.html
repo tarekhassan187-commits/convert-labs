@@ -236,6 +236,76 @@ body, input, button, .calculator-container, .result-card {
     margin-top: 6px;
   }
 }
+/* 🔹 Food name input + Search button layout */
+#foodInput {
+  width: 280px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  vertical-align: middle;
+}
+
+#foodInput:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 4px rgba(37, 99, 235, 0.4);
+}
+
+#searchBtn {
+  margin-left: 6px;
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#searchBtn:hover {
+  background-color: #1d4ed8;
+}
+
+/* 🔹 Serving Size input style */
+#servingSize {
+  width: 150px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 6px;
+}
+
+#servingSize:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 4px rgba(37, 99, 235, 0.4);
+}
+
+/* 📱 Responsive layout for mobile (stack inputs nicely) */
+@media (max-width: 600px) {
+  #foodInput,
+  #searchBtn,
+  #servingSize {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  #searchBtn {
+    margin-top: 10px;
+  }
+
+  #servingSize {
+    margin-top: 12px;
+  }
+}
 
   </style>
 </head>
@@ -676,6 +746,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
