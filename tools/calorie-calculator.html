@@ -309,7 +309,28 @@ function buildIndex(data) {
   console.log(`🔎 Search index built (${foodIndex.length} items)`);
 }
 
-// Call buildIndex after loading
+// 🔍 Build quick-search index once data is ready
+let foodIndex = [];
+
+function normalizeText(s) {
+  return String(s || "")
+    .normalize("NFKD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .trim();
+}
+
+function buildIndex(data) {
+  foodIndex = data.map(item => {
+    const name = item.name || item.food || "";
+    const normName = normalizeText(name);
+    const tokens = Array.from(new Set(normName.split(/\s+/).filter(Boolean)));
+    return { name, normName, tokens, original: item };
+  });
+  console.log(`🔎 Search index built (${foodIndex.length} items)`);
+}
+
+// Call after loading foodData
 buildIndex(foodData);
 
 // Weighted scoring
@@ -324,7 +345,7 @@ function scoreItem(qNorm, item) {
 }
 
 // Get top matches
-function getSuggestions(q, max = 50) {
+function getSuggestions(q, max = 20) {
   const qNorm = normalizeText(q);
   if (!qNorm) return [];
   const scored = [];
@@ -332,19 +353,87 @@ function getSuggestions(q, max = 50) {
     const s = scoreItem(qNorm, item);
     if (s > 0) scored.push({ item, score: s });
   }
-  scored.sort((a,b) => b.score - a.score);
-  return scored.slice(0, max).map(s => s.item);
+  scored.sort((a, b) => b.score - a.score);
+  return { results: scored.slice(0, max).map(s => s.item), total: scored.length };
 }
 
-// Update suggestions in UI
+// Highlight matched term inside a result
+function highlightMatch(text, query) {
+  const norm = normalizeText(text);
+  const q = normalizeText(query);
+  const index = norm.indexOf(q);
+  if (index === -1) return text;
+  const before = text.slice(0, index);
+  const match = text.slice(index, index + q.length);
+  const after = text.slice(index + q.length);
+  return `${before}<strong style="color:#2563eb;">${match}</strong>${after}`;
+}
+
+// Render suggestions with highlighting & “Show more”
 function renderSuggestions(q) {
-  const results = getSuggestions(q);
+  const { results, total } = getSuggestions(q);
   if (results.length === 0) {
     suggestionsBox.style.display = "none";
     return;
   }
-  suggestionsBox.innerHTML = results.map(r => `<div>${r.name}</div>`).join("");
+
+  const limited = results.map(r => `<div>${highlightMatch(r.name, q)}</div>`).join("");
+  let html = limited;
+  if (total > results.length) {
+    html += `<div class="show-more">Show all ${total} results for “${q}”</div>`;
+  }
+
+  suggestionsBox.innerHTML = html;
   suggestionsBox.style.display = "block";
+}
+
+// “Show more” click logic
+suggestionsBox.addEventListener("click", e => {
+  if (e.target.classList.contains("show-more")) {
+    const term = foodInput.value.trim();
+    showFullResults(term);
+  } else if (e.target.tagName === "DIV") {
+    const name = e.target.textContent;
+    foodInput.value = name;
+    suggestionsBox.style.display = "none";
+    searchFood();
+  }
+});
+
+// Show full list in modal (simple inline version)
+function showFullResults(q) {
+  const { results, total } = getSuggestions(q, 100);
+  let html = `<div style="max-height:400px;overflow:auto;padding:8px;">`;
+  html += `<h4 style="margin:0 0 10px;">All ${total} results for “${q}”</h4>`;
+  html += results.map(r => `<div class="suggestion-item">${highlightMatch(r.name, q)}</div>`).join("");
+  html += `</div>`;
+
+  // Simple popup box
+  const modal = document.createElement("div");
+  modal.style.cssText = `
+    position:fixed;inset:0;background:rgba(0,0,0,0.4);
+    display:flex;align-items:center;justify-content:center;z-index:1000;
+  `;
+  const box = document.createElement("div");
+  box.style.cssText = `
+    background:#fff;padding:20px;max-width:600px;width:90%;
+    border-radius:12px;max-height:80vh;overflow:auto;
+  `;
+  box.innerHTML = html + `<button id="closeModalBtn" style="margin-top:10px;">Close</button>`;
+  modal.appendChild(box);
+  document.body.appendChild(modal);
+
+  box.querySelectorAll(".suggestion-item").forEach(div => {
+    div.addEventListener("click", () => {
+      foodInput.value = div.textContent;
+      document.body.removeChild(modal);
+      searchFood();
+    });
+  });
+
+  document.getElementById("closeModalBtn").addEventListener("click", () => {
+    document.body.removeChild(modal);
+  });
 }
 
 // Input listener (debounced)
@@ -357,15 +446,6 @@ foodInput.addEventListener("input", e => {
     return;
   }
   debounceTimer = setTimeout(() => renderSuggestions(q), 200);
-});
-
-// Click to select
-suggestionsBox.addEventListener("click", e => {
-  if (e.target.tagName === "DIV") {
-    foodInput.value = e.target.textContent;
-    suggestionsBox.style.display = "none";
-    searchFood();
-  }
 });
 
   // ✅ Show it to users once loaded
@@ -536,6 +616,7 @@ suggestionsBox.addEventListener("click", e => {
 
 </body>
 </html>
+
 
 
 
