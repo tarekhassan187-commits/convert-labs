@@ -264,234 +264,191 @@ window.addEventListener("DOMContentLoaded", () => {
   const searchBtn = document.getElementById("searchBtn");
 
   let foodData = [];
+  let foodIndex = [];
   let currentFood = null;
   let chart = null;
   let dailyTotals = { kcal:0, protein:0, carbs:0, fat:0, sugar:0 };
 
-const dataStatusEl = document.getElementById('dataStatus');
+  const dataStatusEl = document.getElementById('dataStatus');
 
-Promise.all([
-  fetch("https://convertlabs.online/assets/usda_food_nutrition.json").then(r => r.json()).catch(() => []),
-  fetch("https://convertlabs.online/assets/extras-oriental-foods.json").then(r => r.json()).catch(() => []),
-  fetch("https://convertlabs.online/assets/foods-full.json").then(r => r.json()).catch(() => []),
-  fetch("https://convertlabs.online/assets/foods-lite.json").then(r => r.json()).catch(() => [])
-])
-.then(dataArrays => {
-  const combined = dataArrays.flat();
-  const seen = new Set();
-  foodData = combined.filter(item => {
-    const key = (item.name || item.food || "").toLowerCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-
-  const total = foodData.length.toLocaleString(); // adds commas for readability
-  console.log(`✅ Food data loaded: ${total} unique items total`);
-// 🔍 Build quick-search index once data is ready
-let foodIndex = [];
-
-function normalizeText(s) {
-  return String(s || "")
-    .normalize("NFKD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .trim();
-}
-
-function buildIndex(data) {
-  foodIndex = data.map(item => {
-    const name = item.name || item.food || "";
-    const normName = normalizeText(name);
-    const tokens = Array.from(new Set(normName.split(/\s+/).filter(Boolean)));
-    return { name, normName, tokens, original: item };
-  });
-  console.log(`🔎 Search index built (${foodIndex.length} items)`);
-}
-
-// 🔍 Build quick-search index once data is ready
-let foodIndex = [];
-
-function normalizeText(s) {
-  return String(s || "")
-    .normalize("NFKD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .trim();
-}
-
-function buildIndex(data) {
-  foodIndex = data.map(item => {
-    const name = item.name || item.food || "";
-    const normName = normalizeText(name);
-    const tokens = Array.from(new Set(normName.split(/\s+/).filter(Boolean)));
-    return { name, normName, tokens, original: item };
-  });
-  console.log(`🔎 Search index built (${foodIndex.length} items)`);
-}
-
-// Call after loading foodData
-buildIndex(foodData);
-
-// Weighted scoring
-function scoreItem(qNorm, item) {
-  const n = item.normName;
-  const tokens = item.tokens;
-  if (n === qNorm) return 100;
-  if (n.startsWith(qNorm)) return 85;
-  for (const t of tokens) if (t === qNorm) return 75;
-  if (n.includes(qNorm)) return 55;
-  return 0;
-}
-
-// Get top matches
-function getSuggestions(q, max = 20) {
-  const qNorm = normalizeText(q);
-  if (!qNorm) return [];
-  const scored = [];
-  for (const item of foodIndex) {
-    const s = scoreItem(qNorm, item);
-    if (s > 0) scored.push({ item, score: s });
-  }
-  scored.sort((a, b) => b.score - a.score);
-  return { results: scored.slice(0, max).map(s => s.item), total: scored.length };
-}
-
-// Highlight matched term inside a result
-function highlightMatch(text, query) {
-  const norm = normalizeText(text);
-  const q = normalizeText(query);
-  const index = norm.indexOf(q);
-  if (index === -1) return text;
-  const before = text.slice(0, index);
-  const match = text.slice(index, index + q.length);
-  const after = text.slice(index + q.length);
-  return `${before}<strong style="color:#2563eb;">${match}</strong>${after}`;
-}
-
-// Render suggestions with highlighting & “Show more”
-function renderSuggestions(q) {
-  const { results, total } = getSuggestions(q);
-  if (results.length === 0) {
-    suggestionsBox.style.display = "none";
-    return;
-  }
-
-  const limited = results.map(r => `<div>${highlightMatch(r.name, q)}</div>`).join("");
-  let html = limited;
-  if (total > results.length) {
-    html += `<div class="show-more">Show all ${total} results for “${q}”</div>`;
-  }
-
-  suggestionsBox.innerHTML = html;
-  suggestionsBox.style.display = "block";
-}
-
-// “Show more” click logic
-suggestionsBox.addEventListener("click", e => {
-  if (e.target.classList.contains("show-more")) {
-    const term = foodInput.value.trim();
-    showFullResults(term);
-  } else if (e.target.tagName === "DIV") {
-    const name = e.target.textContent;
-    foodInput.value = name;
-    suggestionsBox.style.display = "none";
-    searchFood();
-  }
-});
-
-// Show full list in modal (simple inline version)
-function showFullResults(q) {
-  const { results, total } = getSuggestions(q, 100);
-  let html = `<div style="max-height:400px;overflow:auto;padding:8px;">`;
-  html += `<h4 style="margin:0 0 10px;">All ${total} results for “${q}”</h4>`;
-  html += results.map(r => `<div class="suggestion-item">${highlightMatch(r.name, q)}</div>`).join("");
-  html += `</div>`;
-
-  // Simple popup box
-  const modal = document.createElement("div");
-  modal.style.cssText = `
-    position:fixed;inset:0;background:rgba(0,0,0,0.4);
-    display:flex;align-items:center;justify-content:center;z-index:1000;
-  `;
-  const box = document.createElement("div");
-  box.style.cssText = `
-    background:#fff;padding:20px;max-width:600px;width:90%;
-    border-radius:12px;max-height:80vh;overflow:auto;
-  `;
-  box.innerHTML = html + `<button id="closeModalBtn" style="margin-top:10px;">Close</button>`;
-  modal.appendChild(box);
-  document.body.appendChild(modal);
-
-  box.querySelectorAll(".suggestion-item").forEach(div => {
-    div.addEventListener("click", () => {
-      foodInput.value = div.textContent;
-      document.body.removeChild(modal);
-      searchFood();
+  // Load data
+  Promise.all([
+    fetch("https://convertlabs.online/assets/usda_food_nutrition.json").then(r => r.json()).catch(() => []),
+    fetch("https://convertlabs.online/assets/extras-oriental-foods.json").then(r => r.json()).catch(() => []),
+    fetch("https://convertlabs.online/assets/foods-full.json").then(r => r.json()).catch(() => []),
+    fetch("https://convertlabs.online/assets/foods-lite.json").then(r => r.json()).catch(() => [])
+  ])
+  .then(dataArrays => {
+    const combined = dataArrays.flat();
+    const seen = new Set();
+    foodData = combined.filter(item => {
+      const key = (item.name || item.food || "").toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
+
+    const total = foodData.length.toLocaleString();
+    console.log(`✅ Food data loaded: ${total} unique items total`);
+
+    // Build index
+    buildIndex(foodData);
+    if (dataStatusEl)
+      dataStatusEl.innerHTML = `Database: <strong>${total}</strong> foods loaded ✅`;
+  })
+  .catch(err => {
+    console.error("❌ Error loading food data:", err);
+    if (dataStatusEl) {
+      dataStatusEl.textContent = "⚠️ Database failed to load — please refresh.";
+      dataStatusEl.style.color = "#b91c1c";
+    }
   });
 
-  document.getElementById("closeModalBtn").addEventListener("click", () => {
-    document.body.removeChild(modal);
+  // ------------------ Search Index ------------------
+  function normalizeText(s) {
+    return String(s || "")
+      .normalize("NFKD")
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase()
+      .trim();
+  }
+
+  function buildIndex(data) {
+    foodIndex = data.map(item => {
+      const name = item.name || item.food || "";
+      const normName = normalizeText(name);
+      const tokens = Array.from(new Set(normName.split(/\s+/).filter(Boolean)));
+      return { name, normName, tokens, original: item };
+    });
+    console.log(`🔎 Search index built (${foodIndex.length} items)`);
+  }
+
+  function scoreItem(qNorm, item) {
+    const n = item.normName;
+    const tokens = item.tokens;
+    if (n === qNorm) return 100;
+    if (n.startsWith(qNorm)) return 85;
+    for (const t of tokens) if (t === qNorm) return 75;
+    if (n.includes(qNorm)) return 55;
+    return 0;
+  }
+
+  function getSuggestions(q, max = 20) {
+    const qNorm = normalizeText(q);
+    if (!qNorm) return [];
+    const scored = [];
+    for (const item of foodIndex) {
+      const s = scoreItem(qNorm, item);
+      if (s > 0) scored.push({ item, score: s });
+    }
+    scored.sort((a, b) => b.score - a.score);
+    return { results: scored.slice(0, max).map(s => s.item), total: scored.length };
+  }
+
+  function highlightMatch(text, query) {
+    const norm = normalizeText(text);
+    const q = normalizeText(query);
+    const index = norm.indexOf(q);
+    if (index === -1) return text;
+    const before = text.slice(0, index);
+    const match = text.slice(index, index + q.length);
+    const after = text.slice(index + q.length);
+    return `${before}<strong style="color:#2563eb;">${match}</strong>${after}`;
+  }
+
+  function renderSuggestions(q) {
+    const { results, total } = getSuggestions(q);
+    if (results.length === 0) {
+      suggestionsBox.style.display = "none";
+      return;
+    }
+    const limited = results.map(r => `<div>${highlightMatch(r.name, q)}</div>`).join("");
+    let html = limited;
+    if (total > results.length) {
+      html += `<div class="show-more">Show all ${total} results for “${q}”</div>`;
+    }
+    suggestionsBox.innerHTML = html;
+    suggestionsBox.style.display = "block";
+  }
+
+  // Show more modal
+  function showFullResults(q) {
+    const { results, total } = getSuggestions(q, 100);
+    let html = `<div style="max-height:400px;overflow:auto;padding:8px;">`;
+    html += `<h4 style="margin:0 0 10px;">All ${total} results for “${q}”</h4>`;
+    html += results.map(r => `<div class="suggestion-item">${highlightMatch(r.name, q)}</div>`).join("");
+    html += `</div>`;
+
+    const modal = document.createElement("div");
+    modal.style.cssText = `
+      position:fixed;inset:0;background:rgba(0,0,0,0.4);
+      display:flex;align-items:center;justify-content:center;z-index:1000;
+    `;
+    const box = document.createElement("div");
+    box.style.cssText = `
+      background:#fff;padding:20px;max-width:600px;width:90%;
+      border-radius:12px;max-height:80vh;overflow:auto;
+    `;
+    box.innerHTML = html + `<button id="closeModalBtn" style="margin-top:10px;">Close</button>`;
+    modal.appendChild(box);
+    document.body.appendChild(modal);
+
+    box.querySelectorAll(".suggestion-item").forEach(div => {
+      div.addEventListener("click", () => {
+        foodInput.value = div.textContent;
+        document.body.removeChild(modal);
+        searchFood();
+      });
+    });
+
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+      document.body.removeChild(modal);
+    });
+  }
+
+  suggestionsBox.addEventListener("click", e => {
+    if (e.target.classList.contains("show-more")) {
+      const term = foodInput.value.trim();
+      showFullResults(term);
+    } else if (e.target.tagName === "DIV") {
+      const name = e.target.textContent;
+      foodInput.value = name;
+      suggestionsBox.style.display = "none";
+      searchFood();
+    }
   });
-}
 
-// Input listener (debounced)
-let debounceTimer;
-foodInput.addEventListener("input", e => {
-  const q = e.target.value.trim();
-  clearTimeout(debounceTimer);
-  if (!q) {
-    suggestionsBox.style.display = "none";
-    return;
-  }
-  debounceTimer = setTimeout(() => renderSuggestions(q), 200);
-});
+  // Debounce input listener
+  let debounceTimer;
+  foodInput.addEventListener("input", e => {
+    const q = e.target.value.trim();
+    clearTimeout(debounceTimer);
+    if (!q) {
+      suggestionsBox.style.display = "none";
+      return;
+    }
+    debounceTimer = setTimeout(() => renderSuggestions(q), 200);
+  });
 
-  // ✅ Show it to users once loaded
-  if (dataStatusEl) {
-    dataStatusEl.innerHTML = `Database: <strong>${total}</strong> foods loaded ✅`;
-  }
-})
-.catch(err => {
-  console.error("❌ Error loading food data:", err);
-  if (dataStatusEl) {
-    dataStatusEl.textContent = "⚠️ Database failed to load — please refresh.";
-    dataStatusEl.style.color = "#b91c1c";
-  }
-});
-
-
-
-  // Theme toggle
+  // ------------------ UI & Logic ------------------
   themeBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark");
     themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
     if (chart) updateChartColors();
   });
 
-  function fuzzyMatch(term, target) {
-    term = term.toLowerCase();
-    target = target.toLowerCase();
-    return target.includes(term) || target.replace(/[^a-z]/g, "").includes(term.replace(/[^a-z]/g, ""));
-  }
-
- 
-
   searchBtn.addEventListener("click", searchFood);
 
   function searchFood() {
     const term = foodInput.value.trim().toLowerCase();
     const match = foodData.find(item => item.name.toLowerCase() === term)
-      || foodData.find(item => fuzzyMatch(term, item.name));
-
+      || foodData.find(item => item.name.toLowerCase().includes(term));
     if (!match) {
       resultContainer.innerHTML = `<p style="color:#b91c1c;">❌ No results for <strong>${term}</strong>.</p>`;
       currentFood = null;
       if (chart) chart.destroy();
       return;
     }
-
     currentFood = match;
     displayResult(match);
   }
@@ -506,7 +463,6 @@ foodInput.addEventListener("input", e => {
       fat: food.fat * factor,
       sugar: food.sugar * factor
     };
-
     resultContainer.innerHTML = `
       <div class="result-card">
         <h3>${food.name}</h3>
@@ -516,21 +472,13 @@ foodInput.addEventListener("input", e => {
         <p><strong>Carbs:</strong> ${scaled.carbs.toFixed(1)} g</p>
         <p><strong>Fat:</strong> ${scaled.fat.toFixed(1)} g</p>
         <p><strong>Sugar:</strong> ${scaled.sugar.toFixed(1)} g</p>
-        <div class="chart-container">
-  <canvas id="nutrientChart"></canvas>
-</div>
-
+        <div class="chart-container"><canvas id="nutrientChart"></canvas></div>
         <button id="addToTotalBtn" style="margin-top:1rem;background:#22c55e;">Add to Daily Summary</button>
         <button id="clearBtn" style="margin-top:1rem;background:#ef4444;">Clear</button>
-      </div>
-    `;
-
+      </div>`;
     drawChart(scaled);
 
-    document.getElementById("addToTotalBtn").addEventListener("click", () => {
-      addToDailyTotal(scaled);
-    });
-
+    document.getElementById("addToTotalBtn").addEventListener("click", () => addToDailyTotal(scaled));
     document.getElementById("clearBtn").addEventListener("click", () => {
       foodInput.value = "";
       servingInput.value = 100;
@@ -542,21 +490,14 @@ foodInput.addEventListener("input", e => {
   function drawChart(data) {
     const ctx = document.getElementById("nutrientChart").getContext("2d");
     if (chart) chart.destroy();
-
     const darkMode = document.body.classList.contains("dark");
     const textColor = darkMode ? "#f1f5f9" : "#111";
     const barColor = darkMode ? "#60a5fa" : "#2563eb";
-
     chart = new Chart(ctx, {
       type: "bar",
       data: {
         labels: ["Calories", "Protein", "Carbs", "Fat", "Sugar"],
-        datasets: [{
-          label: "Per Serving",
-          data: [data.kcal, data.protein, data.carbs, data.fat, data.sugar],
-          borderRadius: 6,
-          backgroundColor: barColor
-        }]
+        datasets: [{ label: "Per Serving", data: [data.kcal, data.protein, data.carbs, data.fat, data.sugar], borderRadius: 6, backgroundColor: barColor }]
       },
       options: {
         responsive: true,
@@ -571,12 +512,7 @@ foodInput.addEventListener("input", e => {
   }
 
   function addToDailyTotal(data) {
-    dailyTotals.kcal += data.kcal;
-    dailyTotals.protein += data.protein;
-    dailyTotals.carbs += data.carbs;
-    dailyTotals.fat += data.fat;
-    dailyTotals.sugar += data.sugar;
-
+    for (const k in data) dailyTotals[k] += data[k];
     updateDailySummary();
   }
 
@@ -587,8 +523,7 @@ foodInput.addEventListener("input", e => {
       <p><strong>Protein:</strong> ${dailyTotals.protein.toFixed(1)} g</p>
       <p><strong>Carbs:</strong> ${dailyTotals.carbs.toFixed(1)} g</p>
       <p><strong>Fat:</strong> ${dailyTotals.fat.toFixed(1)} g</p>
-      <p><strong>Sugar:</strong> ${dailyTotals.sugar.toFixed(1)} g</p>
-    `;
+      <p><strong>Sugar:</strong> ${dailyTotals.sugar.toFixed(1)} g</p>`;
   }
 
   clearAllBtn.addEventListener("click", () => {
@@ -607,15 +542,14 @@ foodInput.addEventListener("input", e => {
     chart.update();
   }
 
-  servingInput.addEventListener("input", () => {
-    if (currentFood) displayResult(currentFood);
-  });
+  servingInput.addEventListener("input", () => { if (currentFood) displayResult(currentFood); });
 });
 </script>
 
 
 </body>
 </html>
+
 
 
 
