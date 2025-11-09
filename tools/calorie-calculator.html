@@ -393,18 +393,18 @@ window.addEventListener("DOMContentLoaded", () => {
     modal.appendChild(box);
     document.body.appendChild(modal);
 
-    box.querySelectorAll(".suggestion-item").forEach(div => {
+  box.querySelectorAll(".suggestion-item").forEach(div => {
   div.addEventListener("click", () => {
     foodInput.value = div.textContent;
     document.body.removeChild(modal);
 
-    // ✅ close the suggestions dropdown if open
+    // ✅ Close dropdown if it was open
     suggestionsBox.style.display = "none";
 
-    // ✅ run the search
     searchFood();
   });
 });
+
 
 
     document.getElementById("closeModalBtn").addEventListener("click", () => {
@@ -555,6 +555,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
