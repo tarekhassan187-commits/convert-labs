@@ -61,76 +61,98 @@
   <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
   <style>
-   /* 🌙 Improved Dark Mode Theme */
+   /* 🌙 Improved & Fixed Dark Mode Theme — Convert Labs */
 body.dark {
-  background-color: #0b1220;      /* deep navy */
-  color: #e2e8f0;                 /* soft white */
+  background-color: #0b1220 !important;
+  color: #e2e8f0 !important;
 }
 
-body.dark main,
+/* Cards and containers */
 body.dark .calculator-container,
+body.dark main,
 body.dark .tool-page {
-  background-color: #1b2435;      /* soft elevated card */
-  color: #f8fafc;
-  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+  background-color: #1b2435 !important;
+  color: #f8fafc !important;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4) !important;
 }
 
+/* Inputs and selects */
 body.dark input,
-body.dark select,
-body.dark button {
-  background-color: #273248;
-  border: 1px solid #3b4764;
-  color: #f8fafc;
+body.dark select {
+  background-color: #273248 !important;
+  border: 1px solid #3b4764 !important;
+  color: #f8fafc !important;
 }
 
 body.dark input::placeholder {
-  color: #9ca3af;
+  color: #9ca3af !important;
 }
 
+/* Suggestions dropdown */
 body.dark .suggestions {
-  background-color: #273248;
-  border-color: #3b4764;
+  background-color: #273248 !important;
+  border-color: #3b4764 !important;
 }
-
 body.dark .suggestions div:hover {
-  background-color: #334155;
+  background-color: #334155 !important;
 }
-
 body.dark .show-more {
-  color: #60a5fa;
+  color: #60a5fa !important;
 }
 
-body.dark .result-card {
-  background-color: #1e293b;
-  color: #f8fafc;
-  border: 1px solid #334155;
-}
-
-body.dark .chart-container {
-  background: #111827;
-  border-radius: 10px;
-  padding: 8px;
-}
-
-body.dark footer {
-  background-color: #0f172a;
-  color: #e2e8f0;
-}
-
-body.dark .footer-links a {
-  color: #60a5fa;
-}
-
+/* Buttons — keep Convert Labs blue */
+body.dark button,
 body.dark .theme-toggle {
-  background: #334155;
-  color: #facc15; /* golden sun icon */
+  background-color: #2563eb !important; /* Convert Labs blue */
+  color: #fff !important;
+  border: none !important;
+}
+body.dark button:hover {
+  background-color: #1e40af !important;
 }
 
-/* Improve dark-mode scrollbar in modal */
-body.dark ::-webkit-scrollbar-thumb {
-  background-color: #475569;
-  border-radius: 4px;
+/* Green & red action buttons */
+body.dark #addToTotalBtn {
+  background-color: #16a34a !important;
 }
+body.dark #clearBtn {
+  background-color: #dc2626 !important;
+}
+
+/* Chart container */
+body.dark .chart-container {
+  background-color: #111827 !important;
+  border-radius: 10px !important;
+  padding: 8px !important;
+}
+
+/* Result card */
+body.dark .result-card {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+}
+
+/* Footer */
+body.dark footer {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+body.dark .footer-links a {
+  color: #60a5fa !important;
+}
+
+/* Theme toggle button */
+body.dark .theme-toggle {
+  background: #334155 !important;
+  color: #facc15 !important; /* golden sun icon */
+}
+
+/* Smooth transitions */
+body, input, button, .calculator-container, .result-card {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
   </style>
 </head>
 
@@ -545,6 +567,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
 
 
