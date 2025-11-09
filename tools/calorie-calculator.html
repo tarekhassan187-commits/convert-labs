@@ -268,7 +268,8 @@ window.addEventListener("DOMContentLoaded", () => {
   let chart = null;
   let dailyTotals = { kcal:0, protein:0, carbs:0, fat:0, sugar:0 };
 
- // Load all food data sources dynamically
+const dataStatusEl = document.getElementById('dataStatus');
+
 Promise.all([
   fetch("https://convertlabs.online/assets/usda_food_nutrition.json").then(r => r.json()).catch(() => []),
   fetch("https://convertlabs.online/assets/extras-oriental-foods.json").then(r => r.json()).catch(() => []),
@@ -276,13 +277,31 @@ Promise.all([
   fetch("https://convertlabs.online/assets/foods-lite.json").then(r => r.json()).catch(() => [])
 ])
 .then(dataArrays => {
-  // Combine all sources into one dataset
-  foodData = dataArrays.flat();
-  console.log("✅ Food data loaded:", foodData.length, "items total");
+  const combined = dataArrays.flat();
+  const seen = new Set();
+  foodData = combined.filter(item => {
+    const key = (item.name || item.food || "").toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  const total = foodData.length.toLocaleString(); // adds commas for readability
+  console.log(`✅ Food data loaded: ${total} unique items total`);
+
+  // ✅ Show it to users once loaded
+  if (dataStatusEl) {
+    dataStatusEl.innerHTML = `Database: <strong>${total}</strong> foods loaded ✅`;
+  }
 })
 .catch(err => {
   console.error("❌ Error loading food data:", err);
+  if (dataStatusEl) {
+    dataStatusEl.textContent = "⚠️ Database failed to load — please refresh.";
+    dataStatusEl.style.color = "#b91c1c";
+  }
 });
+
 
 
   // Theme toggle
@@ -454,6 +473,7 @@ Promise.all([
 
 </body>
 </html>
+
 
 
 
