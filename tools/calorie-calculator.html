@@ -324,7 +324,7 @@ function scoreItem(qNorm, item) {
 }
 
 // Get top matches
-function getSuggestions(q, max = 20) {
+function getSuggestions(q, max = 50) {
   const qNorm = normalizeText(q);
   if (!qNorm) return [];
   const scored = [];
@@ -536,6 +536,7 @@ suggestionsBox.addEventListener("click", e => {
 
 </body>
 </html>
+
 
 
 
