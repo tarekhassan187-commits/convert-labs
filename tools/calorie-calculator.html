@@ -834,12 +834,7 @@ body.dark .footer-links a:hover {
       chart.options.scales.y.ticks.color = textColor;
       chart.update();
     };
-// ✅ Update nutrition instantly when serving size changes
-servingInput.addEventListener("input", () => {
-  if (!currentFood) return;
 
-  const serving = parseFloat(servingInput.value);
-  if (isNaN(serving) || serving <= 0) return;
 
   // Scale nutrition values in real-time
   const factor = serving / 100;
@@ -888,6 +883,7 @@ servingInput.addEventListener("input", () => {
   </script>
 </body>
 </html>
+
 
 
 
