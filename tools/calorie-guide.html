@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calorie & Nutrition Guide — Convert Labs</title>
+  <meta name="description" content="Learn how to calculate your daily calorie needs, how many calories you need to lose or gain weight, and what foods to eat for each goal — from Convert Labs." />
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- ✅ Social Meta -->
+  <meta property="og:title" content="Calorie & Nutrition Guide — Convert Labs" />
+  <meta property="og:description" content="Understand daily calorie needs, TDEE, and meal planning to lose or gain weight effectively." />
+  <meta property="og:image" content="https://convertlabs.online/assets/calorie-calculator.jpg" />
+  <meta property="og:url" content="https://convertlabs.online/tools/calorie-guide.html" />
+  <meta property="og:type" content="article" />
+
+  <!-- ✅ AdSense & Analytics -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P', { debug_mode: true });
+  </script>
+
+  <!-- ✅ Breadcrumb JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://convertlabs.online/" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://convertlabs.online/tools/tools.html" },
+      { "@type": "ListItem", "position": 3, "name": "Calorie & Nutrition Guide" }
+    ]
+  }
+  </script>
+
+  <style>
+    main.guide-page {
+      max-width: 900px;
+      margin: 120px auto 60px;
+      padding: 2rem 1.5rem;
+      background: var(--card-bg, #fff);
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.06);
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: var(--accent, #2563eb);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+    }
+    .back-btn {
+      display: inline-block;
+      margin: 2rem 0 0;
+      padding: 10px 20px;
+      background: #2563eb;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .back-btn:hover {
+      background: #1d4ed8;
+    }
+    @media (max-width: 700px) {
+      main.guide-page { margin: 100px 15px; padding: 1.5rem; }
+      table { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ✅ Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="/index.html">
+          <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo" class="logo-img">
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="https://convertlabs.online/index.html">Home</a></li>
+          <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
+          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
+          <li><a href="https://convertlabs.online/about.html">About</a></li>
+          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+    </div>
+  </header>
+
+  <!-- ✅ Main Content -->
+  <main class="guide-page">
+    <h1>Calorie & Nutrition Guide</h1>
+    <p>
+      Understanding your daily calorie needs is the key to maintaining, losing, or gaining weight effectively.
+      This guide explains how to calculate your <strong>Basal Metabolic Rate (BMR)</strong> and your
+      <strong>Total Daily Energy Expenditure (TDEE)</strong>, along with practical diet tips.
+    </p>
+
+    <h2>1️⃣ How to Calculate Your Daily Calorie Needs</h2>
+    <p>
+      Your daily calorie needs depend on age, gender, weight, height, and activity level.
+      To estimate this, you can use the <strong>Mifflin–St Jeor equation</strong>:
+    </p>
+
+    <ul>
+      <li><strong>Men:</strong> BMR = 88.36 + (13.4 × weight in kg) + (4.8 × height in cm) − (5.7 × age)</li>
+      <li><strong>Women:</strong> BMR = 447.6 + (9.2 × weight in kg) + (3.1 × height in cm) − (4.3 × age)</li>
+    </ul>
+
+    <p>
+      Then, multiply your BMR by an <strong>Activity Factor</strong> to estimate your
+      <strong>Total Daily Energy Expenditure (TDEE)</strong>:
+    </p>
+
+    <ul>
+      <li><strong>Sedentary (little or no exercise):</strong> BMR × 1.2</li>
+      <li><strong>Lightly active (1–3 days/week):</strong> BMR × 1.375</li>
+      <li><strong>Moderately active (3–5 days/week):</strong> BMR × 1.55</li>
+      <li><strong>Very active (6–7 days/week):</strong> BMR × 1.725</li>
+      <li><strong>Extra active (intense training):</strong> BMR × 1.9</li>
+    </ul>
+
+    <h2>2️⃣ Daily Calorie Needs by Goal</h2>
+    <table>
+      <tr>
+        <th>Goal</</th>
+        <th>Strategy</th>
+        <th>Approx. Adjustment</th>
+      </tr>
+      <tr>
+        <td>Maintain Weight</td>
+        <td>Eat around your TDEE</td>
+        <td>0 kcal difference</td>
+      </tr>
+      <tr>
+        <td>Lose Weight</td>
+        <td>Create a calorie deficit</td>
+        <td>−300 to −500 kcal/day</td>
+      </tr>
+      <tr>
+        <td>Gain Weight</td>
+        <td>Create a calorie surplus</td>
+        <td>+300 to +500 kcal/day</td>
+      </tr>
+    </table>
+
+    <h2>3️⃣ What to Eat for Your Goal</h2>
+    <ul>
+      <li><strong>For Weight Loss:</strong> Choose lean proteins (chicken, fish, eggs), vegetables, whole grains, and healthy fats (olive oil, nuts). Avoid sugary drinks and ultra-processed foods.</li>
+      <li><strong>For Weight Gain:</strong> Add calorie-dense, nutritious foods such as oats, nut butters, avocados, whole milk, rice, and starchy vegetables, while keeping protein high.</li>
+      <li><strong>For Maintenance:</strong> Aim for a balanced mix: 45–55% carbs, 20–30% protein, 25–35% fats.</li>
+    </ul>
+
+    <p><em>Note:</em> These are general guidelines — always consult a certified dietitian for personalized nutrition advice.</p>
+
+    <!-- ✅ Back to Calculator Button -->
+    <a href="https://convertlabs.online/tools/calorie-calculator.html" class="back-btn">← Back to Calorie Calculator</a>
+  </main>
+
+  <!-- ✅ Footer -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <span class="footer-text">Convert Labs</span>
+    </div>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
+    <nav class="footer-links">
+      <a href="https://convertlabs.online/about.html">About</a> |
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
+      <a href="https://convertlabs.online/guides.html">Blog</a> |
+      <a href="https://convertlabs.online/privacy.html">Privacy</a> |
+      <a href="https://convertlabs.online/disclaimer.html">Disclaimer</a> |
+      <a href="https://convertlabs.online/terms.html">Terms</a> |
+      <a href="https://convertlabs.online/contact.html">Contact</a>
+    </nav>
+  </footer>
+
+  <script>
+    const themeBtn = document.getElementById("themeToggle");
+    themeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+    });
+  </script>
+</body>
+</html>
