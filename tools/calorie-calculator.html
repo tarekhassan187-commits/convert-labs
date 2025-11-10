@@ -87,18 +87,80 @@
     footer.footer a { color: #bfdbfe; text-decoration: none; }
     footer.footer a:hover { color: #fff; }
 
-    /* === Dark Mode === */
-    body.dark { background: #0b1220; color: #e6eef8; }
-    body.dark .calculator-container { background: #1e293b; color: #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-    body.dark input, body.dark #foodInput, body.dark #servingSize {
-      background: #0f172a; border: 1px solid #334155; color: #f1f5f9;
-    }
-    body.dark .suggestions { background: #1e293b; border-color: #334155; }
-    body.dark .suggestions div:hover { background: #334155; }
-    body.dark .show-more { background: #3b82f6; }
-    body.dark .show-more:hover { background: #2563eb; }
-    body.dark .result-card { background: #111827; border: 1px solid #334155; }
-    body.dark footer.footer { background: #0f172a; color: #e2e8f0; }
+    /* === Dark Mode (Fixed Contrast) === */
+body.dark {
+  background: #0b1220;
+  color: #e6eef8;
+}
+
+body.dark .calculator-container {
+  background: #162138; /* lighter navy for contrast */
+  color: #f1f5f9;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  border: 1px solid #1e293b;
+}
+
+body.dark input,
+body.dark #foodInput,
+body.dark #servingSize {
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #f1f5f9;
+}
+
+body.dark input::placeholder {
+  color: #94a3b8;
+}
+
+body.dark #searchBtn {
+  background: #3b82f6;
+  color: #fff;
+}
+body.dark #searchBtn:hover {
+  background: #2563eb;
+}
+
+body.dark .suggestions {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.06);
+}
+body.dark .suggestions div:hover {
+  background: #334155;
+}
+body.dark .show-more {
+  background: #3b82f6;
+  color: #fff;
+}
+body.dark .show-more:hover {
+  background: #2563eb;
+}
+
+body.dark .result-card {
+  background: #111827;
+  border: 1px solid #334155;
+  color: #f1f5f9;
+}
+
+body.dark footer.footer {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+/* Modal fix */
+body.dark .results-modal {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+body.dark .results-modal-header,
+body.dark .results-modal-footer {
+  background: #111827;
+  border-color: #334155;
+}
+body.dark .suggestion-item:hover {
+  background: #334155;
+}
+
 
     /* === Full Results Modal === */
     .results-modal {
@@ -187,16 +249,21 @@
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer">
+ <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-brand">
+      <img src="https://convertlabs.online/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
+      <span class="footer-text">Convert Labs</span>
+    </div>
     <p>© 2025 Convert Labs. All rights reserved.</p>
-    <nav>
-      <a href="/about.html">About</a> |
-      <a href="/tools/tools.html">Tools</a> |
-      <a href="/guides.html">Blog</a> |
-      <a href="/privacy.html">Privacy</a> |
-      <a href="/terms.html">Terms</a> |
-      <a href="/contact.html">Contact</a>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="https://convertlabs.online/about.html">About</a> |
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
+      <a href="https://convertlabs.online/guides.html">Blog</a> |
+      <a href="https://convertlabs.online/privacy.html">Privacy</a> |
+      <a href="https://convertlabs.online/disclaimer.html">Disclaimer</a> |
+      <a href="https://convertlabs.online/terms.html">Terms of Use</a> |
+      <a href="https://convertlabs.online/contact.html">Contact</a>
     </nav>
   </footer>
 
@@ -334,3 +401,4 @@
   </script>
 </body>
 </html>
+
