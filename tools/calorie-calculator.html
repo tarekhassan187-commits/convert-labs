@@ -17,7 +17,7 @@
   <meta property="og:url" content="https://convertlabs.online/tools/calorie-calculator.html" />
   <meta property="og:type" content="website" />
 
-  <!-- AdSense & Analytics (kept as requested) -->
+  <!-- AdSense & Analytics -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
@@ -41,7 +41,7 @@
   </script>
 
   <style>
-    /* ---------- Layout & base ---------- */
+    /* (unchanged main styles) */
     :root {
       --brand-blue: #2563eb;
       --brand-blue-dark: #1e40af;
@@ -81,14 +81,12 @@
 
     main { padding: 28px 0 60px; }
 
-    /* calculator card */
     .calculator-wrap { max-width:920px; margin: 24px auto; padding: 28px; border-radius: 14px; background: #fff; box-shadow: 0 10px 30px rgba(2,6,23,0.06); }
     .calculator-inner { max-width:820px; margin:auto; padding: 20px; border-radius: 12px; background: var(--card-bg); box-shadow: 0 6px 18px rgba(2,6,23,0.06); }
 
     h1 { margin:0 0 14px; color:#0f172a; font-size:1.9rem; display:flex; align-items:center; gap:10px; }
     p.lead { margin: 8px 0 18px; color:var(--muted); }
 
-    /* input row */
     .search-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
     #foodInput { padding:10px 12px; border-radius:8px; border:1px solid #e6edf3; width: 380px; box-sizing:border-box; font-size:15px; }
     #searchBtn { padding:9px 14px; border-radius:8px; background:var(--brand-blue); color:#fff; border:none; cursor:pointer; font-weight:600; }
@@ -97,7 +95,6 @@
     .serving-input { margin-top:18px; display:flex; gap:12px; align-items:center; }
     #servingSize { width:120px; padding:8px 10px; border-radius:8px; border:1px solid #e6edf3; }
 
-    /* suggestions dropdown - placed absolutely under the input */
     .search-field {
       position:relative;
       display:inline-block;
@@ -120,38 +117,29 @@
     }
     .suggestions .item { padding:10px 14px; cursor:pointer; border-bottom:1px solid #f1f5f9; }
     .suggestions .item:hover { background:#f1f5f9; }
-    .suggestions .item strong { color:var(--brand-blue); }
+    .suggestions .item strong { color:var(--brand-blue); font-weight:700; } /* <<-- ensure bold matched substring */
     .suggestions .show-more { display:block; padding:12px; text-align:center; background:var(--brand-blue); color:#fff; cursor:pointer; border-radius:0 0 10px 10px; margin-top:0; font-weight:600; }
 
-    /* result card & chart */
     .result-card { margin-top:18px; padding:16px; border-radius:10px; background:#f8fafc; border:1px solid #e6edf3; }
     .chart-container { height:260px; margin-top:12px; }
 
-    /* action buttons */
     .actions { margin-top:12px; display:flex; gap:10px; }
     .btn-green { background:#16a34a; color:#fff; padding:8px 12px; border-radius:8px; border:none; cursor:pointer; }
     .btn-red { background:#dc2626; color:#fff; padding:8px 12px; border-radius:8px; border:none; cursor:pointer; }
 
-    /* daily summary */
     .result-summary { margin-top:14px; padding:12px; border-radius:10px; background:#f8fafc; border:1px solid #e6edf3; display:none; }
 
-    /* about section (kept at bottom of card) */
     .about { margin-top:18px; color:var(--muted); font-size:0.96rem; }
 
     footer.footer { margin-top:36px; background:#1e3a8a; color:#fff; padding:26px 0; text-align:center; }
 
-    /* responsive */
     @media (max-width:900px){
       #foodInput { width: 100%; min-width: 0; }
       .suggestions { min-width: calc(100% - 40px); left:0; right:0; }
       .calculator-wrap { margin: 18px; }
     }
 
-    /* ==========================
-       DARK MODE FIXED
-       ========================== */
     :root { --dark-bg: #0b1220; --card-dark: #162138; --inner-card: #111827; --muted-dark: #94a3b8; }
-
     body.dark {
       background: var(--dark-bg);
       color: #e6eef8;
@@ -178,7 +166,6 @@
       color:#e6eef8;
       border:1px solid #233142;
     }
-
     body.dark #foodInput::placeholder { color:#94a3b8; }
     body.dark #searchBtn { background:#3b82f6; }
     body.dark #searchBtn:hover { background:#2563eb; }
@@ -186,6 +173,7 @@
     body.dark .suggestions { box-shadow: 0 8px 30px rgba(0,0,0,0.6); border-color:#233142; }
     body.dark .suggestions .item { border-bottom:1px solid #233142; }
     body.dark .suggestions .item:hover { background:#1e293b; }
+    body.dark .suggestions .item strong { color:#60a5fa; font-weight:700; } /* also ensure bold+colored in dark */
     body.dark .suggestions .show-more { background:#3b82f6; color:#fff; }
 
     body.dark .result-card, body.dark .result-summary { background:#111827; border-color:#233142; }
@@ -194,26 +182,17 @@
 
     body.dark footer.footer { background:#0f172a; color:#e2e8f0; }
 
-    /* modal */
-    .results-modal-overlay {
-      position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.45);
-      z-index:1400;
-    }
-    .results-modal {
-      width:94%; max-width:820px; max-height:82vh; border-radius:12px; overflow:hidden; background:#fff; box-shadow: 0 12px 40px rgba(2,6,23,0.3);
-      display:flex; flex-direction:column;
-    }
+    .results-modal-overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.45); z-index:1400; }
+    .results-modal { width:94%; max-width:820px; max-height:82vh; border-radius:12px; overflow:hidden; background:#fff; box-shadow: 0 12px 40px rgba(2,6,23,0.3); display:flex; flex-direction:column; }
     .results-modal-header { padding:14px 16px; background:#f8fafc; border-bottom:1px solid #e6edf3; font-weight:700; position:sticky; top:0; z-index:5; }
     .results-modal-content { padding:8px 12px; overflow:auto; }
     .suggestion-item { padding:10px 12px; border-bottom:1px solid #f1f5f9; cursor:pointer; }
     .results-modal-footer { padding:10px 12px; background:#f8fafc; text-align:right; border-top:1px solid #e6edf3; position:sticky; bottom:0; z-index:5; }
-
     body.dark .results-modal { background:#0f172a; color:#e6eef8; box-shadow:0 12px 44px rgba(0,0,0,0.7); }
     body.dark .results-modal-header, body.dark .results-modal-footer { background:#111827; border-color:#233142; }
     body.dark .suggestion-item { border-bottom:1px solid #233142; }
     body.dark .suggestion-item:hover { background:#1e293b; }
 
-    /* small visual tweaks */
     .muted { color:var(--muted); font-size:0.95rem; }
   </style>
 </head>
@@ -257,10 +236,8 @@
           <input id="servingSize" type="number" min="1" value="100" aria-label="Serving size in grams">
         </div>
 
-        <!-- Results will be injected here -->
         <div id="resultContainer" aria-live="polite"></div>
 
-        <!-- Daily Summary -->
         <section id="dailySummary" class="result-summary" aria-hidden="true">
           <h3 style="margin:0 0 8px">Daily Summary</h3>
           <div id="dailyTotals" style="font-size:0.98rem;"></div>
@@ -269,7 +246,6 @@
           </div>
         </section>
 
-        <!-- About this tool -->
         <div class="about" style="margin-top:20px;">
           <strong style="display:block;margin-bottom:8px;color:inherit">About This Tool</strong>
           <p class="muted">This calorie calculator retrieves real food data from the official USDA nutrient database (2021–2023 FNDDS). Each result includes the energy (kcal) and macronutrients per 100 g of edible portion. Use the serving size input to scale values to your portion.</p>
@@ -280,6 +256,9 @@
             <li>🥑 <strong>Fat</strong> — grams of total fat</li>
             <li>🍯 <strong>Sugar</strong> — grams of total sugars</li>
           </ul>
+
+          <!-- ADDED LINK to the guide page you mentioned -->
+          <p style="margin-top:12px;">Want to understand daily calorie needs and meal plans? <a href="https://convertlabs.online/tools/calorie-guide.html">Read our Calorie & Nutrition Guide →</a></p>
         </div>
       </div>
     </section>
@@ -304,11 +283,9 @@
     </div>
   </footer>
 
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <script>
-  // Theme persistence + toggle
   (function(){
     const btn = document.getElementById('themeToggle');
     function setTheme(mode){
@@ -331,7 +308,6 @@
 
   <script>
   (function(){
-    // Elements
     const foodInput = document.getElementById('foodInput');
     const searchBtn = document.getElementById('searchBtn');
     const suggestionsBox = document.getElementById('suggestions');
@@ -346,7 +322,6 @@
     let chart = null;
     let dailyTotals = { kcal:0, protein:0, carbs:0, fat:0, sugar:0 };
 
-    // Fetch datasets
     Promise.all([
       fetch('https://convertlabs.online/assets/usda_food_nutrition.json').then(r=>r.json()).catch(()=>[]),
       fetch('https://convertlabs.online/assets/extras-oriental-foods.json').then(r=>r.json()).catch(()=>[]),
@@ -368,10 +343,7 @@
       console.error('Failed to load food JSONs', err);
     });
 
-    // Build simple search index
-    function normalizeText(s){
-      return String(s||'').normalize('NFKD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim();
-    }
+    function normalizeText(s){ return String(s||'').normalize('NFKD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim(); }
     function buildIndex(data){
       foodIndex = data.map(item=>{
         const name = item.name || item.food || '';
@@ -381,7 +353,6 @@
       });
     }
 
-    // Scoring function
     function scoreItem(qNorm, item){
       const n = item.norm;
       if(n === qNorm) return 100;
@@ -404,7 +375,6 @@
       return { results: scored.slice(0,max).map(s=>s.item), total };
     }
 
-    // Highlight helper (returns HTML)
     function highlightMatch(text, q){
       const norm = normalizeText(text);
       const nq = normalizeText(q);
@@ -413,24 +383,21 @@
       const before = text.slice(0, idx);
       const match = text.slice(idx, idx + nq.length);
       const after = text.slice(idx + nq.length);
-      return `${before}<strong>${match}</strong>${after}`;
+      return `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
     }
 
-    // Render suggestions
     function renderSuggestions(q){
       const { results, total } = getSuggestions(q);
       if(!results.length){ suggestionsBox.style.display='none'; return; }
       const items = results.map(r=>`<div class="item" role="option">${highlightMatch(r.name, q)}</div>`).join('');
       let html = items;
       if(total > results.length){
-        html += `<div class="show-more" role="button" tabindex="0">🔍 Show all ${total} results for “${q}”</div>`;
+        html += `<div class="show-more" role="button" tabindex="0">🔍 Show all ${total} results for “${escapeHtml(q)}”</div>`;
       }
       suggestionsBox.innerHTML = html;
       suggestionsBox.style.display = 'block';
-      // reposition width to match input on small screens: suggestions uses min-width, but keep it simple
     }
 
-    // Show full results modal
     function showFullResults(q){
       const { results, total } = getSuggestions(q, 1000);
       const overlay = document.createElement('div');
@@ -442,18 +409,17 @@
       modal.setAttribute('role','dialog');
       modal.setAttribute('aria-label','All search results');
       modal.innerHTML = `
-        <div class="results-modal-header">All ${total} results for “${q}”</div>
+        <div class="results-modal-header">All ${total} results for “${escapeHtml(q)}”</div>
         <div class="results-modal-content"></div>
-        <div class="results-modal-footer"><button id="closeModalBtn" style="padding:8px 14px;border-radius:8px;border:none;background:var(--brand-blue);color:#fff;cursor:pointer">Close</button></div>
+        <div class="results-modal-footer"><button id="closeModalBtn" style="padding:8px 14px;border-radius:8px;border:none;background:var(--brand-blue);color:#fff;cursor:pointer;">Close</button></div>
       `;
       overlay.appendChild(modal);
       document.body.appendChild(overlay);
 
       const content = modal.querySelector('.results-modal-content');
       if(results.length === 0) content.innerHTML = '<p style="padding:12px">No results found.</p>';
-      else content.innerHTML = results.map(r => `<div class="suggestion-item" tabindex="0">${r.name}</div>`).join('');
+      else content.innerHTML = results.map(r => `<div class="suggestion-item" tabindex="0">${escapeHtml(r.name)}</div>`).join('');
 
-      // Bind clicks
       content.querySelectorAll('.suggestion-item').forEach(node=>{
         node.addEventListener('click', ()=>{
           foodInput.value = node.textContent.trim();
@@ -465,7 +431,6 @@
 
       document.getElementById('closeModalBtn').addEventListener('click', closeModal);
 
-      // ESC support
       function escHandler(e){ if(e.key === 'Escape') closeModal(); }
       window.addEventListener('keydown', escHandler);
 
@@ -475,7 +440,6 @@
       }
     }
 
-    // click on suggestions
     suggestionsBox.addEventListener('click', (e)=>{
       const target = e.target.closest('.item');
       if(!target) {
@@ -484,14 +448,12 @@
         }
         return;
       }
-      // get textContent (strip HTML)
       const name = target.textContent.trim();
       foodInput.value = name;
       suggestionsBox.style.display = 'none';
       searchFood();
     });
 
-    // keyboard accessibility for show-more inside suggestions
     suggestionsBox.addEventListener('keydown', (e)=>{
       const t = e.target;
       if(t && t.classList && t.classList.contains('show-more') && (e.key === 'Enter' || e.key === ' ')) {
@@ -500,7 +462,6 @@
       }
     });
 
-    // debounce input
     let debounce;
     foodInput.addEventListener('input', (e)=>{
       const q = e.target.value.trim();
@@ -509,34 +470,29 @@
       debounce = setTimeout(()=> renderSuggestions(q), 180);
     });
 
-    // ensure suggestions close when clicking outside
     document.addEventListener('click', (e)=>{
       if(!e.target.closest('.search-field')) suggestionsBox.style.display='none';
     });
 
-    // search button and Enter key
     searchBtn.addEventListener('click', searchFood);
     foodInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); searchFood(); } });
 
-    // main search logic
     function searchFood(){
       const term = (foodInput.value || '').trim();
       if(!term){ resultContainer.innerHTML=''; currentFood = null; return; }
       const lower = term.toLowerCase();
-      // try exact match first
       let match = foodData.find(it => ((it.name||it.food)||'').toLowerCase() === lower);
       if(!match) match = foodData.find(it => ((it.name||it.food)||'').toLowerCase().includes(lower));
       if(!match){
         resultContainer.innerHTML = `<div class="result-card"><p style="color:#b91c1c;margin:0">❌ No results for <strong>${escapeHtml(term)}</strong>.</p></div>`;
         currentFood = null;
-        if(chart) { chart.destroy(); chart = null; }
+        if(chart){ chart.destroy(); chart = null; }
         return;
       }
       currentFood = match;
       displayResult(match);
     }
 
-    // display result
     function displayResult(food){
       const serving = Number(servingSize.value) || 100;
       const factor = serving / 100;
@@ -565,10 +521,8 @@
         </div>
       `;
 
-      // draw chart
       drawChart(scaled);
 
-      // bind buttons
       document.getElementById('addToTotalBtn').addEventListener('click', ()=> {
         addToDailyTotal(scaled);
       });
@@ -581,7 +535,6 @@
       });
     }
 
-    // draw Chart.js
     function drawChart(data){
       const ctx = document.getElementById('nutrientChart');
       if(!ctx) return;
@@ -607,7 +560,6 @@
       });
     }
 
-    // make updateChartColors global so theme toggle calls it
     window.updateChartColors = function(){
       if(!chart) return;
       const dark = document.body.classList.contains('dark');
@@ -619,7 +571,6 @@
       chart.update();
     };
 
-    // Add to daily totals
     function addToDailyTotal(data){
       for(const k of Object.keys(dailyTotals)) {
         dailyTotals[k] = (dailyTotals[k] || 0) + (data[k] || 0);
@@ -644,22 +595,16 @@
       dailySummary.setAttribute('aria-hidden','true');
     });
 
-    // update serving size live if there's an active result
     servingSize.addEventListener('input', ()=>{
       if(!currentFood) return;
-      // update displayed numbers
       displayResult(currentFood);
     });
 
-    // helpers
     function escapeHtml(s){
       return String(s || '').replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; });
     }
 
-    // keyboard: close suggestions with Escape
-    window.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape') suggestionsBox.style.display='none';
-    });
+    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') suggestionsBox.style.display='none'; });
 
   })();
   </script>
