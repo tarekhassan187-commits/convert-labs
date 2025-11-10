@@ -834,6 +834,37 @@ body.dark .footer-links a:hover {
       chart.options.scales.y.ticks.color = textColor;
       chart.update();
     };
+// ✅ Update nutrition instantly when serving size changes
+servingInput.addEventListener("input", () => {
+  if (!currentFood) return;
+
+  const serving = parseFloat(servingInput.value);
+  if (isNaN(serving) || serving <= 0) return;
+
+  // Scale nutrition values in real-time
+  const factor = serving / 100;
+  const scaled = {
+    kcal: currentFood.kcal * factor,
+    protein: currentFood.protein * factor,
+    carbs: currentFood.carbs * factor,
+    fat: currentFood.fat * factor,
+    sugar: currentFood.sugar * factor
+  };
+
+  // Update values inside the existing card
+  const resultCard = document.querySelector(".result-card");
+  if (resultCard) {
+    resultCard.querySelector("p:nth-child(2)").innerHTML = `<strong>Serving Size:</strong> ${serving} g`;
+    resultCard.querySelector("p:nth-child(3)").innerHTML = `<strong>Calories:</strong> ${scaled.kcal.toFixed(1)} kcal`;
+    resultCard.querySelector("p:nth-child(4)").innerHTML = `<strong>Protein:</strong> ${scaled.protein.toFixed(1)} g`;
+    resultCard.querySelector("p:nth-child(5)").innerHTML = `<strong>Carbs:</strong> ${scaled.carbs.toFixed(1)} g`;
+    resultCard.querySelector("p:nth-child(6)").innerHTML = `<strong>Fat:</strong> ${scaled.fat.toFixed(1)} g`;
+    resultCard.querySelector("p:nth-child(7)").innerHTML = `<strong>Sugar:</strong> ${scaled.sugar.toFixed(1)} g`;
+  }
+
+  // Refresh the chart dynamically
+  drawChart(scaled);
+});
 
     function addToDailyTotal(data){
       for(const k in data) if(Object.prototype.hasOwnProperty.call(data,k)) dailyTotals[k] += (data[k] || 0);
@@ -857,6 +888,7 @@ body.dark .footer-links a:hover {
   </script>
 </body>
 </html>
+
 
 
 
