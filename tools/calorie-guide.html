@@ -40,103 +40,79 @@
   </script>
 
   <style>
+    /* ---------- Base / Light Theme ---------- */
+    :root {
+      --accent: #2563eb;
+      --card-bg: #fff;
+      --page-bg: #f8fafc;
+      --text: #111827;
+      --muted: #6b7280;
+    }
+
+    html,body { margin:0; padding:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--page-bg); color:var(--text); }
+
+    .navbar { background: white; border-bottom: 1px solid #e6edf3; position:sticky; top:0; z-index:50; }
+    .nav-container { max-width:1100px; margin:0 auto; display:flex; gap:20px; align-items:center; padding:10px 16px; }
+    .logo .logo-img { width:36px; height:36px; vertical-align:middle; }
+    .brand-text { margin-left:8px; font-weight:600; color:var(--accent); }
+    .nav-links ul { list-style:none; margin:0; padding:0; display:flex; gap:12px; align-items:center; }
+    .nav-links a { text-decoration:none; color:var(--text); padding:6px 8px; border-radius:6px; }
+    .nav-links a.active { color:var(--accent); font-weight:600; }
+
     main.guide-page {
       max-width: 900px;
       margin: 120px auto 60px;
       padding: 2rem 1.5rem;
-      background: var(--card-bg, #fff);
+      background: var(--card-bg);
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.06);
       line-height: 1.6;
     }
-    h1, h2, h3 {
-      color: var(--accent, #2563eb);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-    }
-    table, th, td {
-      border: 1px solid #ddd;
-    }
-    th, td {
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background: #f3f4f6;
-    }
-    .back-btn {
-      display: inline-block;
-      margin: 2rem 0 0;
-      padding: 10px 20px;
-      background: #2563eb;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-    .back-btn:hover {
-      background: #1d4ed8;
-    }
-    @media (max-width: 700px) {
+    h1, h2, h3 { color: var(--accent); margin-top:0.8rem; }
+    p { color: var(--text); }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; background: transparent; }
+    table, th, td { border: 1px solid #ddd; }
+    th, td { padding: 10px; text-align: left; }
+    th { background: #f3f4f6; color: #111827; }
+    .back-btn { display:inline-block; margin: 2rem 0 0; padding: 10px 20px; background: var(--accent); color: white; border-radius: 8px; text-decoration: none; transition: background 0.3s; }
+    .back-btn:hover { background: #1d4ed8; }
+
+    footer.footer { margin-top: 30px; padding: 18px 0; background: transparent; color: var(--muted); }
+    .footer-brand { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .footer-links a { color: var(--muted); text-decoration:none; }
+
+    /* Transitions for theme change */
+    body, main.guide-page, .nav-container, footer { transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease; }
+
+    /* Responsive */
+    @media (max-width:700px) {
       main.guide-page { margin: 100px 15px; padding: 1.5rem; }
       table { font-size: 0.95rem; }
+      .nav-links { display:none; }
     }
-  
-  /* 🌙 Dark Mode Styling */
-body.dark {
-  background-color: #0f172a;
-  color: #f1f5f9;
-}
 
-body.dark main.guide-page {
-  background: #1e293b;
-  color: #f1f5f9;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
-}
+    /* ---------- Dark Mode (when body.dark is present) ---------- */
+    body.dark { background-color: #0b1220; color: #e6eefb; --text: #e6eefb; --muted: #9aa6bf; --card-bg: #111827; --accent: #60a5fa; }
+    body.dark .navbar { background: #071024; border-bottom-color: rgba(255,255,255,0.03); }
+    body.dark main.guide-page {
+      background: #0f1724;
+      color: #e6eefb;
+      box-shadow: 0 6px 24px rgba(2,6,23,0.7);
+    }
+    body.dark h1, body.dark h2, body.dark h3 { color: var(--accent); }
+    body.dark th { background: #0e243d; color: #e6eefb; }
+    body.dark table, body.dark td { border-color: #213047; }
+    body.dark .back-btn { background: #2563eb; }
+    body.dark footer.footer { background: transparent; color: var(--muted); }
+    body.dark .footer-links a { color: #93c5fd; }
 
-body.dark h1,
-body.dark h2,
-body.dark h3 {
-  color: #60a5fa;
-}
-
-body.dark table {
-  border-color: #334155;
-}
-
-body.dark th {
-  background: #334155;
-  color: #f8fafc;
-}
-
-body.dark td {
-  border-color: #475569;
-}
-
-body.dark .back-btn {
-  background: #3b82f6;
-}
-
-body.dark .back-btn:hover {
-  background: #2563eb;
-}
-
-body.dark .footer {
-  background: #1e293b;
-  color: #f1f5f9;
-}
-
-body.dark .footer a {
-  color: #93c5fd;
-}
-</style>
+    /* small utilities */
+    .muted { color: var(--muted); font-size:0.95rem; }
+  </style>
 </head>
 
 <body>
-  <!-- ✅ Header -->
+  <!-- Header -->
   <header class="navbar">
     <div class="nav-container">
       <div class="logo">
@@ -158,7 +134,7 @@ body.dark .footer a {
     </div>
   </header>
 
-  <!-- ✅ Main Content -->
+  <!-- Main Content -->
   <main class="guide-page">
     <h1>Calorie & Nutrition Guide</h1>
     <p>
@@ -194,7 +170,7 @@ body.dark .footer a {
     <h2>2️⃣ Daily Calorie Needs by Goal</h2>
     <table>
       <tr>
-        <th>Goal</</th>
+        <th>Goal</th>
         <th>Strategy</th>
         <th>Approx. Adjustment</th>
       </tr>
@@ -214,53 +190,53 @@ body.dark .footer a {
         <td>+300 to +500 kcal/day</td>
       </tr>
     </table>
+
     <h2>Recommended Daily Calorie Intake for Healthy Adults</h2>
-<p>
-  While your exact needs depend on age, size, and activity, most health organizations — including 
-  the <strong>World Health Organization (WHO)</strong> and the <strong>U.S. Dietary Guidelines</strong> —
-  suggest the following average calorie ranges to maintain weight:
-</p>
+    <p class="muted">
+      While your exact needs depend on age, size, and activity, most health organizations — including
+      the <strong>World Health Organization (WHO)</strong> and the <strong>U.S. Dietary Guidelines</strong> —
+      suggest the following average calorie ranges to maintain weight:
+    </p>
 
-<table>
-  <tr>
-    <th>Group</th>
-    <th>Activity Level</th>
-    <th>Approx. Calories / Day</th>
-  </tr>
-  <tr>
-    <td>Adult Women (19–30 yrs)</td>
-    <td>Sedentary – Active</td>
-    <td>1,800 – 2,400 kcal</td>
-  </tr>
-  <tr>
-    <td>Adult Men (19–30 yrs)</td>
-    <td>Sedentary – Active</td>
-    <td>2,400 – 3,000 kcal</td>
-  </tr>
-  <tr>
-    <td>Women (31–50 yrs)</td>
-    <td>Sedentary – Active</td>
-    <td>1,800 – 2,200 kcal</td>
-  </tr>
-  <tr>
-    <td>Men (31–50 yrs)</td>
-    <td>Sedentary – Active</td>
-    <td>2,200 – 3,000 kcal</td>
-  </tr>
-  <tr>
-    <td>Older Adults (51+ yrs)</td>
-    <td>Sedentary – Active</td>
-    <td>1,600 – 2,400 kcal</td>
-  </tr>
-</table>
+    <table>
+      <tr>
+        <th>Group</th>
+        <th>Activity Level</th>
+        <th>Approx. Calories / Day</th>
+      </tr>
+      <tr>
+        <td>Adult Women (19–30 yrs)</td>
+        <td>Sedentary – Active</td>
+        <td>1,800 – 2,400 kcal</td>
+      </tr>
+      <tr>
+        <td>Adult Men (19–30 yrs)</td>
+        <td>Sedentary – Active</td>
+        <td>2,400 – 3,000 kcal</td>
+      </tr>
+      <tr>
+        <td>Women (31–50 yrs)</td>
+        <td>Sedentary – Active</td>
+        <td>1,800 – 2,200 kcal</td>
+      </tr>
+      <tr>
+        <td>Men (31–50 yrs)</td>
+        <td>Sedentary – Active</td>
+        <td>2,200 – 3,000 kcal</td>
+      </tr>
+      <tr>
+        <td>Older Adults (51+ yrs)</td>
+        <td>Sedentary – Active</td>
+        <td>1,600 – 2,400 kcal</td>
+      </tr>
+    </table>
 
-<p>
-  🩵 <strong>Quick Summary:</strong><br>
-  • The average healthy adult woman needs around <strong>2,000 calories per day</strong> to maintain weight.<br>
-  • The average healthy adult man needs around <strong>2,500 calories per day</strong> to maintain weight.<br>
-  These values assume moderate activity and can vary with lifestyle, metabolism, and body composition.
-</p>
-
+    <p class="muted">
+      <strong>Quick Summary:</strong><br>
+      • The average healthy adult woman needs around <strong>2,000 calories per day</strong> to maintain weight.<br>
+      • The average healthy adult man needs around <strong>2,500 calories per day</strong> to maintain weight.<br>
+      These values assume moderate activity and can vary with lifestyle, metabolism, and body composition.
+    </p>
 
     <h2>3️⃣ What to Eat for Your Goal</h2>
     <ul>
@@ -271,18 +247,18 @@ body.dark .footer a {
 
     <p><em>Note:</em> These are general guidelines — always consult a certified dietitian for personalized nutrition advice.</p>
 
-    <!-- ✅ Back to Calculator Button -->
+    <!-- Back to Calculator Button -->
     <a href="https://convertlabs.online/tools/calorie-calculator.html" class="back-btn">← Back to Calorie Calculator</a>
   </main>
 
-  <!-- ✅ Footer -->
+  <!-- Footer -->
   <footer class="footer">
     <div class="footer-brand">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
-      <span class="footer-text">Convert Labs</span>
+      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" style="width:30px;height:30px"/>
+      <span class="footer-text muted">Convert Labs</span>
     </div>
-    <p>© 2025 Convert Labs. All rights reserved.</p>
-    <nav class="footer-links">
+    <p class="muted">© 2025 Convert Labs. All rights reserved.</p>
+    <nav class="footer-links muted">
       <a href="https://convertlabs.online/about.html">About</a> |
       <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
       <a href="https://convertlabs.online/guides.html">Blog</a> |
@@ -294,11 +270,26 @@ body.dark .footer a {
   </footer>
 
   <script>
-    const themeBtn = document.getElementById("themeToggle");
-    themeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-    });
+    // Theme toggle — toggles body.dark
+    (function(){
+      const themeBtn = document.getElementById("themeToggle");
+      if (!themeBtn) return;
+      themeBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+        // store preference in localStorage so it persists
+        try { localStorage.setItem('cl_theme_dark', document.body.classList.contains('dark') ? '1' : '0'); } catch(e){}
+      });
+
+      // restore preference on load
+      try {
+        const pref = localStorage.getItem('cl_theme_dark');
+        if (pref === '1') {
+          document.body.classList.add('dark');
+          if (themeBtn) themeBtn.textContent = "☀️";
+        }
+      } catch(e){}
+    })();
   </script>
 </body>
 </html>
