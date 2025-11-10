@@ -84,11 +84,13 @@
     }
 
     /* ---------- 🌙 Dark Mode ---------- */
-    body.dark {
-      background-color: #0b1220 !important;
-      color: #e6eefb !important;
-      transition: background 0.3s, color 0.3s;
-    }
+    html.dark, body.dark {
+  background-color: #0b1220 !important;
+  background: #0b1220 !important;
+  color: #e6eefb !important;
+  transition: background 0.3s, color 0.3s;
+}
+
 
     body.dark main.guide-page {
       background: #1e293b !important;
