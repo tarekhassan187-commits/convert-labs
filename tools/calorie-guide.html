@@ -1,250 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Calorie & Nutrition Guide — Convert Labs</title>
-  <meta name="description" content="Learn how to calculate your daily calorie needs, how many calories you need to lose or gain weight, and what foods to eat for each goal — from Convert Labs." />
-  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
+
+  <!-- Primary description / SEO -->
+  <meta name="description" content="Understand how to calculate your BMR and TDEE, interpret results, and use them to plan meals — a practical Calorie & Nutrition Guide from Convert Labs." />
+  <meta name="keywords" content="BMR, TDEE, calorie guide, calorie calculator, nutrition guide, Convert Labs, basal metabolic rate" />
   <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://convertlabs.online/tools/calorie-guide.html" />
 
-  <!-- ✅ Social Meta -->
-  <meta property="og:title" content="Calorie & Nutrition Guide — Convert Labs" />
-  <meta property="og:description" content="Understand daily calorie needs, TDEE, and meal planning to lose or gain weight effectively." />
-  <meta property="og:image" content="https://convertlabs.online/assets/guide-calories.png" />
-  <meta property="og:url" content="https://convertlabs.online/tools/calorie-guide.html" />
+  <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="Convert Labs" />
   <meta property="og:type" content="article" />
+  <meta property="og:title" content="Calorie & Nutrition Guide — Convert Labs" />
+  <meta property="og:description" content="Learn how to calculate your Basal Metabolic Rate (BMR), convert it into Total Daily Energy Expenditure (TDEE), and use that to plan meals for losing, gaining, or maintaining weight." />
+  <meta property="og:url" content="https://convertlabs.online/tools/calorie-guide.html" />
+  <!-- Use your banner sized for social previews (ideally 1200×630). Replace with your actual banner path if different -->
+  <meta property="og:image" content="https://convertlabs.online/assets/convertlabs-banner.jpg" />
+  <meta property="og:image:alt" content="Convert Labs — Calorie & Nutrition Guide" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
 
-  <!-- ✅ AdSense & Analytics -->
+  <!-- Twitter card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@ConvertLabs" />
+  <meta name="twitter:title" content="Calorie & Nutrition Guide — Convert Labs" />
+  <meta name="twitter:description" content="Step-by-step guide to calculate your BMR and TDEE and apply the result to meal planning." />
+  <meta name="twitter:image" content="https://convertlabs.online/assets/convertlabs-banner.jpg" />
+
+  <!-- Favicon and theme color -->
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
+
+  <!-- Google AdSense (as used on site) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics / gtag -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P');
+    gtag('config', 'G-Z88B03WV7P', { 'anonymize_ip': false });
   </script>
 
-  <!-- ✅ Breadcrumb JSON-LD -->
+  <!-- Structured data (WebPage + Breadcrumb) -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://convertlabs.online/" },
-      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://convertlabs.online/tools/tools.html" },
-      { "@type": "ListItem", "position": 3, "name": "Calorie & Nutrition Guide" }
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://convertlabs.online/tools/calorie-guide.html"
+    },
+    "headline":"Calorie & Nutrition Guide — Convert Labs",
+    "description":"Learn how to calculate your Basal Metabolic Rate (BMR), convert it into Total Daily Energy Expenditure (TDEE), and use that to plan meals.",
+    "image":"https://convertlabs.online/assets/convertlabs-banner.jpg",
+    "author": {
+      "@type":"Organization",
+      "name":"Convert Labs"
+    },
+    "publisher": {
+      "@type":"Organization",
+      "name":"Convert Labs",
+      "logo": { "@type":"ImageObject", "url":"https://convertlabs.online/assets/convert-labs-icon.png" }
+    },
+    "datePublished": "2025-10-25"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      { "@type":"ListItem", "position":1, "name":"Home", "item":"https://convertlabs.online/" },
+      { "@type":"ListItem", "position":2, "name":"Tools", "item":"https://convertlabs.online/tools/tools.html" },
+      { "@type":"ListItem", "position":3, "name":"Calorie & Nutrition Guide", "item":"https://convertlabs.online/tools/calorie-guide.html" }
     ]
   }
   </script>
 
+  <!-- Styles (keeps page visually consistent with other pages) -->
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
   <style>
-    /* ---------- Base / Light Theme ---------- */
-    main.guide-page {
-      max-width: 900px;
-      margin: 120px auto 60px;
-      padding: 2rem 1.5rem;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.06);
-      line-height: 1.6;
-      transition: background 0.3s, color 0.3s;
+    /* local page tweaks to match Convert Labs look */
+    body {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: #f9fafb;
+      color: #111827;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
     }
-
-    h1, h2, h3 {
-      color: #2563eb;
-      transition: color 0.3s;
+    header.navbar {
+      background-color: #1e3a8a;
+      color: #fff;
+      padding: 12px 0;
+      position: sticky;
+      top: 0;
+      z-index: 999;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-    }
-    table, th, td { border: 1px solid #ddd; }
-    th, td { padding: 10px; text-align: left; }
-    th { background: #f3f4f6; }
-
-    .back-btn {
-      display: inline-block;
-      margin: 2rem 0 0;
-      padding: 10px 20px;
-      background: #2563eb;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-    .back-btn:hover { background: #1d4ed8; }
-
-    @media (max-width: 700px) {
-      main.guide-page { margin: 100px 15px; padding: 1.5rem; }
-      table { font-size: 0.95rem; }
-    }
-
-    /* ---------- 🌙 Dark Mode ---------- */
-    html.dark, body.dark {
-  background-color: #0b1220 !important;
-  background: #0b1220 !important;
-  color: #e6eefb !important;
-  transition: background 0.3s, color 0.3s;
-}
-
-
-    body.dark main.guide-page {
-      background: #1e293b !important;
-      color: #f1f5f9 !important;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-    }
-
-    body.dark h1, body.dark h2, body.dark h3 {
-      color: #60a5fa !important;
-    }
-
-    body.dark th {
-      background: #334155 !important;
-      color: #f8fafc !important;
-    }
-    body.dark td { border-color: #475569 !important; }
-
-    body.dark .navbar {
-      background: #0f172a !important;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    body.dark .nav-links a {
-      color: #e2e8f0 !important;
-    }
-
-    body.dark .nav-links a.active {
-      color: #60a5fa !important;
-    }
-
-    body.dark .back-btn {
-      background: #3b82f6 !important;
-    }
-
-    body.dark .back-btn:hover {
-      background: #2563eb !important;
-    }
-
-    body.dark .footer {
-      background: #0f172a !important;
-      color: #f1f5f9 !important;
-    }
-
-    body.dark .footer a {
-      color: #93c5fd !important;
-    }
+    .nav-container { width: 92%; max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; }
+    .brand { display:flex; gap:8px; align-items:center; text-decoration:none; color:#fff; font-weight:700; }
+    main { max-width:850px; margin:60px auto; padding: 0 20px 60px; background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.06); }
+    h1 { color:#1e3a8a; font-size:1.9rem; margin:16px 0; }
+    h2 { color:#1e3a8a; margin-top:32px; font-size:1.4rem; }
+    .tip { background:#eff6ff; padding:12px; border-radius:8px; margin-top:16px; border-left:4px solid #1e3a8a; }
+    .button-blue { display:inline-block; background:#2563eb; color:#fff; padding:12px 20px; border-radius:8px; text-decoration:none; font-weight:600; margin-top:28px; transition:background .2s; }
+    .button-blue:hover { background:#1e40af; }
+    footer.footer { background:#1e3a8a; color:#fff; text-align:center; padding:26px 0; margin-top:60px; }
+    @media (max-width:700px){ main{margin:40px 14px;} }
+    /* Dark theme support that toggles with body.dark */
+    body.dark { background: #0b1220; color: #e6eef8; }
+    body.dark main { background: #0e1724; box-shadow: 0 16px 36px rgba(0,0,0,0.6); }
+    body.dark .tip { background: #0f172a; border-left-color:#60a5fa; color:#e6eef8; }
+    body.dark .button-blue { background:#3b82f6; }
   </style>
 </head>
 
 <body>
-  <!-- ✅ Header -->
+  <!-- Header -->
   <header class="navbar">
     <div class="nav-container">
-      <div class="logo">
-        <a href="/index.html">
-          <img src="/assets/convert-labs-icon.png" alt="Convert Labs Logo" class="logo-img">
-          <span class="brand-text">Convert Labs</span>
-        </a>
-      </div>
-      <nav class="nav-links">
-        <ul>
-          <li><a href="https://convertlabs.online/index.html">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
+      <a href="https://convertlabs.online/index.html" class="brand">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:36px;height:36px;border-radius:6px;background:#fff;padding:4px;" />
+        <span>Convert Labs</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <ul style="display:flex; gap:18px; list-style:none; margin:0; padding:0;">
+          <li><a href="https://convertlabs.online/index.html" style="color:#f8fafc; text-decoration:none;">Home</a></li>
+          <li><a href="https://convertlabs.online/tools/tools.html" class="active" style="color:#f8fafc; text-decoration:none;">Tools</a></li>
+          <li><a href="https://convertlabs.online/guides.html" style="color:#f8fafc; text-decoration:none;">Blog</a></li>
+          <li><a href="https://convertlabs.online/about.html" style="color:#f8fafc; text-decoration:none;">About</a></li>
+          <li><a href="https://convertlabs.online/contact.html" style="color:#f8fafc; text-decoration:none;">Contact</a></li>
         </ul>
       </nav>
-      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+
+      <button id="themeToggle" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">🌙</button>
     </div>
   </header>
 
-  <!-- ✅ Main Content -->
-  <main class="guide-page">
-    <h1>Calorie & Nutrition Guide</h1>
-    <p>
-      Understanding your daily calorie needs is the key to maintaining, losing, or gaining weight effectively.
-      This guide explains how to calculate your <strong>Basal Metabolic Rate (BMR)</strong> and your
-      <strong>Total Daily Energy Expenditure (TDEE)</strong>, along with practical diet tips.
-    </p>
+  <!-- Main content -->
+  <main>
+    <h1>📘 Calorie & Nutrition Guide</h1>
+    <p>This guide helps you understand how to calculate your daily energy needs and plan meals using your BMR and TDEE.</p>
 
-    <h2>1️⃣ How to Calculate Your Daily Calorie Needs</h2>
+    <h2>1️⃣ How to Calculate Your BMR</h2>
+    <p><strong>BMR (Basal Metabolic Rate)</strong> is the number of calories your body needs to maintain vital functions while at rest.</p>
+
+    <p><strong>For Men:</strong> BMR = (10 × weight kg) + (6.25 × height cm) – (5 × age years) + 5</p>
+    <p><strong>For Women:</strong> BMR = (10 × weight kg) + (6.25 × height cm) – (5 × age years) – 161</p>
+
+    <h2>🔍 Understanding Your BMR Result</h2>
+    <p>Your <strong>BMR</strong> shows the minimum energy your body burns each day, even if you are completely at rest. It reflects calories needed for breathing, blood flow, cell maintenance, and body temperature.</p>
+
+    <p>To convert BMR into a practical daily target, multiply it by an <strong>activity factor</strong> to calculate your <strong>TDEE (Total Daily Energy Expenditure)</strong>:</p>
     <ul>
-      <li><strong>Men:</strong> BMR = 88.36 + (13.4 × weight in kg) + (4.8 × height in cm) − (5.7 × age)</li>
-      <li><strong>Women:</strong> BMR = 447.6 + (9.2 × weight in kg) + (3.1 × height in cm) − (4.3 × age)</li>
+      <li><strong>1.2</strong> – Sedentary (little or no exercise)</li>
+      <li><strong>1.375</strong> – Light activity (1–3 days/week)</li>
+      <li><strong>1.55</strong> – Moderate activity (3–5 days/week)</li>
+      <li><strong>1.725</strong> – Active (6–7 days/week)</li>
+      <li><strong>1.9</strong> – Very active (hard physical work or training)</li>
     </ul>
 
+    <p>Your <strong>TDEE</strong> is the estimated calories to maintain your current weight.</p>
+
+    <h3>🍽️ How to Apply It to Meals</h3>
     <ul>
-      <li><strong>Sedentary (little or no exercise):</strong> BMR × 1.2</li>
-      <li><strong>Lightly active:</strong> BMR × 1.375</li>
-      <li><strong>Moderately active:</strong> BMR × 1.55</li>
-      <li><strong>Very active:</strong> BMR × 1.725</li>
-      <li><strong>Extra active:</strong> BMR × 1.9</li>
+      <li>To <strong>maintain</strong> weight: eat around your TDEE.</li>
+      <li>To <strong>lose</strong> weight: target ~10–20% below TDEE (e.g., -300 to -700 kcal/day depending on goals).</li>
+      <li>To <strong>gain</strong> weight: target ~10–20% above TDEE.</li>
     </ul>
+    <p><em>Example:</em> BMR = 1500 kcal; activity factor 1.55 → TDEE ≈ 2325 kcal/day. → ~2300 kcal maintain, ~1800 kcal deficit for weight loss, ~2600 kcal surplus for muscle gain.</p>
 
-    <h2>2️⃣ Daily Calorie Needs by Goal</h2>
-    <table>
-      <tr><th>Goal</th><th>Strategy</th><th>Approx. Adjustment</th></tr>
-      <tr><td>Maintain Weight</td><td>Eat around your TDEE</td><td>0 kcal</td></tr>
-      <tr><td>Lose Weight</td><td>Calorie deficit</td><td>−300 to −500 kcal</td></tr>
-      <tr><td>Gain Weight</td><td>Calorie surplus</td><td>+300 to +500 kcal</td></tr>
-    </table>
+    <div class="tip">
+      💡 Use the <a href="https://convertlabs.online/tools/calorie-calculator.html" style="color:#1e3a8a;font-weight:600;">Calorie Calculator</a> to estimate calories per food and plan meals to meet your daily target.
+    </div>
 
-    <h2>Recommended Daily Calorie Intake</h2>
-    <table>
-      <tr><th>Group</th><th>Activity Level</th><th>Calories / Day</th></tr>
-      <tr><td>Women 19–30</td><td>Sedentary – Active</td><td>1,800 – 2,400</td></tr>
-      <tr><td>Men 19–30</td><td>Sedentary – Active</td><td>2,400 – 3,000</td></tr>
-      <tr><td>Women 31–50</td><td>Sedentary – Active</td><td>1,800 – 2,200</td></tr>
-      <tr><td>Men 31–50</td><td>Sedentary – Active</td><td>2,200 – 3,000</td></tr>
-      <tr><td>Older Adults</td><td>Sedentary – Active</td><td>1,600 – 2,400</td></tr>
-    </table>
-
-    <p><strong>Summary:</strong> Most women need ~2,000 kcal/day; most men need ~2,500 kcal/day to maintain weight.</p>
+    <h2>2️⃣ How to Balance Your Macros</h2>
+    <ul>
+      <li><strong>Carbs:</strong> 45–55% of total calories</li>
+      <li><strong>Protein:</strong> 20–30% of total calories</li>
+      <li><strong>Fat:</strong> 25–35% of total calories</li>
+    </ul>
 
     <h2>3️⃣ What to Eat for Your Goal</h2>
     <ul>
       <li><strong>Lose weight:</strong> Lean proteins, vegetables, whole grains, olive oil.</li>
       <li><strong>Gain weight:</strong> Oats, nut butter, avocados, rice, full-fat dairy.</li>
-      <li><strong>Maintain:</strong> Balanced mix: 45–55% carbs, 20–30% protein, 25–35% fats.</li>
+      <li><strong>Maintain:</strong> Balanced mix (45–55% carbs, 20–30% protein, 25–35% fat).</li>
     </ul>
 
-    <a href="https://convertlabs.online/tools/calorie-calculator.html" class="back-btn">← Back to Calorie Calculator</a>
+    <!-- KEEP this exact blue button users rely on -->
+    <a href="https://convertlabs.online/tools/calorie-calculator.html" class="button-blue">← Back to Calorie Calculator</a>
   </main>
 
   <!-- Footer -->
-  <footer class="footer" role="contentinfo">
-    <div class="footer-brand">
-      <img src="https://convertlabs.online/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
-      <span class="footer-text">Convert Labs</span>
+  <footer class="footer">
+    <div style="margin-bottom:8px;">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:38px;height:38px;vertical-align:middle;margin-right:8px;background:#fff;padding:4px;border-radius:6px;">
+      <span style="font-weight:700;vertical-align:middle;">Convert Labs</span>
     </div>
-    <p>© 2025 Convert Labs. All rights reserved.</p>
-    <nav class="footer-links" aria-label="Footer">
+    <p style="margin:6px 0 8px 0;">© 2025 Convert Labs. All rights reserved.</p>
+    <div>
       <a href="https://convertlabs.online/about.html">About</a> |
       <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
       <a href="https://convertlabs.online/guides.html">Blog</a> |
       <a href="https://convertlabs.online/privacy.html">Privacy</a> |
       <a href="https://convertlabs.online/disclaimer.html">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html">Terms of Use</a> |
+      <a href="https://convertlabs.online/terms.html">Terms</a> |
       <a href="https://convertlabs.online/contact.html">Contact</a>
-    </nav>
+    </div>
   </footer>
 
+  <!-- Theme toggle persistence -->
   <script>
-    const themeBtn = document.getElementById("themeToggle");
-    themeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-    });
-    if (localStorage.getItem("theme") === "dark") {
-      document.body.classList.add("dark");
-      themeBtn.textContent = "☀️";
-    }
+    (function(){
+      const btn = document.getElementById('themeToggle');
+      function setTheme(mode){
+        document.body.classList.toggle('dark', mode === 'dark');
+        btn.textContent = mode === 'dark' ? '☀️' : '🌙';
+        try { localStorage.setItem('cl_theme', mode); } catch(e){}
+      }
+      try {
+        const saved = localStorage.getItem('cl_theme');
+        if(saved) setTheme(saved);
+        else {
+          const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          setTheme(prefers ? 'dark' : 'light');
+        }
+      } catch(e){ setTheme('light'); }
+      btn.addEventListener('click', () => {
+        const dark = document.body.classList.contains('dark');
+        setTheme(dark ? 'light' : 'dark');
+      });
+    })();
   </script>
 </body>
 </html>
