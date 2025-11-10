@@ -3,35 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Calorie Calculator — Check Calories, Protein, Fat & Carbs | Convert Labs</title>
-<meta name="description" content="Find calories, protein, carbs, fat and sugar in thousands of foods with Convert Labs' free Calorie Calculator — powered by USDA nutrition data.">
+  <title>Convert Labs — Smart Online Converters & Everyday Calculators</title>
 
-
-  <!-- ✅ SEO META -->
-  <meta name="description" content="Convert Labs is your all-in-one online converter hub. Instantly convert units, currencies, calories, and more with accurate results — plus educational guides explaining how conversions work." />
-  <meta name="keywords" content="unit converter, kitchen converter, temperature converter, currency converter, volume calculator, calorie calculator, Convert Labs, online tools" />
+  <!-- ✅ Primary Meta Tags -->
+  <meta name="description" content="Convert Labs is your smart hub for everyday calculations. Instantly convert units, currencies, calories, and more with accurate results — plus easy guides explaining how conversions work." />
+  <meta name="keywords" content="unit converter, kitchen converter, temperature converter, currency converter, calorie calculator, volume calculator, Convert Labs, online tools" />
   <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://convertlabs.online/" />
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
 
-  <!-- ✅ OPEN GRAPH -->
-  <meta property="og:title" content="Convert Labs — Smart & Accurate Online Converters" />
-  <meta property="og:description" content="Explore smart, free tools for everyday use — from temperature and volume conversions to kitchen, calorie, and currency calculators. Learn and calculate instantly." />
+  <!-- ✅ Open Graph (Facebook, LinkedIn, etc.) -->
+  <meta property="og:title" content="Convert Labs — Smart Online Converters & Everyday Calculators" />
+  <meta property="og:description" content="Your smart hub for unit, currency, calorie, and kitchen conversions — accurate, fast, and free. Explore Convert Labs today!" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://convertlabs.online/" />
-  <meta property="og:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <meta property="og:image:alt" content="Convert Labs logo icon" />
+  <meta property="og:image" content="https://convertlabs.online/assets/convertlabs-banner.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Convert Labs — Your Smart Hub for Everyday Calculations" />
   <meta property="og:site_name" content="Convert Labs" />
   <meta property="og:locale" content="en_US" />
 
-  <!-- ✅ TWITTER -->
+  <!-- ✅ Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Convert Labs — Smart & Accurate Online Converters" />
-  <meta name="twitter:description" content="Free online converters with educational guides. Convert units, currency, and calories instantly with Convert Labs." />
-  <meta name="twitter:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
-
-  <link rel="canonical" href="https://convertlabs.online/" />
-  <link rel="icon" href="assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-  <link rel="stylesheet" href="style.css" />
+  <meta name="twitter:title" content="Convert Labs — Smart Online Converters & Everyday Calculators" />
+  <meta name="twitter:description" content="Convert Labs helps you convert units, currencies, and calories instantly — accurate, simple, and fast." />
+  <meta name="twitter:image" content="https://convertlabs.online/assets/convertlabs-banner.jpg" />
 
   <!-- ✅ Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
@@ -45,27 +43,34 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- ✅ STRUCTURED DATA -->
+  <!-- ✅ Structured Data (JSON-LD Schema) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Convert Labs",
     "url": "https://convertlabs.online/",
+    "description": "Convert Labs provides smart and accurate online converters — including unit, currency, and calorie calculators.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Convert Labs",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://convertlabs.online/assets/convert-labs-icon.png"
+      }
+    },
     "potentialAction": {
       "@type": "SearchAction",
       "target": "https://convertlabs.online/search?q={search_term_string}",
       "query-input": "required name=search_term_string"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Convert Labs",
-      "logo": "https://convertlabs.online/assets/convert-labs-icon.png"
     }
   }
   </script>
 
-  <!-- ✅ STYLE FIXES -->
+  <!-- ✅ CSS -->
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
+
+  <!-- ✅ Inline Navbar & Footer Styles -->
   <style>
     header.navbar {
       background: #1e40af;
@@ -102,7 +107,8 @@
       font-weight: 500;
       transition: opacity 0.2s;
     }
-    .nav-links a:hover, .nav-links .active {
+    .nav-links a:hover,
+    .nav-links .active {
       opacity: 0.8;
     }
     .theme-toggle {
@@ -113,19 +119,23 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
-    .theme-toggle:hover { transform: scale(1.2); }
-
+    .theme-toggle:hover {
+      transform: scale(1.2);
+    }
     main { padding-top: 1rem; }
-
     .hero {
       text-align: center;
       padding: 3rem 1rem;
       max-width: 900px;
       margin: auto;
     }
-    .intro { line-height: 1.7; margin-bottom: 1rem; }
-
-    .features, .tools-preview, .updates {
+    .intro {
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .features,
+    .tools-preview,
+    .updates {
       max-width: 1000px;
       margin: 2rem auto;
       padding: 1rem;
@@ -150,14 +160,19 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.08);
     }
     footer.footer {
-      background: #1e40af;
+      background: #1e3a8a; /* darker blue for strong footer contrast */
       color: #fff;
       text-align: center;
       padding: 2rem 1rem;
       margin-top: 3rem;
     }
-    footer.footer a { color: #fff; text-decoration: none; }
-    footer.footer a:hover { text-decoration: underline; }
+    footer.footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+    footer.footer a:hover {
+      text-decoration: underline;
+    }
     .footer-brand {
       display: flex;
       justify-content: center;
@@ -279,6 +294,7 @@
   <script src="script.js" defer></script>
 </body>
 </html>
+
 
 
 
