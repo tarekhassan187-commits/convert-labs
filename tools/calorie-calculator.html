@@ -381,6 +381,75 @@ body.dark .footer-links a {
 body.dark .footer-links a:hover {
   color: #93c5fd !important;
 }
+/* ===========================
+   🌞 LIGHT MODE THEME FIX
+   =========================== */
+
+/* Header + Footer unified color (Dark Blue Theme) */
+body:not(.dark) header.navbar,
+body:not(.dark) .navbar {
+  background-color: #1e3a8a !important; /* Dark Convert Labs Blue */
+  color: #ffffff !important;
+}
+
+body:not(.dark) footer.footer,
+body:not(.dark) .footer {
+  background-color: #1e3a8a !important;
+  color: #ffffff !important;
+  text-align: center;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Links in Navbar */
+body:not(.dark) .nav-links a {
+  color: #f1f5f9 !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+body:not(.dark) .nav-links a:hover {
+  color: #ffffff !important;
+}
+
+/* Footer links */
+body:not(.dark) .footer-links a {
+  color: #bfdbfe !important; /* Light blue */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+body:not(.dark) .footer-links a:hover {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+/* Brand text color fix */
+body:not(.dark) .brand-text,
+body:not(.dark) .footer-text {
+  color: #ffffff !important;
+}
+
+/* ===========================
+   🌙 DARK MODE THEME FIX
+   =========================== */
+body.dark header.navbar,
+body.dark .navbar {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark footer.footer,
+body.dark .footer {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark .footer-links a {
+  color: #60a5fa !important;
+}
+body.dark .footer-links a:hover {
+  color: #93c5fd !important;
+}
 
   </style>
 </head>
@@ -788,6 +857,7 @@ body.dark .footer-links a:hover {
   </script>
 </body>
 </html>
+
 
 
 
