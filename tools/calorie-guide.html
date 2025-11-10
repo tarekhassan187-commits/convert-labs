@@ -23,7 +23,7 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P', { debug_mode: true });
+    gtag('config', 'G-Z88B03WV7P');
   </script>
 
   <!-- ✅ Breadcrumb JSON-LD -->
@@ -41,78 +41,105 @@
 
   <style>
     /* ---------- Base / Light Theme ---------- */
-    :root {
-      --accent: #2563eb;
-      --card-bg: #fff;
-      --page-bg: #f8fafc;
-      --text: #111827;
-      --muted: #6b7280;
-    }
-
-    html,body { margin:0; padding:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--page-bg); color:var(--text); }
-
-    .navbar { background: white; border-bottom: 1px solid #e6edf3; position:sticky; top:0; z-index:50; }
-    .nav-container { max-width:1100px; margin:0 auto; display:flex; gap:20px; align-items:center; padding:10px 16px; }
-    .logo .logo-img { width:36px; height:36px; vertical-align:middle; }
-    .brand-text { margin-left:8px; font-weight:600; color:var(--accent); }
-    .nav-links ul { list-style:none; margin:0; padding:0; display:flex; gap:12px; align-items:center; }
-    .nav-links a { text-decoration:none; color:var(--text); padding:6px 8px; border-radius:6px; }
-    .nav-links a.active { color:var(--accent); font-weight:600; }
-
     main.guide-page {
       max-width: 900px;
       margin: 120px auto 60px;
       padding: 2rem 1.5rem;
-      background: var(--card-bg);
+      background: #fff;
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.06);
       line-height: 1.6;
+      transition: background 0.3s, color 0.3s;
     }
-    h1, h2, h3 { color: var(--accent); margin-top:0.8rem; }
-    p { color: var(--text); }
-    table { width: 100%; border-collapse: collapse; margin: 1rem 0; background: transparent; }
+
+    h1, h2, h3 {
+      color: #2563eb;
+      transition: color 0.3s;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
     table, th, td { border: 1px solid #ddd; }
     th, td { padding: 10px; text-align: left; }
-    th { background: #f3f4f6; color: #111827; }
-    .back-btn { display:inline-block; margin: 2rem 0 0; padding: 10px 20px; background: var(--accent); color: white; border-radius: 8px; text-decoration: none; transition: background 0.3s; }
+    th { background: #f3f4f6; }
+
+    .back-btn {
+      display: inline-block;
+      margin: 2rem 0 0;
+      padding: 10px 20px;
+      background: #2563eb;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
     .back-btn:hover { background: #1d4ed8; }
 
-    footer.footer { margin-top: 30px; padding: 18px 0; background: transparent; color: var(--muted); }
-    .footer-brand { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-    .footer-links a { color: var(--muted); text-decoration:none; }
-
-    /* Transitions for theme change */
-    body, main.guide-page, .nav-container, footer { transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease; }
-
-    /* Responsive */
-    @media (max-width:700px) {
+    @media (max-width: 700px) {
       main.guide-page { margin: 100px 15px; padding: 1.5rem; }
       table { font-size: 0.95rem; }
-      .nav-links { display:none; }
     }
 
-    /* ---------- Dark Mode (when body.dark is present) ---------- */
-    body.dark { background-color: #0b1220; color: #e6eefb; --text: #e6eefb; --muted: #9aa6bf; --card-bg: #111827; --accent: #60a5fa; }
-    body.dark .navbar { background: #071024; border-bottom-color: rgba(255,255,255,0.03); }
+    /* ---------- 🌙 Dark Mode ---------- */
+    body.dark {
+      background-color: #0b1220 !important;
+      color: #e6eefb !important;
+      transition: background 0.3s, color 0.3s;
+    }
+
     body.dark main.guide-page {
-      background: #0f1724;
-      color: #e6eefb;
-      box-shadow: 0 6px 24px rgba(2,6,23,0.7);
+      background: #1e293b !important;
+      color: #f1f5f9 !important;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
     }
-    body.dark h1, body.dark h2, body.dark h3 { color: var(--accent); }
-    body.dark th { background: #0e243d; color: #e6eefb; }
-    body.dark table, body.dark td { border-color: #213047; }
-    body.dark .back-btn { background: #2563eb; }
-    body.dark footer.footer { background: transparent; color: var(--muted); }
-    body.dark .footer-links a { color: #93c5fd; }
 
-    /* small utilities */
-    .muted { color: var(--muted); font-size:0.95rem; }
+    body.dark h1, body.dark h2, body.dark h3 {
+      color: #60a5fa !important;
+    }
+
+    body.dark th {
+      background: #334155 !important;
+      color: #f8fafc !important;
+    }
+    body.dark td { border-color: #475569 !important; }
+
+    body.dark .navbar {
+      background: #0f172a !important;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    body.dark .nav-links a {
+      color: #e2e8f0 !important;
+    }
+
+    body.dark .nav-links a.active {
+      color: #60a5fa !important;
+    }
+
+    body.dark .back-btn {
+      background: #3b82f6 !important;
+    }
+
+    body.dark .back-btn:hover {
+      background: #2563eb !important;
+    }
+
+    body.dark .footer {
+      background: #0f172a !important;
+      color: #f1f5f9 !important;
+    }
+
+    body.dark .footer a {
+      color: #93c5fd !important;
+    }
   </style>
 </head>
 
 <body>
-  <!-- Header -->
+  <!-- ✅ Header -->
   <header class="navbar">
     <div class="nav-container">
       <div class="logo">
@@ -134,7 +161,7 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- ✅ Main Content -->
   <main class="guide-page">
     <h1>Calorie & Nutrition Guide</h1>
     <p>
@@ -144,152 +171,65 @@
     </p>
 
     <h2>1️⃣ How to Calculate Your Daily Calorie Needs</h2>
-    <p>
-      Your daily calorie needs depend on age, gender, weight, height, and activity level.
-      To estimate this, you can use the <strong>Mifflin–St Jeor equation</strong>:
-    </p>
-
     <ul>
       <li><strong>Men:</strong> BMR = 88.36 + (13.4 × weight in kg) + (4.8 × height in cm) − (5.7 × age)</li>
       <li><strong>Women:</strong> BMR = 447.6 + (9.2 × weight in kg) + (3.1 × height in cm) − (4.3 × age)</li>
     </ul>
 
-    <p>
-      Then, multiply your BMR by an <strong>Activity Factor</strong> to estimate your
-      <strong>Total Daily Energy Expenditure (TDEE)</strong>:
-    </p>
-
     <ul>
       <li><strong>Sedentary (little or no exercise):</strong> BMR × 1.2</li>
-      <li><strong>Lightly active (1–3 days/week):</strong> BMR × 1.375</li>
-      <li><strong>Moderately active (3–5 days/week):</strong> BMR × 1.55</li>
-      <li><strong>Very active (6–7 days/week):</strong> BMR × 1.725</li>
-      <li><strong>Extra active (intense training):</strong> BMR × 1.9</li>
+      <li><strong>Lightly active:</strong> BMR × 1.375</li>
+      <li><strong>Moderately active:</strong> BMR × 1.55</li>
+      <li><strong>Very active:</strong> BMR × 1.725</li>
+      <li><strong>Extra active:</strong> BMR × 1.9</li>
     </ul>
 
     <h2>2️⃣ Daily Calorie Needs by Goal</h2>
     <table>
-      <tr>
-        <th>Goal</th>
-        <th>Strategy</th>
-        <th>Approx. Adjustment</th>
-      </tr>
-      <tr>
-        <td>Maintain Weight</td>
-        <td>Eat around your TDEE</td>
-        <td>0 kcal difference</td>
-      </tr>
-      <tr>
-        <td>Lose Weight</td>
-        <td>Create a calorie deficit</td>
-        <td>−300 to −500 kcal/day</td>
-      </tr>
-      <tr>
-        <td>Gain Weight</td>
-        <td>Create a calorie surplus</td>
-        <td>+300 to +500 kcal/day</td>
-      </tr>
+      <tr><th>Goal</th><th>Strategy</th><th>Approx. Adjustment</th></tr>
+      <tr><td>Maintain Weight</td><td>Eat around your TDEE</td><td>0 kcal</td></tr>
+      <tr><td>Lose Weight</td><td>Calorie deficit</td><td>−300 to −500 kcal</td></tr>
+      <tr><td>Gain Weight</td><td>Calorie surplus</td><td>+300 to +500 kcal</td></tr>
     </table>
 
-    <h2>Recommended Daily Calorie Intake for Healthy Adults</h2>
-    <p class="muted">
-      While your exact needs depend on age, size, and activity, most health organizations — including
-      the <strong>World Health Organization (WHO)</strong> and the <strong>U.S. Dietary Guidelines</strong> —
-      suggest the following average calorie ranges to maintain weight:
-    </p>
-
+    <h2>Recommended Daily Calorie Intake</h2>
     <table>
-      <tr>
-        <th>Group</th>
-        <th>Activity Level</th>
-        <th>Approx. Calories / Day</th>
-      </tr>
-      <tr>
-        <td>Adult Women (19–30 yrs)</td>
-        <td>Sedentary – Active</td>
-        <td>1,800 – 2,400 kcal</td>
-      </tr>
-      <tr>
-        <td>Adult Men (19–30 yrs)</td>
-        <td>Sedentary – Active</td>
-        <td>2,400 – 3,000 kcal</td>
-      </tr>
-      <tr>
-        <td>Women (31–50 yrs)</td>
-        <td>Sedentary – Active</td>
-        <td>1,800 – 2,200 kcal</td>
-      </tr>
-      <tr>
-        <td>Men (31–50 yrs)</td>
-        <td>Sedentary – Active</td>
-        <td>2,200 – 3,000 kcal</td>
-      </tr>
-      <tr>
-        <td>Older Adults (51+ yrs)</td>
-        <td>Sedentary – Active</td>
-        <td>1,600 – 2,400 kcal</td>
-      </tr>
+      <tr><th>Group</th><th>Activity Level</th><th>Calories / Day</th></tr>
+      <tr><td>Women 19–30</td><td>Sedentary – Active</td><td>1,800 – 2,400</td></tr>
+      <tr><td>Men 19–30</td><td>Sedentary – Active</td><td>2,400 – 3,000</td></tr>
+      <tr><td>Women 31–50</td><td>Sedentary – Active</td><td>1,800 – 2,200</td></tr>
+      <tr><td>Men 31–50</td><td>Sedentary – Active</td><td>2,200 – 3,000</td></tr>
+      <tr><td>Older Adults</td><td>Sedentary – Active</td><td>1,600 – 2,400</td></tr>
     </table>
 
-    <p class="muted">
-      <strong>Quick Summary:</strong><br>
-      • The average healthy adult woman needs around <strong>2,000 calories per day</strong> to maintain weight.<br>
-      • The average healthy adult man needs around <strong>2,500 calories per day</strong> to maintain weight.<br>
-      These values assume moderate activity and can vary with lifestyle, metabolism, and body composition.
-    </p>
+    <p><strong>Summary:</strong> Most women need ~2,000 kcal/day; most men need ~2,500 kcal/day to maintain weight.</p>
 
     <h2>3️⃣ What to Eat for Your Goal</h2>
     <ul>
-      <li><strong>For Weight Loss:</strong> Choose lean proteins (chicken, fish, eggs), vegetables, whole grains, and healthy fats (olive oil, nuts). Avoid sugary drinks and ultra-processed foods.</li>
-      <li><strong>For Weight Gain:</strong> Add calorie-dense, nutritious foods such as oats, nut butters, avocados, whole milk, rice, and starchy vegetables, while keeping protein high.</li>
-      <li><strong>For Maintenance:</strong> Aim for a balanced mix: 45–55% carbs, 20–30% protein, 25–35% fats.</li>
+      <li><strong>Lose weight:</strong> Lean proteins, vegetables, whole grains, olive oil.</li>
+      <li><strong>Gain weight:</strong> Oats, nut butter, avocados, rice, full-fat dairy.</li>
+      <li><strong>Maintain:</strong> Balanced mix: 45–55% carbs, 20–30% protein, 25–35% fats.</li>
     </ul>
 
-    <p><em>Note:</em> These are general guidelines — always consult a certified dietitian for personalized nutrition advice.</p>
-
-    <!-- Back to Calculator Button -->
     <a href="https://convertlabs.online/tools/calorie-calculator.html" class="back-btn">← Back to Calorie Calculator</a>
   </main>
 
-  <!-- Footer -->
+  <!-- ✅ Footer -->
   <footer class="footer">
-    <div class="footer-brand">
-      <img src="/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" style="width:30px;height:30px"/>
-      <span class="footer-text muted">Convert Labs</span>
-    </div>
-    <p class="muted">© 2025 Convert Labs. All rights reserved.</p>
-    <nav class="footer-links muted">
-      <a href="https://convertlabs.online/about.html">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
-      <a href="https://convertlabs.online/guides.html">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html">Terms</a> |
-      <a href="https://convertlabs.online/contact.html">Contact</a>
-    </nav>
+    <p>© 2025 Convert Labs. All rights reserved.</p>
   </footer>
 
   <script>
-    // Theme toggle — toggles body.dark
-    (function(){
-      const themeBtn = document.getElementById("themeToggle");
-      if (!themeBtn) return;
-      themeBtn.addEventListener("click", () => {
-        document.body.classList.toggle("dark");
-        themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-        // store preference in localStorage so it persists
-        try { localStorage.setItem('cl_theme_dark', document.body.classList.contains('dark') ? '1' : '0'); } catch(e){}
-      });
-
-      // restore preference on load
-      try {
-        const pref = localStorage.getItem('cl_theme_dark');
-        if (pref === '1') {
-          document.body.classList.add('dark');
-          if (themeBtn) themeBtn.textContent = "☀️";
-        }
-      } catch(e){}
-    })();
+    const themeBtn = document.getElementById("themeToggle");
+    themeBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      themeBtn.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+    });
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark");
+      themeBtn.textContent = "☀️";
+    }
   </script>
 </body>
 </html>
