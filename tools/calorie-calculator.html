@@ -328,17 +328,19 @@ body:not(.dark) .footer-links a:hover {
 body:not(.dark) .footer-text {
   color: #1e293b !important;
 }
-/* ☀️ Light Mode Footer Styling */
+/* ☀️ Light Mode Footer Styling (Dark Blue Theme) */
 body:not(.dark) footer.footer,
 body:not(.dark) .footer {
-  background-color: #2563eb !important;  /* Convert Labs blue */
+  background-color: #1e3a8a !important;  /* Dark Convert Labs Blue */
   color: #ffffff !important;              /* White text */
   text-align: center;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 body:not(.dark) .footer-links a {
-  color: #bfdbfe !important;              /* Light blue links for contrast */
+  color: #bfdbfe !important;              /* Lighter blue links */
   text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 body:not(.dark) .footer-links a:hover {
@@ -349,6 +351,22 @@ body:not(.dark) .footer-links a:hover {
 body:not(.dark) .footer-text {
   color: #ffffff !important;
 }
+
+/* 🌙 Dark Mode Footer Styling */
+body.dark footer.footer,
+body.dark .footer {
+  background-color: #0f172a !important;   /* Deep navy */
+  color: #e2e8f0 !important;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+body.dark .footer-links a {
+  color: #60a5fa !important;
+}
+body.dark .footer-links a:hover {
+  color: #93c5fd !important;
+}
+
 
 /* 🌙 Dark Mode Footer Styling */
 body.dark footer.footer,
@@ -770,6 +788,7 @@ body.dark .footer-links a:hover {
   </script>
 </body>
 </html>
+
 
 
 
