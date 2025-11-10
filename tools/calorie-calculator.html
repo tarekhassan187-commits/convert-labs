@@ -7,7 +7,6 @@
 
   <!-- ✅ Primary SEO -->
   <meta name="description" content="Find calories, protein, carbs, fat, and sugar in thousands of foods with Convert Labs' free Calorie Calculator — powered by USDA nutrition data." />
-  <meta name="keywords" content="calorie calculator, nutrition calculator, calorie counter, protein calculator, fat calculator, Convert Labs, food calories" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://convertlabs.online/tools/calorie-calculator.html" />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
@@ -21,42 +20,7 @@
   <meta property="og:image" content="https://convertlabs.online/assets/convertlabs-banner.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Convert Labs Calorie Calculator" />
   <meta property="og:site_name" content="Convert Labs" />
-
-  <!-- ✅ Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Calorie Calculator — Find Calories & Nutrition Info | Convert Labs" />
-  <meta name="twitter:description" content="Quickly estimate calories, protein, carbs, fat, and sugar for thousands of foods using Convert Labs’ USDA-powered calorie calculator." />
-  <meta name="twitter:image" content="https://convertlabs.online/assets/convertlabs-banner.jpg" />
-
-  <!-- ✅ Breadcrumb Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://convertlabs.online/" },
-      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://convertlabs.online/tools/tools.html" },
-      { "@type": "ListItem", "position": 3, "name": "Calorie Calculator" }
-    ]
-  }
-  </script>
-
-  <!-- ✅ SoftwareApplication Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Convert Labs Calorie Calculator",
-    "operatingSystem": "All",
-    "applicationCategory": "WebApplication",
-    "url": "https://convertlabs.online/tools/calorie-calculator.html",
-    "description": "Free calorie calculator that estimates calories, protein, carbs, fat, and sugar for thousands of foods using official USDA data.",
-    "creator": { "@type": "Organization", "name": "Convert Labs" },
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "231" }
-  }
-  </script>
 
   <!-- ✅ AdSense & Analytics -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
@@ -68,11 +32,128 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- ✅ Main stylesheet -->
   <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
   <style>
-    /* ✅ your entire CSS block (unchanged) */
+    /* ===============================
+       🧩 Layout & Form Styling
+    =============================== */
+    .calculator-container {
+      max-width: 900px;
+      margin: 120px auto;
+      padding: 2rem;
+      background: var(--card-bg, #fff);
+      border-radius: 12px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.06);
+    }
+
+    h1 { color: #1e3a8a; }
+
+    input[type="text"], input[type="number"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      margin-top: 8px;
+      box-sizing: border-box;
+    }
+
+    #foodInput {
+      width: 70%;
+      margin-right: 8px;
+    }
+
+    #searchBtn {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #searchBtn:hover { background: #1e40af; }
+
+    .serving-input {
+      margin-top: 1.4rem;
+    }
+
+    .serving-input input {
+      width: 150px;
+      padding: 8px;
+    }
+
+    /* ===============================
+       🔍 Suggestion Dropdown
+    =============================== */
+    .suggestions {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 70%;
+      margin-top: 6px;
+      text-align: left;
+      max-height: 280px;
+      overflow-y: auto;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .suggestions div {
+      padding: 10px 14px;
+      cursor: pointer;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .suggestions div:hover {
+      background: #eff6ff;
+    }
+
+    .show-more {
+      background: #2563eb;
+      color: #fff;
+      text-align: center;
+      font-weight: 500;
+      border-radius: 0 0 10px 10px;
+      padding: 10px;
+      cursor: pointer;
+      transition: background 0.25s ease;
+    }
+
+    .show-more:hover { background: #1e40af; }
+
+    /* ===============================
+       📊 Result Card
+    =============================== */
+    .result-card {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1.2rem;
+    }
+
+    .chart-container {
+      height: 240px;
+      margin-top: 8px;
+    }
+
+    /* Dark mode */
+    body.dark .suggestions {
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+
+    body.dark .show-more {
+      background: #3b82f6;
+    }
+    body.dark .show-more:hover {
+      background: #2563eb;
+    }
   </style>
 </head>
 
@@ -86,13 +167,13 @@
           <span style="font-weight:700;margin-left:6px;color:inherit">Convert Labs</span>
         </a>
       </div>
-      <nav class="nav-links" aria-label="Main navigation">
+      <nav class="nav-links">
         <ul style="display:flex;gap:18px;list-style:none;margin:0;padding:0">
-          <li><a href="https://convertlabs.online/index.html">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/tools/tools.html" class="active">Tools</a></li>
+          <li><a href="/guides.html">Blog</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
         </ul>
       </nav>
       <button id="themeToggle" class="theme-toggle" title="Toggle theme">🌙</button>
@@ -117,195 +198,113 @@
       </div>
 
       <div id="resultContainer"></div>
-
-      <section id="dailySummary" class="result-card" style="display:none;">
-        <h3>Daily Summary</h3>
-        <div id="dailyTotals"></div>
-        <button id="clearAllBtn" style="margin-top:12px;background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;">Clear All</button>
-      </section>
-
-      <div class="about-section" style="margin-top:1.2rem">
-        <h2>About This Tool</h2>
-        <p>This calorie calculator retrieves real food data from the official USDA nutrient database (2021–2023 FNDDS). Each result includes the energy (kcal) and macronutrients per 100 g of edible portion.</p>
-        <ul>
-          <li>⚡ <strong>Calories (kcal)</strong> — energy per 100 g</li>
-          <li>🍗 <strong>Protein</strong> — grams of protein</li>
-          <li>🥖 <strong>Carbs</strong> — grams of carbohydrate</li>
-          <li>🥑 <strong>Fat</strong> — grams of total fat</li>
-          <li>🍯 <strong>Sugar</strong> — grams of total sugars</li>
-        </ul>
-      </div>
-
-      <hr style="margin-top:18px;border:none;border-top:1px solid rgba(0,0,0,0.06)">
-      <p style="margin-top:10px">
-        Want to understand daily calorie needs and meal plans?
-        <a href="https://convertlabs.online/tools/calorie-guide.html">Read our full Calorie & Nutrition Guide →</a>
-      </p>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer" role="contentinfo">
-    <div class="footer-brand">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="footer-logo" />
-      <span class="footer-text">Convert Labs</span>
-    </div>
-    <p>© 2025 Convert Labs. All rights reserved.</p>
-    <nav class="footer-links" aria-label="Footer">
-      <a href="https://convertlabs.online/about.html">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
-      <a href="https://convertlabs.online/guides.html">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html">Terms</a> |
-      <a href="https://convertlabs.online/contact.html">Contact</a>
-    </nav>
-  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
-  <!-- ✅ Theme toggle -->
   <script>
     const themeBtn = document.getElementById('themeToggle');
-    function setTheme(mode){
-      if(mode === 'dark'){
+    function setTheme(mode) {
+      if(mode==='dark'){
         document.body.classList.add('dark');
-        document.documentElement.classList.add('dark');
-        themeBtn.textContent = '☀️';
+        themeBtn.textContent='☀️';
       } else {
         document.body.classList.remove('dark');
-        document.documentElement.classList.remove('dark');
-        themeBtn.textContent = '🌙';
+        themeBtn.textContent='🌙';
       }
       localStorage.setItem('cl_theme', mode);
     }
     (function initTheme(){
       const saved = localStorage.getItem('cl_theme');
       if(saved) setTheme(saved);
-      else setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      else setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
     })();
-    themeBtn.addEventListener('click', ()=> setTheme(document.body.classList.contains('dark') ? 'light' : 'dark'));
+    themeBtn.addEventListener('click',()=>setTheme(document.body.classList.contains('dark')?'light':'dark'));
   </script>
 
-  <!-- ✅ Application Script -->
   <script>
   window.addEventListener("DOMContentLoaded", () => {
-    const foodInput = document.getElementById("foodInput");
-    const servingInput = document.getElementById("servingSize");
-    const suggestionsBox = document.getElementById("suggestions");
-    const resultContainer = document.getElementById("resultContainer");
-    const dailySummary = document.getElementById("dailySummary");
-    const dailyTotalsDiv = document.getElementById("dailyTotals");
-    const clearAllBtn = document.getElementById("clearAllBtn");
-    const searchBtn = document.getElementById("searchBtn");
+    const foodInput=document.getElementById("foodInput");
+    const searchBtn=document.getElementById("searchBtn");
+    const servingInput=document.getElementById("servingSize");
+    const suggestionsBox=document.getElementById("suggestions");
+    const resultContainer=document.getElementById("resultContainer");
 
-    let foodData = [], foodIndex = [], currentFood = null, chart = null;
-    let dailyTotals = { kcal:0, protein:0, carbs:0, fat:0, sugar:0 };
+    let foodData=[],foodIndex=[],currentFood=null,chart=null;
 
     Promise.all([
-      fetch("https://convertlabs.online/assets/usda_food_nutrition.json").then(r => r.json()).catch(()=>[]),
-      fetch("https://convertlabs.online/assets/extras-oriental-foods.json").then(r => r.json()).catch(()=>[]),
-      fetch("https://convertlabs.online/assets/foods-full.json").then(r => r.json()).catch(()=>[]),
-      fetch("https://convertlabs.online/assets/foods-lite.json").then(r => r.json()).catch(()=>[])
-    ]).then(arrays => {
-      const seen = new Set();
-      foodData = arrays.flat().filter(i => {
-        const key = (i.name || i.food || "").toLowerCase();
-        if(seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-      buildIndex(foodData);
+      fetch("/assets/usda_food_nutrition.json").then(r=>r.json()).catch(()=>[]),
+      fetch("/assets/extras-oriental-foods.json").then(r=>r.json()).catch(()=>[])
+    ]).then(arr=>{
+      foodData=arr.flat(); buildIndex(foodData);
     });
 
-    function normalizeText(s){ return String(s||"").normalize('NFKD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim(); }
-    function buildIndex(data){ foodIndex = data.map(i => ({ name:i.name||i.food||'', norm:normalizeText(i.name||i.food||''), original:i })); }
-    function scoreItem(q, i){ const n=i.norm; return n===q?100:n.startsWith(q)?85:n.includes(q)?60:0; }
-    function getSuggestions(q){ const qn=normalizeText(q); if(!qn) return []; return foodIndex.map(i=>({i,s:scoreItem(qn,i)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i); }
+    function normalize(s){return s.toLowerCase().trim();}
+    function buildIndex(data){foodIndex=data.map(i=>({name:i.name,norm:normalize(i.name),original:i}));}
+    function score(q,i){const n=i.norm;return n===q?100:n.startsWith(q)?80:n.includes(q)?60:0;}
+    function getSuggestions(q){q=normalize(q);if(!q)return[];return foodIndex.map(i=>({i,s:score(q,i)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.i);}
 
     function renderSuggestions(q){
-      const results = getSuggestions(q);
-      if(!results.length){ suggestionsBox.style.display='none'; return; }
-      let html = results.slice(0,20).map(r=>`<div>${r.name}</div>`).join('');
-      if(results.length>20) html += `<div class="show-more">🔍 Show all ${results.length} results for “${q}”</div>`;
+      const res=getSuggestions(q);
+      if(!res.length){suggestionsBox.style.display='none';return;}
+      let html=res.slice(0,20).map(r=>`<div>${r.name}</div>`).join('');
+      if(res.length>20) html+=`<div class="show-more">🔍 Show all ${res.length} results for “${q}”</div>`;
       suggestionsBox.innerHTML=html; suggestionsBox.style.display='block';
     }
 
-    function searchFood(){
-      const term = foodInput.value.trim().toLowerCase();
-      if(!term) return;
-      const match = foodData.find(f=>(f.name||'').toLowerCase()===term) || foodData.find(f=>(f.name||'').toLowerCase().includes(term));
-      if(!match){ resultContainer.innerHTML=`<p style="color:#b91c1c">❌ No results for <strong>${term}</strong>.</p>`; currentFood=null; if(chart)chart.destroy(); return;}
-      currentFood = match; displayResult(match);
-    }
-
-    searchBtn.addEventListener("click", searchFood);
-    foodInput.addEventListener("input", e => { const q=e.target.value.trim(); if(!q){suggestionsBox.style.display='none';return;} renderSuggestions(q); });
-    suggestionsBox.addEventListener("click", e=>{
-      if(e.target.classList.contains("show-more")) alert("Full results modal omitted for brevity.");
-      else if(e.target.tagName==="DIV"){ foodInput.value=e.target.textContent; suggestionsBox.style.display='none'; searchFood(); }
+    suggestionsBox.addEventListener("click",e=>{
+      if(e.target.classList.contains("show-more")) showFullResults(foodInput.value.trim());
+      else if(e.target.tagName==="DIV"){foodInput.value=e.target.textContent;suggestionsBox.style.display='none';searchFood();}
     });
 
-    function displayResult(food){
-      const serving=parseFloat(servingInput.value)||100, f=serving/100;
-      const scaled={ kcal:(food.kcal||0)*f, protein:(food.protein||0)*f, carbs:(food.carbs||0)*f, fat:(food.fat||0)*f, sugar:(food.sugar||0)*f };
-      resultContainer.innerHTML=`
-        <div class="result-card">
-          <h3>${food.name}</h3>
-          <p><strong>Serving Size:</strong> ${serving} g</p>
-          <p><strong>Calories:</strong> ${scaled.kcal.toFixed(1)} kcal</p>
-          <p><strong>Protein:</strong> ${scaled.protein.toFixed(1)} g</p>
-          <p><strong>Carbs:</strong> ${scaled.carbs.toFixed(1)} g</p>
-          <p><strong>Fat:</strong> ${scaled.fat.toFixed(1)} g</p>
-          <p><strong>Sugar:</strong> ${scaled.sugar.toFixed(1)} g</p>
-          <div class="chart-container"><canvas id="nutrientChart"></canvas></div>
-          <div style="margin-top:10px">
-            <button id="addToTotalBtn" style="background:#16a34a">Add to Daily Summary</button>
-            <button id="clearBtn" style="background:#dc2626">Clear</button>
-          </div>
-        </div>`;
-      drawChart(scaled);
-      document.getElementById("addToTotalBtn").onclick=()=>addToDailyTotal(scaled);
-      document.getElementById("clearBtn").onclick=()=>{foodInput.value='';resultContainer.innerHTML='';if(chart)chart.destroy();};
+    function showFullResults(q){
+      const res=getSuggestions(q);
+      const modal=document.createElement("div");
+      modal.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:2000;";
+      const box=document.createElement("div");
+      box.style.cssText="background:white;padding:20px;border-radius:12px;max-height:80vh;overflow:auto;width:600px;";
+      box.innerHTML=`<h3>All ${res.length} results for “${q}”</h3>`+res.map(r=>`<div style='padding:6px 0;border-bottom:1px solid #eee;cursor:pointer;'>${r.name}</div>`).join('');
+      const close=document.createElement("button");
+      close.textContent="Close"; close.style="margin-top:10px;padding:8px 14px;background:#2563eb;color:white;border:none;border-radius:8px;cursor:pointer;";
+      close.onclick=()=>document.body.removeChild(modal);
+      box.appendChild(close); modal.appendChild(box); document.body.appendChild(modal);
+      box.querySelectorAll("div").forEach(d=>d.onclick=()=>{foodInput.value=d.textContent;document.body.removeChild(modal);searchFood();});
+    }
+
+    foodInput.addEventListener("input",e=>{
+      const q=e.target.value.trim(); if(!q){suggestionsBox.style.display='none';return;} renderSuggestions(q);
+    });
+
+    searchBtn.addEventListener("click",searchFood);
+    function searchFood(){
+      const t=foodInput.value.toLowerCase();
+      const match=foodData.find(f=>(f.name||'').toLowerCase()===t)||foodData.find(f=>(f.name||'').toLowerCase().includes(t));
+      if(!match){resultContainer.innerHTML="<p style='color:red;'>No result found.</p>";return;}
+      currentFood=match; displayResult(match);
+    }
+
+    function displayResult(f){
+      const s=parseFloat(servingInput.value)||100, factor=s/100;
+      const val={kcal:f.kcal*factor,protein:f.protein*factor,carbs:f.carbs*factor,fat:f.fat*factor,sugar:f.sugar*factor};
+      resultContainer.innerHTML=`<div class='result-card'><h3>${f.name}</h3>
+      <p><strong>Serving Size:</strong> ${s} g</p>
+      <p><strong>Calories:</strong> ${val.kcal.toFixed(1)} kcal</p>
+      <p><strong>Protein:</strong> ${val.protein.toFixed(1)} g</p>
+      <p><strong>Carbs:</strong> ${val.carbs.toFixed(1)} g</p>
+      <p><strong>Fat:</strong> ${val.fat.toFixed(1)} g</p>
+      <p><strong>Sugar:</strong> ${val.sugar.toFixed(1)} g</p>
+      <div class='chart-container'><canvas id='nutrientChart'></canvas></div></div>`;
+      drawChart(val);
     }
 
     function drawChart(d){
       const ctx=document.getElementById("nutrientChart").getContext("2d");
       if(chart) chart.destroy();
-      const dark=document.body.classList.contains("dark"), color=dark?"#60a5fa":"#2563eb", text=dark?"#e6eef8":"#111";
-      chart=new Chart(ctx,{type:"bar",data:{labels:["Calories","Protein","Carbs","Fat","Sugar"],datasets:[{data:[d.kcal,d.protein,d.carbs,d.fat,d.sugar],backgroundColor:color,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:text}},y:{beginAtZero:true,ticks:{color:text}}}}});
+      chart=new Chart(ctx,{type:"bar",data:{labels:["Calories","Protein","Carbs","Fat","Sugar"],datasets:[{data:[d.kcal,d.protein,d.carbs,d.fat,d.sugar],backgroundColor:"#2563eb",borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
     }
 
-    servingInput.addEventListener("input",()=>{ if(currentFood) displayResult(currentFood); });
-
-    function addToDailyTotal(d){ for(const k in d) dailyTotals[k]+=d[k]||0; updateDailySummary(); }
-    function updateDailySummary(){
-      dailySummary.style.display='block';
-      dailyTotalsDiv.innerHTML=`
-        <p><strong>Calories:</strong> ${dailyTotals.kcal.toFixed(1)} kcal</p>
-        <p><strong>Protein:</strong> ${dailyTotals.protein.toFixed(1)} g</p>
-        <p><strong>Carbs:</strong> ${dailyTotals.carbs.toFixed(1)} g</p>
-        <p><strong>Fat:</strong> ${dailyTotals.fat.toFixed(1)} g</p>
-        <p><strong>Sugar:</strong> ${dailyTotals.sugar.toFixed(1)} g</p>`;
-    }
-
-    clearAllBtn.addEventListener("click", () => {
-      dailyTotals = { kcal: 0, protein: 0, carbs: 0, fat: 0, sugar: 0 };
-      dailySummary.style.display = "none";
-    });
-
-    // ✅ update chart colors when theme toggles
-    window.updateChartColors = function () {
-      if (!chart) return;
-      const dark = document.body.classList.contains("dark");
-      const barColor = dark ? "#60a5fa" : "#2563eb";
-      const textColor = dark ? "#e6eef8" : "#111";
-      chart.data.datasets[0].backgroundColor = barColor;
-      chart.options.scales.x.ticks.color = textColor;
-      chart.options.scales.y.ticks.color = textColor;
-      chart.update();
-    };
+    servingInput.addEventListener("input",()=>{if(currentFood) displayResult(currentFood);});
   });
   </script>
 </body>
