@@ -115,40 +115,110 @@
     <h2>1️⃣ How to Calculate Your BMR</h2>
     <p><strong>BMR (Basal Metabolic Rate)</strong> is the number of calories your body needs to maintain vital functions while at rest.</p>
 
-    <!-- ✅ Embedded BMR & TDEE Calculator -->
-    <section class="bmr-form">
-      <label>Gender:</label>
-      <div>
-        <label><input type="radio" name="gender" value="male" checked> Male</label>
-        <label><input type="radio" name="gender" value="female"> Female</label>
+    <!-- === Interactive BMR & TDEE Calculator === -->
+<section class="bmr-form">
+  <h3 style="margin-top:0;">Try It Yourself</h3>
+
+  <label>Gender:</label>
+  <div>
+    <label><input type="radio" name="gender" value="male" checked> Male</label>
+    <label><input type="radio" name="gender" value="female"> Female</label>
+  </div>
+
+  <label>Age (years):</label>
+  <input type="number" id="age" placeholder="e.g., 30" min="10" max="100">
+
+  <label>Height (cm):</label>
+  <input type="number" id="height" placeholder="e.g., 175" min="100" max="250">
+
+  <label>Weight (kg):</label>
+  <input type="number" id="weight" placeholder="e.g., 70" min="30" max="250">
+
+  <label>Activity Level:</label>
+  <select id="activity">
+    <option value="1.2">Sedentary (little or no exercise)</option>
+    <option value="1.375">Light activity (1–3 days/week)</option>
+    <option value="1.55">Moderate activity (3–5 days/week)</option>
+    <option value="1.725">Active (6–7 days/week)</option>
+    <option value="1.9">Very active (hard physical work or training)</option>
+  </select>
+
+  <button class="bmr-btn" id="calcBmrBtn">Calculate BMR & TDEE</button>
+
+  <div class="bmr-result" id="bmrResult">
+    <p><strong>BMR:</strong> <span id="bmrValue">–</span> kcal / day</p>
+    <p><strong>TDEE:</strong> <span id="tdeeValue">–</span> kcal / day</p>
+    <p id="tdeeNote"></p>
+
+    <!-- new goal selection -->
+    <div id="goalSection" style="margin-top:18px; display:none;">
+      <p><strong>What is your goal?</strong></p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="goal-btn" data-goal="lose">Lose Weight</button>
+        <button class="goal-btn" data-goal="maintain">Maintain Weight</button>
+        <button class="goal-btn" data-goal="gain">Gain Weight</button>
       </div>
+    </div>
 
-      <label>Age (years):</label>
-      <input type="number" id="age" placeholder="e.g., 30" min="10" max="100">
+    <div id="goalResult" style="margin-top:16px; display:none;"></div>
+  </div>
+</section>
 
-      <label>Height (cm):</label>
-      <input type="number" id="height" placeholder="e.g., 175" min="100" max="250">
+<script>
+document.getElementById("calcBmrBtn").addEventListener("click", () => {
+  const age = parseFloat(document.getElementById("age").value);
+  const h   = parseFloat(document.getElementById("height").value);
+  const w   = parseFloat(document.getElementById("weight").value);
+  const g   = document.querySelector('input[name="gender"]:checked').value;
+  const act = parseFloat(document.getElementById("activity").value);
 
-      <label>Weight (kg):</label>
-      <input type="number" id="weight" placeholder="e.g., 70" min="30" max="250">
+  if (!age || !h || !w) {
+    alert("Please enter valid age, height, and weight.");
+    return;
+  }
 
-      <label>Activity Level:</label>
-      <select id="activity">
-        <option value="1.2">Sedentary (little or no exercise)</option>
-        <option value="1.375">Light activity (1–3 days/week)</option>
-        <option value="1.55">Moderate activity (3–5 days/week)</option>
-        <option value="1.725">Active (6–7 days/week)</option>
-        <option value="1.9">Very active (hard physical work or training)</option>
-      </select>
+  const bmr = g === "male"
+    ? 10*w + 6.25*h - 5*age + 5
+    : 10*w + 6.25*h - 5*age - 161;
+  const tdee = bmr * act;
 
-      <button class="bmr-btn" id="calcBmrBtn">Calculate BMR & TDEE</button>
+  document.getElementById("bmrValue").textContent  = bmr.toFixed(0);
+  document.getElementById("tdeeValue").textContent = tdee.toFixed(0);
 
-      <div class="bmr-result" id="bmrResult">
-        <p><strong>BMR:</strong> <span id="bmrValue">–</span> kcal/day</p>
-        <p><strong>TDEE:</strong> <span id="tdeeValue">–</span> kcal/day</p>
-        <p id="tdeeNote"></p>
-      </div>
-    </section>
+  const note = tdee < 1800 ? "Your energy needs are relatively low — suitable for smaller or sedentary frames."
+        : tdee < 2500 ? "You have a moderate daily calorie requirement for weight maintenance."
+        : "You have a high energy need due to higher activity or larger body size.";
+  document.getElementById("tdeeNote").textContent = note;
+  document.getElementById("bmrResult").style.display = "block";
+  document.getElementById("goalSection").style.display = "block";
+  document.getElementById("goalResult").style.display = "none";
+});
+
+// === Goal Buttons ===
+document.querySelectorAll(".goal-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const tdee = parseFloat(document.getElementById("tdeeValue").textContent);
+    if (!tdee) return;
+    let target, msg;
+
+    if (btn.dataset.goal === "lose") {
+      target = tdee * 0.8;
+      msg = `To lose weight safely, aim for about <strong>${target.toFixed(0)} kcal/day</strong> (≈20% below your TDEE). Focus on protein-rich foods, vegetables, and a mild deficit.`;
+    } else if (btn.dataset.goal === "gain") {
+      target = tdee * 1.15;
+      msg = `To gain weight or build muscle, target around <strong>${target.toFixed(0)} kcal/day</strong> (≈15% above your TDEE). Include complex carbs and healthy fats.`;
+    } else {
+      target = tdee;
+      msg = `To maintain your weight, keep your intake around <strong>${target.toFixed(0)} kcal/day</strong>. Balance carbs, protein, and fats evenly.`;
+    }
+
+    const res = document.getElementById("goalResult");
+    res.innerHTML = msg;
+    res.style.display = "block";
+  });
+});
+</script>
+  </section>
 
     <h2>🔍 Understanding Your BMR Result</h2>
     <p>Your <strong>BMR</strong> shows the minimum energy your body burns each day, even if you are completely at rest.</p>
