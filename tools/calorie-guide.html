@@ -3,19 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calorie & Nutrition Guide — Convert Labs</title>
+  <title>Calorie & Nutrition Guide + BMR Calculator — Convert Labs</title>
 
   <!-- ✅ SEO -->
-  <meta name="description" content="Understand how to calculate your BMR and TDEE, interpret results, and use them to plan meals — with an interactive BMR & TDEE Calculator from Convert Labs." />
-  <meta name="keywords" content="BMR calculator, TDEE calculator, calorie guide, calorie calculator, Convert Labs, basal metabolic rate, daily energy expenditure" />
-  <meta name="robots" content="index, follow" />
+  <meta name="description" content="Understand and calculate your BMR, TDEE, and BMI to plan healthy meals. Interactive calculator with personalized calorie goals from Convert Labs." />
+  <meta name="keywords" content="BMR calculator, TDEE calculator, BMI, calorie guide, Convert Labs, nutrition guide, weight management" />
   <link rel="canonical" href="https://convertlabs.online/tools/calorie-guide.html" />
 
   <!-- ✅ Open Graph -->
   <meta property="og:site_name" content="Convert Labs" />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Calorie & Nutrition Guide + BMR Calculator — Convert Labs" />
-  <meta property="og:description" content="Learn how to calculate and understand your BMR and TDEE — with a built-in calculator to estimate your daily calorie needs." />
+  <meta property="og:description" content="Calculate your BMR, TDEE, and BMI with this free interactive tool and learn how many calories you need to lose, maintain, or gain weight." />
   <meta property="og:url" content="https://convertlabs.online/tools/calorie-guide.html" />
   <meta property="og:image" content="https://convertlabs.online/assets/convertlabs-banner.jpg" />
   <meta property="og:image:width" content="1200" />
@@ -24,7 +23,7 @@
   <!-- ✅ Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Calorie & Nutrition Guide + BMR Calculator — Convert Labs" />
-  <meta name="twitter:description" content="Use Convert Labs' free BMR calculator to estimate your daily calorie needs and plan meals smarter." />
+  <meta name="twitter:description" content="Free BMR, TDEE, and BMI calculator to estimate your daily calorie needs — from Convert Labs." />
   <meta name="twitter:image" content="https://convertlabs.online/assets/convertlabs-banner.jpg" />
 
   <!-- ✅ AdSense & Analytics -->
@@ -32,7 +31,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-Z88B03WV7P');
   </script>
@@ -42,47 +41,62 @@
   {
     "@context":"https://schema.org",
     "@type":"Article",
-    "mainEntityOfPage":{"@type":"WebPage","@id":"https://convertlabs.online/tools/calorie-guide.html"},
     "headline":"Calorie & Nutrition Guide + BMR Calculator — Convert Labs",
-    "description":"Interactive BMR and TDEE calculator with nutrition guidance for maintaining, losing, or gaining weight.",
+    "description":"Interactive BMR, TDEE, and BMI calculator with nutrition advice for weight management.",
     "image":"https://convertlabs.online/assets/convertlabs-banner.jpg",
     "author":{"@type":"Organization","name":"Convert Labs"},
     "publisher":{"@type":"Organization","name":"Convert Labs","logo":{"@type":"ImageObject","url":"https://convertlabs.online/assets/convert-labs-icon.png"}}
   }
   </script>
 
-  <!-- ✅ Style -->
   <link rel="stylesheet" href="https://convertlabs.online/style.css" />
+  <meta name="theme-color" content="#1e3a8a" />
+
   <style>
-    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#f9fafb; color:#111827; margin:0; }
-    header.navbar { background:#1e3a8a; color:#fff; padding:12px 0; position:sticky; top:0; z-index:999; }
-    .nav-container { width:92%; max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; }
-    .brand { display:flex; align-items:center; gap:8px; text-decoration:none; color:#fff; font-weight:700; }
-    main { max-width:850px; margin:60px auto; padding:0 20px 60px; background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.06); }
-    h1 { color:#1e3a8a; font-size:1.9rem; }
-    h2 { color:#1e3a8a; margin-top:32px; }
-    .tip { background:#eff6ff; padding:12px; border-radius:8px; border-left:4px solid #1e3a8a; margin-top:16px; }
-    .button-blue { display:inline-block; background:#2563eb; color:white; padding:12px 20px; border-radius:8px; text-decoration:none; font-weight:600; margin-top:28px; transition:background .2s; }
-    .button-blue:hover { background:#1e40af; }
-    footer.footer { background:#1e3a8a; color:#fff; text-align:center; padding:26px 0; margin-top:60px; }
-    @media(max-width:700px){ main{margin:40px 14px;} }
+    body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;margin:0;background:#f9fafb;color:#111827;}
+    header.navbar{background:#1e3a8a;color:#fff;padding:12px 0;position:sticky;top:0;z-index:999;}
+    .nav-container{width:92%;max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;}
+    .brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:#fff;font-weight:700;}
+    .nav-links ul{display:flex;gap:18px;list-style:none;margin:0;padding:0;}
+    .nav-links a{color:#f1f5f9;text-decoration:none;}
+    .nav-links a:hover{color:#fff;}
+    main{max-width:850px;margin:60px auto;padding:0 20px 60px;background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.06);}
+    h1{color:#1e3a8a;font-size:1.9rem;}
+    h2{color:#1e3a8a;margin-top:32px;}
+    .button-blue{display:inline-block;background:#2563eb;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:28px;transition:background .2s;}
+    .button-blue:hover{background:#1e40af;}
+    footer.footer{background:#1e3a8a;color:#fff;text-align:center;padding:26px 0;margin-top:60px;}
+    @media(max-width:700px){main{margin:40px 14px;}}
 
     /* === BMR Form === */
-    .bmr-form { background:#f8fafc; padding:20px; border-radius:10px; margin-top:20px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
-    .bmr-form label { display:block; margin-top:12px; font-weight:600; }
-    .bmr-form input, .bmr-form select { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; margin-top:6px; }
-    .bmr-btn { background:#2563eb; color:#fff; border:none; border-radius:8px; padding:10px 16px; cursor:pointer; margin-top:16px; font-weight:600; width:100%; }
-    .bmr-btn:hover { background:#1d4ed8; }
-    .bmr-result { margin-top:18px; background:#e0f2fe; border-radius:8px; padding:14px; display:none; }
-    .bmr-result strong { color:#1e3a8a; }
+    .bmr-form{background:#f8fafc;padding:20px;border-radius:10px;margin-top:20px;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+    .bmr-form label{display:block;margin-top:12px;font-weight:600;}
+    .bmr-form input,.bmr-form select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:6px;}
+    .bmr-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;margin-top:16px;font-weight:600;width:100%;transition:background .25s;}
+    .bmr-btn:hover{background:#1d4ed8;}
+    .goal-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+    .goal-btn{flex:1;min-width:100px;padding:10px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:opacity .25s;}
+    .goal-btn[data-goal="lose"]{background:#dc2626;color:#fff;}
+    .goal-btn[data-goal="maintain"]{background:#2563eb;color:#fff;}
+    .goal-btn[data-goal="gain"]{background:#16a34a;color:#fff;}
+    .goal-btn:hover{opacity:.9;}
+    .bmr-result{margin-top:18px;background:#e0f2fe;border-radius:8px;padding:14px;display:none;}
+    .goal-result{margin-top:14px;background:#dbeafe;padding:12px;border-radius:8px;display:none;}
+    .fade-in{animation:fadeIn .6s ease forwards;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+    .progress-bar{height:14px;background:#e5e7eb;border-radius:8px;overflow:hidden;margin-top:10px;}
+    .progress-fill{height:100%;width:0%;transition:width .8s ease;background:#2563eb;}
 
-    /* Dark mode */
-    body.dark { background:#0b1220; color:#e6eef8; }
-    body.dark main { background:#0f172a; box-shadow:0 8px 30px rgba(0,0,0,0.6); }
-    body.dark .bmr-form { background:#1e293b; border:1px solid #334155; color:#e6eef8; }
-    body.dark .bmr-form input, body.dark .bmr-form select { background:#0f172a; color:#e6eef8; border:1px solid #334155; }
-    body.dark .bmr-result { background:#172033; color:#e6eef8; }
-    body.dark .bmr-btn { background:#3b82f6; }
+    /* === Dark Mode === */
+    body.dark{background:#0b1220;color:#e6eef8;}
+    body.dark main{background:#0f172a;box-shadow:0 8px 30px rgba(0,0,0,0.6);}
+    body.dark .bmr-form{background:#1e293b;border:1px solid #334155;color:#e6eef8;}
+    body.dark .bmr-form input,body.dark .bmr-form select{background:#0f172a;color:#e6eef8;border:1px solid #334155;}
+    body.dark .bmr-result{background:#172033;color:#e6eef8;}
+    body.dark .goal-result{background:#1e293b;color:#e6eef8;}
+    body.dark .goal-btn[data-goal="lose"]{background:#b91c1c;}
+    body.dark .goal-btn[data-goal="maintain"]{background:#3b82f6;}
+    body.dark .goal-btn[data-goal="gain"]{background:#15803d;}
   </style>
 </head>
 
@@ -95,7 +109,7 @@
         <span>Convert Labs</span>
       </a>
       <nav class="nav-links">
-        <ul style="display:flex;gap:18px;list-style:none;margin:0;padding:0;">
+        <ul>
           <li><a href="https://convertlabs.online/index.html">Home</a></li>
           <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
           <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
@@ -110,133 +124,50 @@
   <!-- Main -->
   <main>
     <h1>📘 Calorie & Nutrition Guide</h1>
-    <p>This guide helps you understand how to calculate your daily energy needs and plan meals using your BMR and TDEE.</p>
+    <p>Use this calculator to estimate your Basal Metabolic Rate (BMR), Total Daily Energy Expenditure (TDEE), and Body Mass Index (BMI). You’ll also get personalized calorie goals and feedback about your weight category.</p>
 
-    <h2>1️⃣ How to Calculate Your BMR</h2>
-    <p><strong>BMR (Basal Metabolic Rate)</strong> is the number of calories your body needs to maintain vital functions while at rest.</p>
-
-    <!-- === Interactive BMR & TDEE Calculator === -->
-<section class="bmr-form">
-  <h3 style="margin-top:0;">Try It Yourself</h3>
-
-  <label>Gender:</label>
-  <div>
-    <label><input type="radio" name="gender" value="male" checked> Male</label>
-    <label><input type="radio" name="gender" value="female"> Female</label>
-  </div>
-
-  <label>Age (years):</label>
-  <input type="number" id="age" placeholder="e.g., 30" min="10" max="100">
-
-  <label>Height (cm):</label>
-  <input type="number" id="height" placeholder="e.g., 175" min="100" max="250">
-
-  <label>Weight (kg):</label>
-  <input type="number" id="weight" placeholder="e.g., 70" min="30" max="250">
-
-  <label>Activity Level:</label>
-  <select id="activity">
-    <option value="1.2">Sedentary (little or no exercise)</option>
-    <option value="1.375">Light activity (1–3 days/week)</option>
-    <option value="1.55">Moderate activity (3–5 days/week)</option>
-    <option value="1.725">Active (6–7 days/week)</option>
-    <option value="1.9">Very active (hard physical work or training)</option>
-  </select>
-
-  <button class="bmr-btn" id="calcBmrBtn">Calculate BMR & TDEE</button>
-
-  <div class="bmr-result" id="bmrResult">
-    <p><strong>BMR:</strong> <span id="bmrValue">–</span> kcal / day</p>
-    <p><strong>TDEE:</strong> <span id="tdeeValue">–</span> kcal / day</p>
-    <p id="tdeeNote"></p>
-
-    <!-- new goal selection -->
-    <div id="goalSection" style="margin-top:18px; display:none;">
-      <p><strong>What is your goal?</strong></p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="goal-btn" data-goal="lose">Lose Weight</button>
-        <button class="goal-btn" data-goal="maintain">Maintain Weight</button>
-        <button class="goal-btn" data-goal="gain">Gain Weight</button>
+    <!-- === BMR Calculator === -->
+    <section class="bmr-form">
+      <h3>Try It Yourself</h3>
+      <label>Gender:</label>
+      <div>
+        <label><input type="radio" name="gender" value="male" checked> Male</label>
+        <label><input type="radio" name="gender" value="female"> Female</label>
       </div>
-    </div>
+      <label>Age (years):</label>
+      <input type="number" id="age" placeholder="e.g., 30" min="10" max="100">
+      <label>Height (cm):</label>
+      <input type="number" id="height" placeholder="e.g., 175" min="100" max="250">
+      <label>Weight (kg):</label>
+      <input type="number" id="weight" placeholder="e.g., 70" min="30" max="250">
+      <label>Activity Level:</label>
+      <select id="activity">
+        <option value="1.2">Sedentary (little or no exercise)</option>
+        <option value="1.375">Light activity (1–3 days/week)</option>
+        <option value="1.55">Moderate activity (3–5 days/week)</option>
+        <option value="1.725">Active (6–7 days/week)</option>
+        <option value="1.9">Very active (hard physical work or training)</option>
+      </select>
+      <button class="bmr-btn" id="calcBmrBtn">Calculate BMR, TDEE & BMI</button>
 
-    <div id="goalResult" style="margin-top:16px; display:none;"></div>
-  </div>
-</section>
-
-<script>
-document.getElementById("calcBmrBtn").addEventListener("click", () => {
-  const age = parseFloat(document.getElementById("age").value);
-  const h   = parseFloat(document.getElementById("height").value);
-  const w   = parseFloat(document.getElementById("weight").value);
-  const g   = document.querySelector('input[name="gender"]:checked').value;
-  const act = parseFloat(document.getElementById("activity").value);
-
-  if (!age || !h || !w) {
-    alert("Please enter valid age, height, and weight.");
-    return;
-  }
-
-  const bmr = g === "male"
-    ? 10*w + 6.25*h - 5*age + 5
-    : 10*w + 6.25*h - 5*age - 161;
-  const tdee = bmr * act;
-
-  document.getElementById("bmrValue").textContent  = bmr.toFixed(0);
-  document.getElementById("tdeeValue").textContent = tdee.toFixed(0);
-
-  const note = tdee < 1800 ? "Your energy needs are relatively low — suitable for smaller or sedentary frames."
-        : tdee < 2500 ? "You have a moderate daily calorie requirement for weight maintenance."
-        : "You have a high energy need due to higher activity or larger body size.";
-  document.getElementById("tdeeNote").textContent = note;
-  document.getElementById("bmrResult").style.display = "block";
-  document.getElementById("goalSection").style.display = "block";
-  document.getElementById("goalResult").style.display = "none";
-});
-
-// === Goal Buttons ===
-document.querySelectorAll(".goal-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const tdee = parseFloat(document.getElementById("tdeeValue").textContent);
-    if (!tdee) return;
-    let target, msg;
-
-    if (btn.dataset.goal === "lose") {
-      target = tdee * 0.8;
-      msg = `To lose weight safely, aim for about <strong>${target.toFixed(0)} kcal/day</strong> (≈20% below your TDEE). Focus on protein-rich foods, vegetables, and a mild deficit.`;
-    } else if (btn.dataset.goal === "gain") {
-      target = tdee * 1.15;
-      msg = `To gain weight or build muscle, target around <strong>${target.toFixed(0)} kcal/day</strong> (≈15% above your TDEE). Include complex carbs and healthy fats.`;
-    } else {
-      target = tdee;
-      msg = `To maintain your weight, keep your intake around <strong>${target.toFixed(0)} kcal/day</strong>. Balance carbs, protein, and fats evenly.`;
-    }
-
-    const res = document.getElementById("goalResult");
-    res.innerHTML = msg;
-    res.style.display = "block";
-  });
-});
-</script>
-  </section>
-
-    <h2>🔍 Understanding Your BMR Result</h2>
-    <p>Your <strong>BMR</strong> shows the minimum energy your body burns each day, even if you are completely at rest.</p>
-    <p>Your <strong>TDEE</strong> is your total daily calorie need, factoring in activity level — the amount required to maintain your current weight.</p>
-
-    <h2>2️⃣ How to Balance Your Macros</h2>
-    <ul>
-      <li><strong>Carbohydrates:</strong> 45–55% of total calories</li>
-      <li><strong>Protein:</strong> 20–30% of total calories</li>
-      <li><strong>Fats:</strong> 25–35% of total calories</li>
-    </ul>
-
-    <h2>3️⃣ What to Eat for Your Goal</h2>
-    <ul>
-      <li><strong>Lose weight:</strong> Lean proteins, vegetables, whole grains, olive oil.</li>
-      <li><strong>Gain weight:</strong> Oats, nut butter, avocados, rice, full-fat dairy.</li>
-      <li><strong>Maintain:</strong> Balanced mix: 45–55% carbs, 20–30% protein, 25–35% fats.</li>
-    </ul>
+      <div class="bmr-result" id="bmrResult">
+        <p><strong>BMR:</strong> <span id="bmrValue">–</span> kcal/day</p>
+        <p><strong>TDEE:</strong> <span id="tdeeValue">–</span> kcal/day</p>
+        <p><strong>BMI:</strong> <span id="bmiValue">–</span></p>
+        <p id="bmiNote"></p>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <p id="tdeeNote" style="margin-top:12px;"></p>
+        <div id="goalSection" style="margin-top:18px;display:none;">
+          <p><strong>What is your goal?</strong></p>
+          <div class="goal-buttons">
+            <button class="goal-btn" data-goal="lose">Lose Weight</button>
+            <button class="goal-btn" data-goal="maintain">Maintain Weight</button>
+            <button class="goal-btn" data-goal="gain">Gain Weight</button>
+          </div>
+        </div>
+        <div id="goalResult" class="goal-result"></div>
+      </div>
+    </section>
 
     <a href="https://convertlabs.online/tools/calorie-calculator.html" class="button-blue">← Back to Calorie Calculator</a>
   </main>
@@ -250,50 +181,52 @@ document.querySelectorAll(".goal-btn").forEach(btn => {
     <a href="https://convertlabs.online/contact.html">Contact</a>
   </footer>
 
-  <!-- ✅ JS -->
+  <!-- === JS === -->
   <script>
-    document.getElementById("calcBmrBtn").addEventListener("click", () => {
-      const age = parseFloat(document.getElementById("age").value);
-      const height = parseFloat(document.getElementById("height").value);
-      const weight = parseFloat(document.getElementById("weight").value);
-      const gender = document.querySelector('input[name="gender"]:checked').value;
-      const activity = parseFloat(document.getElementById("activity").value);
+  // BMR + TDEE + BMI + goals
+  document.getElementById("calcBmrBtn").addEventListener("click", () => {
+    const age=parseFloat(document.getElementById("age").value);
+    const h=parseFloat(document.getElementById("height").value);
+    const w=parseFloat(document.getElementById("weight").value);
+    const g=document.querySelector('input[name="gender"]:checked').value;
+    const act=parseFloat(document.getElementById("activity").value);
+    if(!age||!h||!w){alert("Please fill age, height and weight correctly.");return;}
+    const bmr=g==="male"?10*w+6.25*h-5*age+5:10*w+6.25*h-5*age-161;
+    const tdee=bmr*act;
+    const bmi=w/Math.pow(h/100,2);
+    document.getElementById("bmrValue").textContent=bmr.toFixed(0);
+    document.getElementById("tdeeValue").textContent=tdee.toFixed(0);
+    document.getElementById("bmiValue").textContent=bmi.toFixed(1);
+    const progress=document.getElementById("progressFill");
+    let bmiNote="";
+    if(bmi<18.5){bmiNote="You are underweight — consider a balanced calorie surplus to reach a healthy range.";progress.style.width="30%";progress.style.background="#60a5fa";}
+    else if(bmi<25){bmiNote="Your weight is within a healthy range — maintain with balanced intake.";progress.style.width="55%";progress.style.background="#16a34a";}
+    else if(bmi<30){bmiNote="You are slightly overweight — a moderate calorie deficit can help improve health.";progress.style.width="80%";progress.style.background="#fbbf24";}
+    else{bmiNote="You are obese — consult a nutritionist and consider a sustained calorie deficit.";progress.style.width="100%";progress.style.background="#dc2626";}
+    document.getElementById("bmiNote").textContent=bmiNote;
+    document.getElementById("tdeeNote").textContent=tdee<1800?"Low calorie needs — small frame or sedentary.":tdee<2500?"Moderate energy needs — average activity.":"High calorie needs — very active lifestyle.";
+    const box=document.getElementById("bmrResult");box.style.display="block";box.classList.add("fade-in");
+    document.getElementById("goalSection").style.display="block";
+    document.getElementById("goalResult").style.display="none";
+  });
 
-      if (!age || !height || !weight) {
-        alert("Please enter valid age, height, and weight.");
-        return;
-      }
-
-      let bmr = gender === "male"
-        ? 10 * weight + 6.25 * height - 5 * age + 5
-        : 10 * weight + 6.25 * height - 5 * age - 161;
-
-      const tdee = bmr * activity;
-
-      document.getElementById("bmrValue").textContent = bmr.toFixed(0);
-      document.getElementById("tdeeValue").textContent = tdee.toFixed(0);
-
-      const note = tdee < 1800 ? "Your energy needs are relatively low — suitable for a small frame or sedentary routine."
-        : tdee < 2500 ? "You have a moderate calorie requirement. Maintain this for balanced weight."
-        : "You have a high daily calorie need due to larger body size or activity.";
-
-      document.getElementById("tdeeNote").textContent = note;
-      document.getElementById("bmrResult").style.display = "block";
+  document.querySelectorAll(".goal-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const tdee=parseFloat(document.getElementById("tdeeValue").textContent);
+      if(!tdee)return;
+      let target,msg;
+      if(btn.dataset.goal==="lose"){target=tdee*0.8;msg=`To lose weight safely, aim for about <strong>${target.toFixed(0)} kcal/day</strong> (~20% below TDEE).`;}
+      else if(btn.dataset.goal==="gain"){target=tdee*1.15;msg=`To gain weight or muscle, aim for about <strong>${target.toFixed(0)} kcal/day</strong> (~15% above TDEE).`;}
+      else{target=tdee;msg=`To maintain weight, keep around <strong>${target.toFixed(0)} kcal/day</strong>.`;}
+      const res=document.getElementById("goalResult");res.innerHTML=msg;res.style.display="block";res.classList.add("fade-in");
     });
+  });
 
-    // Theme toggle
-    const btn = document.getElementById("themeToggle");
-    function setTheme(mode) {
-      document.body.classList.toggle("dark", mode === "dark");
-      btn.textContent = mode === "dark" ? "☀️" : "🌙";
-      localStorage.setItem("cl_theme", mode);
-    }
-    const saved = localStorage.getItem("cl_theme");
-    setTheme(saved || "light");
-    btn.addEventListener("click", () => {
-      const dark = document.body.classList.contains("dark");
-      setTheme(dark ? "light" : "dark");
-    });
+  // Theme toggle
+  const btn=document.getElementById("themeToggle");
+  function setTheme(mode){document.body.classList.toggle("dark",mode==="dark");btn.textContent=mode==="dark"?"☀️":"🌙";localStorage.setItem("cl_theme",mode);}
+  const saved=localStorage.getItem("cl_theme");setTheme(saved||"light");
+  btn.addEventListener("click",()=>{const dark=document.body.classList.contains("dark");setTheme(dark?"light":"dark");});
   </script>
 </body>
 </html>
