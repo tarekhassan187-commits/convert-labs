@@ -118,13 +118,6 @@
     body.dark .results-modal { background: #1e293b; color: #f1f5f9; }
     body.dark .results-modal-header, body.dark .results-modal-footer { background: #111827; border-color: #334155; }
     body.dark .suggestion-item:hover { background: #334155; }
-
-    /* Responsive tweaks */
-    @media (max-width: 700px) {
-      #foodInput { width: calc(100% - 96px); display:block; margin-bottom:8px; }
-      #searchBtn { display:block; width: 100%; }
-      .suggestions { width: 92%; left: 50%; transform: translateX(-50%); }
-    }
   </style>
 </head>
 
@@ -166,20 +159,22 @@
 
       <div id="resultContainer"></div>
 
-      <!-- Daily Summary -->
       <section id="dailySummary" class="result-card" style="display:none;">
         <h3>Daily Summary</h3>
         <div id="dailyTotals"></div>
         <button id="clearAllBtn">Clear All</button>
       </section>
 
-      <!-- About This Tool (restored) -->
-      <div class="about-section" style="margin-top:1.2rem">
+      <hr style="margin-top:18px;border:none;border-top:1px solid rgba(0,0,0,0.06)">
+      <p>Want to understand daily calorie needs and meal plans?  
+        <a href="https://convertlabs.online/tools/calorie-guide.html">Read our Calorie & Nutrition Guide →</a>
+      </p>
+    </section>
+     <div class="about-section">
         <h2>About This Tool</h2>
         <p>
           This calorie calculator retrieves real food data from the official USDA nutrient database (2021–2023 FNDDS).
-          Each result includes the energy (kcal) and macronutrients per 100 g of edible portion. Use the serving size input
-          to scale values to your portion.
+          Each result includes the energy (kcal) and macronutrients per 100 g of edible portion.
         </p>
         <ul>
           <li>⚡ <strong>Calories (kcal)</strong> — energy per 100 g</li>
@@ -188,13 +183,7 @@
           <li>🥑 <strong>Fat</strong> — grams of total fat</li>
           <li>🍯 <strong>Sugar</strong> — grams of total sugars</li>
         </ul>
-        <p style="margin-top:.6rem"><em>Note:</em> These are general nutrient values — for clinical advice or strict meal plans consult a registered dietitian.</p>
       </div>
-
-      <hr style="margin-top:18px;border:none;border-top:1px solid rgba(0,0,0,0.06)">
-      <p>Want to understand daily calorie needs and meal plans?  
-        <a href="https://convertlabs.online/tools/calorie-guide.html">Read our Calorie & Nutrition Guide →</a>
-      </p>
     </section>
   </main>
 
@@ -219,15 +208,13 @@
   function setTheme(mode){
     if(mode==='dark'){document.body.classList.add('dark');themeBtn.textContent='☀️';}
     else {document.body.classList.remove('dark');themeBtn.textContent='🌙';}
-    try{ localStorage.setItem('cl_theme', mode); }catch(e){}
+    localStorage.setItem('cl_theme', mode);
   }
   (function(){
-    try{
-      const saved = localStorage.getItem('cl_theme');
-      setTheme(saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
-    }catch(e){ setTheme('light'); }
+    const saved = localStorage.getItem('cl_theme');
+    setTheme(saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
   })();
-  themeBtn.onclick = ()=> setTheme(document.body.classList.contains('dark') ? 'light' : 'dark');
+  themeBtn.onclick = ()=>setTheme(document.body.classList.contains('dark')?'light':'dark');
   </script>
 
   <script>
@@ -240,138 +227,73 @@
     const dailyTotalsDiv = document.getElementById("dailyTotals");
     const clearAllBtn = document.getElementById("clearAllBtn");
     const searchBtn = document.getElementById("searchBtn");
-    let foodData=[], foodIndex=[], currentFood=null, chart=null;
+    let foodData=[],foodIndex=[],currentFood=null,chart=null;
     let dailyTotals={kcal:0,protein:0,carbs:0,fat:0,sugar:0};
 
-    // load all four JSON files (required)
     Promise.all([
-      fetch("https://convertlabs.online/assets/usda_food_nutrition.json").then(r=>r.json()).catch(()=>[]),
-      fetch("https://convertlabs.online/assets/extras-oriental-foods.json").then(r=>r.json()).catch(()=>[]),
-      fetch("https://convertlabs.online/assets/foods-full.json").then(r=>r.json()).catch(()=>[]),
-      fetch("https://convertlabs.online/assets/foods-lite.json").then(r=>r.json()).catch(()=>[])
-    ]).then(arrays => {
-      foodData = arrays.flat();
-      // de-duplicate by name
-      const seen = new Set();
-      foodData = foodData.filter(item => {
-        const key = (item.name || item.food || "").toLowerCase();
-        if(seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-      buildIndex();
-    }).catch(err => {
-      console.error("Failed to load food data", err);
-    });
+      fetch("https://convertlabs.online/assets/usda_food_nutrition.json").then(r=>r.json()),
+      fetch("https://convertlabs.online/assets/extras-oriental-foods.json").then(r=>r.json()),
+      fetch("https://convertlabs.online/assets/foods-full.json").then(r=>r.json()),
+      fetch("https://convertlabs.online/assets/foods-lite.json").then(r=>r.json())
+    ]).then(d=>{foodData=d.flat();buildIndex();});
 
-    const normalize = s => String(s||"").normalize('NFKD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim();
-    function buildIndex(){
-      foodIndex = foodData.map(i => ({ name: i.name || i.food || '', norm: normalize(i.name || i.food || ''), original: i }));
-    }
-
-    function getSuggestions(q){
-      if(!q) return [];
-      const qn = normalize(q);
-      const scored = foodIndex.map(i => {
-        const n = i.norm;
-        let score = 0;
-        if(n === qn) score = 100;
-        else if(n.startsWith(qn)) score = 85;
-        else if(n.split(/\s+/).includes(qn)) score = 75;
-        else if(n.includes(qn)) score = 55;
-        return { i, score };
-      }).filter(x => x.score>0).sort((a,b)=>b.score-a.score).map(x=>x.i);
-      return scored;
-    }
-
+    const normalize=s=>String(s||"").normalize('NFKD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim();
+    function buildIndex(){foodIndex=foodData.map(i=>({name:i.name||i.food,norm:normalize(i.name||i.food),original:i}));}
+    function getSuggestions(q){const n=normalize(q);return foodIndex.filter(i=>i.norm.includes(n));}
     function renderSuggestions(q){
-      const results = getSuggestions(q);
-      if(!results.length){ suggestionsBox.style.display='none'; return; }
-      let html = results.slice(0,20).map(r => `<div>${r.name}</div>`).join('');
-      if(results.length > 20){
-        html += `<div class="show-more">🔍 Show all ${results.length} results for “${q}”</div>`;
-      }
-      suggestionsBox.innerHTML = html;
-      suggestionsBox.style.display = 'block';
+      const res=getSuggestions(q);
+      if(!res.length){suggestionsBox.style.display='none';return;}
+      let html=res.slice(0,20).map(r=>`<div>${r.name}</div>`).join('');
+      if(res.length>20) html+=`<div class="show-more">🔍 Show all ${res.length} results for “${q}”</div>`;
+      suggestionsBox.innerHTML=html;suggestionsBox.style.display='block';
     }
 
-    suggestionsBox.addEventListener('click', e => {
-      if(e.target.classList.contains('show-more')){
-        showFullResults(foodInput.value.trim());
-      } else if(e.target.tagName === 'DIV'){
-        foodInput.value = e.target.textContent;
-        suggestionsBox.style.display = 'none';
-        searchFood();
-      }
-    });
-
-    let debounce;
-    foodInput.addEventListener('input', e => {
-      const q = e.target.value.trim();
-      clearTimeout(debounce);
-      if(!q){ suggestionsBox.style.display='none'; return; }
-      debounce = setTimeout(()=> renderSuggestions(q), 180);
-    });
-
-    // hide suggestions on outside click
-    document.addEventListener('click', e => {
-      if(!suggestionsBox.contains(e.target) && e.target !== foodInput) suggestionsBox.style.display = 'none';
+    suggestionsBox.onclick=e=>{
+      if(e.target.classList.contains('show-more')) showFullResults(foodInput.value.trim());
+      else if(e.target.tagName==='DIV'){foodInput.value=e.target.textContent;suggestionsBox.style.display='none';searchFood();}
+    };
+    let timer;
+    foodInput.oninput=e=>{
+      const q=e.target.value.trim();
+      clearTimeout(timer);
+      if(!q){suggestionsBox.style.display='none';return;}
+      timer=setTimeout(()=>renderSuggestions(q),200);
+    };
+    document.addEventListener('click',e=>{
+      if(!suggestionsBox.contains(e.target) && e.target!==foodInput) suggestionsBox.style.display='none';
     });
 
     function showFullResults(q){
-      const results = getSuggestions(q);
-      const modal = document.createElement('div');
-      modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:1200;backdrop-filter: blur(2px);';
-      const box = document.createElement('div');
-      box.className = 'results-modal';
-      const header = document.createElement('div'); header.className='results-modal-header'; header.textContent = `All ${results.length} results for “${q}”`;
-      const content = document.createElement('div'); content.className='results-modal-content';
-      content.innerHTML = results.map(r => `<div class="suggestion-item">${r.name}</div>`).join('');
-      const footer = document.createElement('div'); footer.className='results-modal-footer';
-      footer.innerHTML = `<button id="closeModalBtn" style="padding:8px 14px;border:none;border-radius:8px;background:#2563eb;color:#fff;cursor:pointer;">Close</button>`;
-      box.appendChild(header); box.appendChild(content); box.appendChild(footer); modal.appendChild(box);
-      document.body.appendChild(modal);
-
-      content.querySelectorAll('.suggestion-item').forEach(div => {
-        div.addEventListener('click', () => {
-          foodInput.value = div.textContent;
-          document.body.removeChild(modal);
-          suggestionsBox.style.display = 'none';
-          searchFood();
-        });
-      });
-      document.getElementById('closeModalBtn').addEventListener('click', ()=> document.body.removeChild(modal));
+      const res=getSuggestions(q);
+      const modal=document.createElement('div');
+      modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:9999;';
+      const box=document.createElement('div');
+      box.className='results-modal';
+      box.innerHTML=`
+        <div class="results-modal-header">All ${res.length} results for “${q}”</div>
+        <div class="results-modal-content">
+          ${res.map(r=>`<div class="suggestion-item">${r.name}</div>`).join('')}
+        </div>
+        <div class="results-modal-footer"><button id="closeModalBtn">Close</button></div>`;
+      modal.appendChild(box);document.body.appendChild(modal);
+      box.querySelectorAll('.suggestion-item').forEach(d=>d.onclick=()=>{foodInput.value=d.textContent;document.body.removeChild(modal);searchFood();});
+      box.querySelector('#closeModalBtn').onclick=()=>document.body.removeChild(modal);
     }
 
-    searchBtn.addEventListener('click', searchFood);
+    searchBtn.onclick=searchFood;
     function searchFood(){
-      const term = (foodInput.value || '').trim().toLowerCase();
-      if(!term){ resultContainer.innerHTML = ''; return; }
-      const match = foodData.find(item => (item.name || '').toLowerCase() === term)
-                 || foodData.find(item => (item.name || '').toLowerCase().includes(term));
-      if(!match){
-        resultContainer.innerHTML = `<p style="color:#b91c1c">❌ No results for <strong>${term}</strong>.</p>`;
-        currentFood = null;
-        chart && chart.destroy();
-        return;
-      }
-      currentFood = match;
-      displayResult(match);
+      const term=foodInput.value.trim().toLowerCase();
+      const match=foodData.find(i=>(i.name||'').toLowerCase()===term)||foodData.find(i=>(i.name||'').toLowerCase().includes(term));
+      if(!match){resultContainer.innerHTML=`<p style="color:#b91c1c">❌ No results for <strong>${term}</strong>.</p>`;return;}
+      currentFood=match;displayResult(match);
     }
 
     function displayResult(food){
-      const serving = parseFloat(servingInput.value) || 100;
-      const factor = serving / 100;
-      const scaled = {
-        kcal: (food.kcal || 0) * factor,
-        protein: (food.protein || 0) * factor,
-        carbs: (food.carbs || 0) * factor,
-        fat: (food.fat || 0) * factor,
-        sugar: (food.sugar || 0) * factor
-      };
-      resultContainer.innerHTML = `
+      const serving=parseFloat(servingInput.value)||100,factor=serving/100;
+      const scaled={kcal:(food.kcal||0)*factor,protein:(food.protein||0)*factor,carbs:(food.carbs||0)*factor,fat:(food.fat||0)*factor,sugar:(food.sugar||0)*factor};
+      resultContainer.innerHTML=`
       <div class="result-card">
-        <h3 style="margin-top:0">${food.name}</h3>
+        <h3>${food.name}</h3>
         <p><strong>Serving Size:</strong> ${serving} g</p>
         <p><strong>Calories:</strong> ${scaled.kcal.toFixed(1)} kcal</p>
         <p><strong>Protein:</strong> ${scaled.protein.toFixed(1)} g</p>
@@ -385,60 +307,30 @@
         </div>
       </div>`;
       drawChart(scaled);
-      document.getElementById('addToTotalBtn').addEventListener('click', ()=> addToDailyTotal(scaled));
-      document.getElementById('clearBtn').addEventListener('click', ()=> {
-        foodInput.value = '';
-        servingInput.value = 100;
-        resultContainer.innerHTML = '';
-        chart && chart.destroy();
-      });
+      document.getElementById('addToTotalBtn').onclick=()=>addToDaily(scaled);
+      document.getElementById('clearBtn').onclick=()=>{foodInput.value='';resultContainer.innerHTML='';chart?.destroy();}
     }
 
-    function drawChart(data){
-      const canvas = document.getElementById('nutrientChart');
-      if(!canvas) return;
-      const ctx = canvas.getContext('2d');
-      chart && chart.destroy();
-      const dark = document.body.classList.contains('dark');
-      chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Calories','Protein','Carbs','Fat','Sugar'],
-          datasets: [{ data: [data.kcal,data.protein,data.carbs,data.fat,data.sugar], backgroundColor: dark ? '#60a5fa' : '#2563eb', borderRadius: 6 }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { x: { ticks: { color: dark ? '#e6eef8' : '#111' } }, y: { beginAtZero: true, ticks: { color: dark ? '#e6eef8' : '#111' } } }
-        }
-      });
+    function drawChart(d){
+      const ctx=document.getElementById('nutrientChart');if(!ctx)return;
+      chart?.destroy();
+      const dark=document.body.classList.contains('dark');
+      chart=new Chart(ctx,{type:'bar',data:{labels:['Calories','Protein','Carbs','Fat','Sugar'],datasets:[{data:[d.kcal,d.protein,d.carbs,d.fat,d.sugar],backgroundColor:dark?'#60a5fa':'#2563eb',borderRadius:6}]},
+      options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:dark?'#e6eef8':'#111'}},y:{beginAtZero:true,ticks:{color:dark?'#e6eef8':'#111'}}}}});
     }
 
-    function addToDailyTotal(data){
-      for(const k in data) if(Object.prototype.hasOwnProperty.call(data,k)) dailyTotals[k] += (data[k] || 0);
-      updateDailySummary();
+    function addToDaily(d){for(let k in d)dailyTotals[k]+=d[k];updateSummary();}
+    function updateSummary(){
+      dailySummary.style.display='block';
+      dailyTotalsDiv.innerHTML=`
+      <p><strong>Calories:</strong> ${dailyTotals.kcal.toFixed(1)} kcal</p>
+      <p><strong>Protein:</strong> ${dailyTotals.protein.toFixed(1)} g</p>
+      <p><strong>Carbs:</strong> ${dailyTotals.carbs.toFixed(1)} g</p>
+      <p><strong>Fat:</strong> ${dailyTotals.fat.toFixed(1)} g</p>
+      <p><strong>Sugar:</strong> ${dailyTotals.sugar.toFixed(1)} g</p>`;
     }
-    function updateDailySummary(){
-      dailySummary.style.display = 'block';
-      dailyTotalsDiv.innerHTML = `
-        <p><strong>Calories:</strong> ${dailyTotals.kcal.toFixed(1)} kcal</p>
-        <p><strong>Protein:</strong> ${dailyTotals.protein.toFixed(1)} g</p>
-        <p><strong>Carbs:</strong> ${dailyTotals.carbs.toFixed(1)} g</p>
-        <p><strong>Fat:</strong> ${dailyTotals.fat.toFixed(1)} g</p>
-        <p><strong>Sugar:</strong> ${dailyTotals.sugar.toFixed(1)} g</p>`;
-    }
-
-    clearAllBtn.addEventListener('click', ()=> {
-      dailyTotals = { kcal:0, protein:0, carbs:0, fat:0, sugar:0 };
-      dailySummary.style.display = 'none';
-    });
-
-    // update displayed result values when serving size changes (if a result is present)
-    servingInput.addEventListener('input', () => {
-      if(currentFood) displayResult(currentFood);
-    });
-
-  }); // DOMContentLoaded end
+    clearAllBtn.onclick=()=>{dailyTotals={kcal:0,protein:0,carbs:0,fat:0,sugar:0};dailySummary.style.display='none';};
+  });
   </script>
 </body>
 </html>
