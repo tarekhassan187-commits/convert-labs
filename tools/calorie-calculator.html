@@ -328,6 +328,41 @@ body:not(.dark) .footer-links a:hover {
 body:not(.dark) .footer-text {
   color: #1e293b !important;
 }
+/* ☀️ Light Mode Footer Styling */
+body:not(.dark) footer.footer,
+body:not(.dark) .footer {
+  background-color: #2563eb !important;  /* Convert Labs blue */
+  color: #ffffff !important;              /* White text */
+  text-align: center;
+}
+
+body:not(.dark) .footer-links a {
+  color: #bfdbfe !important;              /* Light blue links for contrast */
+  text-decoration: none;
+}
+
+body:not(.dark) .footer-links a:hover {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+body:not(.dark) .footer-text {
+  color: #ffffff !important;
+}
+
+/* 🌙 Dark Mode Footer Styling */
+body.dark footer.footer,
+body.dark .footer {
+  background-color: #0f172a !important;   /* Deep navy */
+  color: #e2e8f0 !important;              /* Soft white */
+}
+
+body.dark .footer-links a {
+  color: #60a5fa !important;              /* Soft blue links */
+}
+body.dark .footer-links a:hover {
+  color: #93c5fd !important;
+}
 
   </style>
 </head>
@@ -735,6 +770,7 @@ body:not(.dark) .footer-text {
   </script>
 </body>
 </html>
+
 
 
 
