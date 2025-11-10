@@ -309,6 +309,25 @@ body.dark #closeModalBtn:hover {
   from { opacity: 0; transform: scale(0.97); }
   to { opacity: 1; transform: scale(1); }
 }
+/* ☀️ Light mode footer reset — ensure text and links are visible */
+body:not(.dark) footer.footer,
+body:not(.dark) .footer {
+  background: #f9fafb !important;   /* light gray background */
+  color: #1e293b !important;         /* dark gray text */
+}
+
+body:not(.dark) .footer-links a {
+  color: #2563eb !important;         /* Convert Labs blue */
+  text-decoration: none;
+}
+
+body:not(.dark) .footer-links a:hover {
+  text-decoration: underline;
+}
+
+body:not(.dark) .footer-text {
+  color: #1e293b !important;
+}
 
   </style>
 </head>
@@ -716,6 +735,7 @@ body.dark #closeModalBtn:hover {
   </script>
 </body>
 </html>
+
 
 
 
