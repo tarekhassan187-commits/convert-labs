@@ -138,18 +138,22 @@
 </head>
 
 <body>
-  <header class="navbar">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 24px;">
-      <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:36px;height:36px;margin-right:8px;">
-        <strong>Convert Labs</strong>
+<header class="navbar">
+    <div class="nav-container">
+      <a class="brand" href="/index.html">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:36px;height:36px;border-radius:6px;background:#fff;padding:4px;">
+        <span>Convert Labs</span>
       </a>
-      <nav class="nav-links">
-        <a href="https://convertlabs.online/index.html">Home</a>|
-        <a href="https://convertlabs.online/tools/tools.html">Tools</a>|
-        <a href="https://convertlabs.online/guides.html">Blog</a>
+      <nav class="nav-links" aria-label="Primary">
+        <ul>
+          <li><a href="https://convertlabs.online/index.html">Home</a></li>
+          <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
+          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
+          <li><a href="https://convertlabs.online/about.html">About</a></li>
+          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
+        </ul>
       </nav>
-      <button id="themeToggle" style="background:none;border:none;color:white;font-size:1.3rem;cursor:pointer;">🌙</button>
+      <button id="themeToggle" title="Toggle theme" style="background:transparent;border:none;color:#f8fafc;font-size:20px;cursor:pointer;">🌙</button>
     </div>
   </header>
 
