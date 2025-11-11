@@ -155,7 +155,13 @@
     body.dark footer.footer{background:#07102a;color:#e2e8f0}
 
     /* tiny */
-    .muted small{color:#94a3b8}
+    .muted small {
+  color: #475569; /* darker gray for better readability */
+}
+body.dark .muted small {
+  color: #9ca3af; /* still softer gray in dark mode */
+}
+
   </style>
 </head>
 <body>
