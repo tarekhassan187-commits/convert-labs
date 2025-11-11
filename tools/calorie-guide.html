@@ -1,28 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Calorie & Nutrition Guide — Convert Labs</title>
-  <meta name="description" content="Calculate your BMR, TDEE, and BMI to understand your daily calorie needs. Get personalized nutrition guidance for weight loss, maintenance, or gain — from Convert Labs." />
-  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-  <meta name="robots" content="index, follow" />
+  <meta name="description" content="Use our guide and built-in calculator to estimate your BMR, TDEE and BMI — then learn practical, safe advice for losing, gaining, or maintaining weight." />
 
-  <!-- ✅ Open Graph -->
+  <!-- Social / OG -->
   <meta property="og:title" content="Calorie & Nutrition Guide — Convert Labs" />
-  <meta property="og:description" content="Understand your BMR, TDEE, and BMI, and get personalized calorie guidance to reach your fitness goals." />
-  <meta property="og:image" content="https://convertlabs.online/assets/guide-calories.png" />
+  <meta property="og:description" content="Calculate BMR, TDEE and BMI and get clear, actionable nutrition advice." />
+  <meta property="og:image" content="https://convertlabs.online/assets/convertlabs-banner.jpg" />
   <meta property="og:url" content="https://convertlabs.online/tools/calorie-guide.html" />
   <meta property="og:type" content="article" />
 
-  <!-- ✅ Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Calorie & Nutrition Guide — Convert Labs" />
-  <meta name="twitter:description" content="Calculate your calorie needs, BMR, and BMI, then get guidance for healthy nutrition with Convert Labs." />
-  <meta name="twitter:image" content="https://convertlabs.online/assets/guide-calories.png" />
+  <!-- canonical -->
+  <link rel="canonical" href="https://convertlabs.online/tools/calorie-guide.html" />
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
 
-  <!-- ✅ AdSense + Analytics -->
+  <!-- AdSense & Analytics (kept as you requested) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
@@ -32,295 +27,355 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- ✅ Breadcrumb JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://convertlabs.online/" },
-      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://convertlabs.online/tools/tools.html" },
-      { "@type": "ListItem", "position": 3, "name": "Calorie & Nutrition Guide" }
-    ]
-  }
-  </script>
-
+  <!-- Minimal page-level styles (overrides + component styles) -->
   <style>
-    html, body {
-      font-family: "Inter", sans-serif;
-      background: #f9fafb;
-      color: #1e293b;
-      margin: 0;
-      line-height: 1.6;
-      transition: background 0.4s ease, color 0.4s ease;
+    :root{
+      --blue-600: #2563eb;
+      --blue-700: #1e40af;
+      --nav-blue: #1e3a8a;
+      --bg: #f8fafc;
+      --card-bg: #fff;
+      --text: #0f172a;
+      --muted: #6b7280;
+      --dark-bg: #0b1220;
+      --card-dark: #1b2435;
+      --inner-card: #0f172a;
+      --accent: #3b82f6;
+    }
+    /* Reset + global */
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    a{color:var(--blue-600);text-decoration:none}
+    .site-width{width:90%;max-width:1100px;margin:0 auto;}
+
+    /* Header */
+    header.navbar{
+      background:var(--nav-blue);
+      color:#fff;
+      padding:10px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand img{width:36px;height:36px}
+    .brand .brand-text{font-weight:700;color:#fff}
+    nav.nav-links ul{display:flex;gap:16px;list-style:none;margin:0;padding:0}
+    nav.nav-links a{color:#f1f5f9;font-weight:600}
+
+    .theme-toggle{background:none;border:none;color:#fff;font-size:18px;padding:6px 8px;border-radius:8px;cursor:pointer}
+
+    /* Main area */
+    main{
+      max-width:980px;
+      margin:48px auto 96px; /* reduced top spacing per request */
+      color:var(--text);
+      padding:0 16px;
     }
 
-    header.navbar, footer.footer {
-      background: #1e3a8a;
-      color: #fff;
+    .hero-card{
+      border-radius:14px;
+      padding:36px;
+      background: linear-gradient(145deg,#ffffff,#f1f5ff);
+      box-shadow: 0 12px 30px rgba(16,24,40,0.06);
     }
-    .nav-links a { color: #f8fafc; text-decoration: none; margin: 0 8px; }
-    .nav-links a:hover { color: #fff; }
+    .page-title{font-size:32px;margin:0 0 12px;color:var(--nav-blue);font-weight:800}
+    .lead{color:var(--muted);line-height:1.6;margin:0 0 20px}
 
-/* 🌤️ Main container styling (light mode) */
-main {
-  max-width: 900px;
-  margin: 60px auto 100px;
-  padding: 2rem;
-  background: linear-gradient(145deg, #ffffff, #f1f5ff); /* soft white-to-blue gradient */
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  animation: fadeIn 0.4s ease;
-  color: #111827;
-}
-
-
-    h1,h2,h3 { color: #1e3a8a; }
-    input, select, button {
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      padding: 8px 10px;
-      font-size: 1rem;
+    /* Calculator card */
+    .calc-card{
+      margin-top:24px;
+      border-radius:12px;
+      padding:22px;
+      background:#f1f7fb;
+      box-shadow: 0 10px 24px rgba(16,24,40,0.05);
+      border:1px solid rgba(30,58,138,0.04);
     }
-    button {
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s ease;
+    .calc-card h3{margin:0 0 16px;color:var(--blue-700)}
+    .field{margin:10px 0;display:block}
+    label.field-label{display:block;color:#475569;font-size:14px;margin-bottom:6px}
+    input[type="number"], select, input[type="text"]{
+      width:270px;max-width:100%;
+      padding:10px 12px;border-radius:8px;border:1px solid #e6eef8;background:#fff;color:var(--text);
+      box-sizing:border-box;
     }
-    button:hover { background: #1d4ed8; }
+    select{appearance:auto}
+    .small{width:160px}
 
-    .calculator-card, .advice-card {
-      background: #f8fafc;
-      padding: 1.5rem;
-      border-radius: 12px;
-      margin-top: 1.5rem;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+    .actions{margin-top:14px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;
+      background:var(--blue-600);color:#fff;
+      box-shadow: 0 6px 16px rgba(37,99,235,0.12);
+    }
+    .muted{color:#6b7280;margin-top:10px;font-size:14px}
+
+    /* Result box */
+    .result-box{
+      margin-top:18px;padding:14px;border-radius:10px;background:#fff;border:1px solid rgba(16,24,40,0.04);
+      box-shadow: 0 8px 20px rgba(16,24,40,0.04);
+    }
+    .result-row{display:flex;gap:12px;align-items:center;margin:8px 0}
+    .result-label{min-width:160px;color:#475569;font-weight:600}
+
+    /* Advice */
+    .advice{margin-top:10px;padding:12px;border-radius:8px;background:linear-gradient(90deg,#eef2ff,#fff);border:1px solid rgba(59,130,246,0.06)}
+
+    /* Back button */
+    .back-btn{display:inline-block;margin-top:18px;padding:12px 18px;background:var(--blue-600);color:#fff;border-radius:10px;text-decoration:none;font-weight:700}
+
+    /* Footer */
+    footer.footer{background:var(--nav-blue);color:#fff;padding:28px 0;margin-top:40px}
+    .footer-inner{text-align:center}
+    .footer-links{margin-top:8px}
+    .footer-links a{color:#bfdbfe;margin:0 8px;font-weight:600}
+
+    /* Responsive */
+    @media(max-width:700px){
+      nav.nav-links ul{display:none}
+      .site-width{width:92%}
+      input[type="number"], select, input[type="text"]{width:100%}
     }
 
-    .advice-card { display: none; animation: fadeIn 0.4s ease; }
-    .advice-icon { font-size: 1.2rem; margin-right: 6px; }
-    .input-group { margin-bottom: 1rem; }
-    .input-group label { display:block; margin-bottom:6px; font-weight:500; }
-
-    .result-card {
-      margin-top: 1rem;
-      background: #e0f2fe;
-      border-radius: 8px;
-      padding: 1rem;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-      color: #1e3a8a;
-      animation: fadeIn 0.4s ease;
+    /* ---------------- Dark Mode ---------------- */
+    body.dark{
+      background: linear-gradient(180deg,#020617, #081224);
+      color:#dbeafe;
     }
-
-    .back-btn {
-      display: inline-block;
-      margin-top: 2rem;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      transition: background 0.3s;
+    body.dark header.navbar{background:#0f172a}
+    body.dark .hero-card{background:linear-gradient(145deg,#0f172a,#111827);box-shadow: 0 8px 26px rgba(0,0,0,0.7)}
+    body.dark .page-title{color:#93c5fd}
+    body.dark .lead{color:#cbd5e1}
+    body.dark .calc-card{background:#0b1220;border:1px solid #263447;box-shadow:0 14px 30px rgba(0,0,0,0.6)}
+    body.dark input[type="number"], body.dark select, body.dark input[type="text"]{
+      background:#0f172a;border:1px solid #2c3b53;color:#e6eef8
     }
-    .back-btn:hover { background: #1d4ed8; }
+    body.dark .calc-card h3{color:#60a5fa}
+    body.dark .result-box{background:#0f172a;border:1px solid #263447;color:#e6eef8}
+    body.dark .btn{box-shadow:0 6px 20px rgba(59,130,246,0.12)}
+    body.dark .advice{background:linear-gradient(90deg,#0b1220,#0f172a);border:1px solid rgba(99,102,241,0.06)}
+    body.dark footer.footer{background:#07102a;color:#e2e8f0}
 
-  /* 🌙 Dark mode styling */
-body.dark main {
-  background: linear-gradient(145deg, #1e293b, #0f172a); /* dark navy gradient */
-  color: #e2e8f0;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
-}
-
-/* 📱 Responsive spacing and padding */
-@media (max-width: 900px) {
-  main {
-    margin: 50px auto 80px;
-    padding: 1.8rem;
-  }
-}
-
-@media (max-width: 600px) {
-  main {
-    margin: 40px auto 70px;
-    padding: 1.5rem;
-  }
-}
-
-/* ✨ Smooth fade-in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    /* tiny */
+    .muted small{color:#94a3b8}
   </style>
 </head>
-
 <body>
-   <!-- ✅ NAVBAR -->
-  <!-- ✅ HEADER -->
-<header class="navbar">
-  <div class="container" style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;">
-    <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:36px;height:36px;margin-right:8px;">
-      <strong>Convert Labs</strong>
-    </a>
-    <nav class="nav-links" style="display:flex;gap:16px;flex-wrap:wrap;">
-      <a href="https://convertlabs.online/index.html">Home</a>
-      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
-      <a href="https://convertlabs.online/guides.html">Blog</a>
-      <a href="https://convertlabs.online/about.html">About</a>
-      <a href="https://convertlabs.online/contact.html">Contact</a>
-    </nav>
-    <button id="themeToggle" style="background:none;border:none;color:white;font-size:1.3rem;cursor:pointer;">🌙</button>
-  </div>
-</header>
-  <main>
-    <h1>Calorie & Nutrition Guide</h1>
-    <p>Use this tool to calculate your <strong>BMR</strong> (Basal Metabolic Rate), <strong>TDEE</strong> (Total Daily Energy Expenditure), and <strong>BMI</strong> (Body Mass Index). Then learn how to adjust your nutrition to meet your goal.</p>
-
-    <section class="calculator-card">
-      <h2>🔢 Calculate Your BMR, TDEE & BMI</h2>
-      <div class="input-group"><label>Gender</label>
-        <select id="gender"><option value="male">Male</option><option value="female">Female</option></select>
+  <!-- Header -->
+  <header class="navbar">
+    <div class="site-width nav-inner">
+      <div class="brand">
+        <a href="/index.html" style="display:flex;align-items:center;text-decoration:none;color:inherit">
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" />
+          <span class="brand-text">Convert Labs</span>
+        </a>
       </div>
-      <div class="input-group"><label>Age</label><input type="number" id="age" placeholder="Years"></div>
-      <div class="input-group"><label>Weight (kg)</label><input type="number" id="weight"></div>
-      <div class="input-group"><label>Height (cm)</label><input type="number" id="height"></div>
-      <div class="input-group"><label>Activity Level</label>
-        <select id="activity">
-          <option value="1.2">Sedentary</option>
-          <option value="1.375">Lightly active</option>
-          <option value="1.55">Moderate</option>
-          <option value="1.725">Active</option>
-          <option value="1.9">Very active</option>
-        </select>
-      </div>
-      <div class="input-group"><label>Goal</label>
-        <select id="goal">
-          <option value="maintain">Maintain</option>
-          <option value="lose">Lose</option>
-          <option value="gain">Gain</option>
-        </select>
-      </div>
-      <button id="calcBtn">Calculate</button>
-      <div id="result"></div>
-    </section>
+      <nav class="nav-links" aria-label="Main">
+        <ul>
+          <li><a href="https://convertlabs.online/index.html">Home</a></li>
+          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
+          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
+          <li><a href="https://convertlabs.online/about.html">About</a></li>
+          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
+        </ul>
+      </nav>
 
-    <section class="advice-card" id="adviceCard">
-      <h2>🥗 Your Nutrition Guidance</h2>
-      <p id="adviceText"></p>
-    </section>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+    </div>
+  </header>
 
-    <a href="https://convertlabs.online/tools/calorie-calculator.html" class="back-btn">← Back to Calorie Calculator</a>
+  <main class="site-width">
+    <div class="hero-card">
+      <h1 class="page-title">Calorie & Nutrition Guide</h1>
+      <p class="lead">Use this guide and the calculator below to determine your <strong>BMR</strong> (Basal Metabolic Rate), <strong>TDEE</strong> (Total Daily Energy Expenditure), and <strong>BMI</strong> (Body Mass Index). Then get clear, practical advice to lose, gain, or maintain weight.</p>
+
+      <!-- Calculator card -->
+      <div class="calc-card">
+        <h3>📊 Calculate Your BMR, TDEE & BMI</h3>
+
+        <div class="field">
+          <label class="field-label">Gender</label>
+          <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Age</label>
+          <input id="age" type="number" placeholder="Years" min="10" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">Weight (kg)</label>
+          <input id="weight" type="number" placeholder="kg" min="20" step="0.1" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">Height (cm)</label>
+          <input id="height" type="number" placeholder="cm" min="80" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">Activity Level</label>
+          <select id="activity">
+            <option value="1.2">Sedentary (little or no exercise)</option>
+            <option value="1.375">Light activity (1–3 days/week)</option>
+            <option value="1.55">Moderate activity (3–5 days/week)</option>
+            <option value="1.725">Active (6–7 days/week)</option>
+            <option value="1.9">Very active (hard physical work or training)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Goal</label>
+          <select id="goal">
+            <option value="maintain">Maintain weight</option>
+            <option value="lose">Lose weight</option>
+            <option value="gain">Gain weight</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <button id="calcBtn" class="btn">Calculate</button>
+        </div>
+
+        <div id="results" class="result-box" style="display:none;">
+          <div class="result-row"><div class="result-label">BMR</div><div id="resBmr">— kcal/day</div></div>
+          <div class="result-row"><div class="result-label">TDEE (est.)</div><div id="resTdee">— kcal/day</div></div>
+          <div class="result-row"><div class="result-label">BMI</div><div id="resBmi">—</div></div>
+          <div class="result-row"><div class="result-label">Daily target</div><div id="resTarget">— kcal/day</div></div>
+
+          <div id="adviceBox" class="advice" style="display:none;margin-top:12px"></div>
+        </div>
+
+        <p class="muted" style="margin-top:12px">
+          <small>Note: These are estimates for general guidance only. For medical or clinical recommendations consult a registered dietitian or physician.</small>
+        </p>
+      </div>
+
+      <a class="back-btn" href="https://convertlabs.online/tools/calorie-calculator.html">← Back to Calorie Calculator</a>
+    </div>
   </main>
 
- <!-- ✅ FOOTER -->
-<footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <footer class="footer">
+    <div class="site-width footer-inner">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:36px;height:36px"/>
+        <div class="footer-brand-text">Convert Labs</div>
+      </div>
+      <p style="margin:8px 0 0">© 2025 Convert Labs. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://convertlabs.online/about.html">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
+        <a href="https://convertlabs.online/guides.html">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html">Terms</a> |
+        <a href="https://convertlabs.online/contact.html">Contact</a>
+      </div>
     </div>
+  </footer>
 
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
-
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
-
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-</footer>
-
-<style>
-  footer.footer a:hover { 
-    text-decoration: underline; 
-    color: #ffffff; 
-  }
-</style>
-
-
+  <!-- Calculator logic + theme persistence -->
   <script>
-    // 🌙 Dark mode persistence (fixed for html + body)
-    const themeBtn = document.getElementById("themeToggle");
-    function setTheme(mode) {
-      document.body.classList.toggle("dark", mode === "dark");
-      document.documentElement.classList.toggle("dark", mode === "dark");
-      themeBtn.textContent = mode === "dark" ? "☀️" : "🌙";
-      localStorage.setItem("theme", mode);
+    // Theme toggle + persistence (keeps it simple and robust)
+    const themeToggle = document.getElementById('themeToggle');
+    function setTheme(mode){
+      if(mode === 'dark'){
+        document.body.classList.add('dark');
+        themeToggle.textContent = '☀️';
+      } else {
+        document.body.classList.remove('dark');
+        themeToggle.textContent = '🌙';
+      }
+      try{ localStorage.setItem('cl_theme', mode); } catch(e){}
     }
-    setTheme(localStorage.getItem("theme") || "light");
-    themeBtn.onclick = () => {
-      const isDark = document.body.classList.contains("dark");
-      setTheme(isDark ? "light" : "dark");
+    (function initTheme(){
+      try{
+        const saved = localStorage.getItem('cl_theme');
+        if(saved) { setTheme(saved); return; }
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(prefersDark ? 'dark' : 'light');
+      }catch(e){ setTheme('light'); }
+    })();
+    themeToggle.addEventListener('click', ()=>{
+      const isDark = document.body.classList.contains('dark');
+      setTheme(isDark ? 'light' : 'dark');
+    });
+
+    // BMR/TDEE/BMI calculation
+    const calcBtn = document.getElementById('calcBtn');
+    const showResults = (bmr,tdee,bmi,target,adviceHtml) => {
+      document.getElementById('resBmr').textContent = Math.round(bmr) + ' kcal/day';
+      document.getElementById('resTdee').textContent = Math.round(tdee) + ' kcal/day';
+      document.getElementById('resBmi').textContent = bmi.toFixed(1);
+      document.getElementById('resTarget').textContent = Math.round(target) + ' kcal/day';
+      document.getElementById('adviceBox').innerHTML = adviceHtml;
+      document.getElementById('adviceBox').style.display = 'block';
+      document.getElementById('results').style.display = 'block';
+      window.scrollTo({ top: document.getElementById('results').offsetTop - 120, behavior:'smooth' });
     };
 
-    // 🧮 BMR + TDEE + BMI
-    document.getElementById("calcBtn").addEventListener("click", () => {
-      const gender = document.getElementById("gender").value;
-      const age = +document.getElementById("age").value;
-      const weight = +document.getElementById("weight").value;
-      const height = +document.getElementById("height").value;
-      const activity = +document.getElementById("activity").value;
-      const goal = document.getElementById("goal").value;
-      const resultDiv = document.getElementById("result");
-      const adviceCard = document.getElementById("adviceCard");
-      const adviceText = document.getElementById("adviceText");
+    function interpretBMI(bmi){
+      if(bmi < 18.5) return {label:'Underweight', msg:'Your BMI indicates underweight. Consider gradual healthy weight gain through calorie surplus and strength training.'};
+      if(bmi < 25) return {label:'Normal', msg:'Your BMI is within the normal range — maintain balanced diet and consistent activity.'};
+      if(bmi < 30) return {label:'Overweight', msg:'Your BMI indicates overweight. A modest calorie deficit (~300–500 kcal/day) with increased activity is often effective.'};
+      return {label:'Obese', msg:'BMI in the obese range. Consider speaking to a healthcare professional for a tailored plan.'};
+    }
 
-      if (!age || !weight || !height) {
-        resultDiv.innerHTML = "<p style='color:#dc2626'>⚠️ Please fill all fields.</p>";
+    calcBtn.addEventListener('click', ()=>{
+      const gender = document.getElementById('gender').value;
+      const age = Number(document.getElementById('age').value);
+      const weight = Number(document.getElementById('weight').value);
+      const height = Number(document.getElementById('height').value);
+      const activity = parseFloat(document.getElementById('activity').value);
+      const goal = document.getElementById('goal').value;
+
+      // basic validation
+      if(!age || !weight || !height || age < 10){
+        alert('Please enter valid Age, Weight and Height.');
         return;
       }
 
-      const bmr = gender === "male"
-        ? 88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)
-        : 447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age);
-      const tdee = bmr * activity;
-
-      let targetCalories = tdee;
-      if (goal === "lose") targetCalories -= 400;
-      else if (goal === "gain") targetCalories += 400;
-
-      const bmi = weight / ((height / 100) ** 2);
-      let bmiStatus = "";
-      if (bmi < 18.5) bmiStatus = "🔵 Underweight — you may need to gain some healthy weight.";
-      else if (bmi < 25) bmiStatus = "🟢 Healthy weight — maintain your balanced nutrition!";
-      else if (bmi < 30) bmiStatus = "🟡 Overweight — focus on calorie control and activity.";
-      else bmiStatus = "🔴 Obese — consider professional nutrition guidance.";
-
-      resultDiv.innerHTML = `
-        <div class="result-card">
-          <p><strong>BMR:</strong> ${bmr.toFixed(0)} kcal/day</p>
-          <p><strong>TDEE:</strong> ${tdee.toFixed(0)} kcal/day</p>
-          <p><strong>Recommended Intake:</strong> ${targetCalories.toFixed(0)} kcal/day (${goal})</p>
-          <p><strong>BMI:</strong> ${bmi.toFixed(1)} — ${bmiStatus}</p>
-        </div>
-      `;
-
-      let advice = "";
-      if (goal === "lose") {
-        advice = "🔥 To lose weight safely, aim for a 300–500 kcal daily deficit. Choose lean protein, high-fiber foods, and avoid sugary drinks.";
-      } else if (goal === "gain") {
-        advice = "💪 To gain muscle or weight, eat 300–500 kcal more than TDEE. Include whole grains, nuts, and protein-rich foods.";
+      // Mifflin-St Jeor BMR
+      let bmr;
+      if(gender === 'male'){
+        bmr = 10*weight + 6.25*height - 5*age + 5;
       } else {
-        advice = "🥗 To maintain your current weight, match your TDEE and keep balanced meals: 45–55% carbs, 25–30% protein, 20–30% fats.";
+        bmr = 10*weight + 6.25*height - 5*age - 161;
       }
 
-      adviceCard.style.display = "block";
-      adviceText.innerHTML = advice;
+      // TDEE
+      const tdee = bmr * activity;
+
+      // BMI
+      const bmi = weight / Math.pow(height/100, 2);
+
+      // Decide target calories according to goal
+      let target = tdee;
+      let advice = '';
+      if(goal === 'maintain'){
+        target = tdee;
+        advice = '<strong>Maintain</strong>: Eat roughly your TDEE each day. Focus on balanced macros and consistent activity.';
+      } else if(goal === 'lose'){
+        // safe deficit: 10-25% depending on starting point; default -20%
+        const deficit = 0.20;
+        target = tdee * (1 - deficit);
+        advice = `<strong>Lose weight</strong>: Aim for a gradual calorie deficit. Example: reduce ~${Math.round(tdee*deficit)} kcal/day (~20% deficit) to lose ~0.4–0.6 kg/week. Combine with protein-rich meals and resistance training.`;
+      } else if(goal === 'gain'){
+        const surplus = 0.15;
+        target = tdee * (1 + surplus);
+        advice = `<strong>Gain weight</strong>: Moderate surplus of ~${Math.round(tdee*surplus)} kcal/day (~15%) supports slow, lean muscle gain with strength training. Prefer nutrient-dense foods.`;
+      }
+
+      // BMI interpretation
+      const bmiInterpret = interpretBMI(bmi);
+      const fullAdvice = `
+        <div><strong>BMI:</strong> ${bmiInterpret.label} — ${bmiInterpret.msg}</div>
+        <div style="margin-top:8px">${advice}</div>
+        <div style="margin-top:8px">Use the <strong>Daily target</strong> as an average — daily calories will vary. Track progress weekly, not daily.</div>
+      `;
+
+      showResults(bmr, tdee, bmi, target, fullAdvice);
     });
   </script>
 </body>
