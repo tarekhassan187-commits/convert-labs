@@ -6,7 +6,6 @@
   <title>Calorie & Nutrition Guide — Convert Labs</title>
   <meta name="description" content="Calculate your BMR, TDEE, and BMI to understand your daily calorie needs. Get personalized nutrition guidance for weight loss, maintenance, or gain — from Convert Labs." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
   <meta name="theme-color" content="#1e40af" />
   <meta name="robots" content="index, follow" />
 
@@ -47,7 +46,7 @@
   </script>
 
   <style>
-    body {
+    html, body {
       font-family: "Inter", sans-serif;
       background: #f9fafb;
       color: #1e293b;
@@ -55,12 +54,14 @@
       line-height: 1.6;
       transition: background 0.4s ease, color 0.4s ease;
     }
+
     header.navbar, footer.footer {
       background: #1e3a8a;
       color: #fff;
     }
     .nav-links a { color: #f8fafc; text-decoration: none; margin: 0 8px; }
     .nav-links a:hover { color: #fff; }
+
     main {
       max-width: 900px;
       margin: 120px auto;
@@ -70,6 +71,7 @@
       box-shadow: 0 6px 14px rgba(0,0,0,0.06);
       animation: fadeIn 0.4s ease;
     }
+
     h1,h2,h3 { color: #1e3a8a; }
     input, select, button {
       border-radius: 8px;
@@ -85,6 +87,7 @@
       transition: background 0.3s ease;
     }
     button:hover { background: #1d4ed8; }
+
     .calculator-card, .advice-card {
       background: #f8fafc;
       padding: 1.5rem;
@@ -92,9 +95,9 @@
       margin-top: 1.5rem;
       box-shadow: 0 6px 12px rgba(0,0,0,0.06);
     }
+
     .advice-card { display: none; animation: fadeIn 0.4s ease; }
     .advice-icon { font-size: 1.2rem; margin-right: 6px; }
-
     .input-group { margin-bottom: 1rem; }
     .input-group label { display:block; margin-bottom:6px; font-weight:500; }
 
@@ -120,15 +123,31 @@
     }
     .back-btn:hover { background: #1d4ed8; }
 
-    /* 🌙 Dark Mode */
-    body.dark { background: #0f172a; color: #e2e8f0; }
-    body.dark main { background: #1e293b; color: #e2e8f0; }
-    body.dark .calculator-card, body.dark .advice-card { background: #111827; box-shadow: 0 0 10px rgba(255,255,255,0.05); }
-    body.dark .result-card { background: #1e3a8a; color: #e0f2fe; }
+    /* 🌙 Dark Mode (Fixed) */
+    html.dark, body.dark {
+      background: #0b1120 !important;
+      color: #e2e8f0 !important;
+    }
+    body.dark main {
+      background: #1e293b;
+      color: #e2e8f0;
+      box-shadow: 0 0 20px rgba(255,255,255,0.05);
+    }
+    body.dark .calculator-card, body.dark .advice-card {
+      background: #111827;
+      box-shadow: 0 0 10px rgba(255,255,255,0.05);
+    }
+    body.dark .result-card {
+      background: #1e3a8a;
+      color: #f0f9ff;
+    }
+    body.dark header.navbar, body.dark footer.footer {
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+    body.dark h1,h2,h3 { color: #60a5fa; }
     body.dark button { background: #3b82f6; }
     body.dark button:hover { background: #2563eb; }
-    body.dark header.navbar, body.dark footer.footer { background: #0f172a; }
-    body.dark h1,h2,h3 { color: #60a5fa; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
@@ -138,22 +157,18 @@
 </head>
 
 <body>
-<header class="navbar">
-    <div class="nav-container">
-      <a class="brand" href="/index.html">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:36px;height:36px;border-radius:6px;background:#fff;padding:4px;">
-        <span>Convert Labs</span>
+  <header class="navbar">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 24px;">
+      <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:36px;height:36px;margin-right:8px;">
+        <strong>Convert Labs</strong>
       </a>
-      <nav class="nav-links" aria-label="Primary">
-        <ul>
-          <li><a href="https://convertlabs.online/index.html">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-        </ul>
+      <nav class="nav-links">
+        <a href="https://convertlabs.online/index.html">Home</a>|
+        <a href="https://convertlabs.online/tools/tools.html">Tools</a>|
+        <a href="https://convertlabs.online/guides.html">Blog</a>
       </nav>
-      <button id="themeToggle" title="Toggle theme" style="background:transparent;border:none;color:#f8fafc;font-size:20px;cursor:pointer;">🌙</button>
+      <button id="themeToggle" style="background:none;border:none;color:white;font-size:1.3rem;cursor:pointer;">🌙</button>
     </div>
   </header>
 
@@ -215,10 +230,11 @@
   </footer>
 
   <script>
-    // 🌙 Dark mode persistence
+    // 🌙 Dark mode persistence (fixed for html + body)
     const themeBtn = document.getElementById("themeToggle");
     function setTheme(mode) {
       document.body.classList.toggle("dark", mode === "dark");
+      document.documentElement.classList.toggle("dark", mode === "dark");
       themeBtn.textContent = mode === "dark" ? "☀️" : "🌙";
       localStorage.setItem("theme", mode);
     }
@@ -254,13 +270,12 @@
       if (goal === "lose") targetCalories -= 400;
       else if (goal === "gain") targetCalories += 400;
 
-      // 🧾 BMI Calculation
       const bmi = weight / ((height / 100) ** 2);
       let bmiStatus = "";
       if (bmi < 18.5) bmiStatus = "🔵 Underweight — you may need to gain some healthy weight.";
       else if (bmi < 25) bmiStatus = "🟢 Healthy weight — maintain your balanced nutrition!";
       else if (bmi < 30) bmiStatus = "🟡 Overweight — focus on calorie control and activity.";
-      else bmiStatus = "🔴 Obese — consult a nutritionist for a healthy reduction plan.";
+      else bmiStatus = "🔴 Obese — consider professional nutrition guidance.";
 
       resultDiv.innerHTML = `
         <div class="result-card">
