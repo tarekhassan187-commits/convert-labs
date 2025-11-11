@@ -79,5 +79,11 @@
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
+  <url>
+    <loc>https://convertlabs.online/tools/calorie-guide.html</loc>
+    <lastmod>2025-11-11</lastmod>
+    <priority>0.85</priority>
+  </url>
 
 </urlset>
+
