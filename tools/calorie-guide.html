@@ -62,14 +62,16 @@
     .nav-links a { color: #f8fafc; text-decoration: none; margin: 0 8px; }
     .nav-links a:hover { color: #fff; }
 
-  main {
+/* 🌤️ Main container styling (light mode) */
+main {
   max-width: 900px;
-  margin: 60px auto 100px;  /* reduced top gap from 120px → 60px */
+  margin: 60px auto 100px;
   padding: 2rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  background: linear-gradient(145deg, #ffffff, #f1f5ff); /* soft white-to-blue gradient */
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   animation: fadeIn 0.4s ease;
+  color: #111827;
 }
 
 
@@ -124,36 +126,39 @@
     }
     .back-btn:hover { background: #1d4ed8; }
 
-    /* 🌙 Dark Mode (Fixed) */
-    html.dark, body.dark {
-      background: #0b1120 !important;
-      color: #e2e8f0 !important;
-    }
-    body.dark main {
-      background: #1e293b;
-      color: #e2e8f0;
-      box-shadow: 0 0 20px rgba(255,255,255,0.05);
-    }
-    body.dark .calculator-card, body.dark .advice-card {
-      background: #111827;
-      box-shadow: 0 0 10px rgba(255,255,255,0.05);
-    }
-    body.dark .result-card {
-      background: #1e3a8a;
-      color: #f0f9ff;
-    }
-    body.dark header.navbar, body.dark footer.footer {
-      background: #0f172a;
-      color: #e2e8f0;
-    }
-    body.dark h1,h2,h3 { color: #60a5fa; }
-    body.dark button { background: #3b82f6; }
-    body.dark button:hover { background: #2563eb; }
+  /* 🌙 Dark mode styling */
+body.dark main {
+  background: linear-gradient(145deg, #1e293b, #0f172a); /* dark navy gradient */
+  color: #e2e8f0;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+/* 📱 Responsive spacing and padding */
+@media (max-width: 900px) {
+  main {
+    margin: 50px auto 80px;
+    padding: 1.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  main {
+    margin: 40px auto 70px;
+    padding: 1.5rem;
+  }
+}
+
+/* ✨ Smooth fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
   </style>
 </head>
 
