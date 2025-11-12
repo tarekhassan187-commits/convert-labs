@@ -258,7 +258,39 @@
           </ul>
 
           <!-- ADDED LINK to the guide page you mentioned -->
-          <p style="margin-top:12px;">Want to understand daily calorie needs and meal plans? <a href="https://convertlabs.online/tools/calorie-guide.html">Read our Calorie & Nutrition Guide →</a></p>
+<p style="margin-top:12px;">Want to understand daily calorie needs and meal plans? </p>
+         <div style="text-align:center; margin-top:24px;">
+  <a href="https://convertlabs.online/tools/calorie-guide.html"
+     style="
+       display:inline-block;
+       background:#2563eb;
+       color:#fff;
+       padding:12px 22px;
+       border-radius:8px;
+       font-weight:600;
+       text-decoration:none;
+       box-shadow:0 4px 10px rgba(37,99,235,0.25);
+       transition:all 0.25s ease;
+     "
+     onmouseover="this.style.background='#1e40af'; this.style.boxShadow='0 4px 12px rgba(30,64,175,0.35)';"
+     onmouseout="this.style.background='#2563eb'; this.style.boxShadow='0 4px 10px rgba(37,99,235,0.25)';">
+     📘 Explore Full Calorie & Nutrition Guide
+  </a>
+</div>
+
+<!-- 🌙 Dark mode adaptation -->
+<style>
+  body.dark a[href*="calorie-guide.html"] {
+    background:#3b82f6 !important;
+    color:#ffffff !important;
+    box-shadow:0 4px 12px rgba(59,130,246,0.3) !important;
+  }
+  body.dark a[href*="calorie-guide.html"]:hover {
+    background:#2563eb !important;
+    box-shadow:0 4px 14px rgba(37,99,235,0.4) !important;
+  }
+</style>
+
         </div>
       </div>
     </section>
@@ -654,5 +686,4 @@
   </script>
 </body>
 </html>
-
 
