@@ -1,6 +1,6 @@
 [
   { "name": "falafel", "kcal": 333, "protein": 13.3, "carbs": 31.8, "sugar": 2.1, "fat": 17.8 },
- { "name": "flafel", "kcal": 333, "protein": 13.3, "carbs": 31.8, "sugar": 2.1, "fat": 17.8 },
+  { "name": "flafel", "kcal": 333, "protein": 13.3, "carbs": 31.8, "sugar": 2.1, "fat": 17.8 },
   { "name": "taamiya", "kcal": 320, "protein": 13.0, "carbs": 30.0, "sugar": 1.8, "fat": 18.0 },
   { "name": "hummus", "kcal": 166, "protein": 7.9, "carbs": 14.3, "sugar": 0.3, "fat": 9.6 },
   { "name": "tahini", "kcal": 595, "protein": 17.0, "carbs": 21.0, "sugar": 0.5, "fat": 53.8 },
@@ -21,8 +21,5 @@
   { "name": "baklava", "kcal": 430, "protein": 6.0, "carbs": 46.0, "sugar": 28.0, "fat": 24.0 },
   { "name": "knafeh", "kcal": 350, "protein": 9.0, "carbs": 38.0, "sugar": 26.0, "fat": 17.0 },
   { "name": "egyptian salad", "kcal": 65, "protein": 1.2, "carbs": 7.2, "sugar": 4.5, "fat": 3.2 },
-  { "name": "koshary", "kcal": 118, "protein": 3, "carbs": 16, "sugar": 2, "fat": 5.1 },
+  { "name": "koshary", "kcal": 118, "protein": 3.0, "carbs": 16.0, "sugar": 2.0, "fat": 5.1 }
 ]
-
-
-
