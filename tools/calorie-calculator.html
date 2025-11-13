@@ -253,16 +253,40 @@
   multiplier to estimate Total Daily Energy Expenditure (TDEE).
 </div>
 
-<div class="nutrition-disclaimer" style="margin-top:30px;padding:18px;background:#f7f7f7;border-left:4px solid #4A90E2;border-radius:6px;font-size:15px;line-height:1.6;">
+<div class="nutrition-disclaimer">
   <strong>Nutrition Data Notice:</strong><br>
   All nutrition values provided on this website come exclusively from the 
   <strong>USDA FoodData Central</strong> public-domain database.<br>
   Traditional or regional dishes have been temporarily removed to comply with 
   <strong>Google Publisher Policies</strong> relating to health and nutrition data accuracy.<br><br>
-  This tool is intended for general informational purposes only and should not be considered 
-  medical, nutritional, or dietary advice. For personalized guidance, please consult a certified 
-  nutritionist or healthcare professional.
+  This tool is intended for general informational purposes only and should not be considered medical,
+  nutritional, or dietary advice. For personalized guidance, please consult a certified nutritionist
+  or healthcare professional.
 </div>
+
+<style>
+/* LIGHT THEME */
+.nutrition-disclaimer {
+  margin-top: 30px;
+  padding: 18px;
+  background: #f7f7f7;
+  border-left: 4px solid #4A90E2;
+  border-radius: 6px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #222;
+}
+
+/* DARK THEME */
+@media (prefers-color-scheme: dark) {
+  .nutrition-disclaimer {
+    background: #1e1e1e;
+    color: #ddd;
+    border-left: 4px solid #6aa0ff;
+  }
+}
+</style>
+
 
         <div class="about" style="margin-top:20px;">
           <strong style="display:block;margin-bottom:8px;color:inherit">About This Tool</strong>
@@ -703,6 +727,7 @@
   </script>
 </body>
 </html>
+
 
 
 
