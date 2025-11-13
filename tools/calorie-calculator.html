@@ -265,7 +265,7 @@
 </div>
 
 <style>
-/* LIGHT THEME (default colors) */
+/* LIGHT THEME (default) */
 .nutrition-disclaimer {
   margin-top: 30px;
   padding: 18px;
@@ -277,18 +277,18 @@
   color: #222;
 }
 
-/* DARK THEME — triggered when page has dark background */
-body[style*="background-color:#0"],      /* matches body with dark inline style */
-body[style*="background:#0"],           /* matches body with dark inline style */
-.calculator-wrap.dark-mode .nutrition-disclaimer,
-.dark-theme .nutrition-disclaimer {
-  background: #1a2238 !important;
-  color: #e8e8e8 !important;
+/* DARK THEME — detect dark calculator background */
+.calculator-wrap {
+  /* nothing here — selector only */
+}
+
+/* Apply dark styles to disclaimer when calculator region is dark */
+.calculator-wrap .nutrition-disclaimer {
+  background: #1c253a !important;
+  color: #e7e7e7 !important;
   border-left: 4px solid #6aa0ff !important;
 }
 </style>
-
-
 
         <div class="about" style="margin-top:20px;">
           <strong style="display:block;margin-bottom:8px;color:inherit">About This Tool</strong>
@@ -729,6 +729,7 @@ body[style*="background:#0"],           /* matches body with dark inline style *
   </script>
 </body>
 </html>
+
 
 
 
