@@ -151,6 +151,61 @@
     footer.footer a:hover {
       text-decoration: underline;
     }
+    /* === CONTACT PAGE DARK MODE FIX === */
+
+/* Contact card container */
+html.dark .contact-card,
+body.dark .contact-card {
+  background: #1b2435 !important;
+  color: #e6eef8 !important;
+  border: 1px solid #263447 !important;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.6) !important;
+}
+
+/* Headings */
+html.dark .contact-card h1,
+html.dark .contact-card h2,
+html.dark .contact-card h3,
+body.dark .contact-card h1,
+body.dark .contact-card h2,
+body.dark .contact-card h3 {
+  color: #93c5fd !important;
+}
+
+/* Paragraphs & labels */
+html.dark .contact-card p,
+html.dark .contact-card label,
+body.dark .contact-card p,
+body.dark .contact-card label {
+  color: #cbd5e1 !important;
+}
+
+/* Input fields */
+html.dark .contact-card input,
+html.dark .contact-card textarea,
+body.dark .contact-card input,
+body.dark .contact-card textarea {
+  background: #0f172a !important;
+  border: 1px solid #2c3b53 !important;
+  color: #e6eef8 !important;
+}
+
+/* Placeholder text */
+html.dark .contact-card input::placeholder,
+html.dark .contact-card textarea::placeholder,
+body.dark .contact-card input::placeholder,
+body.dark .contact-card textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Submit button */
+html.dark .contact-card button,
+body.dark .contact-card button {
+  background: #2563eb !important;
+  color: #fff !important;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25) !important;
+}
+
   </style>
 </head>
 
@@ -285,6 +340,7 @@
   <script src="https://convertlabs.online/script.js" defer></script>
 </body>
 </html>
+
 
 
 
