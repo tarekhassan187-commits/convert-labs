@@ -113,6 +113,59 @@ html.dark .small-muted {
 html.dark a {
   color: #93c5fd !important;
 }
+<!-- DARK MODE OVERRIDES: paste into <head> AFTER your main styles -->
+<style>
+/* Universal dark-mode override — covers html.dark, body.dark, body.dark-mode */
+html.dark .hero-card,
+body.dark .hero-card,
+html.dark .page,
+body.dark .page,
+html.dark .content,
+body.dark .content {
+  background: linear-gradient(145deg,#0f172a,#111827) !important;
+  color: #e6eef8 !important;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.7) !important;
+}
+
+/* Make headings and body text readable */
+html.dark h1, html.dark h2, html.dark h3, html.dark .page-title,
+body.dark h1, body.dark h2, body.dark h3, body.dark .page-title {
+  color: #93c5fd !important;
+}
+html.dark p, html.dark li, html.dark .small-muted,
+body.dark p, body.dark li, body.dark .small-muted {
+  color: #cbd5e1 !important;
+}
+
+/* Links color in dark mode */
+html.dark a, body.dark a {
+  color: #93c5fd !important;
+}
+
+/* Specific fix for disclaimer / boxed cards with inline styles */
+html.dark .nutrition-disclaimer,
+body.dark .nutrition-disclaimer,
+html.dark .content,
+body.dark .content {
+  background: #1b2435 !important;
+  color: #e7e7e7 !important;
+  border-left-color: #6aa0ff !important;
+  border-radius: 8px !important;
+}
+
+/* Footer link color */
+html.dark .footer-links a, body.dark .footer-links a {
+  color: #dbeafe !important;
+}
+
+/* Small screen tweaks */
+@media (max-width:700px){
+  html.dark .content, body.dark .content {
+    padding: 14px !important;
+    font-size: 15px !important;
+  }
+}
+</style>
 
   </style>
 </head>
@@ -263,4 +316,5 @@ html.dark a {
 
 </body>
 </html>
+
 
