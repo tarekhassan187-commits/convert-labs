@@ -400,7 +400,6 @@
 
     Promise.all([
       fetch('https://convertlabs.online/assets/usda_food_nutrition.json').then(r=>r.json()).catch(()=>[]),
-      fetch('https://convertlabs.online/assets/extras-oriental-foods.json').then(r=>r.json()).catch(()=>[]),
       fetch('https://convertlabs.online/assets/foods-full.json').then(r=>r.json()).catch(()=>[]),
       fetch('https://convertlabs.online/assets/foods-lite.json').then(r=>r.json()).catch(()=>[])
     ]).then(arrs=>{
@@ -686,4 +685,5 @@
   </script>
 </body>
 </html>
+
 
