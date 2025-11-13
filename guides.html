@@ -1,164 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Guides & Tutorials — Convert Labs</title>
-
-  <!-- ✅ SEO -->
-  <meta name="description" content="Learn with Convert Labs guides — explore formulas, real-world examples, and conversion tips for length, volume, temperature, currency, kitchen conversions, images, calories, and container volume." />
-  <meta name="keywords" content="unit conversion guide, tutorials, measurement tips, length conversion, volume conversion, kitchen measurements, currency conversion, image conversion, calorie estimation" />
-  <meta name="robots" content="index, follow" />
+  <meta name="description" content="Practical guides for Convert Labs tools — formulas, worked examples, and tips for length, volume, temperature, currency, kitchen measures, images, calories and container volume." />
   <link rel="canonical" href="https://convertlabs.online/guides.html" />
-  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-  <link rel="stylesheet" href="style.css" />
-
-<!-- ✅ OPEN GRAPH -->
-  <meta property="og:title" content="Convert Labs — Smart & Accurate Online Converters" />
-  <meta property="og:description" content="Explore smart, free tools for everyday use — from temperature and volume conversions to kitchen, calorie, and currency calculators. Learn and calculate instantly." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://convertlabs.online/" />
+  <meta property="og:title" content="Guides & Tutorials — Convert Labs" />
+  <meta property="og:description" content="Step-by-step HOW TO guides for Convert Labs tools: formulas, examples and practical tips." />
+  <meta property="og:url" content="https://convertlabs.online/guides.html" />
   <meta property="og:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <meta property="og:image:alt" content="Convert Labs logo icon" />
-  <meta property="og:site_name" content="Convert Labs" />
-  <meta property="og:locale" content="en_US" />
-
-  <!-- ✅ TWITTER -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Convert Labs — Smart & Accurate Online Converters" />
-  <meta name="twitter:description" content="Free online converters with educational guides. Convert units, currency, and calories instantly with Convert Labs." />
-  <meta name="twitter:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png">
 
-  <link rel="canonical" href="https://convertlabs.online/" />
-  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- ✅ Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
-
-  <!-- ✅ Google Analytics -->
+  <!-- Analytics only (no AdSense in guides index by your choice) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P');
+  </script>
 
-
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
   <style>
-    /* --- Guides Page Layout --- */
-    main {
-      max-width: 1000px;
-      margin: auto;
-      padding: 2rem 1rem;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    /* --- Card Grid --- */
-    .blog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
-      align-items: stretch;
-    }
-
-    .blog-card {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      padding: 1rem;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
-      min-height: 400px;
-      border: 1px solid rgba(30,64,175,0.05);
-    }
-
-    .blog-card img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 0.8rem;
-    }
-
-    .blog-card h3 {
-      font-size: 1rem;
-      color: #1e40af;
-      margin: 0.5rem 0;
-      transition: color 0.2s ease;
-    }
-
-    .blog-card h3 a {
-      text-decoration: none;
-      color: inherit;
-      transition: color 0.2s ease;
-    }
-
-    .blog-card p {
-      flex-grow: 1;
-      color: #333;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .blog-card small {
-      display: block;
-      margin-top: 0.8rem;
-      color: #666;
-      font-size: 0.85rem;
-    }
-
-    /* --- Hover Effect --- */
-    .blog-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 16px rgba(37,99,235,0.15);
-      border: 1px solid rgba(37,99,235,0.25);
-    }
-
-    .blog-card:hover h3 a {
-      color: #2563eb;
-    }
-
-    /* --- Button --- */
-    .cta-secondary {
-      background: #2563eb;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      transition: background 0.25s;
-    }
-
-    .cta-secondary:hover {
-      background: #1e3a8a;
-    }
-
-    /* --- Responsive tweaks --- */
-    @media (max-width: 600px) {
-      main {
-        padding: 1.5rem 0.8rem;
-      }
-      .blog-card {
-        min-height: auto;
-      }
-    }
+    /* Page-specific styles */
+    main{ max-width:1100px; margin:36px auto; padding:0 16px; }
+    .hero{ text-align:center; margin-bottom:28px; }
+    .grid{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+    .card{ background:var(--card,#fff); border-radius:12px; padding:16px; box-shadow:0 8px 20px rgba(16,24,40,0.04); border:1px solid rgba(16,24,40,0.03); min-height:240px; display:flex;flex-direction:column; }
+    .card h3{ color:var(--nav-blue,#1e40af); margin:12px 0 8px; font-size:1.05rem; }
+    .card p{ color:var(--text,#0f172a); flex:1; line-height:1.5; }
+    .card a.read{ display:inline-block; margin-top:12px; background:#2563eb; color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none;}
+    /* dark mode */
+    html.dark .card, body.dark .card{ background:#0f172a; border-color:#263447; color:#e6eef8; box-shadow:none; }
+    html.dark .card h3{ color:#93c5fd; }
   </style>
 </head>
-
 <body>
-  <!-- ✅ NAVBAR -->
   <header class="navbar">
     <div class="nav-container">
-      <div class="logo">
-        <a href="https://convertlabs.online/index.html">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs Icon" class="logo-img" />
-          <span class="brand-text">Convert Labs</span>
-        </a>
-      </div>
-      <nav class="nav-links">
+      <a class="brand" href="https://convertlabs.online/index.html" style="display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit;">
+        <img src="/assets/convert-labs-icon.png" alt="" style="width:36px;height:36px;border-radius:8px;background:#fff;padding:4px;">
+        <span style="font-weight:700;color:#fff">Convert Labs</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
         <ul>
           <li><a href="https://convertlabs.online/index.html">Home</a></li>
           <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
@@ -171,80 +57,71 @@
     </div>
   </header>
 
-  <!-- ✅ MAIN CONTENT -->
   <main>
-    <h1>Convert Labs Guides & Tutorials</h1>
-    <p style="text-align:center;max-width:700px;margin:auto;margin-bottom:2rem;">
-      Learn the science behind everyday conversions. Our practical guides explain formulas, logic, and real-world applications — so you can calculate smarter, not just faster.
-    </p>
+    <div class="hero">
+      <h1>Guides & Tutorials</h1>
+      <p style="max-width:780px;margin:12px auto;color:var(--muted,#6b7280);">
+        Step-by-step how-to guides for each Convert Labs tool. Each guide explains formulas, examples and practical tips — written for people who want to understand the "why" behind results.
+      </p>
+    </div>
 
-    <section class="blog-grid">
-      <article class="blog-card">
-        <img src="https://convertlabs.online/assets/guide-length.png" alt="Length conversion guide">
-        <h3><a href="https://convertlabs.online/tools/length-converter.html">Understanding Length Conversions</a></h3>
-        <p>Convert meters, centimeters, inches, feet, and miles — learn common formulas, examples, and practical tips for measurement accuracy.</p>
-        <small>📅 Updated: November 2025</small>
+    <section class="grid" aria-label="Guides list">
+      <article class="card">
+        <h3>Length conversions — How to use</h3>
+        <p>Formulas, common pitfalls (unit prefixes, imperial vs metric), and worked examples for meters, centimeters, inches and miles.</p>
+        <a class="read" href="https://convertlabs.online/guides/length.html">Read guide →</a>
       </article>
 
-      <article class="blog-card">
-        <img src="https://convertlabs.online/assets/thermometer.jpg" alt="Temperature conversion guide">
-        <h3><a href="https://convertlabs.online/tools/temperature-converter.html">Temperature Scales Explained</a></h3>
-        <p>Understand Celsius, Fahrenheit, Kelvin, and how to convert between them — including Rankine and Réaumur notes for completeness.</p>
-        <small>📅 Updated: November 2025</small>
+      <article class="card">
+        <h3>Temperature scales — How to convert</h3>
+        <p>Why Celsius, Fahrenheit and Kelvin differ, conversion formulas, and precision tips for scientific vs everyday use.</p>
+        <a class="read" href="/guides/temperature.html">Read guide →</a>
       </article>
 
-      <article class="blog-card">
-        <img src="https://convertlabs.online/assets/guide-volume.png" alt="Volume conversion guide">
-        <h3><a href="https://convertlabs.online/tools/volume-converter.html">Understanding Volume Conversions</a></h3>
-        <p>Learn liters, milliliters, cups, US/UK gallons, cubic meters, cubic feet and more — with real-world cooking and shipping examples.</p>
-        <small>📅 Updated: November 2025</small>
+      <article class="card">
+        <h3>Volume conversions — How to measure</h3>
+        <p>Liters, milliliters, cups, gallons, and converting between volume and mass using density (with examples for water, oil, flour).</p>
+        <a class="read" href="https://convertlabs.online/guides/volume.html">Read guide →</a>
       </article>
 
-      <article class="blog-card">
-        <img src="https://convertlabs.online/assets/container-volume.jpg" alt="Container volume guide">
-        <h3><a href="https://convertlabs.online/tools/container-calculator.html">How to Calculate Container Volume</a></h3>
-        <p>Step-by-step guide to compute box and cylinder volumes, unit conversions, and estimate mass using densities for common liquids.</p>
-        <small>📅 Updated: November 2025</small>
+      <article class="card">
+        <h3>Container volume — Boxes & cylinders</h3>
+        <p>Calculate box and cylinder volumes, convert units, and estimate mass for liquids using density tables — useful for packaging and shipping.</p>
+        <a class="read" href="https://convertlabs.online/guides/container-volume.html">Read guide →</a>
       </article>
 
-      <article class="blog-card">
-        <img src="https://convertlabs.online/assets/kitchen-measuring.jpg" alt="Kitchen measurements guide">
-        <h3><a href="https://convertlabs.online/tools/kitchen-converter.html">Cooking Measurements Made Easy</a></h3>
-        <p>From grams to cups — understand ingredient density, packing differences, and tips for accurate baking and cooking conversions.</p>
-        <small>📅 Updated: November 2025</small>
+      <article class="card">
+        <h3>Kitchen measurements — Practical tips</h3>
+        <p>Why two tablespoons of flour ≠ two tablespoons of sugar: density, packing, and how to measure accurately in recipes.</p>
+        <a class="read" href="https://convertlabs.online/guides/kitchen.html">Read guide →</a>
       </article>
 
-      <article class="blog-card">
-        <img src="https://convertlabs.online/assets/guide-currency.png" alt="Currency conversion guide">
-        <h3><a href="https://convertlabs.online/tools/currency-converter.html">Smart Currency Conversion Tips</a></h3>
-        <p>Learn how exchange rates work, what affects them, and how to read live rates safely for travel and small business transactions.</p>
-        <small>📅 Updated: November 2025</small>
+      <article class="card">
+        <h3>Currency conversion — Smart usage</h3>
+        <p>How exchange rates work, reading quotes, avoiding hidden fees, and examples for travel and small business conversions.</p>
+        <a class="read" href="https://convertlabs.online/guides/currency.html">Read guide →</a>
       </article>
 
-      <article class="blog-card">
-        <img src="https://convertlabs.online/assets/guide-image.png" alt="Image format converter guide">
-        <h3><a href="https://convertlabs.online/tools/image-converter.html">Image Format Conversion Guide</a></h3>
-        <p>Know when to use JPG, PNG, WEBP, or GIF — file size vs quality, transparency, and best use cases for web publishing.</p>
-        <small>📅 Updated: November 2025</small>
+      <article class="card">
+        <h3>Image formats — Choose the right one</h3>
+        <p>JPG vs PNG vs WEBP vs SVG: quality, transparency, compression trade-offs, and when to use each format for web and print.</p>
+        <a class="read" href="https://convertlabs.online/guides/image.html">Read guide →</a>
       </article>
 
-      <article class="blog-card">
-        <img src="https://convertlabs.online/assets/guide-calories.png" alt="Calorie calculator guide">
-        <h3><a href="https://convertlabs.online/tools/calorie-calculator.html">Calorie Calculation Explained</a></h3>
-        <p>Discover how calorie estimation works using ingredient composition and densities — practical methods and limitations to be aware of.</p>
-        <small>📅 Updated: November 2025</small>
+      <article class="card">
+        <h3>Calories & nutrition — How we estimate</h3>
+        <p>How calorie estimates are built (macros → energy), per-100g basis, serving conversions, and limitations of food composition data.</p>
+        <a class="read" href="https://convertlabs.online/guides/calories.html">Read guide →</a>
       </article>
     </section>
 
-    <section style="text-align:center;margin-top:3rem;">
-      <h2>Want More In-Depth Guides?</h2>
-      <p>We regularly add new articles about conversion accuracy, formulas, and unit history. Suggest a topic anytime via our <a href="contact.html">contact page</a> — your ideas shape our next updates!</p>
-      <a href="tools/tools.html" class="cta-secondary">Explore All Tools</a>
+    <section style="text-align:center;margin-top:36px;">
+      <p style="color:var(--muted,#6b7280);">Want a guide we haven't written yet? <a href="/contact.html">Send a suggestion</a>.</p>
     </section>
   </main>
 
- <!-- Footer -->
-  <footer class="footer">
+   <!-- Footer -->
+ <footer class="footer">
   <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
     <div class="footer-brand" style="margin-bottom:10px;">
       <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
@@ -252,38 +129,6 @@
     </div>
 
     <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
-<div class="footer-verification" style="text-align:center; font-size:13px; margin-top:10px; transition:color 0.3s ease;">
-  <p class="verify-text" style="margin:0;">
-    🔒 Verified by <strong>Convert Labs</strong> — Secure DNS & Email Authentication 
-    (SPF • DKIM • DMARC Active)
-    <a href="/about.html" style="text-decoration:none; color:var(--verify-link-color);">Learn more</a>
-  </p>
-
-  <style>
-    :root {
-      --verify-text-light: #2448a1;    /* dark blue for light mode */
-      --verify-link-light: #0048ff;    /* bright blue link for light mode */
-      --verify-text-dark: #dbe5ff;     /* soft white for dark mode */
-      --verify-link-dark: #9dc6ff;     /* light blue for dark mode */
-    }
-
-    body.light-mode .verify-text {
-      color: var(--verify-text-light);
-    }
-
-    body.light-mode .verify-text a {
-      color: var(--verify-link-light);
-    }
-
-    body.dark-mode .verify-text {
-      color: var(--verify-text-dark);
-    }
-
-    body.dark-mode .verify-text a {
-      color: var(--verify-link-dark);
-    }
-  </style>
-</div>
 
     <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
 
@@ -297,20 +142,29 @@
       <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
     </nav>
   </div>
+   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+  <p>✅ <strong>Domain Verification & Email Security</strong></p>
+  <p>
+    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+  </p>
+  <p>
+    Email protection includes:
+    <ul style="list-style:none; padding:0; margin:5px 0;">
+      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+    </ul>
+  </p>
+  <p>
+    These records confirm the legitimacy of our domain and improve deliverability,  
+    search engine trust, and AdSense approval readiness.
+  </p>
+</section>
+
 </footer>
 
-<style>
-  footer.footer a:hover { 
-    text-decoration: underline; 
-    color: #ffffff; 
-  }
-</style>
-
-
-  <script src="https://convertlabs.online/script.js" defer></script>
+  <script src="/script.js" defer></script>
 </body>
 </html>
-
-
-
-
