@@ -163,6 +163,32 @@ body.dark .muted small {
 }
 
   </style>
+  <style>
+/* Strong override for disclaimer in dark mode — covers all dark-class variants */
+body.dark .nutrition-disclaimer,
+body.dark-mode .nutrition-disclaimer,
+html.dark .nutrition-disclaimer,
+.calculator-wrap .nutrition-disclaimer {
+  background: #1c253a !important;
+  color: #e7e7e7 !important;
+  border-left: 4px solid #6aa0ff !important;
+  box-shadow: 0 6px 18px rgba(8,12,20,0.45) !important;
+}
+
+/* ensure links / strong text inside disclaimer are readable */
+body.dark .nutrition-disclaimer a,
+body.dark-mode .nutrition-disclaimer a,
+html.dark .nutrition-disclaimer a,
+.calculator-wrap .nutrition-disclaimer a {
+  color: #cfe3ff !important;
+}
+
+/* optional: slightly reduce padding on small screens */
+@media (max-width:700px){
+  .nutrition-disclaimer { padding:14px !important; font-size:14px !important; }
+}
+</style>
+
 </head>
 <body>
   <!-- Header -->
