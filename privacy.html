@@ -54,11 +54,17 @@
 
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
 
-  <!-- Page CSS (keeps same look as other pages) -->
+  <!-- Page CSS (single clean style block, includes dark-mode overrides) -->
   <style>
     :root{
-      --blue-600:#2563eb; --nav-blue:#1e3a8a; --bg:#f8fafc; --card:#fff; --text:#0f172a;
-      --muted:#6b7280; --dark-bg:#0b1220; --card-dark:#1b2435;
+      --blue-600:#2563eb;
+      --nav-blue:#1e3a8a;
+      --bg:#f8fafc;
+      --card:#fff;
+      --text:#0f172a;
+      --muted:#6b7280;
+      --dark-bg:#0b1220;
+      --card-dark:#1b2435;
     }
     html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;}
     a{color:var(--blue-600);text-decoration:none}
@@ -83,90 +89,58 @@
     .divider{height:1px;background:rgba(255,255,255,0.12);margin:18px auto 12px;max-width:900px}
     .footer-links a{color:#bfdbfe;margin:0 8px;font-weight:600}
 
-    /* Force correct dark theme for privacy page */
-html.dark .hero-card {
-  background: linear-gradient(145deg, #0f172a, #111827) !important;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.7) !important;
-  color: #e6eef8 !important;
-}
+    /* DARK MODE: ensure it applies whether class is on html or body */
+    html.dark body, body.dark, html.dark, body {
+      /* no changes here — this selector ensures compatibility */
+    }
 
-html.dark .content {
-  background: #1b2435 !important;
-  color: #e6eef8 !important;
-  border-color: #2c3b53 !important;
-}
+    /* Prefer selectors that match your theme toggling (both html.dark and body.dark) */
+    html.dark .hero-card,
+    body.dark .hero-card {
+      background: linear-gradient(145deg,#0f172a,#111827);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.7);
+      color: #e6eef8;
+    }
 
-html.dark h1, 
-html.dark h2, 
-html.dark h3, 
-html.dark .page-title {
-  color: #93c5fd !important;
-}
+    html.dark .content,
+    body.dark .content {
+      background: #1b2435;
+      color: #e6eef8;
+      border-color: #2c3b53;
+    }
 
-html.dark .lead,
-html.dark p,
-html.dark li,
-html.dark .small-muted {
-  color: #cbd5e1 !important;
-}
+    html.dark h1, html.dark h2, html.dark h3, html.dark .page-title,
+    body.dark h1, body.dark h2, body.dark h3, body.dark .page-title {
+      color: #93c5fd;
+    }
 
-html.dark a {
-  color: #93c5fd !important;
-}
-<!-- DARK MODE OVERRIDES: paste into <head> AFTER your main styles -->
-<style>
-/* Universal dark-mode override — covers html.dark, body.dark, body.dark-mode */
-html.dark .hero-card,
-body.dark .hero-card,
-html.dark .page,
-body.dark .page,
-html.dark .content,
-body.dark .content {
-  background: linear-gradient(145deg,#0f172a,#111827) !important;
-  color: #e6eef8 !important;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.7) !important;
-}
+    html.dark .lead, html.dark p, html.dark li, html.dark .small-muted,
+    body.dark .lead, body.dark p, body.dark li, body.dark .small-muted {
+      color: #cbd5e1;
+    }
 
-/* Make headings and body text readable */
-html.dark h1, html.dark h2, html.dark h3, html.dark .page-title,
-body.dark h1, body.dark h2, body.dark h3, body.dark .page-title {
-  color: #93c5fd !important;
-}
-html.dark p, html.dark li, html.dark .small-muted,
-body.dark p, body.dark li, body.dark .small-muted {
-  color: #cbd5e1 !important;
-}
+    html.dark a, body.dark a { color: #93c5fd; }
 
-/* Links color in dark mode */
-html.dark a, body.dark a {
-  color: #93c5fd !important;
-}
+    /* Specific fix for disclaimer / boxed cards with inline styles (if any) */
+    html.dark .nutrition-disclaimer,
+    body.dark .nutrition-disclaimer {
+      background: #1b2435 !important;
+      color: #e7e7e7 !important;
+      border-left-color: #6aa0ff !important;
+      border-radius: 8px !important;
+    }
 
-/* Specific fix for disclaimer / boxed cards with inline styles */
-html.dark .nutrition-disclaimer,
-body.dark .nutrition-disclaimer,
-html.dark .content,
-body.dark .content {
-  background: #1b2435 !important;
-  color: #e7e7e7 !important;
-  border-left-color: #6aa0ff !important;
-  border-radius: 8px !important;
-}
+    /* Footer colors in dark mode */
+    html.dark .footer-links a, body.dark .footer-links a { color: #dbeafe !important; }
+    html.dark .divider, body.dark .divider { background: rgba(255,255,255,0.08); }
 
-/* Footer link color */
-html.dark .footer-links a, body.dark .footer-links a {
-  color: #dbeafe !important;
-}
-
-/* Small screen tweaks */
-@media (max-width:700px){
-  html.dark .content, body.dark .content {
-    padding: 14px !important;
-    font-size: 15px !important;
-  }
-}
-</style>
-
+    /* Responsive tweak */
+    @media (max-width:700px){
+      html.dark .content, body.dark .content {
+        padding: 14px;
+        font-size: 15px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -262,36 +236,37 @@ html.dark .footer-links a, body.dark .footer-links a {
       <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
     </nav>
   </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
+
+  <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+    <p>✅ <strong>Domain Verification & Email Security</strong></p>
+    <p>
+      Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+      Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+      uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+    </p>
+    <p>
+      Email protection includes:
+      <ul style="list-style:none; padding:0; margin:5px 0;">
+        <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+        <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+        <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+      </ul>
+    </p>
+    <p>
+      These records confirm the legitimacy of our domain and improve deliverability,  
+      search engine trust, and AdSense approval readiness.
+    </p>
+  </section>
 
 </footer>
 
   <!-- Footer small inline styles for theme-specific colors -->
   <style>
-    body.dark .footer-links a{ color:#dbeafe; }
-    body.dark .divider{ background: rgba(255,255,255,0.08); }
+    html.dark .footer-links a, body.dark .footer-links a { color:#dbeafe; }
+    html.dark .divider, body.dark .divider { background: rgba(255,255,255,0.08); }
   </style>
 
- <!-- THEME TOGGLE: replace existing theme script with this -->
+ <!-- THEME TOGGLE: keep this script (sets both html & body classes) -->
 <script>
 (function(){
   const toggleBtn = document.getElementById('themeToggle');
@@ -335,6 +310,3 @@ html.dark .footer-links a, body.dark .footer-links a {
 
 </body>
 </html>
-
-
-
