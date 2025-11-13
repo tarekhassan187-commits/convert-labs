@@ -55,110 +55,217 @@
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
 
   <!-- Page CSS (single clean style block, includes dark-mode overrides) -->
-  <style>
-    :root{
-      --blue-600:#2563eb;
-      --nav-blue:#1e3a8a;
-      --bg:#f8fafc;
-      --card:#fff;
-      --text:#0f172a;
-      --muted:#6b7280;
-      --dark-bg:#0b1220;
-      --card-dark:#1b2435;
-    }
-    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;}
-    a{color:var(--blue-600);text-decoration:none}
-    .site-width{width:90%;max-width:1100px;margin:0 auto;}
-    header.navbar{background:var(--nav-blue);color:#fff;padding:12px 0;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
-    .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;align-items:center;gap:10px}
-    .brand img{width:36px;height:36px;border-radius:8px;background:#fff;padding:4px}
-    nav.nav-links ul{display:flex;gap:16px;list-style:none;margin:0;padding:0}
-    nav.nav-links a{color:#f1f5f9;font-weight:600}
-    .theme-toggle{background:none;border:none;color:#fff;font-size:18px;padding:6px 8px;border-radius:8px;cursor:pointer}
+<style>
+/* ===== ROOT VARIABLES ===== */
+:root{
+  --blue-600:#2563eb;
+  --nav-blue:#1e3a8a;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#6b7280;
+  --dark-bg:#0b1220;
+  --card-dark:#1b2435;
+}
 
-    main{max-width:980px;margin:36px auto 64px;color:var(--text);padding:0 16px}
-    .hero-card{border-radius:12px;padding:28px;background:linear-gradient(145deg,#ffffff,#f1f5ff);box-shadow:0 12px 30px rgba(16,24,40,0.06)}
-    .page-title{font-size:26px;margin:0 0 12px;color:var(--nav-blue);font-weight:700}
-    .lead{color:var(--muted);line-height:1.6;margin:0 0 18px}
-    .content { background:var(--card); padding:20px; border-radius:10px; box-shadow:0 8px 20px rgba(16,24,40,0.04); }
-    .section { margin-top:18px; }
-    .small-muted { color:var(--muted); font-size:14px; }
-    footer.footer{background:var(--nav-blue);color:#fff;padding:28px 0;margin-top:30px}
-    .footer-inner{text-align:center}
-    .divider{height:1px;background:rgba(255,255,255,0.12);margin:18px auto 12px;max-width:900px}
-    .footer-links a{color:#bfdbfe;margin:0 8px;font-weight:600}
+/* ===== BASE PAGE STRUCTURE ===== */
+html,body{
+  height:100%;
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+a{ color:var(--blue-600); text-decoration:none; }
 
-    /* DARK MODE: ensure it applies whether class is on html or body */
-    html.dark body, body.dark, html.dark, body {
-      /* no changes here — this selector ensures compatibility */
-    }
+/* Layout */
+.site-width{ width:90%; max-width:1100px; margin:0 auto; }
 
-    /* Prefer selectors that match your theme toggling (both html.dark and body.dark) */
-    html.dark .hero-card,
-    body.dark .hero-card {
-      background: linear-gradient(145deg,#0f172a,#111827);
-      box-shadow: 0 10px 26px rgba(0,0,0,0.7);
-      color: #e6eef8;
-    }
+/* ===== NAVBAR ===== */
+header.navbar{
+  background:var(--nav-blue);
+  color:#fff;
+  padding:12px 0;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+.nav-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.brand img{
+  width:36px; height:36px;
+  border-radius:8px;
+  background:#fff;
+  padding:4px;
+}
+.nav-links ul{
+  list-style:none;
+  margin:0; padding:0;
+  display:flex; gap:16px;
+}
+.nav-links a{ color:#f1f5f9; font-weight:600; }
 
-    html.dark .content,
-    body.dark .content {
-      background: #1b2435;
-      color: #e6eef8;
-      border-color: #2c3b53;
-    }
+.theme-toggle{
+  background:none; border:none;
+  color:#fff; font-size:18px;
+  padding:6px 8px; cursor:pointer;
+}
 
-    html.dark h1, html.dark h2, html.dark h3, html.dark .page-title,
-    body.dark h1, body.dark h2, body.dark h3, body.dark .page-title {
-      color: #93c5fd;
-    }
+/* ===== MAIN CONTENT ===== */
+main{
+  max-width:980px;
+  margin:36px auto 64px;
+  padding:0 16px;
+  color:var(--text);
+}
 
-    html.dark .lead, html.dark p, html.dark li, html.dark .small-muted,
-    body.dark .lead, body.dark p, body.dark li, body.dark .small-muted {
-      color: #cbd5e1;
-    }
+.hero-card{
+  border-radius:12px;
+  padding:28px;
+  background:linear-gradient(145deg,#ffffff,#f1f5ff);
+  box-shadow:0 12px 30px rgba(16,24,40,0.06);
+}
+.page-title{
+  font-size:26px;
+  color:var(--nav-blue);
+  margin:0 0 12px;
+  font-weight:700;
+}
+.lead{
+  color:var(--muted);
+  margin-bottom:18px;
+}
+.content{
+  background:var(--card);
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 8px 20px rgba(16,24,40,0.04);
+}
+.section{ margin-top:18px; }
+.small-muted{ color:var(--muted); font-size:14px; }
 
-    html.dark a, body.dark a { color: #93c5fd; }
+/* ===== FOOTER ===== */
+footer.footer{
+  background:var(--nav-blue);
+  color:#fff;
+  padding:28px 0;
+  margin-top:30px;
+}
+.footer-links a{
+  color:#bfdbfe;
+  margin:0 8px;
+  font-weight:600;
+}
+.divider{
+  height:1px;
+  background:rgba(255,255,255,0.12);
+  margin:18px auto 12px;
+  max-width:900px;
+}
 
-    /* Specific fix for disclaimer / boxed cards with inline styles (if any) */
-    html.dark .nutrition-disclaimer,
-    body.dark .nutrition-disclaimer {
-      background: #1b2435 !important;
-      color: #e7e7e7 !important;
-      border-left-color: #6aa0ff !important;
-      border-radius: 8px !important;
-    }
+/* ====================================
+   DARK MODE OVERRIDES (correct version)
+   ==================================== */
 
-    /* Footer colors in dark mode */
-    html.dark .footer-links a, body.dark .footer-links a { color: #dbeafe !important; }
-    html.dark .divider, body.dark .divider { background: rgba(255,255,255,0.08); }
+html.dark body,
+body.dark {
+  background:linear-gradient(180deg,#020617,#0b1220);
+  color:#e6eef8;
+}
 
-    /* Responsive tweak */
-    @media (max-width:700px){
-      html.dark .content, body.dark .content {
-        padding: 14px;
-        font-size: 15px;
-      }
-    }
-  </style>
+/* Cards */
+html.dark .hero-card,
+body.dark .hero-card{
+  background:linear-gradient(145deg,#0f172a,#111827) !important;
+  color:#e6eef8 !important;
+  box-shadow:0 10px 26px rgba(0,0,0,0.7) !important;
+}
+html.dark .content,
+body.dark .content{
+  background:#1b2435 !important;
+  color:#e6eef8 !important;
+  border:1px solid #2c3b53 !important;
+}
+
+/* Text */
+html.dark h1, html.dark h2, html.dark h3, html.dark .page-title,
+body.dark h1, body.dark h2, body.dark h3, body.dark .page-title{
+  color:#93c5fd !important;
+}
+html.dark p, html.dark li, html.dark .small-muted,
+body.dark p, body.dark li, body.dark .small-muted{
+  color:#cbd5e1 !important;
+}
+
+/* Links */
+html.dark a, body.dark a{
+  color:#93c5fd !important;
+}
+
+/* Footer */
+html.dark .footer-links a,
+body.dark .footer-links a{
+  color:#dbeafe !important;
+}
+html.dark .divider,
+body.dark .divider{
+  background:rgba(255,255,255,0.08) !important;
+}
+/* === FIX HEADER & FOOTER DARK MODE === */
+html.dark header.navbar,
+body.dark header.navbar {
+  background:#0f172a !important;     /* deep navy */
+  color:#e6eef8 !important;
+  box-shadow:0 2px 6px rgba(0,0,0,0.5) !important;
+}
+
+html.dark header.navbar a,
+body.dark header.navbar a {
+  color:#e6eef8 !important;
+}
+
+html.dark #themeToggle,
+body.dark #themeToggle {
+  color:#e6eef8 !important;
+}
+
+
+/* FOOTER */
+html.dark footer.footer,
+body.dark footer.footer {
+  background:#0f172a !important;     /* same deep navy */
+  color:#dbeafe !important;
+}
+
+html.dark footer.footer a,
+body.dark footer.footer a {
+  color:#dbeafe !important;
+}
+
+html.dark footer.footer .divider,
+body.dark footer.footer .divider {
+  background:rgba(255,255,255,0.15) !important;
+}
+
+</style>
+
 </head>
 <body>
   <!-- Header -->
   <header class="navbar">
     <div class="site-width nav-inner">
-      <a class="brand" href="/index.html" style="display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none">
-        <img src="/assets/convert-labs-icon.png" alt="Convert Labs" />
+      <a class="brand" href="https://convertlabs.online/index.html" style="display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" />
         <span style="font-weight:700;color:#fff">Convert Labs</span>
       </a>
 
       <nav class="nav-links" aria-label="Primary">
         <ul>
-          <li><a href="/index.html">Home</a></li>
-          <li><a href="/tools/tools.html">Tools</a></li>
-          <li><a href="/guides.html">Blog</a></li>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="https://convertlabs.online/index.html">Home</a></li>
+          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
+          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
+          <li><a href="https://convertlabs.online/about.html">About</a></li>
+          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
         </ul>
       </nav>
 
