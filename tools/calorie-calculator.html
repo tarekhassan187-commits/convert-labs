@@ -265,7 +265,7 @@
 </div>
 
 <style>
-/* LIGHT THEME */
+/* LIGHT THEME (default colors) */
 .nutrition-disclaimer {
   margin-top: 30px;
   padding: 18px;
@@ -277,15 +277,17 @@
   color: #222;
 }
 
-/* DARK THEME */
-@media (prefers-color-scheme: dark) {
-  .nutrition-disclaimer {
-    background: #1e1e1e;
-    color: #ddd;
-    border-left: 4px solid #6aa0ff;
-  }
+/* DARK THEME — triggered when page has dark background */
+body[style*="background-color:#0"],      /* matches body with dark inline style */
+body[style*="background:#0"],           /* matches body with dark inline style */
+.calculator-wrap.dark-mode .nutrition-disclaimer,
+.dark-theme .nutrition-disclaimer {
+  background: #1a2238 !important;
+  color: #e8e8e8 !important;
+  border-left: 4px solid #6aa0ff !important;
 }
 </style>
+
 
 
         <div class="about" style="margin-top:20px;">
@@ -727,6 +729,7 @@
   </script>
 </body>
 </html>
+
 
 
 
