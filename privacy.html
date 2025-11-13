@@ -192,7 +192,7 @@ html.dark a {
     <div class="site-width footer-inner">
       <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
         <div style="display:flex;align-items:center;gap:8px;">
-          <img src="/assets/convert-labs-icon.png" alt="Convert Labs" style="width:28px;height:28px;border-radius:6px;background:#fff;padding:4px;">
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:28px;height:28px;border-radius:6px;background:#fff;padding:4px;">
           <strong>Convert Labs</strong>
         </div>
 <p style="margin:8px 0 0;color:#cfe3ff;font-size:13px">© 2025 Convert Labs — All rights reserved</p>
@@ -219,21 +219,48 @@ html.dark a {
     body.dark .divider{ background: rgba(255,255,255,0.08); }
   </style>
 
-  <!-- Theme toggle script (persistent) -->
-  <script>
-    const toggle = document.getElementById('themeToggle');
-    function setTheme(mode){
-      if(mode === 'dark'){ document.body.classList.add('dark'); toggle.textContent = '☀️'; }
-      else { document.body.classList.remove('dark'); toggle.textContent = '🌙'; }
-      try{ localStorage.setItem('cl_theme', mode); }catch(e){}
+ <!-- THEME TOGGLE: replace existing theme script with this -->
+<script>
+(function(){
+  const toggleBtn = document.getElementById('themeToggle');
+
+  // set or remove both html & body dark classes
+  function applyTheme(mode){
+    if(mode === 'dark'){
+      document.documentElement.classList.add('dark'); // html
+      document.body.classList.add('dark');            // body
+      if(toggleBtn) toggleBtn.textContent = '☀️';
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+      if(toggleBtn) toggleBtn.textContent = '🌙';
     }
-    (function(){
-      const saved = localStorage.getItem('cl_theme');
-      if(saved){ setTheme(saved); return; }
-      const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefers ? 'dark' : 'light');
-    })();
-    toggle.addEventListener('click', ()=> setTheme(document.body.classList.contains('dark') ? 'light' : 'dark'));
-  </script>
+    try { localStorage.setItem('cl_theme', mode); } catch(e){}
+  }
+
+  // initialize theme (saved > system)
+  try {
+    const saved = localStorage.getItem('cl_theme');
+    if(saved) {
+      applyTheme(saved);
+    } else {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(prefersDark ? 'dark' : 'light');
+    }
+  } catch(e){
+    applyTheme('light');
+  }
+
+  // attach toggle
+  if(toggleBtn){
+    toggleBtn.addEventListener('click', () => {
+      const isNowDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
+      applyTheme(isNowDark ? 'light' : 'dark');
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
+
