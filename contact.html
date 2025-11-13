@@ -205,6 +205,86 @@ body.dark .contact-card button {
   color: #fff !important;
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25) !important;
 }
+<!-- CONTACT PAGE: dark-mode overrides (paste after existing CSS) -->
+<style>
+/* make header/footer dark */
+html.dark header.navbar,
+body.dark header.navbar {
+  background:#0f172a !important;
+  color:#e6eef8 !important;
+  box-shadow:0 2px 6px rgba(0,0,0,0.5) !important;
+}
+html.dark header.navbar a,
+body.dark header.navbar a { color:#e6eef8 !important; }
+html.dark #themeToggle, body.dark #themeToggle { color:#e6eef8 !important; }
+
+html.dark footer.footer,
+body.dark footer.footer {
+  background:#0f172a !important;
+  color:#dbeafe !important;
+}
+html.dark footer.footer a, body.dark footer.footer a { color:#dbeafe !important; }
+
+/* page wrapper / card */
+html.dark .contact-section,
+body.dark .contact-section {
+  background: transparent !important; /* keeps page bg consistent */
+}
+
+/* Target the actual form used on the page (.contact-form) */
+html.dark form.contact-form,
+body.dark form.contact-form {
+  background: #1b2435 !important;        /* dark card */
+  color: #e6eef8 !important;
+  border: 1px solid #263447 !important;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.6) !important;
+}
+
+/* headings/paragraphs inside the form */
+html.dark form.contact-form h1,
+html.dark form.contact-form h2,
+html.dark form.contact-form label,
+body.dark form.contact-form h1,
+body.dark form.contact-form h2,
+body.dark form.contact-form label {
+  color: #cbd5e1 !important;
+}
+
+/* inputs / textarea */
+html.dark form.contact-form input,
+html.dark form.contact-form textarea,
+body.dark form.contact-form input,
+body.dark form.contact-form textarea {
+  background: #0f172a !important;        /* input bg */
+  border: 1px solid #2c3b53 !important;
+  color: #e6eef8 !important;
+  box-shadow: none !important;
+}
+
+/* placeholder color */
+html.dark form.contact-form input::placeholder,
+html.dark form.contact-form textarea::placeholder,
+body.dark form.contact-form input::placeholder,
+body.dark form.contact-form textarea::placeholder {
+  color:#94a3b8 !important;
+}
+
+/* send button */
+html.dark form.contact-form .send-btn,
+body.dark form.contact-form .send-btn {
+  background:#2563eb !important;
+  color:#fff !important;
+  box-shadow: 0 6px 20px rgba(37,99,235,0.25) !important;
+  border: none !important;
+}
+
+/* small responsive tweak so edges aren't harsh on mobile */
+@media (max-width:700px) {
+  html.dark form.contact-form, body.dark form.contact-form {
+    padding: 1rem !important;
+  }
+}
+</style>
 
   </style>
 </head>
@@ -328,6 +408,7 @@ body.dark .contact-card button {
   <script src="https://convertlabs.online/script.js" defer></script>
 </body>
 </html>
+
 
 
 
