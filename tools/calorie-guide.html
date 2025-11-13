@@ -268,7 +268,7 @@ body.dark .muted small {
   nutritionist or healthcare professional.
 </div>
 <style>
-/* LIGHT THEME (default) */
+/* LIGHT THEME */
 .nutrition-disclaimer {
   margin-top: 30px;
   padding: 18px;
@@ -280,13 +280,14 @@ body.dark .muted small {
   color: #222;
 }
 
-/* DARK THEME — detect dark calculator background */
-.calculator-wrap .nutrition-disclaimer {
+/* DARK THEME — triggered by global html.dark class */
+html.dark .nutrition-disclaimer {
   background: #1c253a !important;
   color: #e7e7e7 !important;
   border-left: 4px solid #6aa0ff !important;
 }
 </style>
+
 
       <a class="back-btn" href="https://convertlabs.online/tools/calorie-calculator.html">← Back to Calorie Calculator</a>
     </div>
