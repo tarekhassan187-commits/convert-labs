@@ -3,121 +3,115 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Understanding Volume Conversions — Convert Labs</title>
-  <meta name="description" content="How to convert litres, millilitres, cubic metres, tablespoons, cups and gallons — exact formulas, worked examples, precision rules and practical insights." />
+  <title>Volume Conversion — Convert Labs</title>
+  <meta name="description" content="Learn how to convert litres, millilitres, cubic metres, tablespoons, cups and gallons accurately. Includes exact formulas, pitfalls to avoid, worked examples, precision rules and automation-ready code snippets." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
   <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
-  <!-- Guide-specific layout fixes -->
   <style>
-    :root{
-      --brand-blue: #1e40af;
-      --nav-bg: var(--brand-blue);
-      --page-bg: #f6f8fb;
-      --card-bg: #ffffff;
-      --card-shadow: 0 10px 30px rgba(18, 26, 40, 0.08);
-      --text: #0b1220;
-      --muted: #58616a;
-      --footer-bg-light: #1e40af;
-      --footer-bg-dark: #0e2440;
+    main.guide-page {
+      max-width: 980px;
+      margin: 1.5rem auto;
+      padding: 1rem;
     }
 
-    body.light-mode { background: var(--page-bg); color: var(--text); }
-    body.dark-mode { background: #07101a; color: #e6eef8; }
-
-    header.navbar {
-      background: var(--nav-bg);
-      color: #fff;
-      padding: 10px 0;
-      position: sticky;
-      top: 0;
-      z-index: 60;
-      box-shadow: 0 2px 6px rgba(2,6,23,0.08);
-    }
-    .nav-container {
-      width: 92%; max-width:1100px; margin:auto;
-      display:flex; align-items:center; justify-content:space-between;
-    }
-    .logo img { height:40px; width:40px; border-radius:8px; object-fit:cover; }
-    .brand-text { font-weight:700; color:#fff; text-decoration:underline; text-underline-offset:6px; }
-    .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; }
-    .nav-links a { color:#fff; text-decoration:none; font-weight:600; padding:6px 4px; }
-
-    main.guide { max-width:980px; margin:1.5rem auto; padding:1rem; }
-
-    /* ===============================
-       NEW CLASS to avoid .hero conflicts
-       ===============================*/
-    .guide-hero {
+    .hero {
+      background: var(--card-bg);
       border-radius: 12px;
-      overflow: visible;
-      background: linear-gradient(180deg,rgba(14,24,49,0.06),rgba(14,24,49,0.02));
-      padding: 18px;
-      margin-bottom: 18px;
-      position: relative;
-      box-shadow: var(--card-shadow);
-    }
-    .guide-hero .hero-title {
-      font-size:2rem; font-weight:800; margin:6px 0; color:var(--text);
-    }
-    .guide-hero .hero-sub {
-      color:var(--muted); margin-bottom:12px; max-width:980px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
     }
 
-    body.dark-mode .guide-hero {
-      background: linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+    .hero-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 4px 0 10px 0;
+      color: var(--text-color);
     }
-    body.dark-mode .guide-hero .hero-title { color:#e6eef8; }
-    body.dark-mode .guide-hero .hero-sub { color:#b9c7db; }
 
-    /* Banner */
+    .hero-sub {
+      color: var(--text-color);
+      opacity: 0.8;
+      max-width: 900px;
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+    }
+
     .banner-wrap {
-      width:100%; max-width:980px; margin:12px auto;
-      border-radius:12px; overflow:hidden;
-      background:linear-gradient(180deg,#e9edf6,#f6f9ff);
-      padding:18px;
-      display:flex; justify-content:center; align-items:center;
-      box-shadow: var(--card-shadow);
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(180deg,#e6edf7,#f4f8ff);
+      padding: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     }
     .banner-wrap img {
-      width:100%; height:auto; max-height:360px;
-      object-fit:contain; border-radius:8px;
-    }
-    body.dark-mode .banner-wrap {
-      background:linear-gradient(180deg,#07101a,#081426);
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 10px;
     }
 
-    /* Guide card */
     .guide-card {
-      background:var(--card-bg); border-radius:12px;
-      padding:22px; box-shadow:var(--card-shadow);
+      background: var(--card-bg);
+      padding: 22px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      color: var(--text-color);
     }
-    .guide-card h2 { color:#1345a8; }
-    .guide-card h3 { color:#0b2a54; }
-    .muted { color:var(--muted); }
 
-    body.dark-mode .guide-card {
-      background:#07121c; color:#dbeaf8;
-      box-shadow:0 12px 32px rgba(0,0,0,0.6);
+    .guide-card h2 {
+      color: var(--text-color);
+      margin-top: 0;
     }
-    body.dark-mode .guide-card h2,
-    body.dark-mode .guide-card h3 { color:#9cc3ff; }
+    .guide-card h3 {
+      color: var(--text-color);
+      margin-top: 1.2rem;
+    }
 
     pre.code {
-      background:#0b1220; color:#e6eef8;
-      padding:12px; border-radius:8px; overflow:auto;
-    }
-    body.dark-mode pre.code {
-      background:#07121c; color:#cfe9ff;
+      background: #0b1220;
+      color: #e6eef8;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
     }
 
-    footer.footer { background:var(--footer-bg-light); color:#fff; margin-top:2.5rem; }
-    body.dark-mode footer.footer { background:var(--footer-bg-dark); }
+    body.dark pre.code {
+      background: #111d2c !important;
+      color: #d7e9ff !important;
+    }
+
+    /* DARK MODE FIXES */
+    html.dark .hero,
+    html.dark .guide-card,
+    html.dark .banner-wrap {
+      background: #111827 !important;
+      color: #f3f4f6 !important;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.6) !important;
+    }
+
+    html.dark .hero-title,
+    html.dark .hero-sub {
+      color: #f3f4f6 !important;
+    }
+
+    html.dark .banner-wrap {
+      background: linear-gradient(180deg,#0d1726,#0b1522) !important;
+    }
+
+    html.dark .banner-wrap img {
+      filter: brightness(0.92);
+    }
 
     @media (max-width:720px){
-      .hero-title{font-size:1.6rem;}
-      .banner-wrap img{max-height:240px;}
+      .hero-title { font-size:1.6rem; }
     }
   </style>
 </head>
@@ -128,7 +122,7 @@
     <div class="nav-container">
       <div class="logo">
         <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;gap:10px;">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png">
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:40px;height:40px;border-radius:8px;">
           <span class="brand-text">Convert Labs</span>
         </a>
       </div>
@@ -143,16 +137,18 @@
         </ul>
       </nav>
 
-      <button id="themeToggle" class="theme-toggle" aria-label="Switch theme" style="background:none;border:none;color:white;font-size:20px;cursor:pointer;">🌙</button>
+      <button id="themeToggle" class="theme-toggle">🌙</button>
     </div>
   </header>
 
-  <main class="guide">
-    <!-- HERO -->
-    <section class="guide-hero">
+  <!-- CONTENT -->
+  <main class="guide-page">
+
+    <section class="hero">
       <h1 class="hero-title">Volume conversion — quick, practical and precise</h1>
       <p class="hero-sub">
-        Convert between millilitres, litres, cubic metres, cups, tablespoons and gallons — learn exact formulas, where precision matters, how to avoid rounding traps and copy-ready snippets for code and spreadsheets.
+        Convert between millilitres, litres, cubic metres, tablespoons, cups and gallons — learn exact formulas, where precision matters,
+        how to avoid rounding traps and code-friendly snippets for spreadsheets and automation.
       </p>
 
       <div class="banner-wrap">
@@ -160,35 +156,45 @@
       </div>
     </section>
 
-    <!-- CONTENT -->
+    <!-- CONTENT CARD -->
     <article class="guide-card">
       <h2>Practical guide to volume conversions</h2>
-      <p class="muted">Volume appears everywhere — from measuring liquids in cooking and labs, filling tanks, shipping containers, dosing ingredients, to engineering and environmental monitoring. This guide focuses on real-world accuracy: exact constants, hidden pitfalls, step-by-step worked examples and code snippets you can reuse immediately.</p>
+
+      <p>
+        Volume is everywhere — from cooking and labs to logistics, tank sizing, beverage production, agriculture, batching chemicals,
+        engine fluids, and environmental monitoring. Surprisingly, even routine conversions can cause large errors when using rounded
+        factors or mixing incompatible measurement systems.
+      </p>
 
       <h3>1. Why exact constants matter</h3>
       <p>
-        Many people assume volume is straightforward — but real measurement systems hide complications. For example:
+        Many people assume volume is simpler than mass or temperature — but multiple “gallon” systems, regional definitions,
+        and rounding habits can create unseen drift. Examples:
       </p>
+
       <ul>
         <li>1 litre = 1000 mL is exact.</li>
-        <li>But “1 cup” has **five different definitions** depending on US, metric, UK or historical standards.</li>
-        <li>Gallons are even worse — US liquid gallon ≠ US dry gallon ≠ Imperial UK gallon.</li>
-        <li>Cubic metres rely on SI definitions and are mathematically exact.</li>
+        <li>But 1 “cup” has different legal definitions in US, metric, UK and nutritional standards.</li>
+        <li>US gallons differ from Imperial gallons by almost 20%.</li>
+        <li>Cubic metres rely strictly on SI definitions and are mathematically exact.</li>
       </ul>
+
       <p>
-        When precision matters (chemistry, dosing, logistics, engineering), always use SI units (L, m³, mL) and convert using exact factors below.
+        When accuracy matters (shipping, chemical dosing, engineering), prefer SI units (L, m³) and convert carefully using exact
+        constants shown below.
       </p>
 
       <h3>2. Core unit relationships (exact)</h3>
       <ul>
         <li><strong>1 litre (L) = 1000 millilitres (mL)</strong></li>
-        <li><strong>1 cubic metre (m³) = 1000 L = 1,000,000 mL</strong></li>
-        <li><strong>1 US liquid gallon = 3.785411784 L</strong> (exact, defined value)</li>
+        <li><strong>1 cubic metre (m³) = 1000 litres = 1,000,000 mL</strong></li>
+        <li><strong>1 US liquid gallon = 3.785411784 L</strong> (exact)</li>
         <li><strong>1 US cup = 236.5882365 mL</strong></li>
         <li><strong>1 Imperial gallon = 4.54609 L</strong></li>
       </ul>
 
-      <h3>3. Quick formulas (copy these)</h3>
+      <h3>3. Quick formulas</h3>
+
       <pre class="code">
 mL = L * 1000
 L = mL / 1000
@@ -197,90 +203,87 @@ L = gallons_us * 3.785411784
 mL = cups_us * 236.5882365
       </pre>
 
-      <h3>4. Worked examples (step-by-step)</h3>
+      <h3>4. Worked examples</h3>
 
-      <p><strong>Example A — recipe scaling:</strong></p>
+      <p><strong>Example A — converting a recipe using only US cups</strong></p>
       <p>
-        A sauce requires 750 mL stock but your measuring tools only show US cups.  
-        Cups = 750 / 236.5882365 = 3.171 cups.  
-        For cooking, rounding to **3.17 cups** is appropriate (do not round intermediate steps).
+        A sauce needs 750 mL stock but your measuring tools only show US cups.
+        Cups = 750 / 236.5882365 = 3.171 cups → round to 3.17 cups for cooking.
       </p>
 
-      <p><strong>Example B — tank volume:</strong></p>
+      <p><strong>Example B — tank volume to litres</strong></p>
       <p>
         A rectangular tank is 1.2 m × 0.5 m × 0.4 m.  
-        Volume = 1.2 × 0.5 × 0.4 = 0.24 m³ = **240 L**.
+        Volume = 1.2 × 0.5 × 0.4 = 0.24 m³ → 0.24 × 1000 = <strong>240 L</strong>.
       </p>
 
-      <h3>5. Precision & rounding — practical rules</h3>
+      <h3>5. Precision & rounding rules</h3>
       <ul>
-        <li><strong>Cooking:</strong> ±1–2% is fine. Use millilitres for repeatability.</li>
-        <li><strong>Lab / engineering:</strong> Keep at least 4–6 significant figures internally.</li>
-        <li><strong>Shipping / logistics:</strong> Avoid early rounding — volume misestimation scales poorly for large containers.</li>
-        <li><strong>Sensors:</strong> Many cheap ultrasonic or float-based sensors have non-linear error; apply calibration curves.</li>
+        <li><strong>Cooking:</strong> ±3% is fine; round to sensible 1–2 decimals.</li>
+        <li><strong>Engineering/labs:</strong> keep at least 4–6 significant figures during calculations.</li>
+        <li><strong>Logistics:</strong> never round mid-calculation — round only final output.</li>
+        <li><strong>Telemetry sensors:</strong> digital floats often show nonlinear errors — calibrate regularly.</li>
       </ul>
 
-      <h3>6. Common pitfalls & how to avoid them</h3>
+      <h3>6. Common pitfalls & mistakes</h3>
       <ul>
-        <li>Confusing US cups with metric cups (250 mL).</li>
-        <li>Using rounded gallon → litre values (never use “3.8 L”).</li>
-        <li>Mixing teaspoons/tablespoons — the US tablespoon is 14.7868 mL, not 15 mL.</li>
-        <li>Converting using repeating decimals — always use exact constants shown above.</li>
-        <li>Assuming cylindrical container volume fits its printed label — manufacturing tolerances vary.</li>
+        <li>Confusing US cups with metric cups.</li>
+        <li>Using rounded gallon values — litres vary by up to 20% depending on system.</li>
+        <li>Mixing tablespoons and teaspoons — these differ widely by region.</li>
+        <li>Assuming cylinders have perfect roundness — many tanks don’t.</li>
       </ul>
 
       <h3>7. Practical measuring tips</h3>
       <ul>
-        <li>For repeatable measurements, use graduated cylinders or digital scales (mass-based liquids are far more consistent).</li>
-        <li>In kitchens, weighing liquids often gives better accuracy than using cups.</li>
-        <li>For tanks, always measure at several depths — many tanks have curved bases.</li>
-        <li>Temperature affects volume: water at 4°C is slightly denser than at 20°C.</li>
+        <li>For unstable fluids, average several readings.</li>
+        <li>For tanks, measure at multiple depths — bottoms are often curved.</li>
+        <li>Temperature affects volume — water at 4°C is denser than at 20°C.</li>
       </ul>
 
-      <h3>8. Code snippets (ready for automation)</h3>
+      <h3>8. Automation-ready code</h3>
+
       <pre class="code">
 // JS utilities for volume conversions
-const LtoML = L => L * 1000;
-const MLtoL = mL => mL / 1000;
-const LtoGallonUS = L => L / 3.785411784;
-const GallonUStoL = g => g * 3.785411784;
-const CupsToML = cups => cups * 236.5882365;
-const MLtoCups = mL => mL / 236.5882365;
+const L_to_mL = L => L * 1000;
+const mL_to_L = mL => mL / 1000;
+const gallons_to_L = g => g * 3.785411784;
+const cups_to_mL = c => c * 236.5882365;
 
-// Example: convert sensor data (litres) to gallons (rounded 2 dp)
-let tankLitres = 128.567;
-let gallons = Math.round(LtoGallonUS(tankLitres) * 100) / 100;
-console.log(gallons + " gallons");
+// Example: convert litres to US gallons for analytics
+console.log((12.5 / 3.785411784).toFixed(3));
       </pre>
 
       <h3>9. Quick cheat sheet</h3>
-      <div class="cheatsheet">
-• 1 L = 1000 mL<br>
-• 1 m³ = 1000 L<br>
-• 1 US gal = 3.785411784 L<br>
-• 1 US cup = 236.5882365 mL<br>
-• Round only final results — never mid-calculation.
-      </div>
+      <ul>
+        <li>1 L = 1000 mL</li>
+        <li>1 m³ = 1000 L</li>
+        <li>1 US gallon = 3.785411784 L</li>
+        <li>1 US cup = 236.5882365 mL</li>
+        <li>Round final results — never mid-calculation.</li>
+      </ul>
 
       <h3>10. Continue learning</h3>
       <ul>
         <li><a href="https://convertlabs.online/tools/volume-converter.html">Volume converter tool</a></li>
-        <li><a href="https://convertlabs.online/tools/kitchen-tools.html">Kitchen & recipe tools</a></li>
         <li><a href="https://convertlabs.online/guides.html">More guides</a></li>
       </ul>
     </article>
+
   </main>
 
-  <!-- FOOTER (as provided) -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
       <div class="footer-brand" style="margin-bottom:10px;">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" style="width:24px;height:24px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;">
         <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
       </div>
+
       <p>© 2025 Convert Labs. All rights reserved.</p>
+
       <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
-      <nav class="footer-links" style="margin-top:8px;">
+
+      <nav class="footer-links">
         <a href="https://convertlabs.online/about.html">About</a> |
         <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
         <a href="https://convertlabs.online/guides.html">Blog</a> |
@@ -290,45 +293,39 @@ console.log(gallons + " gallons");
         <a href="https://convertlabs.online/contact.html">Contact</a>
       </nav>
     </div>
-
-    <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-      <p>✅ <strong>Domain Verification & Email Security</strong></p>
-      <p>
-        Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>) uses trusted Cloudflare infrastructure with validated DNS records.
-      </p>
-      <ul style="list-style:none;padding:0;margin:5px 0;">
-        <li>✔ SPF – Approved senders: Cloudflare & Outlook</li>
-        <li>✔ DKIM – 2048-bit signature verified</li>
-        <li>✔ DMARC – Spoofing & spam protection</li>
-      </ul>
-    </section>
   </footer>
 
-  <!-- Theme toggle script -->
+  <!-- THEME SCRIPT (UNIFIED THEME SYSTEM) -->
   <script>
-    (function(){
-      const html = document.documentElement;
-      const body = document.body;
-      const toggle = document.getElementById('themeToggle');
-      const stored = localStorage.getItem('site-theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const isDark = stored ? stored === 'dark' : prefersDark;
+(function(){
+  const html = document.documentElement;
+  const toggle = document.getElementById("themeToggle");
 
-      function applyTheme(dark){
-        if(dark){
-          html.classList.add('dark-mode'); html.classList.remove('light-mode');
-          body.classList.add('dark-mode'); body.classList.remove('light-mode');
-          toggle.textContent = "☀️";
-        } else {
-          html.classList.add('light-mode'); html.classList.remove('dark-mode');
-          body.classList.add('light-mode'); body.classList.remove('dark-mode');
-          toggle.textContent = "🌙";
-        }
-        localStorage.setItem('site-theme', dark ? 'dark' : 'light');
-      }
-      applyTheme(isDark);
-      toggle.addEventListener('click', ()=> applyTheme(!html.classList.contains('dark-mode')));
-    })();
+  const stored = localStorage.getItem("site-theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const useDark = stored ? stored === "dark" : prefersDark;
+
+  function applyTheme(dark){
+    if(dark){
+      html.classList.add("dark");
+      html.classList.remove("light");
+      toggle.textContent = "☀️";
+    } else {
+      html.classList.add("light");
+      html.classList.remove("dark");
+      toggle.textContent = "🌙";
+    }
+    localStorage.setItem("site-theme", dark ? "dark" : "light");
+  }
+
+  applyTheme(useDark);
+
+  toggle.addEventListener("click", () => {
+    const currentlyDark = html.classList.contains("dark");
+    applyTheme(!currentlyDark);
+  });
+})();
   </script>
+
 </body>
 </html>
