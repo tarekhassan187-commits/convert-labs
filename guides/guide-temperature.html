@@ -23,6 +23,18 @@
   --footer-bg-light: #1e40af;
   --footer-bg-dark: #0e2440;
 }
+/* Force header logo to correct size no matter what */
+header.navbar .logo img {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: contain;
+}
+@media (max-width: 720px) {
+  header.navbar .logo img {
+    width: 34px !important;
+    height: 34px !important;
+  }
+}
 
 /* LIGHT THEME */
 body.light-mode {
