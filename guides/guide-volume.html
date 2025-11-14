@@ -1,144 +1,298 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Volume Conversion Guide — Convert Labs</title>
-  <meta name="description" content="Volume conversions — liters, milliliters, cups, gallons, cubic meters. Real world examples for cooking, shipping, and science." />
-  <link rel="canonical" href="https://convertlabs.online/guides/guide-volume.html" />
-  <meta property="og:image" content="https://convertlabs.online/assets/guide-volume.png" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <title>Understanding Volume Conversions — Convert Labs</title>
+  <meta name="description" content="Practical guide to converting liters, millilitres, cubic metres, gallons and cups — exact formulas, worked examples, rounding guidance and code snippets." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
-
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config','G-Z88B03WV7P');</script>
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
   <style>
-    :root{--nav-blue:#1e40af;--blue-600:#2563eb;--bg:#f8fafc;--text:#0f172a}
-    html,body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:var(--bg);color:var(--text)}
-    header.navbar{background:var(--nav-blue);color:#fff;padding:10px 0}
-    .nav-container{width:90%;max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between}
-    .brand{display:flex;align-items:center;gap:10px}
-    .brand img{width:36px;height:36px;border-radius:6px;background:#fff;padding:4px}
-    .brand .brand-text{color:#fff;font-weight:700}
-    nav.nav-links ul{display:flex;gap:16px;list-style:none;margin:0;padding:0}
-    nav.nav-links a{color:#f1f5f9;text-decoration:none;font-weight:600}
-    .theme-toggle{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+    :root{
+      --brand-blue: #1e40af;
+      --bg: #f6f8fb;
+      --text: #0b1220;
+      --muted: #58616a;
+      --card-bg: #fff;
+      --card-shadow: 0 10px 30px rgba(18,26,40,0.08);
+      --hero-dark-overlay: rgba(5,10,20,0.55);
+    }
 
-    main{max-width:900px;margin:36px auto;padding:0 16px}
-    .card{background:linear-gradient(145deg,#fff,#f1f7ff);border-radius:12px;padding:26px;box-shadow:0 12px 30px rgba(16,24,40,0.06)}
-    h1{margin-top:0;font-size:28px;color:var(--nav-blue)}
-    .hero-img{display:block;margin:18px auto;border-radius:14px;max-width:880px;width:100%;height:220px;object-fit:cover;box-shadow:0 10px 24px rgba(2,6,23,0.12)}
-    .lead{color:#475569;line-height:1.6}
-    h2{color:#0f172a}
-    ul{padding-left:1.2rem}
-    footer.footer{background:var(--nav-blue);color:#fff;padding:28px 0;margin-top:40px}
-    html.dark .card{background:linear-gradient(145deg,#0f172a,#111827);box-shadow:0 12px 30px rgba(0,0,0,0.7)}
-    html.dark h1{color:#93c5fd}
-    html.dark .lead{color:#cbd5e1}
-    @media(max-width:600px){ .hero-img{height:160px} }
+    /* Basic page layout */
+    html.light, body.light-mode { background: var(--bg); color: var(--text); }
+    html.dark, body.dark-mode { background: #07101a; color: #e6eef8; }
+
+    header.navbar {
+      background: var(--brand-blue);
+      color: #fff;
+      padding: 10px 0;
+      position: sticky;
+      top:0;
+      z-index:60;
+      box-shadow:0 2px 6px rgba(2,6,23,0.08);
+    }
+    .nav-container{ width:92%; max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .logo img{ height:40px; width:40px; border-radius:8px; object-fit:cover; }
+    .brand-text{ font-weight:700; color:#fff; text-decoration:underline; text-underline-offset:6px; }
+
+    .nav-links ul{ display:flex; gap:.9rem; margin:0; padding:0; list-style:none; align-items:center; }
+    .nav-links a{ color:#fff; text-decoration:none; padding:6px 4px; font-weight:600; font-size:0.95rem; }
+
+    /* Option C hero: full-width banner with overlay text */
+    .hero-full {
+      width:100%;
+      background-image: url('/assets/guide-volume.jpg');
+      background-position: center;
+      background-size: cover;
+      position: relative;
+      min-height: 320px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .hero-overlay {
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg,var(--hero-dark-overlay), rgba(0,0,0,0.25));
+      mix-blend-mode: normal;
+    }
+    .hero-content {
+      position:relative;
+      z-index:2;
+      width:92%;
+      max-width:1100px;
+      text-align:center;
+      padding:48px 18px;
+      color:#fff;
+    }
+    .hero-title { font-size:2.2rem; margin:0 0 8px; font-weight:800; line-height:1.02; text-shadow: 0 6px 20px rgba(0,0,0,0.45);}
+    .hero-lead { margin:0 auto; max-width:900px; color:rgba(255,255,255,0.92); font-weight:500; }
+
+    /* Main content card that overlaps hero */
+    main.container { max-width:980px; margin: -40px auto 2rem; padding: 1rem; }
+    .guide-card { background: var(--card-bg); border-radius:12px; box-shadow: var(--card-shadow); padding:22px; }
+    .guide-card h2{ color:#1345a8; margin-top:0; }
+    .guide-card h3{ color:#0b2a54; margin-top:1.1rem; }
+    .muted{ color:var(--muted); }
+
+    pre.code { background:#0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
+    .cheatsheet{ background:#0f172a; color:#e6eef8; padding:12px; border-radius:8px; font-family:mono; }
+
+    footer.footer { background: var(--brand-blue); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem; }
+
+    /* Dark mode adjustments */
+    html.dark .hero-overlay { background: linear-gradient(180deg, rgba(2,8,18,0.75), rgba(2,8,18,0.35)); }
+    html.dark .guide-card { background:#07121c; color:#dbeaf8; box-shadow:0 12px 40px rgba(0,0,0,0.6); }
+    html.dark pre.code, html.dark .cheatsheet { background:#07121c; color:#cfe9ff; }
+    html.dark .hero-title, html.dark .hero-lead { color:#e8f6ff; }
+
+    /* Responsive */
+    @media (max-width:720px){
+      .hero-title{ font-size:1.4rem; }
+      .hero-content{ padding:28px 12px; }
+      main.container{ margin:-24px 12px 1rem; }
+    }
   </style>
 </head>
 <body>
-  <header class="navbar">
+  <!-- Header -->
+  <header class="navbar" role="banner">
     <div class="nav-container">
-      <a class="brand" href="/index.html">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs">
-        <span class="brand-text">Convert Labs</span>
-      </a>
-      <nav class="nav-links" aria-label="Primary">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;">
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo">
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+
+      <nav class="nav-links" aria-label="Main navigation">
         <ul>
           <li><a href="https://convertlabs.online/index.html">Home</a></li>
           <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html" class="active">Guides</a></li>
+          <li><a href="https://convertlabs.online/guides.html" aria-current="page">Guides</a></li>
           <li><a href="https://convertlabs.online/about.html">About</a></li>
           <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
         </ul>
       </nav>
-      <button id="themeToggle" class="theme-toggle" title="Toggle theme">🌙</button>
+
+      <button id="themeToggle" class="theme-toggle" title="Switch theme" aria-label="Switch theme" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">🌙</button>
     </div>
   </header>
 
-  <main>
-    <div class="card">
-      <h1>Understanding Volume Conversions</h1>
-      <img class="hero-img" src="https://convertlabs.online/assets/guide-volume.png" alt="Volume guide banner">
-      <p class="lead">Convert liters, milliliters, cups, gallons and cubic meters. Tips for cooking measurements and shipping volume calculations.</p>
-
-      <h2>Quick conversions</h2>
-      <ul>
-        <li>1 L = 1000 mL</li>
-        <li>1 US cup ≈ 240 mL (approx)</li>
-        <li>1 US gallon ≈ 3.785 L</li>
-      </ul>
-
-      <h2>Practical tips</h2>
-      <ul>
-        <li>Make sure to use appropriate cup standard (US vs UK).</li>
-        <li>When converting packing volumes, allow headspace and tolerances.</li>
-      </ul>
+  <!-- Hero full-width with overlay text (Option C) -->
+  <section class="hero-full" role="banner" aria-labelledby="page-title">
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <h1 id="page-title" class="hero-title">Volume conversion — quick, practical and precise</h1>
+      <p class="hero-lead">Convert between millilitres, litres, cubic metres, cups, tablespoons and gallons — learn exact formulas, where precision matters, how to avoid rounding traps and copy-ready snippets for code and spreadsheets.</p>
     </div>
+  </section>
+
+  <!-- Main content card (overlapping) -->
+  <main class="container" role="main">
+    <article class="guide-card" aria-labelledby="guide-h2">
+      <h2 id="guide-h2">Practical guide to volume conversions</h2>
+      <p class="muted">Volume comes up everywhere — from measuring liquids in cooking and labs, sizing tanks, to packing and shipping. This guide focuses on useful exact relationships, common pitfalls, step-by-step worked examples and small code snippets you can reuse.</p>
+
+      <h3>Why exact constants matter</h3>
+      <p>Using the correct constants avoids silent errors. For example, using 1000 ml = 1 L is exact — but US customary cups and gallons have multiple definitions (US vs imperial). When precision matters (chemistry, dosing, engineering), prefer SI units (L, m³) and convert carefully using the exact factors shown below.</p>
+
+      <h3>Core unit relationships (exact)</h3>
+      <ul>
+        <li><strong>1 litre (L) = 1,000 millilitres (mL)</strong></li>
+        <li><strong>1 cubic metre (m³) = 1,000 litres = 1,000,000 mL</strong></li>
+        <li><strong>1 US liquid gallon = 3.785411784 L</strong> (exact defined value)</li>
+        <li><strong>1 US cup = 236.5882365 mL</strong></li>
+        <li><strong>1 Imperial gallon = 4.54609 L</strong></li>
+      </ul>
+
+      <h3>Quick formulas</h3>
+      <pre class="code" aria-hidden="false">
+mL = L * 1000
+L = mL / 1000
+m³ = L / 1000
+L = gallons_us * 3.785411784
+mL = cups_us * 236.5882365
+      </pre>
+
+      <h3>Worked examples (step-by-step)</h3>
+      <p><strong>Example A — recipe scaling:</strong> A sauce needs 750 mL stock but you have only cups listed. Convert to US cups: cups = mL / 236.5882365 → 750 ÷ 236.5882365 = 3.171 cups. Use 3.17 cups (round to sensible precision for cooking; don't round intermediate steps).</p>
+
+      <p><strong>Example B — tank volume to litres:</strong> A rectangular tank is 1.2 m × 0.5 m × 0.4 m. Volume (m³) = 1.2 × 0.5 × 0.4 = 0.24 m³ → litres = 0.24 × 1000 = 240 L.</p>
+
+      <h3>Precision and rounding — rules you can use</h3>
+      <ul>
+        <li>For cooking: 0–1 significant decimal (e.g., 3.2 cups).</li>
+        <li>For lab work: keep at least 2–3 significant digits in intermediate steps, then round to instrument tolerance.</li>
+        <li>For engineering: follow specification tolerance (e.g., ±0.1 L or better), and always document units on drawings.</li>
+      </ul>
+
+      <h3>Common pitfalls & how to avoid them</h3>
+      <ul>
+        <li><strong>Multiple 'cup' definitions:</strong> US customary, metric cup (250 mL), and imperial cups differ — always label which cup you use.</li>
+        <li><strong>Chained rounding:</strong> do not round between steps. Keep raw values and round only for display.</li>
+        <li><strong>Volume vs mass:</strong> 1 L water ≈ 1 kg at 4°C, but for other liquids or temperatures this differs — avoid assuming density=1 unless appropriate.</li>
+        <li><strong>Locale parsing:</strong> some locales use commas as decimal separators; parse numeric input robustly.</li>
+      </ul>
+
+      <h3>Practical measuring tips</h3>
+      <ul>
+        <li>Use measuring cups for approximate kitchen work and graduated cylinders or volumetric flasks for scientific accuracy.</li>
+        <li>For viscous liquids, use the meniscus reading method or weigh the liquid for greater repeatability.</li>
+        <li>When converting bulk volumes (pallets, tanks), account for headspace and packing efficiency rather than raw internal volume alone.</li>
+      </ul>
+
+      <h3>Programming snippet (copy-ready)</h3>
+      <p class="muted">Small, reliable JS functions for conversions — keep numbers exact as constants and format only on output.</p>
+      <pre class="code">
+// JavaScript: small volume conversion library
+const ML_PER_L = 1000;
+const L_PER_US_GALLON = 3.785411784;
+const ML_PER_US_CUP = 236.5882365;
+
+function mlToL(ml){ return ml / ML_PER_L; }
+function lToMl(l){ return l * ML_PER_L; }
+function lToUsGallons(l){ return l / L_PER_US_GALLON; }
+function usCupsToMl(cups){ return cups * ML_PER_US_CUP; }
+
+// Example: 750 mL to US cups (rounded for display)
+const cups = Math.round((750 / ML_PER_US_CUP) * 100) / 100; // 3.17 cups
+      </pre>
+
+      <h3>Cheat sheet (copy these)</h3>
+      <div class="cheatsheet">
+• 1 L = 1000 mL • 1 m³ = 1000 L • 1 US gal = 3.785411784 L • 1 US cup = 236.5882365 mL • Keep raw values, round only for display
+      </div>
+
+      <h3>Where to go next</h3>
+      <p>Try our interactive volume converters to practice with the units discussed above and copy code-ready formulas:</p>
+      <ul>
+        <li><a href="https://convertlabs.online/tools/volume-converter.html">Volume converter tool</a></li>
+        <li><a href="https://convertlabs.online/tools/container-calculator.html">Container volume guide</a></li>
+        <li><a href="https://convertlabs.online/guides.html">Other guides & tutorials</a></li>
+      </ul>
+
+      <p style="margin-top:12px;"><em>Tip: Save frequently used snippets (for example, L → US gal) as bookmarks or a tiny utilities file so you can reuse them without retyping constants.</em></p>
+    </article>
   </main>
 
-  <!-- Footer (exact) -->
-  <!-- Footer -->
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <!-- Footer (user-provided, kept verbatim) -->
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
     </div>
+     <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+    <p>✅ <strong>Domain Verification & Email Security</strong></p>
+    <p>
+      Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+      Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+      uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+    </p>
+    <p>
+      Email protection includes:
+      <ul style="list-style:none; padding:0; margin:5px 0;">
+        <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+        <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+        <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+      </ul>
+    </p>
+    <p>
+      These records confirm the legitimacy of our domain and improve deliverability,  
+      search engine trust, and AdSense approval readiness.
+    </p>
+  </section>
 
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+  </footer>
 
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+  <!-- Theme toggle script (maintain previous site behavior) -->
+  <script>
+    (function(){
+      const html = document.documentElement;
+      const body = document.body;
+      const toggle = document.getElementById('themeToggle');
 
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
+      const stored = localStorage.getItem('site-theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = stored ? stored === 'dark' : prefersDark;
 
-</footer>
+      function applyTheme(dark){
+        if(dark){
+          html.classList.add('dark'); html.classList.remove('light');
+          body.classList.add('dark-mode'); body.classList.remove('light-mode');
+          toggle.textContent = '☀️';
+        } else {
+          html.classList.add('light'); html.classList.remove('dark');
+          body.classList.add('light-mode'); body.classList.remove('dark-mode');
+          toggle.textContent = '🌙';
+        }
+        localStorage.setItem('site-theme', dark ? 'dark' : 'light');
+      }
+      applyTheme(isDark);
 
-<script>
-  (function(){
-    const btn = document.getElementById('themeToggle');
-    function setTheme(mode){
-      if(mode === 'dark'){ document.documentElement.classList.add('dark'); document.body.classList.add('dark'); btn.textContent='☀️'; }
-      else { document.documentElement.classList.remove('dark'); document.body.classList.remove('dark'); btn.textContent='🌙'; }
-      try{ localStorage.setItem('cl_theme', mode); }catch(e){}
-    }
-    try{ const saved = localStorage.getItem('cl_theme'); if(saved) setTheme(saved); else setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light'); }catch(e){ setTheme('light');}
-    if(btn) btn.addEventListener('click', ()=> setTheme(document.documentElement.classList.contains('dark') ? 'light':'dark'));
-  })();
-</script>
+      toggle.addEventListener('click', function(){
+        const darkNow = html.classList.contains('dark');
+        applyTheme(!darkNow);
+      });
+    })();
+  </script>
 </body>
 </html>
