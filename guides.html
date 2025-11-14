@@ -35,6 +35,19 @@
     /* dark mode */
     html.dark .card, body.dark .card{ background:#0f172a; border-color:#263447; color:#e6eef8; box-shadow:none; }
     html.dark .card h3{ color:#93c5fd; }
+    /* Fix faded intro text on guides page */
+.guides-hero p,
+.guides-intro-text {
+  opacity: 1 !important;
+  color: var(--text-color) !important;
+}
+
+html.dark .guides-hero p,
+html.dark .guides-intro-text {
+  opacity: 1 !important;
+  color: #e5e7eb !important; /* Light grey for perfect contrast */
+}
+
   </style>
 </head>
 <body>
@@ -168,5 +181,6 @@
   <script src="/script.js" defer></script>
 </body>
 </html>
+
 
 
