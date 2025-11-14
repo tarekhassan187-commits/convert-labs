@@ -4,326 +4,267 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Understanding Length Conversions — Convert Labs</title>
-  <meta name="description" content="Learn exactly how to convert meters, centimetres, inches, feet and miles with clear formulas, examples, diagrams, rounding rules and real-world measurement guidance." />
+  <meta name="description" content="How to convert meters, centimetres, inches, feet and miles — practical formulas, worked examples, rounding guidance and programming snippets." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
   <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
-  <!-- Page-specific styles -->
+  <!-- Page-specific styles (responsive banner + theme fixes + header spacing) -->
   <style>
     :root{
       --brand-blue: #1e40af;
-      --page-bg-light: #f6f8fb;
-      --page-bg-dark: #07101a;
-      --text-light: #0b1220;
-      --text-dark: #e6eef8;
-      --muted-light: #58616a;
-      --muted-dark: #b8c6d9;
-      --card-bg-light: #ffffff;
-      --card-bg-dark: #0b1220;
+      --nav-bg: var(--brand-blue);
+      --page-bg: #f6f8fb;
+      --card-bg: #ffffff;
+      --card-shadow: 0 10px 30px rgba(18, 26, 40, 0.08);
+      --text: #0b1220;
+      --muted: #58616a;
       --footer-bg-light: #1e40af;
-      --footer-bg-dark: #0d1626;
-      --shadow-light: 0 10px 30px rgba(18, 26, 40, 0.08);
-      --shadow-dark: 0 16px 40px rgba(0,0,0,0.6);
+      --footer-bg-dark: #0e2440;
     }
 
+    /* Theme base */
     body.light-mode {
-      background: var(--page-bg-light);
-      color: var(--text-light);
+      background: var(--page-bg);
+      color: var(--text);
     }
     body.dark-mode {
-      background: var(--page-bg-dark);
-      color: var(--text-dark);
+      background: #07101a;
+      color: #e6eef8;
     }
 
     /* Header */
     header.navbar {
-      background: var(--brand-blue);
+      background: var(--nav-bg);
       color: #fff;
-      padding: 12px 0;
+      padding: 10px 0;
       position: sticky;
       top: 0;
-      z-index: 999;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 60;
+      box-shadow: 0 2px 6px rgba(2,6,23,0.08);
     }
-    .nav-container {
-      width: 92%;
-      max-width: 1100px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo img {
-      height: 38px;
-      width: 38px;
-      border-radius: 6px;
-    }
-    .brand-text{
-      font-weight:700;
-      font-size:1.15rem;
-      color:#fff;
-    }
+    .nav-container { width: 92%; max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; }
+    .logo { display:flex; align-items:center; gap:10px; }
+    .logo img { height:40px; width:40px; border-radius:8px; }
+    .brand-text { font-weight:700; color: #fff; text-decoration: underline; text-underline-offset:6px; }
 
-    /* Make header mobile-friendly */
-    @media(max-width:768px){
-      .nav-links ul{
-        gap: 18px !important;
-      }
-    }
+    /* Tighten header links spacing (matches your other pages) */
+    .nav-links ul { display:flex; gap: .9rem; margin:0; padding:0; list-style:none; align-items:center; }
+    .nav-links a { color:#fff; text-decoration:none; padding:6px 4px; font-weight:600; }
+    .nav-links a:hover { opacity:0.9; text-decoration:underline; }
 
-    main.guide {
+    /* main */
+    main.guide { max-width: 980px; margin: 1.5rem auto; padding: 1rem; }
+
+    /* Hero / title */
+    .hero-title {
+      font-size: 2rem;
+      line-height: 1.05;
+      margin: 6px 0;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .hero-sub { color: var(--muted); margin-bottom: 12px; max-width:980px; }
+
+    /* Banner container: rounded, responsive - image uses object-fit: contain so it won't be cropped */
+    .banner-wrap {
+      width: 100%;
       max-width: 980px;
-      margin: 1.5rem auto;
-      padding: 1rem;
+      margin: 12px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(180deg,#e9edf6,#f6f9ff);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding: 18px;
+      box-shadow: var(--card-shadow);
     }
-
-    /* Title section */
-    .guide-title{
-      font-size:2rem;
-      font-weight:800;
-      margin: 12px 0 10px;
-    }
-    .guide-sub{
-      font-size:1.05rem;
-      color: var(--muted-light);
-      max-width:740px;
-      margin-bottom: 18px;
-    }
-    body.dark-mode .guide-sub{ color: var(--muted-dark); }
-
-    /* Banner image */
-    .banner-wrap{
-      width:100%;
-      overflow:hidden;
-      border-radius:14px;
-      margin:18px 0 22px;
-      background:#e8edf7;
-      padding:0;
-    }
-    body.dark-mode .banner-wrap{ background:#0d1626; }
-
-    .banner-wrap img{
-      width:100%;
-      height:auto;
+    .banner-wrap img {
+      width: 100%;
+      height: auto;
+      max-height: 360px;
+      object-fit: contain;
       display:block;
-      object-fit:cover;
-      border-radius:14px;
+      border-radius: 8px;
+      background: transparent;
     }
 
-    /* Content card */
-    .guide-card{
-      background:var(--card-bg-light);
-      border-radius:14px;
-      padding:22px;
-      box-shadow:var(--shadow-light);
-      margin-top:18px;
-      line-height:1.65;
-    }
-    body.dark-mode .guide-card{
-      background:var(--card-bg-dark);
-      box-shadow:var(--shadow-dark);
-      color:var(--text-dark);
-    }
+    /* Guide card */
+    .guide-card { background: var(--card-bg); border-radius: 12px; box-shadow: var(--card-shadow); padding: 22px; margin-top: 18px; }
+    .guide-card h2{ color:#1345a8; margin-top:0; }
+    .guide-card h3{ color:#0b2a54; margin-top:1.1rem; }
+    .muted { color: var(--muted); }
 
-    .guide-card h2{
-      color:#1345a8;
-      margin-top:0;
-    }
-    body.dark-mode .guide-card h2{ color:#6ca8ff; }
+    pre.code { background:#0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
+    .cheatsheet { background:#0f172a; color:#e6eef8; padding:12px; border-radius:8px; font-family:mono; }
 
-    .guide-card h3{
-      margin-top:1.2rem;
-      color:#0b2a54;
-    }
-    body.dark-mode .guide-card h3{ color:#8ebcff; }
+    /* Footer */
+    footer.footer { background: var(--footer-bg-light); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem; }
 
-    pre.code{
-      background:#0b1220;
-      color:#e6eef8;
-      padding:14px;
-      border-radius:10px;
-      overflow:auto;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-      margin-top:12px;
-    }
-    body.dark-mode pre.code{
-      background:#0e1828;
-      color:#d6e7ff;
-    }
+    /* Dark theme specifics */
+    body.dark-mode .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
+    body.dark-mode .hero-title { color: #e6eef8; }
+    body.dark-mode .hero-sub { color: #b9c7db; }
+    body.dark-mode .guide-card { background: #07121c; color: #dbeaf8; box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
+    body.dark-mode pre.code { background:#07121c; color:#cfe9ff; }
+    body.dark-mode .muted { color:#94a3b8; }
+    body.dark-mode footer.footer { background: var(--footer-bg-dark); }
 
-    .cheatsheet{
-      background:#0f172a;
-      color:#e6eef8;
-      padding:14px;
-      border-radius:10px;
-      margin-top:10px;
-      font-family:mono;
-    }
-    body.dark-mode .cheatsheet{
-      background:#132036;
-      color:#cfe4ff;
-    }
-
-    /* Footer theme */
-    footer.footer{
-      background:var(--footer-bg-light);
-      color:#fff;
-      margin-top:2.5rem;
-    }
-    body.dark-mode footer.footer{
-      background:var(--footer-bg-dark);
-    }
-
-    @media(max-width:720px){
-      .guide-title{ font-size:1.6rem; }
+    /* Small screens */
+    @media (max-width:720px){
+      .hero-title { font-size:1.6rem; }
+      .banner-wrap img { max-height: 240px; }
+      .nav-container { width:94%; }
     }
   </style>
 </head>
 
 <body>
-
-  <!-- HEADER -->
-  <header class="navbar">
+  <!-- Header -->
+  <header class="navbar" role="banner">
     <div class="nav-container">
-      <a href="https://convertlabs.online/index.html" class="logo" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" />
-        <span class="brand-text">Convert Labs</span>
-      </a>
+      <div class="logo">
+        <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo">
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
 
-      <nav class="nav-links">
-        <ul style="display:flex;list-style:none;margin:0;padding:0;gap:14px;">
-          <li><a href="https://convertlabs.online/index.html" style="color:#fff;text-decoration:none;">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html" style="color:#fff;text-decoration:none;">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html" style="color:#fff;text-decoration:underline;">Guides</a></li>
-          <li><a href="https://convertlabs.online/about.html" style="color:#fff;text-decoration:none;">About</a></li>
-          <li><a href="/contact.html" style="color:#fff;text-decoration:none;">Contact</a></li>
+      <nav aria-label="Main navigation" class="nav-links">
+        <ul>
+          <li><a href="https://convertlabs.online/index.html">Home</a></li>
+          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
+          <li><a href="https://convertlabs.online/guides.html">Guides</a></li>
+          <li><a href="https://convertlabs.online/about.html">About</a></li>
+          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
         </ul>
       </nav>
 
-      <button id="themeToggle" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">🌙</button>
+      <button id="themeToggle" class="theme-toggle" title="Switch theme" aria-label="Switch theme" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">🌙</button>
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
-  <main class="guide">
+  <main class="guide" role="main">
+    <!-- Title -->
+    <h1 class="hero-title">Understanding Length Conversions</h1>
+    <p class="hero-sub">How to convert meters, centimetres, inches, feet and miles — practical formulas, worked examples, programming snippets and rounding guidance for real-life use.</p>
 
-    <h1 class="guide-title">Understanding Length Conversions</h1>
-    <p class="guide-sub">
-      A complete guide to converting meters, centimetres, millimetres, inches, feet and miles. Includes formulas, worked examples, diagrams, rounding advice and measurement best-practices.
-    </p>
-
-    <!-- Banner -->
-    <div class="banner-wrap">
-      <img src="https://convertlabs.online/assets/guide-length-banner.png" alt="Length conversion educational banner">
+    <!-- Banner below the title (you uploaded the image) -->
+    <div class="banner-wrap" aria-hidden="false">
+      <img src="https://convertlabs.online/assets/guide-length-banner.png" alt="Rulers illustrating metres, centimetres, inches and miles — banner" id="guide-banner">
     </div>
 
-    <!-- CARD -->
-    <article class="guide-card">
+    <!-- Guide content -->
+    <article class="guide-card" aria-labelledby="guide-h2">
+      <h2 id="guide-h2">How to convert lengths — a practical step-by-step guide</h2>
 
-      <h2>1. Why length conversions matter</h2>
-      <p>
-        Length measurements are a fundamental part of everyday life — from construction and home DIY to travel distances and scientific calculations. Modern tools make conversions instant, but knowing how the numbers actually work helps you avoid mistakes, communicate clearly, and choose the correct precision for your task.
+      <p class="muted">
+        This is a hands-on how-to: explanations, exact constants, step-by-step worked examples, rounding advice, coding snippets and a compact cheat sheet — everything to convert lengths reliably for DIY, study, travel and light engineering tasks.
       </p>
 
-      <h3>The two main systems</h3>
+      <h3>1. Why unit choice matters</h3>
+      <p>
+        Units communicate scale. Choosing millimetres for a room will produce awkward large numbers; choosing kilometres for a bench measurement will hide needed precision. Use:
+      </p>
       <ul>
-        <li><strong>Metric (SI):</strong> millimetres, centimetres, metres, kilometres</li>
-        <li><strong>Imperial/US:</strong> inches, feet, yards, miles</li>
+        <li><strong>mm/cm</strong> — for small or precision tasks (electronics, carpentry, recipes).</li>
+        <li><strong>m</strong> — for rooms, buildings, most practical measurements.</li>
+        <li><strong>km/mi</strong> — for travel distances and maps.</li>
+      </ul>
+      <p class="muted">Keeping units consistent reduces errors and unnecessary rounding.</p>
+
+      <h3>2. Exact constants you must memorise</h3>
+      <ul>
+        <li><strong>1 m = 100 cm</strong></li>
+        <li><strong>1 in = 2.54 cm</strong> (exact by international agreement)</li>
+        <li><strong>1 ft = 12 in = 0.3048 m</strong> (exact)</li>
+        <li><strong>1 mi = 1609.344 m</strong></li>
       </ul>
 
-      <h2>2. Exact relationships you must memorise</h2>
-      <ul>
-        <li><strong>1 m = 100 cm = 1000 mm</strong></li>
-        <li><strong>1 inch = 2.54 cm</strong> (exact, by definition)</li>
-        <li><strong>1 foot = 12 inches = 30.48 cm</strong></li>
-        <li><strong>1 yard = 3 feet = 91.44 cm</strong></li>
-        <li><strong>1 mile = 5280 feet = 1609.344 m</strong></li>
-      </ul>
-
-      <h2>3. Core formulas (copy these)</h2>
-      <pre class="code">
+      <h3>3. Quick formulas — copy these</h3>
+      <pre class="code" aria-hidden="false">
 cm = m * 100
-m = cm / 100
+m  = cm / 100
 in = cm / 2.54
 cm = in * 2.54
 ft = in / 12
 miles = m / 1609.344
       </pre>
 
-      <h2>4. Worked examples (step-by-step)</h2>
+      <h3>4. Step-by-step worked examples (with rounding)</h3>
 
-      <h3>Example 1 — 175 cm → feet + inches</h3>
-      <p>
-        1) cm → inches: 175 ÷ 2.54 = <strong>68.8976 in</strong><br>
-        2) inches → feet: 68.8976 ÷ 12 = 5 ft + 8.8976 in<br>
-        3) Round inches → <strong>5 ft 9 in</strong>
-      </p>
+      <p><strong>Example A — 175 cm → feet + inches</strong></p>
+      <ol>
+        <li>Convert to metres: 175 / 100 = <strong>1.75 m</strong>.</li>
+        <li>Convert to inches: 175 / 2.54 = <strong>68.8976 in</strong>.</li>
+        <li>Convert to feet & remainder inches: 68.8976 ÷ 12 = 5 remainder 8.8976 in → round inches → <strong>5 ft 9 in</strong>.</li>
+      </ol>
 
-      <h3>Example 2 — 2.5 m → feet</h3>
-      <p>
-        2.5 m × (100 ÷ 2.54) ÷ 12 = <strong>8.20 ft</strong>
-      </p>
+      <p><strong>Example B — 2.5 m → feet (decimal)</strong></p>
+      <ol>
+        <li>2.5 m × 100 = 250 cm → inches: 250 / 2.54 = <strong>98.4252 in</strong>.</li>
+        <li>Divide by 12 = 8.2021 ft → if two decimals required: <strong>8.20 ft</strong>.</li>
+      </ol>
 
-      <h2>5. Choosing precision and rounding</h2>
+      <h3>5. Choosing precision & rounding rules</h3>
+      <p>Decide precision based on the task:</p>
       <ul>
-        <li><strong>Rough work:</strong> 1 significant figure</li>
-        <li><strong>DIY measurement:</strong> nearest 1–3 mm</li>
-        <li><strong>Carpentry:</strong> nearest 1/8 inch</li>
-        <li><strong>Engineering:</strong> follow required tolerances</li>
+        <li><strong>Rough:</strong> 0–1 significant figures (landscape area)</li>
+        <li><strong>Home DIY:</strong> nearest 1–5 mm or nearest 1/8 inch for joinery</li>
+        <li><strong>Engineering:</strong> use the specification tolerance (often ±0.01 mm)</li>
+      </ul>
+      <p class="muted">When converting, keep a consistent number of decimal places across steps to avoid false precision.</p>
+
+      <h3>6. Common pitfalls & how to avoid them</h3>
+      <ul>
+        <li>Avoid mixing imperial/metric without converting first.</li>
+        <li>Watch unit prefixes: 1 mm = 0.001 m (not 0.1 m).</li>
+        <li>Don't round mid-calculation — round only the final result to the required precision.</li>
       </ul>
 
-      <h2>6. Avoid these 5 common mistakes</h2>
+      <h3>7. Practical measurement tips</h3>
       <ul>
-        <li>Mixing metric and imperial without converting first.</li>
-        <li>Using approximated constants instead of exact ones.</li>
-        <li>Confusing cm and mm (easy to do in carpentry).</li>
-        <li>Rounding too early in multi-step calculations.</li>
-        <li>Assuming “feet” and “inches” behave like decimals.</li>
+        <li>Measure twice and record in the same unit.</li>
+        <li>Use the same tool across measurements for consistency (same tape, same zero reference).</li>
+        <li>For long distances prefer laser rangefinders or odometer/ GPS — record decimals consistently (e.g., 2.34 m).</li>
       </ul>
 
-      <h2>7. Practical measuring tips</h2>
-      <ul>
-        <li>Measure twice to reduce systematic error.</li>
-        <li>Use the same unit throughout a project.</li>
-        <li>Prefer laser distance tools for long spans.</li>
-        <li>Record numbers immediately — avoid mental conversions.</li>
-      </ul>
-
-      <h2>8. Programming snippet</h2>
+      <h3>8. Programming & calculator snippets</h3>
+      <p class="muted">Do conversions in the smallest unit then format for display — this avoids accumulated rounding errors.</p>
       <pre class="code">
-function cmToFeetInches(cm){
+/* JS: cm -> feet + inches */
+function cmToFeetAndInches(cm){
   const inches = cm / 2.54;
   const feet = Math.floor(inches / 12);
-  const inch = Math.round(inches % 12);
-  return `${feet} ft ${inch} in`;
+  const remainingInches = Math.round(inches % 12);
+  return { feet, inches: remainingInches };
 }
       </pre>
 
-      <h2>9. Quick cheat sheet</h2>
+      <h3>9. Quick cheat sheet (common roundings)</h3>
       <div class="cheatsheet">
-        • 1 inch = 2.54 cm<br>
-        • 1 foot = 30.48 cm<br>
-        • 1 meter = 3.28084 feet<br>
-        • 1 mile = 1.609 km<br>
-        • Round to 1–2 decimals for everyday work
+• 1 inch = 2.54 cm (exact) • 1 ft = 0.3048 m • 1 km = 1000 m • 1 mile = 1609.344 m<br>
+• Use mm for precision, m for rooms, km/mi for travel • Round final result to required precision
       </div>
 
-      <h2>10. Continue learning</h2>
+      <h3>10. Where to go next</h3>
+      <p>Practice with our interactive calculators and the related guides:</p>
       <ul>
-        <li><a href="/tools/length-converter.html">Length Converter Tool</a></li>
-        <li><a href="/guides.html">All Guides</a></li>
-        <li><a href="/tools/container-calculator.html">Container Volume Guide</a></li>
+        <li><a href="https://convertlabs.online/tools/length-converter.html">Length converter tool</a></li>
+        <li><a href="https://convertlabs.online/tools/container-calculator.html">Container volume guide</a></li>
+        <li><a href="https://convertlabs.online/guides.html">Other guides & tutorials</a></li>
       </ul>
 
+      <p style="margin-top:12px;"><em>Tip: Save frequently used conversions as bookmarks or snippets (example: <code>cm → in = ÷ 2.54</code>) to reuse without repeating math. Measure twice — convert once.</em></p>
     </article>
   </main>
 
-  <!-- FOOTER -->
+  <!-- Footer (copied verbatim to match your site) -->
   <footer class="footer">
     <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
       <div class="footer-brand" style="margin-bottom:10px;">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" style="width:24px;height:24px;vertical-align:middle;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
         <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
       </div>
 
@@ -332,43 +273,65 @@ function cmToFeetInches(cm){
       <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
 
       <nav class="footer-links" style="margin-top:8px;">
-        <a hrhttps://convertlabs.online/about.html" style="color:#f8fafc;margin:0 6px;">About</a> |
-        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;margin:0 6px;">Tools</a> |
-        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;margin:0 6px;">Blog</a> |
-        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;margin:0 6px;">Privacy</a> |
-        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;margin:0 6px;">Disclaimer</a> |
-        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;margin:0 6px;">Terms</a> |
-        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;margin:0 6px;">Contact</a>
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
       </nav>
     </div>
-
-    <section class="site-verification" style="font-size:14px;color:#f1f1f1;text-align:center;margin-top:25px;">
+     <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
       <p>✅ <strong>Domain Verification & Email Security</strong></p>
       <p>
-        Cloudflare DNS • SPF • DKIM • DMARC active  
-        Ensuring high trust & email deliverability
+        Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+        Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+        uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+      </p>
+      <p>
+        Email protection includes:
+        <ul style="list-style:none; padding:0; margin:5px 0;">
+          <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+          <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+          <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+        </ul>
+      </p>
+      <p>
+        These records confirm the legitimacy of our domain and improve deliverability,  
+        search engine trust, and AdSense approval readiness.
       </p>
     </section>
   </footer>
 
-  <!-- THEME SCRIPT -->
+  <!-- Theme script: apply saved theme or system preference (FIXED: uses document.body) -->
   <script>
     (function(){
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const saved = localStorage.getItem("site-theme");
-      const dark = saved ? saved === "dark" : prefersDark;
+      const body = document.body;
+      const stored = localStorage.getItem('site-theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = stored ? stored === 'dark' : prefersDark;
 
-      function apply(d){
-        document.body.classList.toggle("dark-mode", d);
-        document.body.classList.toggle("light-mode", !d);
-        document.getElementById("themeToggle").textContent = d ? "☀️" : "🌙";
-        localStorage.setItem("site-theme", d ? "dark" : "light");
+      function applyTheme(dark){
+        if(dark){
+          body.classList.remove('light-mode');
+          body.classList.add('dark-mode');
+          document.getElementById('themeToggle').textContent = '☀️';
+        } else {
+          body.classList.remove('dark-mode');
+          body.classList.add('light-mode');
+          document.getElementById('themeToggle').textContent = '🌙';
+        }
+        localStorage.setItem('site-theme', dark ? 'dark' : 'light');
       }
-      apply(dark);
 
-      document.getElementById("themeToggle").onclick = ()=> apply(!document.body.classList.contains("dark-mode"));
+      applyTheme(isDark);
+
+      document.getElementById('themeToggle').addEventListener('click', function(){
+        const darkNow = body.classList.contains('dark-mode');
+        applyTheme(!darkNow);
+      });
     })();
   </script>
-
 </body>
 </html>
