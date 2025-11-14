@@ -1,10 +1,14 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Guides & Tutorials — Convert Labs</title>
-  <meta name="description" content="Practical guides for Convert Labs tools — formulas, worked examples, and tips for length, volume, temperature, currency, kitchen measures, images, calories and container volume." />
+
+  <meta name="description"
+        content="Practical guides for Convert Labs tools — formulas, worked examples, and tips for length, volume, temperature, currency, kitchen measures, images, calories and container volume." />
+
   <link rel="canonical" href="https://convertlabs.online/guides.html" />
   <meta property="og:title" content="Guides & Tutorials — Convert Labs" />
   <meta property="og:description" content="Step-by-step HOW TO guides for Convert Labs tools: formulas, examples and practical tips." />
@@ -13,7 +17,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png">
 
-  <!-- Analytics only (no AdSense in guides index by your choice) -->
+  <!-- Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -23,28 +27,124 @@
   </script>
 
   <link rel="stylesheet" href="https://convertlabs.online/style.css" />
+
   <style>
-    /* Page-specific styles */
-    main{ max-width:1100px; margin:36px auto; padding:0 16px; }
-    .hero{ text-align:center; margin-bottom:28px; }
-    .grid{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
-    .card{ background:var(--card,#fff); border-radius:12px; padding:16px; box-shadow:0 8px 20px rgba(16,24,40,0.04); border:1px solid rgba(16,24,40,0.03); min-height:240px; display:flex;flex-direction:column; }
-    .card h3{ color:var(--nav-blue,#1e40af); margin:12px 0 8px; font-size:1.05rem; }
-    .card p{ color:var(--text,#0f172a); flex:1; line-height:1.5; }
-    .card a.read{ display:inline-block; margin-top:12px; background:#2563eb; color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none;}
-    /* dark mode */
-    html.dark .card, body.dark .card{ background:#0f172a; border-color:#263447; color:#e6eef8; box-shadow:none; }
-    html.dark .card h3{ color:#93c5fd; }
+    /* Page layout */
+    main {
+      max-width: 1100px;
+      margin: 36px auto;
+      padding: 0 16px;
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+
+    /* FIXED HERO SUBTITLE */
+    .hero-sub {
+      max-width: 780px;
+      margin: 12px auto;
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: var(--text-color);
+    }
+
+    /* Dark mode hero subtitle */
+    html.dark .hero-sub {
+      color: #e5e7eb !important;
+      opacity: 1 !important;
+    }
+
+    /* GRID OF CARDS */
+    .grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 8px 20px rgba(16, 24, 40, 0.04);
+      border: 1px solid rgba(16, 24, 40, 0.05);
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .card h3 {
+      color: var(--primary);
+      margin: 12px 0 8px;
+      font-size: 1.05rem;
+    }
+
+    .card p {
+      flex: 1;
+      line-height: 1.5;
+      color: var(--text-color);
+    }
+
+    .card a.read {
+      display: inline-block;
+      margin-top: 12px;
+      background: #2563eb;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* DARK MODE FIXES */
+    html.dark .card {
+      background: #0f172a !important;
+      border-color: #263447;
+      color: #e6eef8;
+      box-shadow: none;
+    }
+
+    html.dark .card h3 {
+      color: #93c5fd;
+    }
+
+    html.dark main {
+      background: transparent !important;
+    }
+
+    /* Footer text standardization */
+    html.dark footer,
+    html.dark footer p,
+    html.dark footer a {
+      color: #f5f5f5 !important;
+    }
 
   </style>
+
 </head>
+
 <body>
+
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-container">
-      <a class="brand" href="https://convertlabs.online/index.html" style="display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit;">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="" style="width:36px;height:36px;border-radius:8px;background:#fff;padding:4px;">
+      <a class="brand" href="https://convertlabs.online/index.html"
+         style="display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png"
+             alt=""
+             style="width:36px;height:36px;border-radius:8px;background:#fff;padding:4px;">
         <span style="font-weight:700;color:#fff">Convert Labs</span>
       </a>
+
       <nav class="nav-links" aria-label="Primary">
         <ul>
           <li><a href="https://convertlabs.online/index.html">Home</a></li>
@@ -54,19 +154,25 @@
           <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
         </ul>
       </nav>
+
       <button id="themeToggle" class="theme-toggle">🌙</button>
     </div>
   </header>
 
+  <!-- MAIN CONTENT -->
   <main>
+
     <div class="hero">
       <h1>Guides & Tutorials</h1>
-      <p style="max-width:780px;margin:12px auto;color:var(--muted,#6b7280);">
-        Step-by-step how-to guides for each Convert Labs tool. Each guide explains formulas, examples and practical tips — written for people who want to understand the "why" behind results.
+      <p class="hero-sub">
+        Step-by-step how-to guides for each Convert Labs tool. Each guide explains formulas,
+        examples and practical tips — written for people who want to understand the "why"
+        behind results.
       </p>
     </div>
 
     <section class="grid" aria-label="Guides list">
+
       <article class="card">
         <h3>Length conversions — How to use</h3>
         <p>Formulas, common pitfalls (unit prefixes, imperial vs metric), and worked examples for meters, centimeters, inches and miles.</p>
@@ -114,62 +220,43 @@
         <p>How calorie estimates are built (macros → energy), per-100g basis, serving conversions, and limitations of food composition data.</p>
         <a class="read" href="https://convertlabs.online/guides/guide-calories.html">Read guide →</a>
       </article>
+
     </section>
 
     <section style="text-align:center;margin-top:36px;">
-      <p style="color:var(--muted,#6b7280);">Want a guide we haven't written yet? <a href="/contact.html">Send a suggestion</a>.</p>
+      <p class="hero-sub">Want a guide we haven't written yet? <a href="/contact.html">Send a suggestion</a>.</p>
     </section>
+
   </main>
 
-   <!-- Footer -->
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs"
+             style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
+
     </div>
-
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
-
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
-
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
-
-</footer>
+  </footer>
 
   <script src="/script.js" defer></script>
+
 </body>
 </html>
-
-
-
-
