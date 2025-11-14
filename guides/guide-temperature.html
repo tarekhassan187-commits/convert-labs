@@ -1,343 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Understanding Temperature Conversions — Convert Labs</title>
-  <meta name="description" content="How to convert between Celsius, Fahrenheit and Kelvin — exact formulas, worked examples, when to use each scale, practical tips for science, cooking and engineering." />
-  <link rel="canonical" href="https://convertlabs.online/guides/guide-temperature.html" />
-  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
-  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Understanding Temperature Conversions — Convert Labs</title>
+<meta name="description" content="Learn how to convert Celsius, Fahrenheit and Kelvin — exact formulas, worked examples, when to use each scale, precision tips and small code snippets used in cooking, engineering and science." />
+<link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
+<link rel="stylesheet" href="https://convertlabs.online/style.css" />
+<meta name="theme-color" content="#1e40af" />
 
-  <!-- Page-specific styles (responsive banner + theme fixes + header spacing) -->
-  <style>
+<!-- Page-specific styles -->
+<style>
 :root{
-  --brand-blue: #1e40af;
-  --nav-bg: var(--brand-blue);
-  --page-bg: #f6f8fb;
-  --card-bg: #ffffff;
-  --card-shadow: 0 10px 30px rgba(18, 26, 40, 0.08);
-  --text: #0b1220;
-  --muted: #58616a;
-  --footer-bg-light: #1e40af;
-  --footer-bg-dark: #0e2440;
-}
-/* Force header logo to correct size no matter what */
-header.navbar .logo img {
-  width: 40px !important;
-  height: 40px !important;
-  object-fit: contain;
-}
-@media (max-width: 720px) {
-  header.navbar .logo img {
-    width: 34px !important;
-    height: 34px !important;
-  }
+  --brand-blue:#1e40af;
+  --nav-bg:var(--brand-blue);
+  --page-bg:#f6f8fb;
+  --card-bg:#ffffff;
+  --dark-card:#0a121c;
+  --text:#0b1220;
+  --muted:#58616a;
+  --footer-bg-light:#1e40af;
+  --footer-bg-dark:#0e2440;
+  --shadow:0 10px 30px rgba(0,0,0,0.10);
 }
 
-/* LIGHT THEME */
-body.light-mode {
-  background: var(--page-bg);
-  color: var(--text);
-}
-
-/* DARK THEME – FULL FIX */
-body.dark-mode {
-  background: #07101a !important;
-  color: #e6eef8 !important;
-}
-
-body.dark-mode a { color: #9dc6ff !important; }
-
-/* HEADER */
-header.navbar {
-  background: var(--nav-bg);
-  color: #fff;
-  padding: 10px 0;
-  position: sticky;
-  top: 0;
-  z-index: 60;
-}
-
-.nav-container {
-  width: 92%;
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.nav-links ul { display:flex; gap:.9rem; padding:0; margin:0; list-style:none; }
-.nav-links a { color:#fff; text-decoration:none; font-weight:600; padding:6px 4px; }
-.nav-links a:hover { opacity:.85; text-decoration:underline; }
-
-/* MAIN LAYOUT */
-main.guide { max-width:980px; margin:1.5rem auto; padding:1rem; }
-
-/* HERO TITLE SECTION */
-.hero-title {
-  font-size:2rem;
-  font-weight:800;
-  margin:.5rem 0;
+/* LIGHT MODE */
+body.light-mode{
+  background:var(--page-bg);
   color:var(--text);
 }
 
-.hero-sub {
-  color:var(--muted);
-  margin-bottom:1rem;
-  max-width:950px;
+/* DARK MODE */
+body.dark-mode{
+  background:#07101a;
+  color:#e6eef8;
 }
 
-body.dark-mode .hero-title { color:#e6eef8 !important; }
-body.dark-mode .hero-sub { color:#b9c7db !important; }
-
-/* BANNER */
-.banner-wrap {
-  width:100%;
-  max-width:980px;
-  margin:12px auto;
-  border-radius:12px;
-  padding:18px;
-  background: linear-gradient(180deg,#e9edf6,#f6f9ff);
-  box-shadow:var(--card-shadow);
+/* HEADER */
+header.navbar{
+  background:var(--nav-bg);
+  padding:10px 0;
+  color:#fff;
+  position:sticky;
+  top:0;
+  z-index:50;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+.nav-container{
+  width:92%;
+  max-width:1100px;
+  margin:auto;
   display:flex;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
 }
+.logo{display:flex;align-items:center;gap:10px;}
+.logo img{width:40px;height:40px;border-radius:8px;}
+.nav-links ul{
+  margin:0;
+  padding:0;
+  list-style:none;
+  display:flex;
+  gap:0.8rem;
+}
+.nav-links a{
+  color:#fff;
+  font-weight:600;
+  text-decoration:none;
+  padding:6px 4px;
+}
+.nav-links a:hover{text-decoration:underline;}
 
-.banner-wrap img {
+/* MAIN LAYOUT */
+main.guide{
+  max-width:980px;
+  margin:1.5rem auto;
+  padding:1rem;
+}
+
+/* TITLE AREA */
+.page-title{
+  font-size:2rem;
+  font-weight:800;
+  margin:10px 0 5px;
+  color:var(--text);
+}
+.page-sub{max-width:900px;color:var(--muted);margin-bottom:20px;}
+
+body.dark-mode .page-title{color:#e6eef8;}
+body.dark-mode .page-sub{color:#b8c9df;}
+
+/* FULL-WIDTH BANNER */
+.banner-wrap{
+  width:100%;
+  max-width:980px;
+  margin:14px auto 22px;
+  border-radius:14px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#e8eef9,#f5f8ff);
+  box-shadow:var(--shadow);
+  display:flex;
+  justify-content:center;
+}
+.banner-wrap img{
   width:100%;
   height:auto;
-  max-height:360px;
+  display:block;
   object-fit:contain;
-  border-radius:8px;
+}
+body.dark-mode .banner-wrap{
+  background:linear-gradient(180deg,#07101a,#0c1727);
 }
 
-body.dark-mode .banner-wrap {
-  background: linear-gradient(180deg,#07101a,#0c1626) !important;
-}
-
-/* GUIDE CARD */
-.guide-card {
+/* CONTENT CARD */
+.guide-card{
   background:var(--card-bg);
-  border-radius:12px;
-  box-shadow:var(--card-shadow);
+  border-radius:14px;
   padding:22px;
-  margin-top:18px;
+  box-shadow:var(--shadow);
+}
+body.dark-mode .guide-card{
+  background:var(--dark-card);
+  color:#e6eef8;
 }
 
-.guide-card h2 {
-  color:#1345a8;
-}
-.guide-card h3 {
-  color:#0b2a54;
-}
-
-.muted { color: var(--muted); }
-
-/* DARK MODE FIX FOR CARD */
-body.dark-mode .guide-card {
-  background:#0a1522 !important;
-  color:#dbeaf8 !important;
-  box-shadow:0 12px 32px rgba(0,0,0,0.55) !important;
-}
-
+/* HEADINGS */
+.guide-card h2{color:#1345a8;margin-top:0;}
+.guide-card h3{color:#1345a8;margin-top:1.4rem;}
 body.dark-mode .guide-card h2,
-body.dark-mode .guide-card h3 {
-  color:#9dc6ff !important;
-}
+body.dark-mode .guide-card h3{color:#8cbcff;}
 
-body.dark-mode .muted {
-  color:#94a3b8 !important;
-}
+.muted{color:var(--muted);}
+body.dark-mode .muted{color:#9bb2cc;}
 
-/* CODE BLOCK */
-pre.code {
+/* CODE BLOCKS */
+pre.code{
   background:#0b1220;
   color:#e6eef8;
-  padding:12px;
+  padding:14px;
   border-radius:8px;
   overflow:auto;
-  font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;
 }
-
-body.dark-mode pre.code {
-  background:#09121c !important;
-  color:#cfe9ff !important;
-}
-
-/* CHEAT SHEET BOX */
-.cheatsheet {
-  background:#0f172a;
-  color:#e6eef8;
-  padding:12px;
-  border-radius:8px;
-}
-
-body.dark-mode .cheatsheet {
-  background:#0c1a2a !important;
-  color:#dbeaf8 !important;
+body.dark-mode pre.code{
+  background:#0d1b2a;
+  color:#d7ecff;
 }
 
 /* FOOTER */
-footer.footer {
+footer.footer{
   background:var(--footer-bg-light);
   color:#fff;
-  text-align:center;
-  padding:2rem 1rem;
+  margin-top:3rem;
 }
-
-body.dark-mode footer.footer {
-  background:var(--footer-bg-dark) !important;
+body.dark-mode footer.footer{
+  background:var(--footer-bg-dark);
 }
 
 /* MOBILE */
-@media (max-width:720px){
-  .hero-title { font-size:1.6rem; }
-  .banner-wrap img { max-height:240px; }
-  .nav-container { width:94%; }
+@media(max-width:720px){
+  .page-title{font-size:1.55rem;}
+  .banner-wrap img{max-height:260px;}
 }
 </style>
-
 </head>
+
 <body>
-  <!-- Header -->
-  <header class="navbar" role="banner">
-    <div class="nav-container">
-      <div class="logo">
-        <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo">
-          <span class="brand-text">Convert Labs</span>
-        </a>
-      </div>
-
-      <nav aria-label="Main navigation" class="nav-links">
-        <ul>
-          <li><a href="https://convertlabs.online/index.html">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html" class="active">Guides</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-
-      <button id="themeToggle" class="theme-toggle" title="Switch theme" aria-label="Switch theme" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">🌙</button>
+<header class="navbar">
+  <div class="nav-container">
+    <div class="logo">
+      <a href="https://convertlabs.online/index.html"><img src="https://convertlabs.online/assets/convert-labs-icon.png"></a>
+      <a href="https://convertlabs.online/index.html" style="color:#fff;font-weight:700;text-decoration:none;">Convert Labs</a>
     </div>
-  </header>
 
-  <main class="guide" role="main">
-    <!-- hero with rounded banner -->
-    <section class="hero" aria-labelledby="page-title">
-      <h1 id="page-title" class="hero-title">Understanding Temperature Conversions</h1>
-      <p class="hero-sub">How to convert Celsius, Fahrenheit and Kelvin — exact formulas, worked examples, when to use which scale, precision tips and small-code snippets that keep conversions reliable across recipes, experiments and engineering.</p>
-
-      <div class="banner-wrap" aria-hidden="false">
-        <!-- using your provided banner file -->
-        <img src="https://convertlabs.online/assets/guide-temperature.jpg" alt="Thermometer and temperature scales — banner" id="guide-banner">
-      </div>
-    </section>
-
-    <!-- Guide content card -->
-    <article class="guide-card" aria-labelledby="guide-h2">
-      <h2 id="guide-h2">Quick summary — what this guide covers</h2>
-      <p class="muted">Short formulas, the exact conversion constants, worked examples, rounding guidance, when each scale is appropriate, common mistakes and compact code snippets for web or scripts.</p>
-
-      <h3>1. The three common temperature scales (and when to pick each)</h3>
-      <p>
-        Celsius (°C) is the metric everyday scale — used for weather, cooking in most countries, and laboratory work where water freeze/boil points are convenient (0 °C, 100 °C).  
-        Fahrenheit (°F) is still common for weather and domestic thermostats in the United States — it gives finer steps for human comfort (e.g., 68–72 °F).  
-        Kelvin (K) is the scientific absolute scale used in physics and engineering; Kelvin starts at absolute zero (0 K ≈ −273.15 °C) and is required for thermodynamic calculations.
-      </p>
-
-      <h3>2. Exact formulas you must keep</h3>
+    <nav class="nav-links">
       <ul>
-        <li><strong>°C → K:</strong> <code>K = °C + 273.15</code> (exact by definition)</li>
-        <li><strong>°C → °F:</strong> <code>°F = (°C × 9/5) + 32</code></li>
-        <li><strong>°F → °C:</strong> <code>°C = (°F − 32) × 5/9</code></li>
-        <li><strong>F ↔ K:</strong> Convert via Celsius to avoid rounding: <code>K = (°F − 32) × 5/9 + 273.15</code></li>
+        <li><a href="https://convertlabs.online/index.html">Home</a></li>
+        <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
+        <li><a href="https://convertlabs.online/guides.html">Guides</a></li>
+        <li><a href="https://convertlabs.online/about.html">About</a></li>
+        <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
       </ul>
+    </nav>
 
-      <h3>3. Worked examples (step-by-step)</h3>
+    <button id="themeToggle" style="background:none;border:none;color:white;font-size:20px;cursor:pointer;">🌙</button>
+  </div>
+</header>
 
-      <p><strong>Example A — 37 °C (human body) to °F</strong></p>
-      <p>
-        °F = (37 × 9/5) + 32 = (37 × 1.8) + 32 = 66.6 + 32 = <strong>98.6 °F</strong> (classic average human temperature).  
-        Note: do not round intermediate results aggressively — keep at least two decimals while calculating, then round final result to user-appropriate precision.
-      </p>
+<main class="guide">
 
-      <p><strong>Example B — −40 °F to °C</strong></p>
-      <p>
-        °C = (−40 − 32) × 5/9 = (−72) × 5/9 = −360/9 = <strong>−40 °C</strong>.  
-        This is the scale crossover point where Celsius and Fahrenheit are equal.
-      </p>
+  <!-- TITLE -->
+  <h1 class="page-title">Understanding Temperature Conversions</h1>
+  <p class="page-sub">How to convert Celsius, Fahrenheit and Kelvin — exact formulas, worked examples, when to use each scale, precision tips and small code snippets that keep conversions reliable across cooking, weather, engineering and scientific work.</p>
 
-      <h3>4. Precision & rounding — practical rules</h3>
-      <p>
-        Choose precision by context:
-      </p>
-      <ul>
-        <li><strong>Weather & UX:</strong> 1 °C or 1 °F is usually sufficient.</li>
-        <li><strong>Cooking:</strong> 0.5 °C / 1 °F often fine; on baking, oven calibration matters more and ±2 °C tolerance is common.</li>
-        <li><strong>Laboratory / engineering:</strong> use at least two decimal places for Celsius or Kelvin where control and reproducibility matter (e.g., 23.45 °C).</li>
-      </ul>
-      <p class="muted">Important: prefer storing/converting in the most precise internal unit (Kelvin for physics) and only round for display.</p>
+  <!-- BANNER -->
+  <div class="banner-wrap">
+    <img src="https://convertlabs.online/assets/guide-temperature.jpg" alt="Temperature scales illustration">
+  </div>
 
-      <h3>5. Common pitfalls & how to avoid them</h3>
-      <ul>
-        <li><strong>Forgetting the offset:</strong> Fahrenheit conversions include an additive offset (32) — mixing ratio-only conversions (like scaling) will give wrong results.</li>
-        <li><strong>Using integer math:</strong> in code, integer division can silently truncate — use floating point and explicit rounding when needed.</li>
-        <li><strong>Relying on approximate constants:</strong> use 273.15 for K ↔ °C and exact fractional 9/5 or 5/9 for °C ↔ °F conversions.</li>
-      </ul>
+  <!-- CONTENT -->
+  <article class="guide-card">
 
-      <h3>6. Real-world tips (cooking, weather, scientific)</h3>
-      <p>
-        For recipes that specify Fahrenheit but you prefer Celsius, convert once and note the oven quirks — many ovens run hot by several degrees. For weather apps, offering both scales with locale detection improves UX. In scientific code, always use Kelvin for absolute thermodynamic formulas (e.g., entropy, ideal gas law) — mixing Celsius into those formulas produces errors unless corrected.
-      </p>
+<h2>Why temperature conversion matters more than most people think</h2>
 
-      <h3>7. Compact code snippets</h3>
-      <p class="muted">Use these small functions in web apps or scripts. They keep conversions safe and precise.</p>
+<p class="muted">Temperature affects nearly everything — cooking, HVAC, medicine, environmental science, food safety, chemistry, physics and even electronics design. Yet many people rely only on rough mental estimates (“30°C is hot, 0°C is freezing”) without understanding how these scales behave or when precision truly matters.</p>
 
-      <pre class="code">
-// JavaScript: Celsius ↔ Fahrenheit ↔ Kelvin
-function cToF(c){ return (c * 9/5) + 32; }
-function fToC(f){ return (f - 32) * 5/9; }
-function cToK(c){ return c + 273.15; }
-function kToC(k){ return k - 273.15; }
-// Example: F -> K
-function fToK(f){ return fToC(f) + 273.15; }
-      </pre>
+<p>Different industries use different temperature scales because they each evolved for distinct purposes:</p>
 
-      <pre class="code">
-// Python example (round-to-display)
-def f_to_c(f): return (f - 32) * 5/9
-def c_to_f(c): return (c * 9/5) + 32
-print(round(c_to_f(37),1))  # -> 98.6
-      </pre>
+<ul>
+  <li><strong>Celsius (°C)</strong> — everyday scale based on water freezing (0°C) and boiling (100°C).</li>
+  <li><strong>Fahrenheit (°F)</strong> — historically used for weather and household heating/cooling, still dominant in the US.</li>
+  <li><strong>Kelvin (K)</strong> — the only scale with an absolute zero (0 K). Used in science, physics, astronomy, cryogenics and engineering.</li>
+</ul>
 
-      <h3>8. Cheat sheet (display rounding suggestions)</h3>
-      <div class="cheatsheet">
-• Weather / UI: 0–1 decimal (e.g., 22 °C or 72 °F)<br>
-• Cooking: 0.5 °C / 1 °F tolerance<br>
-• Science / engineering: 2+ decimals and use Kelvin for absolute formulas
-      </div>
+<p>Accurate conversions allow you to follow recipes written in another region, interpret scientific instructions, compare climate data from different countries, or avoid damaging equipment with incorrect temperature assumptions.</p>
 
-      <h3>9. Where to go next</h3>
-      <p>Try our interactive tools for quick conversions and practice with examples:</p>
-      <ul>
-        <li><a href="https://convertlabs.online/tools/temperature-converter.html">Temperature converter tool</a></li>
-        <li><a href="https://convertlabs.online/tools/currency-converter.html">Currency tool</a></li>
-        <li><a href="https://convertlabs.online/guides.html">Other guides & tutorials</a></li>
-      </ul>
+<h2>Exact formulas you must memorise</h2>
 
-      <p style="margin-top:12px;"><em>Tip: store frequently-used conversion constants or small helper functions in a utility file for your app — it avoids repeated mistakes and keeps outputs consistent across pages and tools.</em></p>
-    </article>
-  </main>
+<p>The following formulas are exact, meaning they involve no approximations:</p>
 
-  <!-- Footer (exact copy you requested for consistency) -->
-  <!-- Footer -->
- <footer class="footer">
+<ul>
+  <li><strong>K = °C + 273.15</strong></li>
+  <li><strong>°C = K − 273.15</strong></li>
+  <li><strong>°F = (°C × 9/5) + 32</strong></li>
+  <li><strong>°C = (°F − 32) × 5/9</strong></li>
+  <li><strong>K = (°F − 32) × 5/9 + 273.15</strong></li>
+</ul>
+
+<h3>Quick reference</h3>
+<pre class="code">
+°C → °F : (°C × 9/5) + 32
+°F → °C : (°F − 32) × 5/9
+°C → K  : °C + 273.15
+K  → °C : K − 273.15
+°F → K  : (°F − 32) × 5/9 + 273.15
+</pre>
+
+<h2>Worked examples (proper rounding included)</h2>
+
+<h3>Example 1 — convert 37°C to °F</h3>
+<p>37°C is considered average human body temperature. Convert it:</p>
+
+<pre class="code">
+°F = (37 × 9/5) + 32
+°F = 66.6 + 32
+°F = 98.6
+</pre>
+
+<p><strong>Final answer: 98.6°F</strong> — used in medical thermometers worldwide.</p>
+
+<h3>Example 2 — convert −40°F to °C</h3>
+<p>This is the famous “crossover temperature” where Celsius and Fahrenheit meet:</p>
+
+<pre class="code">
+°C = (−40 − 32) × 5/9
+°C = (−72) × 5/9
+°C = −40
+</pre>
+
+<p><strong>Final answer: −40°C</strong> — the two scales are equal only at this temperature.</p>
+
+<h3>Example 3 — convert 310 K to °C and °F</h3>
+
+<pre class="code">
+°C = 310 − 273.15 = 36.85°C
+°F = (36.85 × 9/5) + 32 = 98.33°F
+</pre>
+
+<p><strong>Final answer: 310 K = 36.85°C = 98.33°F</strong></p>
+
+<h2>When to use each temperature scale</h2>
+
+<ul>
+  <li><strong>Celsius</strong> — cooking, weather, scientific lab notes outside physics, HVAC.</li>
+  <li><strong>Fahrenheit</strong> — US weather forecasts, ovens, medical thermometers.</li>
+  <li><strong>Kelvin</strong> — thermodynamics, radiation, cryogenics, astrophysics.</li>
+</ul>
+
+<h2>Common mistakes & how to avoid them</h2>
+
+<ul>
+  <li><strong>Using rounded constants</strong> (like 273 instead of 273.15) leads to significant scientific error.</li>
+  <li><strong>Mixing scales</strong> without checking units — a frequent cause of engineering accidents.</li>
+  <li><strong>Rounding too early</strong> — always round at the end of calculations.</li>
+  <li><strong>Using mental shortcuts</strong> that are only valid near room temperature.</li>
+  <li><strong>Assuming Fahrenheit changes faster</strong> — it only appears so due to the smaller unit size.</li>
+</ul>
+
+<h2>Useful real-world guidelines</h2>
+
+<ul>
+  <li><strong>−18°C / 0°F</strong> — freezer temperature for safe food storage.</li>
+  <li><strong>4°C / 39°F</strong> — fridge temperature to slow bacterial growth.</li>
+  <li><strong>100°C / 212°F</strong> — boiling point of water (sea level).</li>
+  <li><strong>37°C / 98.6°F</strong> — human body temperature.</li>
+  <li><strong>20°C / 68°F</strong> — comfortable indoor room temperature.</li>
+</ul>
+
+<h2>Programming snippet — convert °C to °F in JavaScript</h2>
+
+<pre class="code">
+function cToF(c){
+  return (c * 9/5) + 32;
+}
+
+function fToC(f){
+  return (f - 32) * 5/9;
+}
+</pre>
+
+<h2>Quick cheat sheet</h2>
+<div class="cheatsheet">
+• Water freezes: 0°C = 32°F = 273.15 K<br>
+• Water boils: 100°C = 212°F = 373.15 K<br>
+• Human body temp: 37°C ≈ 98.6°F<br>
+• Extreme cold: −40°C = −40°F<br>
+• Kelvin never uses the degree symbol (K not °K)<br>
+• Kelvin is the only absolute scale
+</div>
+
+<h2>Where to go next</h2>
+
+<ul>
+  <li><a href="https://convertlabs.online/tools/temperature-converter.html">Temperature converter tool</a></li>
+  <li><a href="https://convertlabs.online/tools/tools.html">Browse all tools</a></li>
+  <li><a href="https://convertlabs.online/guides.html">Other guides & tutorials</a></li>
+</ul>
+
+<p style="margin-top:12px;"><em>Tip: Bookmark this guide — temperature conversion is surprisingly easy to forget, and having exact formulas saved helps avoid major mistakes in recipes, lab work and engineering calculations.</em></p>
+
+</article>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
   <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
     <div class="footer-brand" style="margin-bottom:10px;">
       <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
@@ -358,54 +353,47 @@ print(round(c_to_f(37),1))  # -> 98.6
       <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
     </nav>
   </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
+
+  <section class="site-verification" style="font-size:14px;color:#f1f1f1;text-align:center;margin-top:25px;line-height:1.6;">
+    <p>✅ <strong>Domain Verification & Email Security</strong></p>
+    <p>
+      Convert Labs is officially verified for secure DNS and authenticated email delivery.
+      Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)
+      uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+    </p>
+    <p>Email protection includes:</p>
+    <ul style="list-style:none;padding:0;margin:5px 0;">
       <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (selector: cf2024-1)</li>
       <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
     </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
-
+    <p>
+      These records confirm the legitimacy of our domain and improve deliverability,
+      search engine trust, and AdSense approval readiness.
+    </p>
+  </section>
 </footer>
 
-  <!-- Small theme script: sets saved theme or default, toggles body class -->
-  <script>
-    (function(){
-      const stored = localStorage.getItem('site-theme');
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const isDark = stored ? stored === 'dark' : prefersDark;
-      function applyTheme(dark){
-        if(dark){
-          document.body.classList.remove('light-mode');
-          document.body.classList.add('dark-mode');
-          document.getElementById('themeToggle').textContent = '☀️';
-        } else {
-          document.body.classList.remove('dark-mode');
-          document.body.classList.add('light-mode');
-          document.getElementById('themeToggle').textContent = '🌙';
-        }
-        localStorage.setItem('site-theme', dark ? 'dark' : 'light');
-      }
-      applyTheme(isDark);
+<!-- THEME SWITCH SCRIPT -->
+<script>
+(function(){
+  const stored = localStorage.getItem("site-theme");
+  const isDark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-      document.getElementById('themeToggle').addEventListener('click', function(){
-        const darkNow = document.body.classList.contains('dark-mode');
-        applyTheme(!darkNow);
-      });
-    })();
-  </script>
+  function apply(dark){
+    document.body.classList.toggle("dark-mode", dark);
+    document.body.classList.toggle("light-mode", !dark);
+    document.getElementById("themeToggle").textContent = dark ? "☀️" : "🌙";
+    localStorage.setItem("site-theme", dark ? "dark" : "light");
+  }
+
+  apply(isDark);
+
+  document.getElementById("themeToggle").addEventListener("click", () => {
+    apply(!document.body.classList.contains("dark-mode"));
+  });
+})();
+</script>
+
 </body>
 </html>
