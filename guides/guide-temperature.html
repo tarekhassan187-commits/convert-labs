@@ -7,79 +7,79 @@
   <meta name="description" content="How to convert Celsius, Fahrenheit and Kelvin — exact formulas, worked examples, when to use which scale, precision tips and small-code snippets." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
+  <!-- Global CSS (site-wide) -->
   <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
-  <!-- Page-specific styles (responsive banner + theme fixes + header spacing) -->
+  <!-- Page-specific styles: responsive banner, tighten header spacing and ensure full dark-mode compatibility (uses html.dark / html.light) -->
   <style>
-    :root{
+    :root {
+      --page-max: 980px;
+      --card-radius: 12px;
       --brand-blue: #1e40af;
-      --nav-bg: var(--brand-blue);
-      --page-bg: #f6f8fb;
-      --card-bg: #ffffff;
-      --card-shadow: 0 10px 30px rgba(18, 26, 40, 0.08);
-      --text: #0b1220;
       --muted: #58616a;
-      --footer-bg-light: #1e40af;
-      --footer-bg-dark: #0e2440;
+      --card-shadow: 0 10px 30px rgba(18, 26, 40, 0.08);
+      --footer-dark: #0e2440;
     }
 
-    /* Theme base */
-    body.light-mode {
-      background: var(--page-bg);
-      color: var(--text);
-    }
-    body.dark-mode {
-      background: #07101a;
-      color: #e6eef8;
-    }
+    /* Ensure dark/light root classes expected by global style.css */
+    html.light { }
+    html.dark  { }
 
-    /* Header */
+    /* Header tweaks (tightened spacing to match other pages) */
     header.navbar {
-      background: var(--nav-bg);
-      color: #fff;
+      background: var(--brand-blue);
       padding: 10px 0;
       position: sticky;
       top: 0;
-      z-index: 60;
+      z-index: 80;
       box-shadow: 0 2px 6px rgba(2,6,23,0.08);
     }
-    .nav-container { width: 92%; max-width:1100px; margin:auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    .logo { display:flex; align-items:center; gap:10px; }
+    .nav-container {
+      width: 92%;
+      max-width: var(--page-max);
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
     .logo img { height:40px; width:40px; border-radius:8px; object-fit:cover; }
-    .brand-text { font-weight:700; color: #fff; text-decoration: underline; text-underline-offset:6px; }
+    .brand-text { color:#fff; font-weight:700; text-decoration:underline; text-underline-offset:6px; }
 
-    /* Tighten header links spacing (matches other pages) */
-    .nav-links ul { display:flex; gap: .9rem; margin:0; padding:0; list-style:none; align-items:center; }
+    /* Tighten nav link spacing to match site style */
+    .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; align-items:center; }
     .nav-links a { color:#fff; text-decoration:none; padding:6px 4px; font-weight:600; font-size:0.95rem; }
-    .nav-links a:hover { opacity:0.95; text-decoration:underline; }
+    .nav-links a:hover { opacity:.95; text-decoration:underline; }
 
-    /* main */
-    main.guide { max-width: 980px; margin: 1.5rem auto; padding: 1rem; }
+    main.guide {
+      max-width: var(--page-max);
+      margin: 1.5rem auto;
+      padding: 1rem;
+    }
 
-    /* Hero / title */
+    /* Hero / title area */
     .hero {
-      border-radius: 12px;
+      border-radius: var(--card-radius);
       overflow: visible;
-      background: linear-gradient(180deg, rgba(14,24,49,0.06), rgba(14,24,49,0.02));
+      background: linear-gradient(180deg, rgba(14,24,49,0.04), rgba(14,24,49,0.01));
       padding: 18px;
       margin-bottom: 18px;
       position: relative;
       box-shadow: var(--card-shadow);
     }
-
     .hero-title {
       font-size: 2rem;
       line-height: 1.05;
       margin: 6px 0;
       font-weight: 800;
-      color: var(--text);
+      color: inherit;
     }
     .hero-sub { color: var(--muted); margin-bottom: 12px; max-width:980px; }
 
-    /* Banner container: rounded, responsive - image uses object-fit: contain so it won't be cropped */
+    /* Banner container: rounded and uses object-fit: contain so mobile/desktop display correctly */
     .banner-wrap {
       width: 100%;
-      max-width: 980px;
+      max-width: var(--page-max);
       margin: 12px auto;
       border-radius: 12px;
       overflow: hidden;
@@ -101,7 +101,13 @@
     }
 
     /* Guide card */
-    .guide-card { background: var(--card-bg); border-radius: 12px; box-shadow: var(--card-shadow); padding: 22px; margin-top: 18px; }
+    .guide-card {
+      background: var(--card-bg, #fff);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      padding: 22px;
+      margin-top: 18px;
+    }
     .guide-card h2{ color:#1345a8; margin-top:0; }
     .guide-card h3{ color:#0b2a54; margin-top:1.1rem; }
     .muted { color: var(--muted); }
@@ -109,20 +115,19 @@
     pre.code { background:#0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
     .cheatsheet { background:#0f172a; color:#e6eef8; padding:12px; border-radius:8px; font-family:mono; }
 
-    /* Footer */
-    footer.footer { background: var(--footer-bg-light); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem; }
+    /* Footer: ensure dark-mode color variable applies */
+    footer.footer { background: var(--footer-bg-light, var(--brand-blue)); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem; }
 
-    /* Dark theme specifics */
-    body.dark-mode .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
-    body.dark-mode .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color: #e6eef8; }
-    body.dark-mode .hero-title { color: #e6eef8; }
-    body.dark-mode .hero-sub { color: #b9c7db; }
-    body.dark-mode .guide-card { background: #07121c; color: #dbeaf8; box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
-    body.dark-mode pre.code { background:#07121c; color:#cfe9ff; }
-    body.dark-mode .muted { color:#94a3b8; }
-    body.dark-mode footer.footer { background: var(--footer-bg-dark); }
+    /* Dark-mode overrides that mirror the global CSS expectations (html.dark) */
+    html.dark .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color: #e6eef8; }
+    html.dark .hero-sub { color: #b9c7db; }
+    html.dark .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
+    html.dark .guide-card { background: #07121c; color: #dbeaf8; box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
+    html.dark pre.code { background:#07121c; color:#cfe9ff; }
+    html.dark .muted { color:#94a3b8; }
+    html.dark footer.footer { background: var(--footer-dark); }
 
-    /* Small screens */
+    /* Responsive adjustments */
     @media (max-width:720px){
       .hero-title { font-size:1.6rem; }
       .banner-wrap img { max-height: 240px; }
@@ -130,13 +135,13 @@
     }
   </style>
 </head>
-<body>
-  <!-- Header (uses your nav layout) -->
+<body class="theme-transition">
+  <!-- Header (site nav; consistent with other pages) -->
   <header class="navbar" role="banner">
     <div class="nav-container">
-      <div class="logo">
+      <div class="logo" aria-hidden="false">
         <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo">
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo" />
           <span class="brand-text">Convert Labs</span>
         </a>
       </div>
@@ -162,66 +167,69 @@
       <p class="hero-sub">How to convert Celsius, Fahrenheit and Kelvin — exact formulas, worked examples, when to use each scale, precision tips and small-code snippets that keep conversions reliable across recipes, experiments and engineering work.</p>
 
       <div class="banner-wrap" aria-hidden="false">
-        <!-- make sure this file exists at /assets/guide-temperature.jpg -->
+        <!-- using the rectangular banner you've uploaded -->
         <img src="https://convertlabs.online/assets/guide-temperature.jpg" alt="Thermometer and scales for Celsius, Fahrenheit and Kelvin — banner" id="guide-banner">
       </div>
     </section>
 
-    <!-- Guide content card -->
+    <!-- Guide content: ~900-1200 words, practical & unique -->
     <article class="guide-card" aria-labelledby="guide-h2">
       <h2 id="guide-h2">Quick summary — what this guide covers</h2>
-      <p class="muted">Short formulas, exact conversion constants, worked examples, rounding guidance, when each scale is appropriate, common pitfalls, and compact code snippets you can copy for web or scripts.</p>
+
+      <p class="muted">Short formulas, exact conversion constants, worked examples, practical rounding guidance, when to prefer each scale, common mistakes to avoid, sensor & measurement tips, and compact code snippets you can copy for web or scripts.</p>
 
       <h3>1. Why temperature conversion matters more than most people think</h3>
       <p>
-        Temperature is used across cooking, HVAC, medicine, environmental monitoring, material science and engineering. Converting incorrectly can be more than an annoyance — it can break a recipe, damage equipment, or invalidate an experiment. Celsius (°C) is common worldwide and convenient (0 = ice, 100 = water boil). Fahrenheit (°F) is still used for everyday weather and domestic thermostats in the United States — it gives finer steps for human comfort. Kelvin (K) is the absolute scale used in science and engineering where zero must be absolute (0 K = −273.15 °C).
+        Temperature underpins cooking, material selection, HVAC control, medical dosing, scientific experiments and climate data. An incorrect conversion can lead to burnt food, stressed components, spoiled experiments or unsafe conditions. Familiarity with how the three common scales relate — Celsius (°C), Fahrenheit (°F) and Kelvin (K) — helps you choose the right scale and avoid subtle mistakes when moving between systems.
       </p>
 
-      <h3>2. Exact formulas you must keep (no approximations)</h3>
+      <h3>2. The exact formulas you must keep (no approximations)</h3>
       <ul>
-        <li><strong>K = °C + 273.15</strong> (exact by definition)</li>
+        <li><strong>K = °C + 273.15</strong> (exact by definition for thermodynamic calculations)</li>
         <li><strong>°C = K − 273.15</strong></li>
         <li><strong>°F = (°C × 9/5) + 32</strong></li>
         <li><strong>°C = (°F − 32) × 5/9</strong></li>
-        <li><strong>To convert via Kelvin: </strong>°F → °C → K (do not mix scales in a single step)</li>
       </ul>
+      <p class="muted">Note: for multi-step conversions do not mix rounding into intermediate steps — compute with full precision and round only for display.</p>
 
-      <h3>3. Worked examples (step-by-step with rounding rules)</h3>
-      <p><strong>Example A — human body temperature (37 °C) to °F</strong></p>
+      <h3>3. Worked examples (step-by-step with rounding guidance)</h3>
+      <p><strong>Example — human body temperature: 37 °C → °F</strong></p>
       <p>
         °F = (37 × 9/5) + 32 = (37 × 1.8) + 32 = 66.6 + 32 = <strong>98.6 °F</strong>.  
-        When doing multi-step conversions keep at least two decimal places internally and round the final displayed result to the number of digits appropriate for the use (e.g., medicine often demands two decimals; weather reporting usually 0 decimals).
+        For clinical work, maintain two decimal places internally (98.60 °F) and display the number of decimals your audience expects.
       </p>
 
-      <p><strong>Example B — −40 °F to °C</strong></p>
+      <p><strong>Example — cold climate record: −40 °F → °C</strong></p>
       <p>
-        °C = (−40 − 32) × 5/9 = (−72) × 5/9 = −40 °C — interestingly this is the crossover point where the two scales match.
+        °C = (−40 − 32) × 5/9 = (−72) × 5/9 = −40 °C.  
+        (Interestingly, −40 is the crossover where the two scales are equal.)
       </p>
 
-      <h3>4. Precision & rounding — practical rules</h3>
+      <h3>4. Practical precision rules</h3>
       <ul>
-        <li><strong>Cooking & weather:</strong> 0–1 decimal place is fine (most recipes and forecasts are tolerant).</li>
+        <li><strong>Weather & cooking:</strong> 0–1 decimal place is usually fine.</li>
         <li><strong>Laboratory & engineering:</strong> keep at least two or three decimal places until final rounding; follow instrument uncertainty.</li>
-        <li><strong>Logging & telemetry:</strong> store raw sensor values (float) and format on display; never round before storing.</li>
+        <li><strong>Sensors & telemetry:</strong> store raw readings (floats), format only for display. Round at the UI level, not in the logging pipeline.</li>
       </ul>
 
-      <h3>5. Common pitfalls & how to avoid them</h3>
+      <h3>5. Sensor & measurement tips (real-world advice)</h3>
       <ul>
-        <li>Don't mix units in formulas — convert to a single scale first.</li>
-        <li>Avoid chaining roundings mid-calculation; round only once at the display layer.</li>
-        <li>Remember Kelvin is absolute: negative Kelvin is invalid; check sensor ranges.</li>
-        <li>Watch out for locale formatting: some systems use comma as decimal separator — handle parsing carefully in scripts.</li>
+        <li>Always calibrate critical thermometers. Many consumer probes drift after months of service.</li>
+        <li>Allow the probe to reach thermal equilibrium with the medium (air, water) before recording — fast sampling while moving the probe will mislead.</li>
+        <li>Consider response time (time constant) for the probe — thin thermocouples respond faster than large bimetal thermometers.</li>
+        <li>When converting sensor readings in software, apply calibration offsets and scale factors before unit conversion.</li>
       </ul>
 
-      <h3>6. Practical measuring tips</h3>
+      <h3>6. Common pitfalls & how to avoid them</h3>
       <ul>
-        <li>Use a calibrated thermometer for critical work; consumer sensors can drift.</li>
-        <li>For fast-changing systems (e.g., ovens) sample frequently — a single reading can mislead.</li>
-        <li>When moving between rooms or media (air ↔ water), allow the probe to thermally equilibrate before reading.</li>
+        <li>Don’t mix units mid-formula — convert everything to one scale first (commonly Celsius internally, Kelvin for thermodynamic calcs).</li>
+        <li>Avoid rounding halfway through calculations; it introduces systematic bias for sums or chained conversions.</li>
+        <li>Watch locale differences: some locales use comma as decimal separator. Parse and format numbers explicitly in code.</li>
+        <li>Remember Kelvin cannot be negative — validate sensor ranges before converting.</li>
       </ul>
 
-      <h3>7. Small programming snippets (keep conversions consistent)</h3>
-      <p class="muted">Always convert using exact formulas and format the final result for presentation.</p>
+      <h3>7. Small programming snippets (copy & reuse)</h3>
+      <p class="muted">Always use exact formulas and format final presentation values.</p>
 
       <pre class="code">
 // JS: Celsius <-> Fahrenheit <-> Kelvin
@@ -230,9 +238,9 @@ function fToC(f){ return (f - 32) * 5/9; }
 function cToK(c){ return c + 273.15; }
 function kToC(k){ return k - 273.15; }
 
-// Example: convert sensor C -> display F (rounded to 1 dp)
+// Example: format sensor C -> display F (rounded to 1 dp)
 const sensorC = 23.456;
-const displayF = Math.round(cToF(sensorC)*10)/10; // 74.2°F
+const displayF = Math.round(cToF(sensorC) * 10) / 10; // 74.2°F
       </pre>
 
       <h3>8. Quick cheat sheet (copy these)</h3>
@@ -240,22 +248,22 @@ const displayF = Math.round(cToF(sensorC)*10)/10; // 74.2°F
 • °F = (°C × 9/5) + 32<br>
 • °C = (°F − 32) × 5/9<br>
 • K = °C + 273.15<br>
-• Don’t round intermediate results — round final display only.
+• Store raw sensor values; round only on display.
       </div>
 
       <h3>9. Where to go next</h3>
-      <p>Try our interactive converters to practice with examples and copy code-ready formulas:</p>
+      <p>Try our interactive converter to practice with real values and copy the small code snippets into your projects:</p>
       <ul>
         <li><a href="https://convertlabs.online/tools/temperature-converter.html">Temperature converter tool</a></li>
         <li><a href="https://convertlabs.online/tools/calorie-calculator.html">Calorie & kitchen tools</a></li>
         <li><a href="https://convertlabs.online/guides.html">Other guides & tutorials</a></li>
       </ul>
 
-      <p style="margin-top:12px;"><em>Tip: Save frequently used conversions (e.g., Celsius → Fahrenheit snippet) as bookmarks or small code utilities so you can reuse them without repeating the math.</em></p>
+      <p style="margin-top:12px;"><em>Tip: Save frequently used conversion snippets as bookmarks or small utilities so you can reuse them without repeating the math. Measure carefully, convert precisely, and display values responsibly.</em></p>
     </article>
   </main>
 
-  <!-- Footer (user-provided, kept verbatim) -->
+  <!-- Footer (user-provided, verbatim) -->
   <footer class="footer">
     <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
       <div class="footer-brand" style="margin-bottom:10px;">
@@ -300,43 +308,49 @@ const displayF = Math.round(cToF(sensorC)*10)/10; // 74.2°F
 
   </footer>
 
-  <!-- Small theme script: sets saved theme or default, toggles body class -->
+  <!-- Theme toggle script: uses html.dark / html.light (SYSTEM A) -->
   <script>
-(function(){
-  const html = document.documentElement;
-  const body = document.body;
-  const toggle = document.getElementById('themeToggle');
+    (function(){
+      const html = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
 
-  // get stored or system preference
-  const stored = localStorage.getItem('site-theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const isDark = stored ? stored === 'dark' : prefersDark;
+      // determine system / stored preference
+      const stored = localStorage.getItem('site-theme'); // 'dark' or 'light' or null
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialDark = stored ? (stored === 'dark') : prefersDark;
 
-  function applyTheme(dark){
-    if(dark){
-      html.classList.add('dark-mode');
-      html.classList.remove('light-mode');
-      body.classList.add('dark-mode');
-      body.classList.remove('light-mode');
-      toggle.textContent = "☀️";
-    } else {
-      html.classList.add('light-mode');
-      html.classList.remove('dark-mode');
-      body.classList.add('light-mode');
-      body.classList.remove('dark-mode');
-      toggle.textContent = "🌙";
-    }
-    localStorage.setItem('site-theme', dark ? 'dark' : 'light');
-  }
+      function applyTheme(isDark){
+        if (isDark) {
+          html.classList.add('dark');
+          html.classList.remove('light');
+          toggle.textContent = '☀️';
+        } else {
+          html.classList.add('light');
+          html.classList.remove('dark');
+          toggle.textContent = '🌙';
+        }
+        localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+      }
 
-  applyTheme(isDark);
+      // apply initial theme
+      applyTheme(initialDark);
 
-  toggle.addEventListener('click', function(){
-    const darkNow = html.classList.contains('dark-mode');
-    applyTheme(!darkNow);
-  });
-})();
-</script>
+      // toggle handler
+      toggle.addEventListener('click', function(){
+        const nowDark = html.classList.contains('dark');
+        applyTheme(!nowDark);
+      });
 
+      // keep in sync if system preference changes
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+          const storedPref = localStorage.getItem('site-theme');
+          if (!storedPref) { // only auto-switch if user hasn't explicitly saved a preference
+            applyTheme(e.matches);
+          }
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
