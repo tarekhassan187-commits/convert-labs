@@ -1,31 +1,25 @@
 <!doctype html>
 <html lang="en">
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Container Volume — Boxes, Cylinders & Tanks — Convert Labs</title>
-
-  <meta name="description" content="How to calculate container volumes for boxes, cylinders and tanks — exact formulas, worked examples, unit conversions, density-to-mass methods, packing efficiency and real-world tips.">
-
+  <title>Container volume — Calculate boxes, cylinders & tanks — Convert Labs</title>
+  <meta name="description" content="How to calculate container volumes for boxes, cylinders and irregular tanks — exact formulas, worked examples, unit advice, packing & mass estimation using density." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png">
   <link rel="stylesheet" href="https://convertlabs.online/style.css">
 
-  <!-- PAGE-SPECIFIC STYLES -->
+  <!-- Page-specific styles -->
   <style>
-
-    :root {
+    :root{
       --page-max: 980px;
       --brand-blue: #1e40af;
       --muted: #58616a;
       --card-radius: 12px;
-      --card-shadow: 0 10px 30px rgba(18, 26, 40, 0.08);
+      --card-shadow: 0 10px 30px rgba(18,26,40,0.08);
       --footer-dark: #0e2440;
     }
 
-    /* ----------------------------------------------------
-       HEADER
-    ---------------------------------------------------- */
+    /* Header */
     header.navbar {
       background: var(--brand-blue);
       padding: 10px 0;
@@ -37,16 +31,16 @@
     .nav-container {
       width: 92%;
       max-width: var(--page-max);
-      margin: auto;
-      display: flex;
+      margin: 0 auto;
+      display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
     }
-    .logo img { height:40px; width:40px; border-radius:8px; object-fit:cover; }
-    .brand-text { font-weight:700; color:#fff; text-decoration:underline; text-underline-offset:6px; }
+    /* REMOVED the problematic .logo img styles */
+    .brand-text { color:#fff; font-weight:700; text-decoration:underline; text-underline-offset:6px; }
 
-    .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; }
+    .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; align-items:center; }
     .nav-links a { color:#fff; text-decoration:none; padding:6px 4px; font-weight:600; font-size:0.95rem; }
     .nav-links a:hover { opacity:.95; text-decoration:underline; }
 
@@ -56,9 +50,7 @@
       padding: 1rem;
     }
 
-    /* ----------------------------------------------------
-       HERO + TITLE (fixed color)
-    ---------------------------------------------------- */
+    /* Hero */
     .hero {
       border-radius: var(--card-radius);
       background: linear-gradient(180deg, rgba(14,24,49,0.04), rgba(14,24,49,0.01));
@@ -66,58 +58,35 @@
       margin-bottom: 18px;
       box-shadow: var(--card-shadow);
     }
-
-    /* FIX: Title color black on light mode */
-    html.light .hero-title { color: #111 !important; }
-
-    /* FIX: Title color white on dark mode */
-    html.dark .hero-title { color: #e6eef8 !important; }
-
     .hero-title {
       font-size: 2rem;
-      font-weight: 800;
+      line-height: 1.05;
       margin: 6px 0;
+      font-weight: 800;
+      color: inherit;
     }
+    .hero-sub { color: var(--muted); margin-bottom: 12px; }
 
-    .hero-sub {
-      color: var(--muted);
-      margin-bottom: 12px;
-      max-width: 980px;
-    }
-
-    /* ----------------------------------------------------
-       BANNER
-    ---------------------------------------------------- */
     .banner-wrap {
       width: 100%;
-      max-width: var(--page-max);
       margin: 12px auto;
       border-radius: 12px;
       overflow: hidden;
       background: linear-gradient(180deg,#e9edf6,#f6f9ff);
+      padding: 18px;
       display:flex;
       justify-content:center;
-      align-items:center;
-      padding: 18px;
       box-shadow: var(--card-shadow);
     }
-
     .banner-wrap img {
       width: 100%;
       height: auto;
-      max-height: 360px;
       object-fit: contain;
+      max-height: 360px;
       border-radius: 8px;
     }
 
-    /* DARK MODE BANNER */
-    html.dark .banner-wrap {
-      background: linear-gradient(180deg,#07101a,#0a1422);
-    }
-
-    /* ----------------------------------------------------
-       CONTENT CARD
-    ---------------------------------------------------- */
+    /* Guide card */
     .guide-card {
       background: var(--card-bg, #fff);
       border-radius: 12px;
@@ -125,43 +94,22 @@
       padding: 22px;
       margin-top: 18px;
     }
-
-    .guide-card h2 { color:#1345a8; margin-top:0; }
-    .guide-card h3 { color:#0b2a54; margin-top:1.1rem; }
+    .guide-card h2{ color:#1345a8; margin-top:0; }
+    .guide-card h3{ color:#0b2a54; margin-top:1.1rem; }
     .muted { color: var(--muted); }
 
-    /* Dark mode card */
-    html.dark .guide-card {
-      background:#07121c;
-      color:#dbeaf8;
-      box-shadow:0 12px 32px rgba(0,0,0,0.6);
-    }
-    html.dark .muted { color:#9fb2c9 !important; }
+    pre.code { background:#0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; }
+    .cheatsheet { background:#0f172a; color:#e6eef8; padding:12px; border-radius:8px; }
 
-    /* Code blocks */
-    pre.code {
-      background:#0b1220;
-      color:#e6eef8;
-      padding:12px;
-      border-radius:8px;
-      overflow:auto;
-    }
-    html.dark pre.code {
-      background:#07121c;
-      color:#cfe9ff;
-    }
+    footer.footer { background: var(--brand-blue); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem; }
 
-    .cheatsheet {
-      background:#0f172a;
-      color:#e6eef8;
-      padding:12px;
-      border-radius:8px;
-    }
-
-    /* ----------------------------------------------------
-       FOOTER
-    ---------------------------------------------------- */
-    footer.footer { background: var(--brand-blue); color:#fff; padding:2rem 1rem; text-align:center; margin-top:2.5rem; }
+    /* Dark mode */
+    html.dark .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color:#e6eef8; }
+    html.dark .hero-sub { color:#b9c7db; }
+    html.dark .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
+    html.dark .guide-card { background:#07121c; color:#dbeaf8; }
+    html.dark pre.code { background:#07121c; color:#cfe9ff; }
+    html.dark .muted { color:#94a3b8; }
     html.dark footer.footer { background: var(--footer-dark); }
 
     @media (max-width:720px){
@@ -169,21 +117,23 @@
       .banner-wrap img { max-height: 240px; }
       .nav-container { width:94%; }
     }
-
   </style>
 </head>
 
 <body class="theme-transition">
 
-  <!-- HEADER -->
-  <header class="navbar">
+  <!-- Header -->
+  <header class="navbar" role="banner">
     <div class="nav-container">
-      <a href="https://convertlabs.online/index.html" style="display:flex;gap:10px;align-items:center;text-decoration:none;">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo">
+      <a class="brand" href="https://convertlabs.online/index.html"
+        style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png"
+             alt="Convert Labs logo"
+             style="width:36px;height:36px;border-radius:8px;background:#fff;padding:4px;">
         <span class="brand-text">Convert Labs</span>
       </a>
 
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="Primary">
         <ul>
           <li><a href="https://convertlabs.online/index.html">Home</a></li>
           <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
@@ -193,103 +143,78 @@
         </ul>
       </nav>
 
-      <button id="themeToggle" class="theme-toggle" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">
-        🌙
-      </button>
+      <button id="themeToggle" class="theme-toggle" aria-label="Switch theme"
+        style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">🌙</button>
     </div>
   </header>
 
-  <!-- CONTENT -->
   <main class="guide">
-
+    <!-- Hero -->
     <section class="hero">
-      <h1 class="hero-title">Container volume — Boxes, cylinders & tanks</h1>
-      <p class="hero-sub">
-        Practical formulas for boxes, cylinders, spheres and tapered tanks. Includes worked examples,
-        unit conversions, mass estimation using density, packing, headspace, tolerances and real-world safety margins.
-      </p>
+      <h1 class="hero-title">Container volume — boxes, cylinders & tanks</h1>
+      <p class="hero-sub">Practical formulas for boxes, cylinders, spheres and truncated tanks — worked examples, unit guidance, mass estimation using density, packing efficiency and headspace rules.</p>
 
       <div class="banner-wrap">
-        <img src="https://convertlabs.online/assets/guide-container.jpg" alt="Container volume banner — blueprints">
+        <img src="https://convertlabs.online/assets/guide-container.jpg" alt="Blueprint-style container volume illustration">
       </div>
     </section>
 
-    <!-- LONG ARTICLE (900–1200 words) -->
+    <!-- Guide content -->
     <article class="guide-card">
-
       <h2>Quick summary — what this guide covers</h2>
-      <p class="muted">Exact volume formulas, step-by-step examples, converting volume to mass using density, packing efficiency, headspace rules, rounding advice, common mistakes and reusable code snippets.</p>
+      <p class="muted">Exact formulas, step-by-step examples, converting volume to mass using density, packing efficiency, headspace rules, rounding advice, common mistakes and reusable code snippets.</p>
 
       <h3>1. Core formulas</h3>
       <ul>
         <li><strong>Box:</strong> V = L × W × H</li>
-        <li><strong>Cylinder:</strong> V = π × r² × h</li>
-        <li><strong>Sphere:</strong> V = (4/3) × π × r³</li>
-        <li><strong>Cone:</strong> V = (1/3) × π × r² × h</li>
+        <li><strong>Cylinder:</strong> V = π r² h</li>
+        <li><strong>Sphere:</strong> V = 4/3 π r³</li>
+        <li><strong>Cone:</strong> V = 1/3 π r² h</li>
       </ul>
-
-      <p class="muted">Unit conversions: 1 m³ = 1000 L = 1,000,000 mL.  
-      1 US gal = 3.785 L.  
-      1 Imperial gal = 4.546 L.</p>
+      <p class="muted">Unit conversions: 1 m³ = 1000 L = 1,000,000 mL.</p>
 
       <h3>2. Worked examples</h3>
-
-      <p><strong>Example A — rectangular tank to litres</strong><br>
-      Dimensions: 1.2 m × 0.5 m × 0.4 m  
-      Volume = 0.24 m³ = 240 L.</p>
-
-      <p><strong>Example B — cylinder drum</strong><br>
-      r = 0.3 m, h = 0.8 m  
-      V = π × 0.3² × 0.8 = 0.226 m³ = 226 L.</p>
+      <p><strong>Box:</strong> 1.2 × 0.5 × 0.4 = 0.24 m³ = 240 L</p>
+      <p><strong>Cylinder:</strong> r = 0.3 m, h = 0.8 m → 226.2 L</p>
 
       <h3>3. Volume → Mass using density</h3>
-      <p><strong>mass = volume × density</strong></p>
+      <p><strong>Mass = volume × density</strong></p>
+      <p>Water: 1000 kg/m³ → 1 L = 1 kg</p>
+      <p>Oil: ≈ 920 kg/m³</p>
 
+      <h3>4. Measurement & rounding</h3>
       <ul>
-        <li>Water: 1000 kg/m³</li>
-        <li>Oil: ~920 kg/m³</li>
-        <li>Honey: ~1420 kg/m³</li>
-        <li>Flour (packed): ~580 kg/m³</li>
+        <li>Use SI units internally</li>
+        <li>Round only final results</li>
+        <li>Measure in smallest practical unit</li>
       </ul>
 
-      <p>Example: 0.226 m³ of water → 226 kg.</p>
-
-      <h3>4. Real-world accuracy tips</h3>
+      <h3>5. Packing, headspace & safety</h3>
       <ul>
-        <li>Measure the internal dimensions, not external.</li>
-        <li>Use consistent units and avoid mixing cm with m.</li>
-        <li>Round only final results.</li>
-        <li>For large tanks, verify walls aren’t tapered.</li>
+        <li><strong>Headspace:</strong> liquids need 2–5%</li>
+        <li><strong>Packing:</strong> spheres fill ≈ 64%</li>
+        <li><strong>Tolerances:</strong> mm errors matter in small tanks</li>
       </ul>
 
-      <h3>5. Packing efficiency + headspace</h3>
+      <h3>6. Common pitfalls</h3>
       <ul>
-        <li><strong>Liquids:</strong> allow 2–5% headspace.</li>
-        <li><strong>Solids:</strong> random packing ≈ 64% of container volume.</li>
-        <li><strong>Powders:</strong> settle over time — measure density after tapping.</li>
+        <li>Mixing diameter with radius</li>
+        <li>US vs Imperial gallons</li>
+        <li>Rounding too early</li>
       </ul>
 
-      <h3>6. Common mistakes to avoid</h3>
-      <ul>
-        <li>Forgetting to divide diameter by 2 to get radius.</li>
-        <li>Using US gallons when imperial is intended.</li>
-        <li>Rounding during intermediate steps.</li>
-        <li>Assuming a tank is perfectly straight when it is tapered.</li>
-      </ul>
-
-      <h3>7. Code snippets</h3>
+      <h3>7. Useful code snippets</h3>
       <pre class="code">
-// JS helper functions
+// JS helpers
 const boxVol = (L,W,H) => L*W*H;
 const cylVol = (r,h) => Math.PI*r*r*h;
-const m3ToL  = m3 => m3*1000;
+const m3ToL = m3 => m3*1000;
 
-// Example
-const drum = cylVol(0.3,0.8);
-console.log(m3ToL(drum).toFixed(1)); // 226.2 L
+// Example drum
+console.log(m3ToL(cylVol(0.3,0.8))); // 226.2
       </pre>
 
-      <h3>8. Cheat sheet</h3>
+      <h3>8. Quick cheat sheet</h3>
       <div class="cheatsheet">
         • Box: L × W × H<br>
         • Cylinder: π r² h<br>
@@ -298,16 +223,15 @@ console.log(m3ToL(drum).toFixed(1)); // 226.2 L
         • 1 m³ = 1000 L
       </div>
 
-      <h3>9. Related tools</h3>
+      <h3>9. Next steps</h3>
       <ul>
         <li><a href="https://convertlabs.online/tools/container-calculator.html">Container calculator tool</a></li>
-        <li><a href="https://convertlabs.online/guides.html">See all guides</a></li>
+        <li><a href="https://convertlabs.online/guides.html">More guides</a></li>
       </ul>
-
     </article>
   </main>
 
-  <!-- FOOTER (unchanged, your real footer) -->
+  <!-- Footer -->
   <footer class="footer">
     <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
       <div class="footer-brand" style="margin-bottom:10px;">
@@ -315,45 +239,40 @@ console.log(m3ToL(drum).toFixed(1)); // 226.2 L
         <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
       </div>
 
-      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+      <p>© 2025 Convert Labs. All rights reserved.</p>
 
-      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:10px auto;"></div>
 
       <nav class="footer-links">
-        <a href="https://convertlabs.online/about.html">About</a> |
-        <a href="https://convertlabs.online/tools/tools.html">Tools</a> |
-        <a href="https://convertlabs.online/guides.html">Blog</a> |
-        <a href="https://convertlabs.online/privacy.html">Privacy</a> |
-        <a href="https://convertlabs.online/disclaimer.html">Disclaimer</a> |
-        <a href="https://convertlabs.online/terms.html">Terms</a> |
-        <a href="https://convertlabs.online/contact.html">Contact</a>
+        <a href="/about.html">About</a> |
+        <a href="/tools/tools.html">Tools</a> |
+        <a href="/guides.html">Blog</a> |
+        <a href="/privacy.html">Privacy</a> |
+        <a href="/disclaimer.html">Disclaimer</a> |
+        <a href="/terms.html">Terms</a> |
+        <a href="/contact.html">Contact</a>
       </nav>
     </div>
-
-    <section class="site-verification" style="font-size:14px;color:#f1f1f1;margin-top:25px;">
-      <p>✔ <strong>Domain Verified — Convert Labs</strong></p>
-      <p>SPF, DKIM & DMARC fully active via Cloudflare.</p>
-    </section>
   </footer>
 
-  <!-- THEME SCRIPT -->
+  <!-- Theme script -->
   <script>
     (function(){
       const html = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const stored = localStorage.getItem('site-theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const startDark = stored ? stored === 'dark' : prefersDark;
+      const toggle = document.getElementById('themeToggle');
+      const saved = localStorage.getItem('site-theme');
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initial = saved ? saved === 'dark' : prefersDark;
 
-      function applyTheme(dark){
+      function apply(dark){
         html.classList.toggle('dark', dark);
         html.classList.toggle('light', !dark);
-        btn.textContent = dark ? "☀️" : "🌙";
-        localStorage.setItem('site-theme', dark ? 'dark' : 'light');
+        toggle.textContent = dark ? "☀️" : "🌙";
+        localStorage.setItem('site-theme', dark ? "dark" : "light");
       }
 
-      applyTheme(startDark);
-      btn.addEventListener('click', ()=> applyTheme(!html.classList.contains('dark')));
+      apply(initial);
+      toggle.addEventListener('click', ()=>apply(!html.classList.contains('dark')));
     })();
   </script>
 
