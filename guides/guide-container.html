@@ -19,7 +19,7 @@
       --footer-dark: #0e2440;
     }
 
-    /* Header tweaks */
+    /* Header */
     header.navbar {
       background: var(--brand-blue);
       padding: 10px 0;
@@ -37,7 +37,7 @@
       justify-content:space-between;
       gap:12px;
     }
-    /* REMOVED the .logo img CSS completely */
+    /* REMOVED the problematic .logo img styles */
     .brand-text { color:#fff; font-weight:700; text-decoration:underline; text-underline-offset:6px; }
 
     .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; align-items:center; }
@@ -50,14 +50,12 @@
       padding: 1rem;
     }
 
-    /* Hero card */
+    /* Hero */
     .hero {
       border-radius: var(--card-radius);
-      overflow: visible;
       background: linear-gradient(180deg, rgba(14,24,49,0.04), rgba(14,24,49,0.01));
       padding: 18px;
       margin-bottom: 18px;
-      position: relative;
       box-shadow: var(--card-shadow);
     }
     .hero-title {
@@ -67,28 +65,24 @@
       font-weight: 800;
       color: inherit;
     }
-    .hero-sub { color: var(--muted); margin-bottom: 12px; max-width:980px; }
+    .hero-sub { color: var(--muted); margin-bottom: 12px; }
 
-    /* Banner */
     .banner-wrap {
       width: 100%;
-      max-width: var(--page-max);
       margin: 12px auto;
       border-radius: 12px;
       overflow: hidden;
       background: linear-gradient(180deg,#e9edf6,#f6f9ff);
+      padding: 18px;
       display:flex;
       justify-content:center;
-      align-items:center;
-      padding: 18px;
       box-shadow: var(--card-shadow);
     }
     .banner-wrap img {
       width: 100%;
       height: auto;
-      max-height: 360px;
       object-fit: contain;
-      display:block;
+      max-height: 360px;
       border-radius: 8px;
     }
 
@@ -110,8 +104,8 @@
     footer.footer { background: var(--brand-blue); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem; }
 
     /* Dark mode */
-    html.dark .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color: #e6eef8; }
-    html.dark .hero-sub { color: #b9c7db; }
+    html.dark .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color:#e6eef8; }
+    html.dark .hero-sub { color:#b9c7db; }
     html.dark .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
     html.dark .guide-card { background:#07121c; color:#dbeaf8; }
     html.dark pre.code { background:#07121c; color:#cfe9ff; }
@@ -131,7 +125,8 @@
   <!-- Header -->
   <header class="navbar" role="banner">
     <div class="nav-container">
-      <a class="brand" href="https://convertlabs.online/index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <a class="brand" href="https://convertlabs.online/index.html"
+        style="display:flex;align-items:center;gap:10px;text-decoration:none;">
         <img src="https://convertlabs.online/assets/convert-labs-icon.png"
              alt="Convert Labs logo"
              style="width:36px;height:36px;border-radius:8px;background:#fff;padding:4px;">
@@ -156,13 +151,130 @@
   <main class="guide">
     <!-- Hero -->
     <section class="hero">
-      <h1 class="hero-title">Container volume — Boxes, cylinders & tanks</h1>
-      <p class="hero-sub">Practical formulas for boxes, cylinders, spheres and tapered tanks...</p>
+      <h1 class="hero-title">Container volume — boxes, cylinders & tanks</h1>
+      <p class="hero-sub">Practical formulas for boxes, cylinders, spheres and truncated tanks — worked examples, unit guidance, mass estimation using density, packing efficiency and headspace rules.</p>
 
       <div class="banner-wrap">
-        <img src="https://convertlabs.online/assets/guide-container.jpg" alt="Blueprint-style container volume image">
+        <img src="https://convertlabs.online/assets/guide-container.jpg" alt="Blueprint-style container volume illustration">
       </div>
     </section>
 
-    <!-- Guide content (kept as you approved earlier) -->
-    <!-- ... CONTENT UNCHANGED ... -->
+    <!-- Guide content -->
+    <article class="guide-card">
+      <h2>Quick summary — what this guide covers</h2>
+      <p class="muted">Exact formulas, step-by-step examples, converting volume to mass using density, packing efficiency, headspace rules, rounding advice, common mistakes and reusable code snippets.</p>
+
+      <h3>1. Core formulas</h3>
+      <ul>
+        <li><strong>Box:</strong> V = L × W × H</li>
+        <li><strong>Cylinder:</strong> V = π r² h</li>
+        <li><strong>Sphere:</strong> V = 4/3 π r³</li>
+        <li><strong>Cone:</strong> V = 1/3 π r² h</li>
+      </ul>
+      <p class="muted">Unit conversions: 1 m³ = 1000 L = 1,000,000 mL.</p>
+
+      <h3>2. Worked examples</h3>
+      <p><strong>Box:</strong> 1.2 × 0.5 × 0.4 = 0.24 m³ = 240 L</p>
+      <p><strong>Cylinder:</strong> r = 0.3 m, h = 0.8 m → 226.2 L</p>
+
+      <h3>3. Volume → Mass using density</h3>
+      <p><strong>Mass = volume × density</strong></p>
+      <p>Water: 1000 kg/m³ → 1 L = 1 kg</p>
+      <p>Oil: ≈ 920 kg/m³</p>
+
+      <h3>4. Measurement & rounding</h3>
+      <ul>
+        <li>Use SI units internally</li>
+        <li>Round only final results</li>
+        <li>Measure in smallest practical unit</li>
+      </ul>
+
+      <h3>5. Packing, headspace & safety</h3>
+      <ul>
+        <li><strong>Headspace:</strong> liquids need 2–5%</li>
+        <li><strong>Packing:</strong> spheres fill ≈ 64%</li>
+        <li><strong>Tolerances:</strong> mm errors matter in small tanks</li>
+      </ul>
+
+      <h3>6. Common pitfalls</h3>
+      <ul>
+        <li>Mixing diameter with radius</li>
+        <li>US vs Imperial gallons</li>
+        <li>Rounding too early</li>
+      </ul>
+
+      <h3>7. Useful code snippets</h3>
+      <pre class="code">
+// JS helpers
+const boxVol = (L,W,H) => L*W*H;
+const cylVol = (r,h) => Math.PI*r*r*h;
+const m3ToL = m3 => m3*1000;
+
+// Example drum
+console.log(m3ToL(cylVol(0.3,0.8))); // 226.2
+      </pre>
+
+      <h3>8. Quick cheat sheet</h3>
+      <div class="cheatsheet">
+        • Box: L × W × H<br>
+        • Cylinder: π r² h<br>
+        • Sphere: 4/3 π r³<br>
+        • Cone: 1/3 π r² h<br>
+        • 1 m³ = 1000 L
+      </div>
+
+      <h3>9. Next steps</h3>
+      <ul>
+        <li><a href="https://convertlabs.online/tools/container-calculator.html">Container calculator tool</a></li>
+        <li><a href="https://convertlabs.online/guides.html">More guides</a></li>
+      </ul>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" style="width:24px;height:24px;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p>© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:10px auto;"></div>
+
+      <nav class="footer-links">
+        <a href="/about.html">About</a> |
+        <a href="/tools/tools.html">Tools</a> |
+        <a href="/guides.html">Blog</a> |
+        <a href="/privacy.html">Privacy</a> |
+        <a href="/disclaimer.html">Disclaimer</a> |
+        <a href="/terms.html">Terms</a> |
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Theme script -->
+  <script>
+    (function(){
+      const html = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+      const saved = localStorage.getItem('site-theme');
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initial = saved ? saved === 'dark' : prefersDark;
+
+      function apply(dark){
+        html.classList.toggle('dark', dark);
+        html.classList.toggle('light', !dark);
+        toggle.textContent = dark ? "☀️" : "🌙";
+        localStorage.setItem('site-theme', dark ? "dark" : "light");
+      }
+
+      apply(initial);
+      toggle.addEventListener('click', ()=>apply(!html.classList.contains('dark')));
+    })();
+  </script>
+
+</body>
+</html>
