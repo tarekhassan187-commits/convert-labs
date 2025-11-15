@@ -32,7 +32,7 @@
       padding: 10px 0;
       position: sticky;
       top: 0;
-      z-index: 90;
+      z-index: 80;
       box-shadow: 0 2px 6px rgba(2,6,23,0.08);
     }
     .nav-container {
@@ -44,14 +44,18 @@
       justify-content:space-between;
       gap:12px;
     }
-    /* brand without large icon to avoid size issues */
-    .brand-text { color:#fff; font-weight:700; text-decoration:underline; text-underline-offset:6px; font-size:1.05rem; }
+    /* REMOVED the problematic .logo img styles */
+    .brand-text { color:#fff; font-weight:700; text-decoration:underline; text-underline-offset:6px; }
 
     .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; align-items:center; }
     .nav-links a { color:#fff; text-decoration:none; padding:6px 4px; font-weight:600; font-size:0.95rem; }
     .nav-links a:hover { opacity:.95; text-decoration:underline; }
 
-    main.guide { max-width: var(--page-max); margin: 1.5rem auto; padding: 1rem; }
+    main.guide {
+      max-width: var(--page-max);
+      margin: 1.5rem auto;
+      padding: 1rem;
+    }
 
     /* Hero */
     .hero {
