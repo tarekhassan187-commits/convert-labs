@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>7-Day 2000 Calorie Meal Plan — Convert Labs</title>
+  <meta name="description" content="A practical 7-day 2000-calorie meal plan — balanced macros, quick recipes, swap options, grocery list and meal prep tips. Use our calorie calculator to personalise." />
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
+
+  <!-- Page-specific styles: consistent with other guides, explicit hero text colours to avoid white/visibility problems -->
+  <style>
+    :root {
+      --page-max: 980px;
+      --brand-blue: #1e40af;
+      --muted: #58616a;
+      --card-radius: 12px;
+      --card-shadow: 0 10px 30px rgba(18,26,40,0.08);
+    }
+
+    /* Header */
+    header.navbar {
+      background: var(--brand-blue);
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      box-shadow: 0 2px 6px rgba(2,6,23,0.08);
+    }
+    .nav-container { width:92%; max-width:var(--page-max); margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .brand { display:flex; gap:10px; align-items:center; text-decoration:none; }
+    .brand img { width:40px; height:40px; border-radius:8px; background:#fff; padding:4px; }
+    .brand-text { color:#fff; font-weight:700; text-decoration:none; } /* no underline */
+
+    .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; align-items:center; }
+    .nav-links a { color:#fff; text-decoration:none; padding:6px 4px; font-weight:600; font-size:0.95rem; }
+    .theme-toggle { background:none;border:none;color:#fff;font-size:20px;cursor:pointer; }
+
+    /* Main container */
+    main.guide { max-width:var(--page-max); margin:1.5rem auto; padding:1rem; }
+
+    /* Hero */
+    .hero {
+      border-radius:var(--card-radius);
+      background: linear-gradient(180deg, rgba(14,24,49,0.04), rgba(14,24,49,0.01));
+      padding:18px;
+      margin-bottom:18px;
+      box-shadow: var(--card-shadow);
+      text-align:center;
+    }
+    /* Explicit colour rules to avoid accidental white title */
+    html.light .hero-title { color: #0b2a54; }
+    html.dark  .hero-title { color: #e6eef8; }
+    .hero-title { font-size:2rem; line-height:1.05; margin:6px 0; font-weight:800; }
+    .hero-sub { color: var(--muted); margin-bottom:12px; max-width:880px; margin-left:auto;margin-right:auto; }
+
+    .banner-wrap { width:100%; max-width:var(--page-max); margin:12px auto; border-radius:12px; overflow:hidden; background:linear-gradient(180deg,#e9edf6,#f6f9ff); padding:18px; box-shadow:var(--card-shadow); display:flex; justify-content:center; align-items:center; }
+    .banner-wrap img { width:100%; height:auto; max-height:360px; object-fit:cover; border-radius:8px; display:block; }
+
+    .guide-card { background:var(--card-bg,#fff); border-radius:12px; box-shadow:var(--card-shadow); padding:22px; margin-top:18px; }
+    .guide-card h2 { color:#1345a8; margin-top:0; }
+    .guide-card h3 { color:#0b2a54; }
+    .muted { color:var(--muted); }
+
+    .plan-table { width:100%; border-collapse:collapse; margin-top:12px; }
+    .plan-table th, .plan-table td { padding:10px; vertical-align:top; border-bottom:1px solid rgba(16,24,40,0.06); }
+    .plan-table th { text-align:left; width:22%; color:#123e84; font-weight:700; }
+
+    .macro { display:block; font-size:0.95rem; color:#334155; margin-top:6px; }
+    .note { font-size:0.95rem; color:var(--muted); }
+
+    .grocery { display:flex; gap:18px; flex-wrap:wrap; margin-top:12px; }
+    .grocery ul { margin:0 0 12px 18px; }
+
+    .cheatsheet { background:#f1f5f9; padding:12px; border-radius:8px; font-family:system-ui,monospace; margin-top:12px; }
+
+    /* Dark overrides */
+    html.dark .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    html.dark .hero-sub, html.dark .muted { color:#94a3b8; }
+    html.dark .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
+    html.dark .guide-card { background:#07121c; color:#dbeaf8; box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
+    html.dark .cheatsheet { background:#0b1220; color:#cfe9ff; }
+    html.dark .plan-table th { color:#9dc6ff; }
+    html.dark .macro { color:#cfe9ff; }
+
+    @media (max-width:720px){
+      .hero-title { font-size:1.5rem; }
+      .nav-container { width:94%; }
+      .plan-table th { display:block; width:100%; }
+      .plan-table td { display:block; width:100%; margin-bottom:12px; }
+    }
+  </style>
+</head>
+<body class="theme-transition">
+  <!-- Header -->
+  <header class="navbar" role="banner">
+    <div class="nav-container">
+      <a class="brand" href="https://convertlabs.online/index.html" aria-label="Convert Labs home">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo">
+        <span class="brand-text">Convert Labs</span>
+      </a>
+
+      <nav aria-label="Main navigation" class="nav-links">
+        <ul>
+          <li><a href="https://convertlabs.online/index.html">Home</a></li>
+          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
+          <li><a href="https://convertlabs.online/guides.html" aria-current="page">Guides</a></li>
+          <li><a href="https://convertlabs.online/about.html">About</a></li>
+          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button id="themeToggle" class="theme-toggle" title="Switch theme" aria-label="Switch theme">🌙</button>
+    </div>
+  </header>
+
+  <main class="guide" role="main">
+    <section class="hero" aria-labelledby="page-title">
+      <h1 id="page-title" class="hero-title">7-Day 2000 Calorie Meal Plan</h1>
+      <p class="hero-sub">Balanced, practical meals for moderate activity — ~2000 kcal/day with macro guidance. Use these plans as templates and scale them using our calorie calculator if you need a personalised target.</p>
+
+      <div class="banner-wrap" aria-hidden="false">
+        <img src="/assets/guide-calories.jpg" alt="Assorted healthy foods and calorie display — meal planning banner">
+      </div>
+    </section>
+
+    <article class="guide-card" aria-labelledby="guide-h2">
+      <h2 id="guide-h2">Quick summary — how this plan works</h2>
+      <p class="muted">This plan aims for ~2000 kcal daily with a balanced macronutrient split: roughly 45–50% carbs, 20–25% protein and 25–30% fat. Portions are shown generically; swap with equivalent calorie items or scale using Convert Labs' calorie calculator for exact values.</p>
+
+      <h3>How to use</h3>
+      <p class="note">Follow the sample meals below. Each day's total ≈ 2000 kcal. If you want a personalised plan, visit the <a href="https://convertlabs.online/tools/calorie-calculator.html">Calorie Calculator</a>, get your daily target, then scale the portion sizes proportionally (e.g., multiply ingredient weights by target/2000).</p>
+
+      <h3>7-day meal plan (daily totals ~2000 kcal)</h3>
+      <table class="plan-table" aria-label="7 day meal plan">
+        <thead>
+          <tr><th>Day</th><th>Meals & portions</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Day 1 (≈2000 kcal)</th>
+            <td>
+              Breakfast: Greek yoghurt 200g + 40g oats + 1 small banana (≈480 kcal).<br>
+              Lunch: Grilled chicken breast 150g, mixed salad, 75g cooked quinoa, olive oil 1 tbsp (≈620 kcal).<br>
+              Snack: Apple + 20g almonds (≈220 kcal).<br>
+              Dinner: Baked salmon 130g, sweet potato 200g, steamed broccoli (≈680 kcal).<br>
+              <span class="macro">Approx macros: P 115g / C 235g / F 60g</span>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Day 2</th>
+            <td>
+              Breakfast: 2 scrambled eggs + 2 slices wholegrain toast + 1 orange (≈480 kcal).<br>
+              Lunch: Lentil & veg soup 400ml + wholegrain roll (≈550 kcal).<br>
+              Snack: Cottage cheese 150g + berries (≈200 kcal).<br>
+              Dinner: Stir-fry tofu 150g, mixed veg, 150g cooked brown rice (≈770 kcal).<br>
+              <span class="macro">P 90g / C 250g / F 58g</span>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Day 3</th>
+            <td>
+              Breakfast: Smoothie (200ml milk, 1 banana, 30g oats, 1 tbsp peanut butter) (≈520 kcal).<br>
+              Lunch: Turkey sandwich (120g turkey, 2 slices wholegrain, salad, 1 tbsp mayo) + carrot sticks (≈600 kcal).<br>
+              Snack: 1 pear + 15g walnuts (≈200 kcal).<br>
+              Dinner: Pasta 100g (dry) with tomato & lean mince (120g) + parmesan (≈680 kcal).<br>
+              <span class="macro">P 110g / C 240g / F 64g</span>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Day 4</th>
+            <td>
+              Breakfast: Porridge 50g oats with milk + 1 tbsp honey + berries (≈470 kcal).<br>
+              Lunch: Chickpea salad (200g chickpeas) + feta + olive oil (≈620 kcal).<br>
+              Snack: Greek yoghurt 150g + 1 tbsp chia seeds (≈210 kcal).<br>
+              Dinner: Grilled cod 150g, new potatoes 200g, green beans (≈700 kcal).<br>
+              <span class="macro">P 100g / C 230g / F 65g</span>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Day 5</th>
+            <td>
+              Breakfast: 2 boiled eggs + avocado on toast (1 slice) + tomato (≈480 kcal).<br>
+              Lunch: Quinoa bowl (75g quinoa, roasted veg, 100g chickpeas) + tahini dressing (≈640 kcal).<br>
+              Snack: Protein bar or 1 banana + 20g peanut butter (≈260 kcal).<br>
+              Dinner: Chicken curry (130g), 150g cooked rice, side salad (≈620 kcal).<br>
+              <span class="macro">P 105g / C 245g / F 66g</span>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Day 6</th>
+            <td>
+              Breakfast: Smoothie bowl (yoghurt 150g, 50g granola, fruit) (≈520 kcal).<br>
+              Lunch: Tuna salad (120g tuna in water), mixed greens, 1 tbsp mayo, 2 slices toast (≈600 kcal).<br>
+              Snack: Handful mixed nuts 30g (≈200 kcal).<br>
+              Dinner: Beef stir-fry 130g lean beef, veg, 150g noodles (≈680 kcal).<br>
+              <span class="macro">P 110g / C 235g / F 68g</span>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Day 7</th>
+            <td>
+              Breakfast: Pancakes (2 medium) with 1 tbsp maple syrup + berries (≈520 kcal).<br>
+              Lunch: Baked potato 300g with cottage cheese & chives (≈600 kcal).<br>
+              Snack: Smoothie (milk + protein powder + banana) (≈260 kcal).<br>
+              Dinner: Roast chicken 130g, roasted root veg 250g, small side salad (≈620 kcal).<br>
+              <span class="macro">P 105g / C 250g / F 66g</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Grocery list (basics for the week)</h3>
+      <div class="grocery" role="list">
+        <ul>
+          <li>Proteins: chicken breast, lean beef, salmon/cod, eggs, canned tuna, tofu</li>
+          <li>Carbs: oats, wholegrain bread, brown rice/quinoa, pasta, potatoes</li>
+          <li>Dairy & alternatives: Greek yoghurt, milk, cottage cheese</li>
+        </ul>
+        <ul>
+          <li>Fruits & veg: bananas, apples, berries, oranges, salad greens, broccoli, root veg</li>
+          <li>Pantry: olive oil, nuts, peanut butter, chickpeas, lentils, spices</li>
+          <li>Extras: granola, honey, maple syrup, tahini</li>
+        </ul>
+      </div>
+
+      <div class="cheatsheet" aria-hidden="false">
+        Quick tips: <strong>scale portions</strong> by multiplying ingredient weights by your target/2000. For example, if your target = 2400 kcal, multiply each ingredient by 1.2. Keep protein first — aim for 0.8–1.2 g/kg of bodyweight for maintenance/active users, more if building muscle.
+      </div>
+
+      <h3>Substitutions & dietary swaps</h3>
+      <p class="muted">Vegetarian: swap meats for legumes, tofu and tempeh and add a little extra fat for calories. Vegan: replace dairy with fortified alternatives and include plant-based protein powders if needed. Gluten-free: swap toast/pasta for gluten-free alternatives (adjust calories accordingly).</p>
+
+      <h3>Meal prep & time-saving</h3>
+      <ul>
+        <li>Cook grains (rice/quinoa) in bulk and portion for lunches.</li>
+        <li>Roast a tray of mixed veg and proteins to speed dinner assembly.</li>
+        <li>Use kitchen scales for accuracy — convertlabs' kitchen converter helps grams ↔ cups.</li>
+      </ul>
+
+      <h3>When & how to personalise</h3>
+      <p class="note">This is a template. To personalise: 1) use <a href="https://convertlabs.online/tools/calorie-calculator.html">Calorie Calculator</a> to get your TDEE, 2) choose a goal (maintain/lose/gain), 3) multiply portion sizes by TDEE/2000, and 4) monitor and adjust after 2 weeks.</p>
+
+      <p style="margin-top:12px;"><em>Want a personalised plan generated for your exact TDEE? See our dynamic meal planner (coming soon) or use the Calorie Calculator to scale this plan automatically.</em></p>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo" style="background:var(--brand-blue); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:.6rem;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:28px;height:28px;">
+        <span style="font-weight:600;color:#fff;">Convert Labs</span>
+      </div>
+      <p style="color:#fff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+      <nav class="footer-links" style="color:#fff;">
+        <a href="https://convertlabs.online/about.html" style="color:#fff;text-decoration:none;margin:0 .4rem;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#fff;text-decoration:none;margin:0 .4rem;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#fff;text-decoration:none;margin:0 .4rem;">Guides</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#fff;text-decoration:none;margin:0 .4rem;">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Theme toggle script (html.dark / html.light) -->
+  <script>
+    (function(){
+      const html = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+
+      const stored = localStorage.getItem('site-theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialDark = stored ? (stored === 'dark') : prefersDark;
+
+      function applyTheme(isDark){
+        if(isDark){
+          html.classList.add('dark');
+          html.classList.remove('light');
+          toggle.textContent = '☀️';
+        } else {
+          html.classList.add('light');
+          html.classList.remove('dark');
+          toggle.textContent = '🌙';
+        }
+        localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+      }
+
+      applyTheme(initialDark);
+      toggle.addEventListener('click', () => applyTheme(!html.classList.contains('dark')));
+
+      if(window.matchMedia){
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+          const storedPref = localStorage.getItem('site-theme');
+          if(!storedPref) applyTheme(e.matches);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
