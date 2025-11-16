@@ -1,897 +1,595 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>7-Day Meal Plan — ConvertLabs</title>
+  <title>7-Day Meal Plan — Convert Labs</title>
 
-  <!-- ======================
-       Part 1/3 — Styles + Layout
-       (Parts 2 & 3 will add scripts)
-       ====================== -->
+  <!-- Keep your SEO/meta from tools.html where appropriate -->
+  <meta name="description" content="Personalized 7-day meal plan generated from your TDEE. One day unlocks every 24 hours." />
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
+
+  <!-- Your main site stylesheet (from tools.html) -->
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
+
+  <!-- Google / analytics / ads (copied from your tools.html) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Z88B03WV7P');
+  </script>
+
+  <!-- Inline small style tweaks (keeps visual consistency) -->
   <style>
     :root{
-      --brand: #0a4d8c;
-      --muted: #6c6c6c;
-      --bg: #f5faff;
-      --card: #ffffff;
-      --accent: #2b8bd8;
-      --locked-overlay: rgba(255,255,255,0.88);
-      --radius: 12px;
+      --brand:#0a4d8c;
+      --muted:#6c6c6c;
+      --bg:#f5faff;
+      --card:#fff;
+      --accent:#2b8bd8;
+      --radius:12px;
     }
-    html,body{ height:100%; }
-    body {
-      font-family: "Inter", Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      margin: 0;
-      padding: 20px;
-      color: #111;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    header { display:flex; gap:16px; align-items:flex-start; margin-bottom:12px; }
-    h1 { margin:0; color:var(--brand); font-size:20px; line-height:1.1; }
-    .topline { color:var(--muted); font-size:13px; margin-top:4px; }
-
-    .controls {
-      display:flex; gap:10px; align-items:center; margin:14px 0 20px; flex-wrap:wrap;
-    }
-    .btn {
-      background:var(--brand); color:#fff; border:0; padding:10px 14px; border-radius:10px;
-      cursor:pointer; font-weight:600; box-shadow: 0 6px 18px rgba(10,77,140,0.08);
-    }
-    .btn.secondary { background:#666; }
-    .btn.ghost { background:transparent; border:1px solid var(--brand); color:var(--brand); font-weight:600; }
-
-    .layout {
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap:20px;
-      align-items:start;
-    }
-    @media (max-width:980px) {
-      .layout { grid-template-columns: 1fr; }
-      #side { position: static; height: auto; }
-    }
-
-    /* Main column */
-    #mainInner { }
-    .day-card {
-      background: var(--card);
-      padding: 14px;
-      border-radius: var(--radius);
-      margin-bottom: 14px;
-      box-shadow: 0 6px 18px rgba(12,40,80,0.04);
-      position: relative;
-      transition: transform .12s ease;
-    }
-    .day-card:hover { transform: translateY(-4px); }
-
-    .day-header { display:flex; justify-content:space-between; align-items:center; gap:8px; }
-    .meals { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
-    .meal {
-      flex:1 1 220px; min-width:180px;
-      background: #fbfdff; border-radius:10px; padding:10px; cursor:pointer;
-      border: 1px solid rgba(10,77,140,0.06);
-      transition: box-shadow .12s ease, transform .12s ease;
-    }
-    .meal:hover { box-shadow: 0 8px 22px rgba(10,77,140,0.06); transform: translateY(-4px); }
-    .meal b { color:#083a65; display:block; margin-bottom:6px; }
-    .meal .kcal { color:var(--muted); font-size:13px; margin-top:8px; }
-
-    /* locked visuals */
-    .locked {
-      filter: grayscale(60%) opacity(.6);
-      pointer-events: none;
-      position: relative;
-    }
-    .locked::after {
-      content:"";
-      position:absolute; inset:0; border-radius:var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.92));
-      pointer-events:none;
-    }
-    .lock-badge {
-      position:absolute; right:12px; top:12px;
-      background:var(--locked-overlay); color:#222; border-radius:8px; padding:6px 8px;
-      font-weight:700; font-size:13px; box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-    }
-
-    /* tracking row */
-    .tracking-row { display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap; }
-    .small-input {
-      width:110px; padding:8px; border-radius:8px; border:1px solid #e6e6e6; font-size:14px;
-    }
-    .progress { height:12px; background:#eee; border-radius:8px; overflow:hidden; flex:1 1 200px; }
-    .progress > i { display:block; height:100%; width:0%; background: linear-gradient(90deg,var(--brand),var(--accent)); }
-
-    /* side panel */
-    #side { position:sticky; top:20px; height: calc(100vh - 40px); overflow:auto; }
-    .panel { background: var(--card); padding:14px; border-radius:12px; margin-bottom:14px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); }
-    .muted { color:var(--muted); font-size:13px; }
-
-    /* preview modal */
-    #previewModal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.45); z-index:60; padding:20px; }
-    #previewBox { width:100%; max-width:980px; max-height:86vh; overflow:auto; background:var(--card); border-radius:12px; padding:18px; }
-
-    /* usda popup */
-    #usdaPopup { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.35); z-index:80; padding:20px; }
-    #usdaBox { width:100%; max-width:760px; max-height:86vh; overflow:auto; background:var(--card); border-radius:12px; padding:18px; }
-
-    .muted-small { color:#666; font-size:13px; }
-    .note { font-size:13px; color:var(--muted); margin-top:8px; }
-
-    /* responsive helper for meals on narrow screens */
-    @media(max-width:560px) {
-      .meals { gap:8px; }
-      .meal { min-width:100%; }
-    }
+    body{ background:var(--bg); padding:20px; font-family: Inter, Arial, sans-serif; color:#111; }
+    main.tool-page { max-width:1100px; margin: 1rem auto; padding: 0 1rem; }
+    .controls { display:flex; gap:10px; align-items:center; margin:14px 0 20px; flex-wrap:wrap; }
+    .btn { background:var(--brand); color:#fff; border:0; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600; }
+    .btn.secondary{ background:#666; } .btn.ghost{ background:transparent; border:1px solid var(--brand); color:var(--brand); }
+    .layout { display:grid; grid-template-columns: 1fr 360px; gap:20px; align-items:start; }
+    @media(max-width:980px){ .layout{ grid-template-columns:1fr; } #side{ position:static; height:auto; } }
+    .day-card{ background:var(--card); padding:14px; border-radius:var(--radius); margin-bottom:14px; box-shadow:0 6px 18px rgba(12,40,80,0.04); position:relative; }
+    .day-header{ display:flex; justify-content:space-between; gap:8px; align-items:center; }
+    .meals{ display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+    .meal{ flex:1 1 220px; min-width:180px; background:#fbfdff; border-radius:10px; padding:10px; cursor:pointer; border:1px solid rgba(10,77,140,0.06); }
+    .meal b{ color:#083a65; display:block; margin-bottom:6px; }
+    .kcal{ color:var(--muted); font-size:13px; margin-top:8px; }
+    .locked{ filter:grayscale(60%) opacity(.6); pointer-events:none; position:relative; }
+    .locked::after{ content:""; position:absolute; inset:0; border-radius:var(--radius); background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.92)); pointer-events:none; }
+    .lock-badge{ position:absolute; right:12px; top:12px; background:rgba(255,255,255,0.9); color:#222; border-radius:8px; padding:6px 8px; font-weight:700; font-size:13px; box-shadow:0 6px 18px rgba(0,0,0,0.05); }
+    .tracking-row{ display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap; }
+    .small-input{ width:110px; padding:8px; border-radius:8px; border:1px solid #e6e6e6; font-size:14px; }
+    .progress{ height:12px; background:#eee; border-radius:8px; overflow:hidden; flex:1 1 200px; }
+    .progress > i{ display:block; height:100%; width:0%; background: linear-gradient(90deg,var(--brand),var(--accent)); }
+    #previewModal, #usdaPopup { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.45); z-index:500; padding:20px; }
+    #previewBox, #usdaBox { width:100%; max-width:980px; max-height:86vh; overflow:auto; background:var(--card); border-radius:12px; padding:18px; }
+    .muted-small{ color:#666; font-size:13px; }
   </style>
 </head>
-
 <body>
-  <header>
-    <div>
-      <h1>7-Day Meal Plan</h1>
-      <div class="topline">Personalized from your TDEE — Day 1 unlocked, next days unlock every 24 hours.</div>
+
+  <!-- ---------------------------
+       Header from tools.html (copied exactly)
+       --------------------------- -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="https://convertlabs.online/" aria-label="Convert Labs Home">
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo-img" style="height:32px;" loading="lazy">
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li><a href="https://convertlabs.online/">Home</a></li>
+          <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
+          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
+          <li><a href="https://convertlabs.online/about.html">About</a></li>
+          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
     </div>
   </header>
 
-  <div class="controls">
-    <button id="generateBtn" class="btn">Generate / Preview Plan</button>
-    <button id="acceptBtn" class="btn secondary">Accept & Save Plan</button>
-    <button id="overwriteBtn" class="btn ghost" title="Generate & overwrite saved plan">Overwrite Saved Plan</button>
-    <button id="deleteBtn" class="btn secondary" style="display:none;">Delete Saved Plan</button>
+  <!-- ---------------------------
+       Main content (meal plan)
+       --------------------------- -->
+  <main class="tool-page" style="text-align:left;">
+    <h1 style="text-align:center;">7-Day Meal Plan — Convert Labs</h1>
+    <p style="max-width:800px;margin:8px auto 16px auto;text-align:center;color:var(--muted);">
+      Your personalized 7-day meal plan based on TDEE. Only the current day is visible — users unlock the next day after 24 hours to encourage daily returns.
+    </p>
 
-    <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
-      <div class="muted">TDEE: <strong id="tdeeText">2000</strong> kcal</div>
+    <div class="controls" style="max-width:1100px;margin:0 auto 18px;">
+      <button id="generateBtn" class="btn">Generate / Preview Plan</button>
+      <button id="acceptBtn" class="btn secondary">Accept & Save Plan</button>
+      <button id="overwriteBtn" class="btn ghost" title="Generate & overwrite saved plan">Overwrite Saved Plan</button>
+      <button id="deleteBtn" class="btn secondary" style="display:none;">Delete Saved Plan</button>
+      <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+        <div class="muted">TDEE: <strong id="tdeeText">2000</strong> kcal</div>
+      </div>
     </div>
-  </div>
 
-  <div class="layout">
-    <main id="main">
-      <div id="mainInner"></div>
-    </main>
+    <div class="layout" style="max-width:1100px;margin:0 auto;">
+      <main id="main">
+        <div id="mainInner"></div>
+      </main>
 
-    <aside id="side">
-      <div class="panel">
-        <strong>Quick actions</strong>
-        <p class="muted">Preview a plan before saving. Accepting resets the unlock schedule to today.</p>
-        <hr style="margin:10px 0;">
-        <div>
-          <strong>Manual USDA search</strong>
-          <div style="margin-top:8px;">
-            <input id="manualSearchInput" placeholder="Search food name..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #eee;">
-            <div style="margin-top:8px; text-align:right;">
-              <button id="manualSearchBtn" class="btn">Search USDA</button>
+      <aside id="side">
+        <div class="panel" style="background:#fff;padding:14px;border-radius:12px;margin-bottom:14px;box-shadow:0 6px 18px rgba(0,0,0,0.04);">
+          <strong>Quick actions</strong>
+          <p class="muted" style="margin-top:6px;">Preview a plan before saving. Accepting it resets the unlock start date to today.</p>
+          <hr style="margin:10px 0;">
+          <div>
+            <strong>Manual USDA search</strong>
+            <div style="margin-top:8px;">
+              <input id="manualSearchInput" placeholder="Search food name..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #eee;">
+              <div style="margin-top:8px; text-align:right;">
+                <button id="manualSearchBtn" class="btn">Search USDA</button>
+              </div>
             </div>
+            <div id="manualSearchResults" style="margin-top:10px;"></div>
           </div>
-          <div id="manualSearchResults" style="margin-top:10px;"></div>
         </div>
-      </div>
 
-      <div class="panel">
-        <strong>Saved plan info</strong>
-        <p class="muted">If a plan exists it will load automatically. Accepting a new plan restarts unlocks from today.</p>
-        <div id="savedInfo" style="margin-top:10px;"></div>
-      </div>
+        <div class="panel" style="background:#fff;padding:14px;border-radius:12px;margin-bottom:14px;box-shadow:0 6px 18px rgba(0,0,0,0.04);">
+          <strong>Saved plan info</strong>
+          <p class="muted" style="margin-top:6px;">If a plan exists it will load automatically. Accepting a new plan restarts unlocks from today.</p>
+          <div id="savedInfo" style="margin-top:10px;"></div>
+        </div>
 
-      <div class="panel">
-        <strong>Hints</strong>
-        <p class="muted-small">Click a meal to view nutrition (exact-match search across your datasets). Regenerate preview as needed.</p>
-      </div>
-    </aside>
-  </div>
+        <div class="panel" style="background:#fff;padding:14px;border-radius:12px;margin-bottom:14px;box-shadow:0 6px 18px rgba(0,0,0,0.04);">
+          <strong>Hints</strong>
+          <p class="muted-small">Click a meal to view nutrition (exact-match search across foods-lite → foods-full → USDA). Only the current day is interactive.</p>
+        </div>
+      </aside>
+    </div>
+  </main>
 
-  <!-- Preview modal (Part 3 will supply behavior) -->
+  <!-- preview & usda popups -->
   <div id="previewModal"><div id="previewBox"></div></div>
-
-  <!-- USDA popup (Part 3 will supply behavior) -->
   <div id="usdaPopup"><div id="usdaBox"></div></div>
 
-  <!-- =========================
-       END Part 1/3
-       Next message will contain Part 2/3 (multi-dataset loader)
-       ========================= -->
-  <script>
-/************************************************************************
- * Part 2/3 — Multi-dataset nutrition loader (Option D)
- *
- * Expected files (adjust paths if different):
- *  - /assets/foods-lite.json
- *  - /assets/foods-full.json
- *  - /assets/usda_food_nutrition.json
- *
- * Behavior:
- *  - Loads foods-lite.json on startup (fast).
- *  - If a search finds nothing, loads foods-full.json and retries.
- *  - If still nothing, loads usda_food_nutrition.json and retries.
- *  - Exposes searchNutrition(mealText) -> returns array of matches (may be empty).
- *
- * Notes:
- *  - All datasets are expected to be arrays of objects with at least a "name" and preferably:
- *      { id, name, serving, kcal (or calories), protein_g, carbs_g, fat_g }
- *  - The loader keeps track of which datasets were loaded to avoid duplicate fetches.
- ************************************************************************/
-
-// ---------- Config: set your actual paths here ----------
-const DATA_LITE = "/assets/foods-lite.json";
-const DATA_FULL = "/assets/foods-full.json";
-const DATA_BIG  = "/assets/usda_food_nutrition.json";
-
-// ---------- Internal storage ----------
-let nutritionIndex = {
-  items: [],      // merged items (lite first, then full, then big if loaded)
-  hasLite: false,
-  hasFull: false,
-  hasBig: false
-};
-
-// ---------- Safe JSON fetch helper ----------
-async function safeFetchJSON(url) {
-  try {
-    const res = await fetch(url, {cache: "no-cache"});
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const json = await res.json();
-    if (!Array.isArray(json)) throw new Error("Not an array");
-    return json;
-  } catch (err) {
-    console.warn("safeFetchJSON failed for", url, err && err.message);
-    return null;
-  }
-}
-
-/***********************
- * Load lite dataset (fast) on startup
- ***********************/
-(async function loadLite() {
-  console.info("Nutrition loader: loading lite dataset:", DATA_LITE);
-  const lite = await safeFetchJSON(DATA_LITE);
-  if (lite && lite.length) {
-    nutritionIndex.items = lite.slice(); // clone
-    nutritionIndex.hasLite = true;
-    console.info("Nutrition loader: loaded lite items:", lite.length);
-  } else {
-    console.info("Nutrition loader: no lite dataset found or empty — continuing with empty index.");
-  }
-})();
-
-/***********************
- * Progressive loader functions
- ***********************/
-async function loadFullDatasetIfNeeded() {
-  if (nutritionIndex.hasFull) return true;
-  console.info("Nutrition loader: loading full dataset:", DATA_FULL);
-  const full = await safeFetchJSON(DATA_FULL);
-  if (full && full.length) {
-    // merge (append)
-    nutritionIndex.items = nutritionIndex.items.concat(full);
-    nutritionIndex.hasFull = true;
-    console.info("Nutrition loader: loaded full dataset, items added:", full.length);
-    return true;
-  } else {
-    console.info("Nutrition loader: full dataset not available or empty.");
-    return false;
-  }
-}
-
-async function loadBigDatasetIfNeeded() {
-  if (nutritionIndex.hasBig) return true;
-  console.info("Nutrition loader: loading big USDA dataset:", DATA_BIG);
-  const big = await safeFetchJSON(DATA_BIG);
-  if (big && big.length) {
-    nutritionIndex.items = nutritionIndex.items.concat(big);
-    nutritionIndex.hasBig = true;
-    console.info("Nutrition loader: loaded big USDA dataset, items added:", big.length);
-    return true;
-  } else {
-    console.info("Nutrition loader: big USDA dataset not available or empty.");
-    return false;
-  }
-}
-
-/***********************
- * Search helper: basic normalization and match scoring
- * Returns array of matches sorted by a simple relevance score
- ***********************/
-function normalizeText(s) {
-  return (s || "").toString().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-}
-
-function scoreMatch(itemName, q) {
-  // simple scoring:
-  // +50 exact startsWith
-  // +30 contains
-  // +10 for each keyword matched
-  const name = normalizeText(itemName);
-  if (!name) return 0;
-  if (name === q) return 120;
-  let score = 0;
-  if (name.startsWith(q)) score += 50;
-  if (name.includes(q)) score += 30;
-  const qWords = q.split(/\W+/).filter(Boolean);
-  qWords.forEach(w => { if (name.includes(w)) score += 8; });
-  // shorter item names that match gain a little
-  score += Math.max(0, 6 - (name.split(" ").length));
-  return score;
-}
-
-/***********************
- * Main exported search function
- * Usage: const results = await searchNutrition("oatmeal");
- * Returns an array (possibly empty) of matching items, each with fields like:
- * { id, name, serving, kcal, protein_g, carbs_g, fat_g, _score }
- ***********************/
-async function searchNutrition(query) {
-  const q = normalizeText(query).trim();
-  if (!q) return [];
-
-  // 1) Search current index (lite loaded immediately or index empty)
-  let matches = [];
-  try {
-    matches = nutritionIndex.items
-      .map(it => {
-        const name = it.name || it.food_name || it.description || "";
-        const sc = scoreMatch(name, q);
-        return { item: it, score: sc, name: name };
-      })
-      .filter(x => x.score > 0)
-      .sort((a,b) => b.score - a.score)
-      .map(x => {
-        // normalize fields for consumer
-        const it = x.item;
-        return {
-          id: it.id ?? it.fdc_id ?? it.code ?? null,
-          name: it.name ?? it.food_name ?? it.description ?? "Unknown",
-          serving: it.serving || it.serving_size || it.serving_description || "",
-          kcal: it.kcal ?? it.calories ?? it.energy_kcal ?? it.energy,
-          protein_g: it.protein_g ?? it.protein ?? it.prot ?? null,
-          carbs_g: it.carbs_g ?? it.carbohydrate ?? it.carb ?? it.carbs ?? null,
-          fat_g: it.fat_g ?? it.fat ?? null,
-          raw: it,
-          _score: x.score
-        };
-      });
-  } catch (e) {
-    console.warn("Nutrition search error (index search):", e && e.message);
-    matches = [];
-  }
-
-  if (matches.length > 0) return matches;
-
-  // 2) Not found in lite -> attempt to load / search full dataset
-  const loadedFull = await loadFullDatasetIfNeeded();
-  if (loadedFull) {
-    // repeat search on extended index
-    const extended = nutritionIndex.items
-      .map(it => {
-        const name = it.name || it.food_name || it.description || "";
-        const sc = scoreMatch(name, q);
-        return { item: it, score: sc, name: name };
-      })
-      .filter(x => x.score > 0)
-      .sort((a,b) => b.score - a.score)
-      .map(x => {
-        const it = x.item;
-        return {
-          id: it.id ?? it.fdc_id ?? it.code ?? null,
-          name: it.name ?? it.food_name ?? it.description ?? "Unknown",
-          serving: it.serving || it.serving_size || it.serving_description || "",
-          kcal: it.kcal ?? it.calories ?? it.energy_kcal ?? it.energy,
-          protein_g: it.protein_g ?? it.protein ?? it.prot ?? null,
-          carbs_g: it.carbs_g ?? it.carbohydrate ?? it.carb ?? it.carbs ?? null,
-          fat_g: it.fat_g ?? it.fat ?? null,
-          raw: it,
-          _score: x.score
-        };
-      });
-
-    if (extended.length > 0) return extended;
-  }
-
-  // 3) Still not found -> attempt to load huge USDA file and retry
-  const loadedBig = await loadBigDatasetIfNeeded();
-  if (loadedBig) {
-    const bigmatches = nutritionIndex.items
-      .map(it => {
-        const name = it.name || it.food_name || it.description || "";
-        const sc = scoreMatch(name, q);
-        return { item: it, score: sc, name: name };
-      })
-      .filter(x => x.score > 0)
-      .sort((a,b) => b.score - a.score)
-      .map(x => {
-        const it = x.item;
-        return {
-          id: it.id ?? it.fdc_id ?? it.code ?? null,
-          name: it.name ?? it.food_name ?? it.description ?? "Unknown",
-          serving: it.serving || it.serving_size || it.serving_description || "",
-          kcal: it.kcal ?? it.calories ?? it.energy_kcal ?? it.energy,
-          protein_g: it.protein_g ?? it.protein ?? it.prot ?? null,
-          carbs_g: it.carbs_g ?? it.carbohydrate ?? it.carb ?? it.carbs ?? null,
-          fat_g: it.fat_g ?? it.fat ?? null,
-          raw: it,
-          _score: x.score
-        };
-      });
-    if (bigmatches.length > 0) return bigmatches;
-  }
-
-  // nothing found after all fallbacks
-  return [];
-}
-
-// Expose to global for Part 3
-window.searchNutrition = searchNutrition;
-window._nutritionIndexMeta = nutritionIndex;
-</script>
-<script>
-/***************************************************************************
- * Part 3/3 — Meal Plan Logic + Unlock System + Preview + Tracking
- * This part uses searchNutrition() from Part 2.
- ***************************************************************************/
-
-console.log("%cMeal Plan System Loaded (Part 3/3)", "color: green; font-size:14px");
-
-// ------------------------------
-// Read TDEE from URL
-// ------------------------------
-const urlParams = new URLSearchParams(window.location.search);
-const TDEE = parseInt(urlParams.get("tdee")) || 2000;
-document.getElementById("tdeeText").innerText = TDEE;
-
-// ------------------------------
-// Storage keys
-// ------------------------------
-const KEY_PLAN = "mealPlan";
-const KEY_START = "mealPlanStartDate";
-const KEY_TRACK = "mealPlanTracking";
-
-// ------------------------------
-// Helper: simple toast
-// ------------------------------
-function toast(msg) {
-  const t = document.createElement("div");
-  t.innerHTML = msg;
-  t.style.cssText = `
-    position:fixed; bottom:20px; right:20px;
-    background:#0a4d8c; color:white; padding:10px 16px;
-    border-radius:10px; box-shadow:0 4px 16px rgba(0,0,0,0.2);
-    z-index:2000; font-size:14px; opacity:1;
-    transition:opacity .4s;
-  `;
-  document.body.appendChild(t);
-  setTimeout(()=>{ t.style.opacity = 0; }, 1600);
-  setTimeout(()=>{ t.remove(); }, 2200);
-}
-
-// ------------------------------
-// Day difference by UTC date
-// ------------------------------
-function daysBetweenUTC(a, b) {
-  const d1 = Date.UTC(a.getUTCFullYear(), a.getUTCMonth(), a.getUTCDate());
-  const d2 = Date.UTC(b.getUTCFullYear(), b.getUTCMonth(), b.getUTCDate());
-  return Math.floor((d2 - d1) / 86400000);
-}
-
-// ------------------------------
-// Load / Save helpers
-// ------------------------------
-function savePlan(plan) {
-  localStorage.setItem(KEY_PLAN, JSON.stringify(plan));
-}
-function loadPlan() {
-  try {
-    const raw = localStorage.getItem(KEY_PLAN);
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
-}
-function saveStartDate(d) {
-  localStorage.setItem(KEY_START, d.toISOString());
-}
-function getStartDate() {
-  const v = localStorage.getItem(KEY_START);
-  return v ? new Date(v) : null;
-}
-function saveTrack(obj) {
-  localStorage.setItem(KEY_TRACK, JSON.stringify(obj || {}));
-}
-function loadTrack() {
-  try {
-    const r = localStorage.getItem(KEY_TRACK);
-    return r ? JSON.parse(r) : {};
-  } catch { return {}; }
-}
-
-// ------------------------------
-// Unlock logic: Option A
-// Day 1 unlocked immediately.
-// Day N unlocks after (N-1) * 24 hours.
-// ------------------------------
-function getUnlockedDays() {
-  const start = getStartDate();
-  if (!start) return 0;
-  const now = new Date();
-  const diff = daysBetweenUTC(start, now);
-  return Math.min(7, Math.max(1, 1 + diff));
-}
-
-// ------------------------------
-// Generate 7-day meal plan
-// ------------------------------
-const MEALS = {
-  breakfast: [
-    "Oatmeal with banana & nuts",
-    "Boiled eggs + whole grain toast",
-    "Greek yogurt with honey",
-    "Protein smoothie (banana, whey, milk)",
-    "Shakshuka (2 eggs)"
-  ],
-  lunch: [
-    "Grilled chicken with rice & salad",
-    "Tuna wrap",
-    "Beef stir-fry & vegetables",
-    "Lentil stew with rice",
-    "Pasta with tomato sauce & chicken"
-  ],
-  dinner: [
-    "Baked salmon + potatoes + broccoli",
-    "Chicken vegetable soup",
-    "Beef steak with salad",
-    "Grilled fish with bulgur",
-    "Vegetable pasta with cheese"
-  ],
-  snacks: [
-    "Handful of almonds",
-    "Greek yogurt",
-    "Apple + peanut butter",
-    "Protein bar",
-    "Carrot sticks"
-  ]
-};
-
-function random(list) {
-  return list[Math.floor(Math.random()*list.length)];
-}
-
-function generatePlan() {
-  const p = [];
-  for (let day=1; day<=7; day++) {
-    p.push({
-      day,
-      breakfast: { text: random(MEALS.breakfast), kcal: Math.round(TDEE*0.25) },
-      lunch:     { text: random(MEALS.lunch),     kcal: Math.round(TDEE*0.35) },
-      dinner:    { text: random(MEALS.dinner),    kcal: Math.round(TDEE*0.30) },
-      snack:     { text: random(MEALS.snacks),    kcal: Math.round(TDEE*0.10) }
-    });
-  }
-  return p;
-}
-
-// ------------------------------
-// Render main plan UI
-// ------------------------------
-function computeProgress(tdee, eaten) {
-  if (!eaten) return 0;
-  const pct = Math.round((eaten/tdee)*100);
-  return Math.min(100, Math.max(0, pct));
-}
-
-async function openUSDA(mealText) {
-  const popup = document.getElementById("usdaPopup");
-  const box = document.getElementById("usdaBox");
-
-  box.innerHTML = `<h3>Searching: "${mealText}"</h3>
-  <div class="muted-small" style="margin-top:8px;">Looking across foods-lite → foods-full → USDA…</div>
-  <div id="usdaResults" style="margin-top:14px;">Searching…</div>
-  <div style="margin-top:20px; text-align:right;"><button id="usdaClose" class="btn ghost">Close</button></div>`;
-
-  popup.style.display = "flex";
-  document.getElementById("usdaClose").onclick = ()=> popup.style.display="none";
-
-  const results = await searchNutrition(mealText);
-  const resultsDiv = document.getElementById("usdaResults");
-
-  if (!results || !results.length) {
-    resultsDiv.innerHTML = `<div class="muted-small">No nutrition info found in any dataset.</div>`;
-    return;
-  }
-
-  let html = "";
-  results.slice(0,12).forEach(it=>{
-    html += `
-      <div style="padding:10px 0; border-bottom:1px solid #eee;">
-        <div><strong>${it.name}</strong></div>
-        <div class="muted-small">Serving: ${it.serving || "-"}</div>
-        <div style="margin-top:6px;">
-          <b>${it.kcal || "-"} kcal</b><br>
-          <span class="muted-small">
-            P: ${it.protein_g ?? "-"}g —
-            C: ${it.carbs_g ?? "-"}g —
-            F: ${it.fat_g ?? "-"}g
-          </span>
-        </div>
+  <!-- ---------------------------
+       Footer from tools.html (copied exactly)
+       --------------------------- -->
+  <footer class="footer" style="background:#1e40af;color:#fff;text-align:center;padding:2rem 1rem;margin-top:2rem;">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
       </div>
-    `;
-  });
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
+    </div>
+    <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+      <p>✅ <strong>Domain Verification & Email Security</strong></p>
+      <p>Convert Labs is officially verified for secure DNS and authenticated email delivery. Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>) uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.</p>
+    </section>
+  </footer>
 
-  resultsDiv.innerHTML = html;
-}
+  <!-- Small footer style tweak (from tools.html) -->
+  <style> footer.footer a:hover { text-decoration: underline; color:#ffffff; } </style>
+  <script src="https://convertlabs.online/script.js" defer></script>
 
-function renderPlan(plan) {
-  const container = document.getElementById("mainInner");
-  container.innerHTML = "";
+  <!-- ====================
+       Part 2: Nutrition loader (fast → full → usda)
+       ==================== -->
+  <script>
+  // Config: dataset paths
+  const DATA_LITE = "/assets/foods-lite.json";
+  const DATA_FULL = "/assets/foods-full.json";
+  const DATA_BIG  = "/assets/usda_food_nutrition.json";
 
-  const track = loadTrack();
-  const startDate = getStartDate();
-  const unlocked = getUnlockedDays();
+  let nutritionIndex = { items: [], hasLite: false, hasFull: false, hasBig: false };
 
-  plan.forEach((d, index)=>{
-    const dayIndex = index+1;
-    const unlockedNow = startDate ? (dayIndex <= unlocked) : (dayIndex === 1);
+  async function safeFetchJSON(url) {
+    try {
+      const res = await fetch(url, {cache: "no-cache"});
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const json = await res.json();
+      if (!Array.isArray(json)) throw new Error("Not an array");
+      return json;
+    } catch (err) {
+      console.warn("safeFetchJSON failed for", url, err && err.message);
+      return null;
+    }
+  }
 
-    const card = document.createElement("div");
-    card.className = "day-card" + (unlockedNow ? "" : " locked");
+  (async function loadLite(){
+    const lite = await safeFetchJSON(DATA_LITE);
+    if (lite && lite.length) {
+      nutritionIndex.items = lite.slice();
+      nutritionIndex.hasLite = true;
+      console.info("Nutrition: loaded lite items:", lite.length);
+    } else {
+      console.info("Nutrition: lite not found or empty");
+    }
+  })();
 
-    /* Meals */
-    let mealsHTML = "";
-    for (const key of ["breakfast","lunch","dinner","snack"]) {
-      const item = d[key];
-      mealsHTML += `
-        <div class="meal" data-meal-text="${item.text}">
-          <b>${key.charAt(0).toUpperCase()+key.slice(1)}</b>
-          <div>${item.text}</div>
-          <div class="kcal">${item.kcal} kcal</div>
-        </div>
-      `;
+  async function loadFullDatasetIfNeeded(){
+    if (nutritionIndex.hasFull) return true;
+    const full = await safeFetchJSON(DATA_FULL);
+    if (full && full.length) {
+      nutritionIndex.items = nutritionIndex.items.concat(full);
+      nutritionIndex.hasFull = true;
+      console.info("Nutrition: loaded full items:", full.length);
+      return true;
+    } else { console.info("Nutrition: full not available"); return false; }
+  }
+
+  async function loadBigDatasetIfNeeded(){
+    if (nutritionIndex.hasBig) return true;
+    const big = await safeFetchJSON(DATA_BIG);
+    if (big && big.length) {
+      nutritionIndex.items = nutritionIndex.items.concat(big);
+      nutritionIndex.hasBig = true;
+      console.info("Nutrition: loaded big USDA items:", big.length);
+      return true;
+    } else { console.info("Nutrition: big not available"); return false; }
+  }
+
+  function normalizeText(s){ return (s||"").toString().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase(); }
+
+  function scoreMatch(itemName, q){
+    const name = normalizeText(itemName||"");
+    if (!name) return 0;
+    if (name === q) return 120;
+    let score = 0;
+    if (name.startsWith(q)) score += 50;
+    if (name.includes(q)) score += 30;
+    const qWords = q.split(/\W+/).filter(Boolean);
+    qWords.forEach(w=>{ if (name.includes(w)) score += 8; });
+    score += Math.max(0, 6 - (name.split(" ").length));
+    return score;
+  }
+
+  async function searchNutrition(query) {
+    const q = normalizeText(query).trim();
+    if (!q) return [];
+
+    // search current index
+    let matches = nutritionIndex.items
+      .map(it => { const name = it.name || it.food_name || it.description || ""; return { it, name, score: scoreMatch(name, q)}; })
+      .filter(x => x.score > 0)
+      .sort((a,b)=>b.score - a.score)
+      .map(x => {
+        const it = x.it;
+        return {
+          id: it.id ?? it.fdc_id ?? it.code ?? null,
+          name: it.name ?? it.food_name ?? it.description ?? "Unknown",
+          serving: it.serving || it.serving_size || it.serving_description || "",
+          kcal: it.kcal ?? it.calories ?? it.energy_kcal ?? it.energy,
+          protein_g: it.protein_g ?? it.protein ?? it.prot ?? null,
+          carbs_g: it.carbs_g ?? it.carbohydrate ?? it.carb ?? it.carbs ?? null,
+          fat_g: it.fat_g ?? it.fat ?? null,
+          raw: it,
+          _score: x.score
+        };
+      });
+
+    if (matches.length > 0) return matches;
+
+    // try full
+    const loadedFull = await loadFullDatasetIfNeeded();
+    if (loadedFull) {
+      matches = nutritionIndex.items
+        .map(it => { const name = it.name || it.food_name || it.description || ""; return { it, name, score: scoreMatch(name, q)}; })
+        .filter(x => x.score > 0)
+        .sort((a,b)=>b.score - a.score)
+        .map(x => {
+          const it = x.it;
+          return {
+            id: it.id ?? it.fdc_id ?? it.code ?? null,
+            name: it.name ?? it.food_name ?? it.description ?? "Unknown",
+            serving: it.serving || it.serving_size || it.serving_description || "",
+            kcal: it.kcal ?? it.calories ?? it.energy_kcal ?? it.energy,
+            protein_g: it.protein_g ?? it.protein ?? it.prot ?? null,
+            carbs_g: it.carbs_g ?? it.carbohydrate ?? it.carb ?? it.carbs ?? null,
+            fat_g: it.fat_g ?? it.fat ?? null,
+            raw: it,
+            _score: x.score
+          };
+        });
+      if (matches.length > 0) return matches;
     }
 
-    /* tracking */
-    const tr = track[dayIndex] || {completed:false, calories:0, water:0};
-    const progress = computeProgress(TDEE, tr.calories);
+    // try big
+    const loadedBig = await loadBigDatasetIfNeeded();
+    if (loadedBig) {
+      matches = nutritionIndex.items
+        .map(it => { const name = it.name || it.food_name || it.description || ""; return { it, name, score: scoreMatch(name, q)}; })
+        .filter(x => x.score > 0)
+        .sort((a,b)=>b.score - a.score)
+        .map(x => {
+          const it = x.it;
+          return {
+            id: it.id ?? it.fdc_id ?? it.code ?? null,
+            name: it.name ?? it.food_name ?? it.description ?? "Unknown",
+            serving: it.serving || it.serving_size || it.serving_description || "",
+            kcal: it.kcal ?? it.calories ?? it.energy_kcal ?? it.energy,
+            protein_g: it.protein_g ?? it.protein ?? it.prot ?? null,
+            carbs_g: it.carbs_g ?? it.carbohydrate ?? it.carb ?? it.carbs ?? null,
+            fat_g: it.fat_g ?? it.fat ?? null,
+            raw: it,
+            _score: x.score
+          };
+        });
+      if (matches.length > 0) return matches;
+    }
 
-    let trackingHTML = "";
-    if (unlockedNow) {
-      trackingHTML = `
-        <div class="tracking-row">
+    return [];
+  }
+
+  window.searchNutrition = searchNutrition;
+  window._nutritionIndexMeta = nutritionIndex;
+  </script>
+
+  <!-- ====================
+       Part 3: Meal plan logic (fixed current-day-only unlock + clickable meals when unlocked)
+       ==================== -->
+  <script>
+  // Read TDEE from URL
+  const params = new URLSearchParams(window.location.search);
+  const TDEE = parseInt(params.get("tdee")) || 2000;
+  document.getElementById("tdeeText").innerText = TDEE;
+
+  // Storage keys
+  const KEY_PLAN = "mealPlan";
+  const KEY_START = "mealPlanStartDate";
+  const KEY_TRACK = "mealPlanTracking";
+
+  // Utilities
+  function toast(msg) {
+    const el = document.createElement("div");
+    el.innerText = msg;
+    el.style.cssText = 'position:fixed;right:18px;bottom:18px;background:#0a4d8c;color:#fff;padding:10px 14px;border-radius:8px;z-index:9999';
+    document.body.appendChild(el);
+    setTimeout(()=>{ el.style.opacity = 0; },1600);
+    setTimeout(()=>el.remove(),2200);
+  }
+
+  function daysBetweenUTC(a,b){
+    const A = Date.UTC(a.getUTCFullYear(), a.getUTCMonth(), a.getUTCDate());
+    const B = Date.UTC(b.getUTCFullYear(), b.getUTCMonth(), b.getUTCDate());
+    return Math.floor((B - A) / 86400000);
+  }
+
+  function savePlan(p){ localStorage.setItem(KEY_PLAN, JSON.stringify(p)); }
+  function loadPlan(){ try{ const r=localStorage.getItem(KEY_PLAN); return r?JSON.parse(r):null }catch{ return null } }
+  function saveStart(d){ localStorage.setItem(KEY_START, d.toISOString()); }
+  function loadStart(){ const v=localStorage.getItem(KEY_START); return v?new Date(v):null; }
+  function saveTrack(obj){ localStorage.setItem(KEY_TRACK, JSON.stringify(obj||{})); }
+  function loadTrack(){ try{ const r=localStorage.getItem(KEY_TRACK); return r?JSON.parse(r):{} }catch{return{}} }
+
+  // Unlock: only the single current day is unlocked
+  // If startDate not set -> preview mode (Day 1 unlocked)
+  function getCurrentUnlockedDay(){
+    const start = loadStart();
+    if (!start) return 1;
+    const now = new Date();
+    const daysPassed = daysBetweenUTC(start, now); // 0 => day1; 1 => day2
+    const current = Math.min(7, Math.max(1, 1 + daysPassed));
+    return current;
+  }
+
+  // Meal templates
+  const MEALS = {
+    breakfast: ["Oatmeal with banana & nuts","Boiled eggs + whole grain toast","Greek yogurt with honey","Protein smoothie (banana, whey, milk)","Shakshuka (2 eggs)"],
+    lunch: ["Grilled chicken with rice & salad","Tuna wrap","Beef stir-fry & vegetables","Lentil stew with rice","Pasta with tomato sauce & chicken"],
+    dinner: ["Baked salmon + potatoes + broccoli","Chicken vegetable soup","Beef steak with salad","Grilled fish with bulgur","Vegetable pasta with cheese"],
+    snacks: ["Handful of almonds","Greek yogurt","Apple + peanut butter","Protein bar","Carrot sticks"]
+  };
+
+  function random(list){ return list[Math.floor(Math.random()*list.length)]; }
+  function generate7(){ const p=[]; for(let d=1;d<=7;d++){ p.push({ day:d, breakfast:{text:random(MEALS.breakfast), kcal:Math.round(TDEE*0.25)}, lunch:{text:random(MEALS.lunch), kcal:Math.round(TDEE*0.35)}, dinner:{text:random(MEALS.dinner), kcal:Math.round(TDEE*0.30)}, snack:{text:random(MEALS.snacks), kcal:Math.round(TDEE*0.10)} }); } return p; }
+
+  // Render main plan; only "currentDay" is interactive
+  async function renderPlan(plan){
+    const container = document.getElementById("mainInner");
+    container.innerHTML = "";
+    const saved = loadPlan();
+    const start = loadStart();
+    const currentDay = getCurrentUnlockedDay();
+    const track = loadTrack();
+
+    plan.forEach((d,i)=>{
+      const dayIndex = i+1;
+      const unlocked = (start ? (dayIndex === currentDay) : (dayIndex===1));
+      const card = document.createElement("div");
+      card.className = "day-card" + (unlocked ? "" : " locked");
+
+      // locked badge for non-unlocked days (when start exists)
+      let badgeHTML = "";
+      if (!unlocked && start) {
+        const unlockTime = new Date(start.getTime() + (86400000*(dayIndex-1)));
+        badgeHTML = `<div class="lock-badge">Unlocks: ${unlockTime.toLocaleDateString()}</div>`;
+      }
+
+      let mealsHTML = "";
+      ["breakfast","lunch","dinner","snack"].forEach(key=>{
+        const item = d[key];
+        mealsHTML += `<div class="meal" data-meal="${key}" data-day="${dayIndex}" data-text="${encodeURIComponent(item.text)}">
+                        <b>${key.charAt(0).toUpperCase()+key.slice(1)}</b>
+                        <div>${item.text}</div>
+                        <div class="kcal">${item.kcal} kcal</div>
+                      </div>`;
+      });
+
+      const tr = track[dayIndex] || { completed:false, calories:0, water:0 };
+      const progressPct = tr.calories ? Math.min(100, Math.round((tr.calories / TDEE) * 100)) : 0;
+      let trackingHTML = "";
+      if (unlocked){
+        trackingHTML = `<div class="tracking-row">
           <button class="btn mark-complete">${tr.completed ? "Completed ✓" : "Mark Completed"}</button>
           <div>
             <div class="muted-small">Calories eaten</div>
-            <input type="number" class="small-input input-calories" value="${tr.calories || ""}">
+            <input type="number" class="small-input input-cal" value="${tr.calories || ""}">
           </div>
           <div>
             <div class="muted-small">Water (ml)</div>
             <input type="number" class="small-input input-water" value="${tr.water || ""}">
           </div>
-          <div class="progress"><i style="width:${progress}%"></i></div>
+          <div class="progress"><i style="width:${progressPct}%"></i></div>
           <button class="btn secondary btn-save-track">Save</button>
-        </div>
+        </div>`;
+      }
+
+      card.innerHTML = `${badgeHTML}
+        <div class="day-header"><div><strong>Day ${dayIndex}</strong></div><div class="muted-small">${unlocked ? "Today's plan (Unlocked)" : "Locked"}</div></div>
+        <div class="meals">${mealsHTML}</div>
+        ${trackingHTML}
       `;
-    }
 
-    /* locked badge */
-    let lockedBadge = "";
-    if (!unlockedNow && startDate) {
-      const unlockTime = new Date(startDate.getTime() + (86400000*(dayIndex-1)));
-      lockedBadge = `<div class="lock-badge">Unlocks: ${unlockTime.toLocaleDateString()}</div>`;
-    }
+      container.appendChild(card);
 
-    card.innerHTML = `
-      ${lockedBadge}
-      <div class="day-header">
-        <div><strong>Day ${dayIndex}</strong></div>
-        <div class="muted-small">${unlockedNow ? "Unlocked" : "Locked"}</div>
-      </div>
-      <div class="meals">${mealsHTML}</div>
-      ${trackingHTML}
-    `;
-
-    container.appendChild(card);
-
-    // Meal click events
-    if (unlockedNow) {
-      card.querySelectorAll(".meal").forEach(mealEl=>{
-        mealEl.addEventListener("click", ()=>{
-          const txt = mealEl.dataset.mealText;
-          openUSDA(txt);
+      // If unlocked, attach meal click and tracking handlers
+      if (unlocked){
+        card.querySelectorAll(".meal").forEach(mealEl=>{
+          mealEl.style.pointerEvents = "auto";
+          mealEl.addEventListener("click", async ()=>{
+            const mealText = decodeURIComponent(mealEl.dataset.text || "");
+            await openUSDAPopup(mealText);
+          });
         });
-      });
-    }
 
-    // Tracking events
-    if (unlockedNow) {
-      const btnComplete = card.querySelector(".mark-complete");
-      const btnSave = card.querySelector(".btn-save-track");
-      const calInput = card.querySelector(".input-calories");
-      const waterInput = card.querySelector(".input-water");
+        const btnComplete = card.querySelector(".mark-complete");
+        const btnSave = card.querySelector(".btn-save-track");
+        const inputCal = card.querySelector(".input-cal");
+        const inputWater = card.querySelector(".input-water");
 
-      btnComplete.addEventListener("click", ()=>{
-        const t = loadTrack();
-        t[dayIndex] = t[dayIndex] || {};
-        t[dayIndex].completed = !t[dayIndex].completed;
-        saveTrack(t);
-        renderPlan(plan);
-      });
+        btnComplete && btnComplete.addEventListener("click", ()=>{
+          const t = loadTrack();
+          t[dayIndex] = t[dayIndex] || {};
+          t[dayIndex].completed = !t[dayIndex].completed;
+          saveTrack(t);
+          renderPlan(plan);
+        });
 
-      btnSave.addEventListener("click", ()=>{
-        const t = loadTrack();
-        t[dayIndex] = {
-          completed: t[dayIndex] ? t[dayIndex].completed : false,
-          calories: Number(calInput.value) || 0,
-          water: Number(waterInput.value) || 0
-        };
-        saveTrack(t);
-        toast("Progress saved for Day "+dayIndex);
-        renderPlan(plan);
-      });
-    }
-  });
+        btnSave && btnSave.addEventListener("click", ()=>{
+          const t = loadTrack();
+          t[dayIndex] = t[dayIndex] || {};
+          t[dayIndex].calories = Number(inputCal.value) || 0;
+          t[dayIndex].water = Number(inputWater.value) || 0;
+          t[dayIndex].completed = t[dayIndex].completed || false;
+          saveTrack(t);
+          toast("Saved progress for Day " + dayIndex);
+          renderPlan(plan);
+        });
+      }
+    });
 
-  // Update saved info panel
-  updateSavedPanel(plan);
-}
-
-// ------------------------------
-// Saved info panel
-// ------------------------------
-function updateSavedPanel(plan) {
-  const box = document.getElementById("savedInfo");
-  const start = getStartDate();
-  if (!plan || !start) {
-    box.innerHTML = `<div class="muted-small">No saved plan yet.</div>`;
-    return;
+    // saved info panel update
+    updateSavedInfo(plan);
+    // Show/hide delete button
+    document.getElementById("deleteBtn").style.display = loadPlan() ? "inline-block" : "none";
   }
-  const unlocked = getUnlockedDays();
 
-  box.innerHTML = `
-    <div class="muted-small">Start date: ${start.toLocaleDateString()}</div>
-    <div class="muted-small">Unlocked days: ${unlocked}</div>
-    <button id="jumpToday" class="btn ghost" style="margin-top:10px;">Jump to today's day</button>
-  `;
+  function updateSavedInfo(plan){
+    const saved = loadPlan();
+    const box = document.getElementById("savedInfo");
+    if (!saved || !loadStart()) {
+      box.innerHTML = `<div class="muted-small">No saved plan yet. Preview and accept to start the unlocking schedule.</div>`;
+      return;
+    }
+    const start = loadStart();
+    const current = getCurrentUnlockedDay();
+    box.innerHTML = `<div class="muted-small">Start date: ${start.toLocaleDateString()}</div>
+      <div class="muted-small">Current unlocked day: ${current} / 7</div>
+      <button id="jumpToday" class="btn ghost" style="margin-top:10px;">Jump to current day</button>
+    `;
+    document.getElementById("jumpToday").addEventListener("click", ()=>{
+      const el = document.querySelector(`#mainInner .day-card:nth-child(${current})`);
+      if (el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    });
+  }
 
-  document.getElementById("jumpToday").addEventListener("click", ()=>{
-    const day = unlocked;
-    const el = document.querySelector(`#mainInner .day-card:nth-child(${day})`);
-    if (el) el.scrollIntoView({behavior:"smooth", block:"center"});
-  });
-}
-
-// ------------------------------
-// Preview modal
-// ------------------------------
-function openPreview(plan) {
-  const modal = document.getElementById("previewModal");
-  const box = document.getElementById("previewBox");
-
-  let html = `<h2>Preview Plan</h2><p class="muted-small">Accept to save and start unlocking schedule.</p>`;
-  plan.forEach(d=>{
-    html += `
-      <div class="day-card" style="margin-bottom:8px;">
-        <strong>Day ${d.day}</strong>
+  // Preview modal
+  let currentPreview = generate7();
+  function openPreview(plan){
+    const modal = document.getElementById("previewModal");
+    const box = document.getElementById("previewBox");
+    let html = `<h2>Preview 7-Day Plan</h2><p class="muted-small">Accept to save and start the unlock schedule (start date = today).</p>`;
+    plan.forEach(d=> {
+      html += `<div class="day-card" style="margin-bottom:8px;"><strong>Day ${d.day}</strong>
         <div style="margin-top:6px;">
           <div><b>Breakfast</b> — ${d.breakfast.text} <span class="kcal">(${d.breakfast.kcal} kcal)</span></div>
           <div><b>Lunch</b> — ${d.lunch.text} <span class="kcal">(${d.lunch.kcal} kcal)</span></div>
           <div><b>Dinner</b> — ${d.dinner.text} <span class="kcal">(${d.dinner.kcal} kcal)</span></div>
           <div><b>Snack</b> — ${d.snack.text} <span class="kcal">(${d.snack.kcal} kcal)</span></div>
-        </div>
-      </div>
-    `;
-  });
-
-  html += `
-    <div style="margin-top:12px; display:flex; gap:10px;">
+        </div></div>`;
+    });
+    html += `<div style="margin-top:12px; display:flex; gap:10px;">
       <button id="previewAccept" class="btn">Accept & Save</button>
       <button id="previewRegen" class="btn secondary">Regenerate</button>
       <button id="previewClose" class="btn ghost">Close</button>
-    </div>
-  `;
-
-  box.innerHTML = html;
-  modal.style.display = "flex";
-
-  document.getElementById("previewClose").onclick = ()=> modal.style.display="none";
-  document.getElementById("previewRegen").onclick = ()=>{
-    currentPreview = generatePlan();
-    openPreview(currentPreview);
-  };
-  document.getElementById("previewAccept").onclick = ()=>{
-    savePlan(currentPreview);
-    saveStartDate(new Date());
-    saveTrack({});
-    toast("Plan saved. Day 1 unlocked.");
-    modal.style.display = "none";
-    renderPlan(currentPreview);
-  };
-}
-
-// ------------------------------
-// Manual USDA search panel
-// ------------------------------
-document.getElementById("manualSearchBtn").addEventListener("click", async ()=>{
-  const q = document.getElementById("manualSearchInput").value.trim();
-  const out = document.getElementById("manualSearchResults");
-  out.innerHTML = "";
-
-  if (!q) {
-    out.innerHTML = "<div class='muted-small'>Type something to search.</div>";
-    return;
+    </div>`;
+    box.innerHTML = html;
+    modal.style.display = "flex";
+    document.getElementById("previewClose").onclick = ()=> modal.style.display = "none";
+    document.getElementById("previewRegen").onclick = ()=> { currentPreview = generate7(); openPreview(currentPreview); };
+    document.getElementById("previewAccept").onclick = ()=> {
+      savePlan(currentPreview);
+      saveStart(new Date());
+      saveTrack({});
+      modal.style.display = "none";
+      toast("Plan saved. Current day unlocked.");
+      renderPlan(currentPreview);
+    };
   }
 
-  out.innerHTML = "<div class='muted-small'>Searching…</div>";
-  const results = await searchNutrition(q);
-
-  if (!results.length) {
-    out.innerHTML = "<div class='muted-small'>No matches found.</div>";
-    return;
+  // USDA popup using searchNutrition
+  async function openUSDAPopup(mealText){
+    const popup = document.getElementById("usdaPopup");
+    const box = document.getElementById("usdaBox");
+    box.innerHTML = `<h3>Searching: "${mealText}"</h3><div class="muted-small" style="margin-top:8px;">Searching foods-lite → foods-full → USDA (if needed)...</div><div id="usdaResults" style="margin-top:12px;">Searching…</div><div style="margin-top:12px;text-align:right;"><button id="closeUsda" class="btn ghost">Close</button></div>`;
+    popup.style.display = "flex";
+    document.getElementById("closeUsda").onclick = ()=> popup.style.display = "none";
+    const res = await window.searchNutrition(mealText);
+    const out = document.getElementById("usdaResults");
+    if (!res || res.length === 0) { out.innerHTML = `<div class="muted-small">No matches found in any dataset.</div>`; return; }
+    let html = "";
+    res.slice(0,12).forEach(it=> {
+      html += `<div style="padding:10px 0;border-bottom:1px solid #eee;">
+        <div><strong>${it.name}</strong></div>
+        <div class="muted-small">Serving: ${it.serving || "-"}</div>
+        <div style="margin-top:6px;"><b>${it.kcal || "-"} kcal</b><div class="muted-small">P: ${it.protein_g ?? "-"}g • C: ${it.carbs_g ?? "-"}g • F: ${it.fat_g ?? "-" }g</div></div>
+      </div>`;
+    });
+    out.innerHTML = html;
   }
 
-  let html = "";
-  results.slice(0,20).forEach(it=>{
-    html += `
-      <div style="padding:8px 0; border-bottom:1px solid #eee;">
-        <strong>${it.name}</strong>
-        <div class="muted-small">${it.serving || ""}</div>
-        <div class="muted-small">${it.kcal || "?"} kcal (${it.protein_g || "?"}g P / ${it.carbs_g || "?"}g C / ${it.fat_g || "?"}g F)</div>
-      </div>
-    `;
+  // Manual search
+  document.getElementById("manualSearchBtn").addEventListener("click", async ()=>{
+    const q = document.getElementById("manualSearchInput").value.trim();
+    const out = document.getElementById("manualSearchResults");
+    out.innerHTML = "";
+    if (!q){ out.innerHTML = "<div class='muted-small'>Type a term to search.</div>"; return; }
+    out.innerHTML = "<div class='muted-small'>Searching…</div>";
+    const results = await window.searchNutrition(q);
+    if (!results.length){ out.innerHTML = "<div class='muted-small'>No matches found.</div>"; return; }
+    let html = "";
+    results.slice(0,20).forEach(it=>{
+      html += `<div style="padding:8px 0;border-bottom:1px solid #eee;"><strong>${it.name}</strong><div class="muted-small">${it.serving || ""}</div><div class="muted-small">${it.kcal || "?"} kcal (${it.protein_g || "?"}g P / ${it.carbs_g || "?"}g C / ${it.fat_g || "?"}g F)</div></div>`;
+    });
+    out.innerHTML = html;
   });
-  out.innerHTML = html;
-});
 
-// ------------------------------
-// Buttons: Generate / Overwrite / Delete
-// ------------------------------
-let currentPreview = null;
+  // Buttons
+  document.getElementById("generateBtn").addEventListener("click", ()=> { currentPreview = generate7(); openPreview(currentPreview); });
+  document.getElementById("acceptBtn").addEventListener("click", ()=> { if(!currentPreview) currentPreview = generate7(); savePlan(currentPreview); saveStart(new Date()); saveTrack({}); toast("Plan saved."); renderPlan(currentPreview); });
+  document.getElementById("overwriteBtn").addEventListener("click", ()=> { if(!confirm("Overwrite saved plan? Unlock schedule restarts.")) return; const p = generate7(); savePlan(p); saveStart(new Date()); saveTrack({}); renderPlan(p); toast("Plan overwritten.") });
+  document.getElementById("deleteBtn").addEventListener("click", ()=> { if(!confirm("Delete saved plan permanently?")) return; localStorage.removeItem(KEY_PLAN); localStorage.removeItem(KEY_START); localStorage.removeItem(KEY_TRACK); toast("Plan deleted."); location.reload(); });
 
-document.getElementById("generateBtn").addEventListener("click", ()=>{
-  currentPreview = generatePlan();
-  openPreview(currentPreview);
-});
-
-document.getElementById("acceptBtn").addEventListener("click", ()=>{
-  if (!currentPreview) currentPreview = generatePlan();
-  savePlan(currentPreview);
-  saveStartDate(new Date());
-  saveTrack({});
-  toast("Plan saved.");
-  renderPlan(currentPreview);
-});
-
-document.getElementById("overwriteBtn").addEventListener("click", ()=>{
-  if (!confirm("Overwrite saved plan with a fresh one? Unlock schedule resets.")) return;
-  const p = generatePlan();
-  savePlan(p);
-  saveStartDate(new Date());
-  saveTrack({});
-  toast("Plan overwritten.");
-  renderPlan(p);
-});
-
-document.getElementById("deleteBtn").addEventListener("click", ()=>{
-  if (!confirm("Delete saved plan permanently?")) return;
-  localStorage.removeItem(KEY_PLAN);
-  localStorage.removeItem(KEY_START);
-  localStorage.removeItem(KEY_TRACK);
-  toast("Plan deleted.");
-  location.reload();
-});
-
-// ------------------------------
-// INIT
-// ------------------------------
-function init() {
-  const saved = loadPlan();
-  if (saved) {
-    document.getElementById("deleteBtn").style.display = "inline-block";
-    renderPlan(saved);
-  } else {
-    currentPreview = generatePlan();
-    renderPlan(currentPreview);
+  // Init
+  function init(){
+    const saved = loadPlan();
+    if (saved) { currentPreview = saved; renderPlan(saved); }
+    else { currentPreview = generate7(); renderPlan(currentPreview); }
   }
-}
-
-init();
-</script>
-
+  init();
+  </script>
 </body>
 </html>
