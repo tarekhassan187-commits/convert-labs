@@ -3,139 +3,334 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Calorie Calculation Guide — Convert Labs</title>
-  <meta name="description" content="How calorie estimation works using USDA data, Mifflin-St Jeor BMR, TDEE, and practical limitations to be aware of." />
-  <link rel="canonical" href="https://convertlabs.online/guides/guide-calories.html" />
-  <meta property="og:image" content="https://convertlabs.online/assets/guide-calories.png" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <title>Calories & Nutrition — Calorie Calculators Guide — Convert Labs</title>
+  <meta name="description" content="How calories are estimated, exact conversions between calories/kilojoules, portioning tips, label reading, and small code snippets for building calorie calculators." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config','G-Z88B03WV7P');</script>
-
+  <!-- Page-specific styles (keeps layout consistent with other guides) -->
   <style>
-    :root{--nav-blue:#1e40af;--bg:#f8fafc;--text:#0f172a}
-    html,body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:var(--bg);color:var(--text)}
-    header.navbar{background:var(--nav-blue);color:#fff;padding:10px 0}
-    .nav-container{width:90%;max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between}
-    .brand{display:flex;align-items:center;gap:10px}
-    .brand img{width:36px;height:36px;border-radius:6px;background:#fff;padding:4px}
-    .brand .brand-text{color:#fff;font-weight:700}
-    nav.nav-links ul{display:flex;gap:16px;list-style:none;margin:0;padding:0}
-    nav.nav-links a{color:#f1f5f9;text-decoration:none;font-weight:600}
-    .theme-toggle{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+    :root{
+      --page-max: 980px;
+      --brand-blue: #1e40af;
+      --muted: #58616a;
+      --card-radius: 12px;
+      --card-shadow: 0 10px 30px rgba(18,26,40,0.08);
+      --text-color: #0b1220;
+      --card-bg: #ffffff;
+      --footer-dark: #0e2440;
+    }
 
-    main{max-width:900px;margin:36px auto;padding:0 16px}
-    .card{background:linear-gradient(145deg,#fff,#f1f7ff);border-radius:12px;padding:26px;box-shadow:0 12px 30px rgba(16,24,40,0.06)}
-    h1{margin-top:0;font-size:28px;color:var(--nav-blue)}
-    .hero-img{display:block;margin:18px auto;border-radius:14px;max-width:880px;width:100%;height:220px;object-fit:cover;box-shadow:0 10px 24px rgba(2,6,23,0.12)}
-    .lead{color:#475569;line-height:1.6}
-    h2{color:#0f172a}
-    ul{padding-left:1.2rem}
-    footer.footer{background:var(--nav-blue);color:#fff;padding:28px 0;margin-top:40px}
-    html.dark .card{background:linear-gradient(145deg,#0f172a,#111827);box-shadow:0 12px 30px rgba(0,0,0,0.7)}
-    html.dark h1{color:#93c5fd}
-    html.dark .lead{color:#cbd5e1}
-    @media(max-width:600px){ .hero-img{height:160px} }
+    /* Header */
+    header.navbar {
+      background: var(--brand-blue);
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      box-shadow: 0 2px 6px rgba(2,6,23,0.08);
+    }
+    .nav-container {
+      width: 92%;
+      max-width: var(--page-max);
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+    .brand img { width:36px; height:36px; border-radius:8px; background:#fff; padding:4px; display:block; }
+    .brand-text { color:#fff; font-weight:700; text-decoration:none; /* remove underline */ }
+
+    .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; align-items:center; }
+    .nav-links a { color:#fff; text-decoration:none; padding:6px 4px; font-weight:600; font-size:0.95rem; }
+    .nav-links a:hover { opacity:.95; text-decoration:underline; }
+
+    main.guide {
+      max-width: var(--page-max);
+      margin: 1.5rem auto;
+      padding: 1rem;
+    }
+
+    /* Hero */
+    .hero {
+      border-radius: var(--card-radius);
+      overflow: visible;
+      background: linear-gradient(180deg, rgba(14,24,49,0.04), rgba(14,24,49,0.01));
+      padding: 18px;
+      margin-bottom: 18px;
+      position: relative;
+      box-shadow: var(--card-shadow);
+    }
+    /* use CSS variable for text color so light/dark can override easily */
+    .hero-title {
+      font-size: 2rem;
+      line-height: 1.05;
+      margin: 6px 0;
+      font-weight: 800;
+      color: var(--text-color);
+    }
+    .hero-sub { color: var(--muted); margin-bottom: 12px; max-width:980px; }
+
+    /* Banner */
+    .banner-wrap {
+      width: 100%;
+      max-width: var(--page-max);
+      margin: 12px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(180deg,#e9edf6,#f6f9ff);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding: 18px;
+      box-shadow: var(--card-shadow);
+    }
+    .banner-wrap img {
+      width: 100%;
+      height: auto;
+      max-height: 360px;
+      object-fit: cover;
+      display:block;
+      border-radius: 8px;
+      background: transparent;
+    }
+
+    /* Guide card */
+    .guide-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      padding: 22px;
+      margin-top: 18px;
+    }
+    .guide-card h2{ color:#1345a8; margin-top:0; }
+    .guide-card h3{ color:#0b2a54; margin-top:1.1rem; }
+    .muted { color: var(--muted); }
+
+    pre.code { background:#0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
+    .cheatsheet { background:#0f172a; color:#e6eef8; padding:12px; border-radius:8px; font-family:mono; }
+
+    footer.footer { background: var(--brand-blue); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem; }
+
+    /* Dark-mode overrides (html.dark) */
+    html.dark {
+      --text-color: #e6eef8;
+      --card-bg: #07121c;
+    }
+    html.dark .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    html.dark .hero-sub { color: #b9c7db; }
+    html.dark .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
+    html.dark .guide-card { background: #07121c; color: #dbeaf8; box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
+    html.dark pre.code { background:#07121c; color:#cfe9ff; }
+    html.dark .muted { color:#94a3b8; }
+    html.dark footer.footer { background: var(--footer-dark); }
+
+    @media (max-width:720px){
+      .hero-title { font-size:1.6rem; }
+      .banner-wrap img { max-height: 240px; object-fit: cover; }
+      .nav-container { width:94%; }
+    }
   </style>
 </head>
-<body>
-  <header class="navbar">
+<body class="theme-transition">
+  <!-- Header -->
+  <header class="navbar" role="banner">
     <div class="nav-container">
-      <a class="brand" href="https://convertlabs.online/index.html">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs">
+      <a class="brand" href="https://convertlabs.online/index.html" aria-label="Convert Labs home">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo">
         <span class="brand-text">Convert Labs</span>
       </a>
-      <nav class="nav-links" aria-label="Primary">
+
+      <nav aria-label="Main navigation" class="nav-links">
         <ul>
           <li><a href="https://convertlabs.online/index.html">Home</a></li>
           <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html" class="active">Guides</a></li>
+          <li><a href="https://convertlabs.online/guides.html">Guides</a></li>
           <li><a href="https://convertlabs.online/about.html">About</a></li>
           <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
         </ul>
       </nav>
-      <button id="themeToggle" class="theme-toggle" title="Toggle theme">🌙</button>
+
+      <button id="themeToggle" class="theme-toggle" title="Switch theme" aria-label="Switch theme" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">🌙</button>
     </div>
   </header>
 
-  <main>
-    <div class="card">
-      <h1>Calorie Calculation Explained</h1>
-      <img class="hero-img" src="https://convertlabs.online/assets/guide-calories.png" alt="Calorie guide banner">
-      <p class="lead">Where our nutrition numbers come from (USDA), how we estimate BMR using Mifflin–St Jeor and scale to TDEE, and limitations to remember when tracking calories.</p>
+  <main class="guide" role="main">
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="page-title">
+      <h1 id="page-title" class="hero-title">Calories & Nutrition — How our calculators work</h1>
+      <p class="hero-sub">What a calorie is, how nutritional values are estimated, precise conversions, label-reading tips, portioning advice and compact code snippets you can reuse when building calculators or nutrition tools.</p>
 
-      <h2>Overview</h2>
+      <div class="banner-wrap" aria-hidden="false">
+        <!-- uploaded banner -->
+        <img src="https://convertlabs.online/assets/guide-calories.jpg"
+             alt="Colorful assortment of foods and a small calorie display — Calorie calculators banner"
+             id="guide-banner">
+      </div>
+    </section>
+
+    <!-- Content (≈900–1,200 words) -->
+    <article class="guide-card" aria-labelledby="guide-h2">
+      <h2 id="guide-h2">Quick summary — what this guide covers</h2>
+      <p class="muted">Accurate definitions of kilocalories and kilojoules, how energy values in food are measured/estimated, conversions and rounding rules, label-reading & portioning tips, using density for recipe scaling, and copy-ready calculator logic for developers.</p>
+
+      <h3>1. What exactly is a “calorie” on food labels?</h3>
+      <p>
+        In nutrition the "calorie" displayed is actually a kilocalorie (kcal): the energy required to raise 1 kilogram of water by 1°C. In SI units you'll also see kilojoules (kJ). Exact conversion: <strong>1 kcal = 4.184 kJ</strong>. Food databases record energy per 100 g or per serving — use those base values for precise calculations.
+      </p>
+
+      <h3>2. How are calorie values estimated?</h3>
+      <p>
+        There are two common approaches:
+      </p>
       <ul>
-        <li>We display per-100g nutrition values from USDA FoodData Central.</li>
-        <li>BMR is estimated using Mifflin–St Jeor formula; TDEE uses activity multipliers.</li>
-        <li>Traditional regional dishes may be excluded for accuracy and policy compliance.</li>
+        <li><strong>Bomb calorimetry:</strong> direct measurement of heat released by combustion (laboratory method). This measures gross energy.</li>
+        <li><strong>Atwater system (practical):</strong> macronutrients are multiplied by standard factors that approximate metabolizable energy: protein ≈ 4 kcal/g, carbohydrate ≈ 4 kcal/g, fat ≈ 9 kcal/g, fibre ≈ 2 kcal/g (approx). Processed foods also include alcohol (≈ 7 kcal/g).</li>
+      </ul>
+      <p class="muted">Databases and labels commonly use Atwater-derived values; for high-precision work check the original analytic data or lab measurements.</p>
+
+      <h3>3. Conversions & rounding you must keep</h3>
+      <p>
+        Use the exact multiplier for conversion (4.184) and avoid chaining roundings. Store raw floats and format for display only. Example conversions:
+      </p>
+      <ul>
+        <li><strong>kcal → kJ:</strong> multiply by 4.184</li>
+        <li><strong>kJ → kcal:</strong> divide by 4.184</li>
+      </ul>
+      <p>Display rules: for per-serving values use whole calories (no decimals) in consumer UIs; for per-100 g technical data keep one decimal if needed.</p>
+
+      <h3>4. Label reading: what to check</h3>
+      <ul>
+        <li><strong>Servings:</strong> check serving size then scale. Many miscalculations come from using per-100 g values with per-portion weights incorrectly.</li>
+        <li><strong>Per-100 g vs per-serving:</strong> database values are often per-100 g — convert by multiplying by (serving grams / 100).</li>
+        <li><strong>Rounding rules on labels:</strong> countries allow label rounding; small differences can be present (e.g., protein may be rounded to nearest gram).</li>
       </ul>
 
-      <h2>Practical note</h2>
-      <p>Calorie numbers are estimates — use them for general guidance and consult a dietitian for personalized plans.</p>
-    </div>
+      <h3>5. Portioning & recipe scaling practical tips</h3>
+      <p>
+        For recipe scaling, weigh ingredients where possible. Convert volumes to weight using ingredient density (see small table below) rather than relying on 'cups' for dry ingredients — packing changes with technique.
+      </p>
+      <p><strong>Common densities (examples):</strong> water ≈ 1.00 g/mL, olive oil ≈ 0.92 g/mL, all-purpose flour (sifted) ≈ 0.53–0.60 g/mL (packing-dependent). Use measured grams for repeatable nutrition totals.</p>
+
+      <h3>6. Pitfalls & how to avoid them</h3>
+      <ul>
+        <li>Don't treat 1 cup as a fixed mass — use recipe-specified grams when available.</li>
+        <li>Account for water loss (evaporation) when cooking — stews and reductions concentrate energy per gram.</li>
+        <li>Watch for hidden fats and sauces — they add substantial calories despite small volume.</li>
+      </ul>
+
+      <h3>7. Small code snippets (copy & reuse)</h3>
+      <p class="muted">These lightweight utilities show proper handling of conversions and scaling — compute in base units, then format for display.</p>
+
+      <pre class="code">
+// convert per-100g value to per-serving
+function perServing(kcalPer100g, servingGrams){
+  const kcal = (kcalPer100g * servingGrams) / 100;
+  return Math.round(kcal); // display as whole kcal for consumer UI
+}
+
+// convert between kcal and kJ
+function kcalToKj(kcal){ return kcal * 4.184; }
+function kjToKcal(kj){ return kj / 4.184; }
+
+// example: 250g serving, 150 kcal per 100g
+console.log(perServing(150, 250)); // 375 kcal
+      </pre>
+
+      <h3>8. Quick cheat sheet</h3>
+      <div class="cheatsheet">
+• 1 kcal = 4.184 kJ • Use grams for accuracy • Store raw floats, round at display • Use densities to convert volume→mass
+      </div>
+
+      <h3>9. Where to go next</h3>
+      <p>Use our interactive calorie tools to experiment: enter ingredient weights and servings, switch units, and export nutrition summaries. For product-level accuracy consult laboratory analysis or certified food composition tables for your region.</p>
+
+      <p style="margin-top:12px;"><em>Tip: build a small ingredient library (common weights & Atwater factors) inside your app — it drastically speeds up calculations and reduces user errors.</em></p>
+    </article>
   </main>
 
-  <!-- Footer (exact) -->
-  <!-- Footer -->
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <!-- Footer (consistent site footer) -->
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
     </div>
+     <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+    <p>✅ <strong>Domain Verification & Email Security</strong></p>
+    <p>
+      Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+      Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+      uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+    </p>
+    <p>
+      Email protection includes:
+      <ul style="list-style:none; padding:0; margin:5px 0;">
+        <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+        <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+        <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+      </ul>
+    </p>
+    <p>
+      These records confirm the legitimacy of our domain and improve deliverability,  
+      search engine trust, and AdSense approval readiness.
+    </p>
+  </section>
+  </footer>
 
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+  <!-- Theme toggle script: applies html.dark / html.light and persists preference -->
+  <script>
+    (function(){
+      const html = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
 
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+      const stored = localStorage.getItem('site-theme'); // 'dark' or 'light' or null
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialDark = stored ? (stored === 'dark') : prefersDark;
 
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
+      function applyTheme(isDark){
+        if(isDark){
+          html.classList.add('dark');
+          html.classList.remove('light');
+          toggle.textContent = '☀️';
+        } else {
+          html.classList.add('light');
+          html.classList.remove('dark');
+          toggle.textContent = '🌙';
+        }
+        localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+      }
 
-</footer>
+      applyTheme(initialDark);
 
-<script>
-  (function(){
-    const btn = document.getElementById('themeToggle');
-    function setTheme(mode){
-      if(mode === 'dark'){ document.documentElement.classList.add('dark'); document.body.classList.add('dark'); btn.textContent='☀️'; }
-      else { document.documentElement.classList.remove('dark'); document.body.classList.remove('dark'); btn.textContent='🌙'; }
-      try{ localStorage.setItem('cl_theme', mode); }catch(e){}
-    }
-    try{ const saved = localStorage.getItem('cl_theme'); if(saved) setTheme(saved); else setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light'); }catch(e){ setTheme('light');}
-    if(btn) btn.addEventListener('click', ()=> setTheme(document.documentElement.classList.contains('dark') ? 'light':'dark'));
-  })();
-</script>
+      toggle.addEventListener('click', () => {
+        applyTheme(!html.classList.contains('dark'));
+      });
+
+      if(window.matchMedia){
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+          const storedPref = localStorage.getItem('site-theme');
+          if(!storedPref) applyTheme(e.matches);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
