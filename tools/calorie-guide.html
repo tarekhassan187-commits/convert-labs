@@ -17,7 +17,7 @@
   <link rel="canonical" href="https://convertlabs.online/tools/calorie-guide.html" />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
 
-  <!-- AdSense & Analytics (kept as you requested) -->
+  <!-- AdSense & Analytics (kept as requested) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
@@ -41,6 +41,9 @@
       --card-dark: #1b2435;
       --inner-card: #0f172a;
       --accent: #3b82f6;
+      /* CTA gradient colors (mixed: blue + green) */
+      --cta-from: #10b981;
+      --cta-to: #3b82f6;
     }
     /* Reset + global */
     html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
@@ -156,39 +159,95 @@
 
     /* tiny */
     .muted small {
-  color: #475569; /* darker gray for better readability */
-}
-body.dark .muted small {
-  color: #9ca3af; /* still softer gray in dark mode */
-}
+      color: #475569;
+    }
+    body.dark .muted small {
+      color: #9ca3af;
+    }
 
+    /* Strong override for disclaimer in dark mode */
+    body.dark .nutrition-disclaimer { background: #1c253a !important; color: #e7e7e7 !important; border-left: 4px solid #6aa0ff !important; }
+    body.dark .nutrition-disclaimer a { color: #cfe3ff !important; }
+
+    /* ------------------ CTA animations (base) ------------------ */
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(14px) scale(0.97); }
+      60% { opacity: 1; transform: translateY(-2px) scale(1.02); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    @keyframes softGlowPulse {
+      0% { box-shadow: 0 0 0px rgba(255,255,255,0); }
+      50% { box-shadow: 0 0 18px rgba(255,255,255,0.05); }
+      100% { box-shadow: 0 0 0px rgba(255,255,255,0); }
+    }
+
+    .generate-plan-animate {
+      animation: fadeSlideUp 0.45s ease-out forwards, softGlowPulse 1.4s ease-out 0.45s;
+    }
+
+    #goMealPlanBtn { 
+      background: linear-gradient(90deg, var(--cta-from), var(--cta-to)); 
+      border: none; color: #fff; padding: 10px 16px; border-radius: 10px; cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s;
+    }
+    #goMealPlanBtn:hover { transform: scale(1.05); filter: brightness(1.02); }
+
+    .recommended-label { font-size:14px; color:var(--blue-700); margin-bottom:6px; opacity:0; animation: fadeSlideUp 0.4s ease-out forwards; }
+    body.dark .recommended-label { color:#63b3ff; }
+
+    /* ===== Enhanced Boosted Animations ===== */
+    @keyframes pulseRingAnim {
+      0% { transform: scale(0.4); opacity:0.25; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+      70% { transform: scale(1.2); opacity:0.15; box-shadow: 0 0 32px 8px rgba(16,185,129,0.2); }
+      100% { transform: scale(1.35); opacity:0; }
+    }
+    .pulse-ring { position:absolute; top:50%; left:50%; width:130px; height:130px; margin-top:-65px; margin-left:-65px; border-radius:50%; pointer-events:none; opacity:0; animation: pulseRingAnim 1.7s ease-out forwards; z-index:5; }
+
+    @keyframes breathe { 0%{transform:scale(1);} 50%{transform:scale(1.035);} 100%{transform:scale(1);} }
+    .breathe { animation: breathe 2.6s ease-in-out infinite; }
+
+    @keyframes floatArrow { 0%{opacity:0; transform:translateY(8px)} 30%{opacity:1; transform:translateY(0)} 100%{opacity:1; transform:translateY(-6px)} }
+    .arrow-hint { opacity:0; animation: floatArrow 1.6s ease-out forwards 0.4s; font-size:22px; color:var(--blue-700); margin-bottom:6px; }
+    body.dark .arrow-hint { color:#63b3ff; }
+
+    /* Ripple effect */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: rippleAnim 600ms linear;
+      background: rgba(255,255,255,0.35);
+      pointer-events: none;
+      z-index: 20;
+    }
+    @keyframes rippleAnim {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 2px;
+      opacity: 0;
+      transform: translateY(0) scale(0.6);
+      animation: sparkleAnim 700ms ease-out forwards;
+      pointer-events:none;
+      z-index:15;
+    }
+    @keyframes sparkleAnim {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-26px) scale(0.2); }
+    }
+
+    /* Confetti canvas sits on top */
+    canvas#confettiCanvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2000; display:none; }
   </style>
-  <style>
-/* Strong override for disclaimer in dark mode — covers all dark-class variants */
-body.dark .nutrition-disclaimer,
-body.dark-mode .nutrition-disclaimer,
-html.dark .nutrition-disclaimer,
-.calculator-wrap .nutrition-disclaimer {
-  background: #1c253a !important;
-  color: #e7e7e7 !important;
-  border-left: 4px solid #6aa0ff !important;
-  box-shadow: 0 6px 18px rgba(8,12,20,0.45) !important;
-}
-
-/* ensure links / strong text inside disclaimer are readable */
-body.dark .nutrition-disclaimer a,
-body.dark-mode .nutrition-disclaimer a,
-html.dark .nutrition-disclaimer a,
-.calculator-wrap .nutrition-disclaimer a {
-  color: #cfe3ff !important;
-}
-
-/* optional: slightly reduce padding on small screens */
-@media (max-width:700px){
-  .nutrition-disclaimer { padding:14px !important; font-size:14px !important; }
-}
-</style>
-
 </head>
 <body>
   <!-- Header -->
@@ -266,6 +325,28 @@ html.dark .nutrition-disclaimer a,
           </select>
         </div>
 
+        <!-- NEW: Diet & Protein selects (required for meal-plan redirect) -->
+        <div class="field">
+          <label class="field-label">Diet Style</label>
+          <select id="dietSelect">
+            <option value="normal">No preference</option>
+            <option value="keto">Keto</option>
+            <option value="carnivore">Carnivore</option>
+            <option value="vegetarian">Vegetarian</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Protein Preference</label>
+          <select id="proteinSelect">
+            <option value="any">Any</option>
+            <option value="beef">Beef</option>
+            <option value="chicken">Chicken</option>
+            <option value="fish">Fish</option>
+            <option value="plant">Plant-based</option>
+          </select>
+        </div>
+
         <div class="actions">
           <button id="calcBtn" class="btn">Calculate</button>
         </div>
@@ -277,104 +358,84 @@ html.dark .nutrition-disclaimer a,
           <div class="result-row"><div class="result-label">Daily target</div><div id="resTarget">— kcal/day</div></div>
 
           <div id="adviceBox" class="advice" style="display:none;margin-top:12px"></div>
+
+          <!-- Enhanced CTA area (label + arrow + pulse + button) -->
+          <div style="margin-top:22px; text-align:center; position:relative;">
+            <div id="recommendedLabel" class="recommended-label" style="display:none;">⭐ Recommended Based on Your Results</div>
+            <div id="arrowHint" class="arrow-hint" style="display:none;">⬇️</div>
+            <div id="pulseRing" class="pulse-ring" style="display:none;"></div>
+
+            <button id="goMealPlanBtn" class="btn" style="display:none;position:relative;z-index:10;background:linear-gradient(90deg,var(--cta-from),var(--cta-to));">
+              Generate My Meal Plan →
+            </button>
+          </div>
+
         </div>
 
         <p class="muted" style="margin-top:12px">
           <small>Note: These are estimates for general guidance only. For medical or clinical recommendations consult a registered dietitian or physician.</small>
         </p>
       </div>
-<div class="nutrition-disclaimer" style="margin-top:30px;padding:18px;background:#f7f7f7;border-left:4px solid #4A90E2;border-radius:6px;font-size:15px;line-height:1.6;">
-  <strong>Nutrition Data Notice:</strong><br>
-  All nutrition values provided on this website come exclusively from the 
-  <strong>USDA FoodData Central</strong> public-domain database.<br>
-  Traditional or regional dishes have been temporarily removed to comply with 
-  <strong>Google Publisher Policies</strong> relating to health and nutrition data accuracy.<br><br>
-  This tool is intended for general informational purposes only and should not be considered 
-  medical, nutritional, or dietary advice. For personalized guidance, please consult a certified 
-  nutritionist or healthcare professional.
-</div>
-<style>
-/* LIGHT THEME */
-.nutrition-disclaimer {
-  margin-top: 30px;
-  padding: 18px;
-  background: #f7f7f7;
-  border-left: 4px solid #4A90E2;
-  border-radius: 6px;
-  font-size: 15px;
-  line-height: 1.6;
-  color: #222;
-}
 
-/* DARK THEME — triggered by global html.dark class */
-html.dark .nutrition-disclaimer {
-  background: #1c253a !important;
-  color: #e7e7e7 !important;
-  border-left: 4px solid #6aa0ff !important;
-}
-</style>
-
+      <div class="nutrition-disclaimer" style="margin-top:30px;padding:18px;background:#f7f7f7;border-left:4px solid #4A90E2;border-radius:6px;font-size:15px;line-height:1.6;color:#222;">
+        <strong>Nutrition Data Notice:</strong><br>
+        All nutrition values provided on this website come exclusively from the 
+        <strong>USDA FoodData Central</strong> public-domain database.<br>
+        Traditional or regional dishes have been temporarily removed to comply with 
+        <strong>Google Publisher Policies</strong> relating to health and nutrition data accuracy.<br><br>
+        This tool is intended for general informational purposes only and should not be considered 
+        medical, nutritional, or dietary advice. For personalized guidance, please consult a certified 
+        nutritionist or healthcare professional.
+      </div>
 
       <a class="back-btn" href="https://convertlabs.online/tools/calorie-calculator.html">← Back to Calorie Calculator</a>
     </div>
   </main>
 
+  <!-- Confetti Canvas (hidden until triggered) -->
+  <canvas id="confettiCanvas"></canvas>
+
   <!-- Footer -->
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
     </div>
+     <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+    <p>✅ <strong>Domain Verification & Email Security</strong></p>
+    <p>
+      Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+      Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+      uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+    </p>
+  </section>
+  </footer>
 
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+  <style>
+    footer.footer a:hover { text-decoration: underline; color:#ffffff; }
+  </style>
 
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
-
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
-
-</footer>
-
-<style>
-  footer.footer a:hover { 
-    text-decoration: underline; 
-    color: #ffffff; 
-  }
-</style>
-
-
-  <!-- Calculator logic + theme persistence -->
+  <!-- Calculator logic + theme persistence + CTA wiring + confetti + audio -->
   <script>
-    // Theme toggle + persistence (keeps it simple and robust)
+    // ----------------------------
+    // Theme toggle + persistence
+    // ----------------------------
     const themeToggle = document.getElementById('themeToggle');
     function setTheme(mode){
       if(mode === 'dark'){
@@ -399,7 +460,21 @@ html.dark .nutrition-disclaimer {
       setTheme(isDark ? 'light' : 'dark');
     });
 
-    // BMR/TDEE/BMI calculation
+    // ----------------------------
+    // Utility: simple toast (small)
+    // ----------------------------
+    function toast(msg){
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed;right:18px;bottom:18px;background:#0a4d8c;color:#fff;padding:10px 14px;border-radius:8px;z-index:9999';
+      document.body.appendChild(t);
+      setTimeout(()=> t.style.opacity = 0, 1600);
+      setTimeout(()=> t.remove(), 2200);
+    }
+
+    // ----------------------------
+    // Calculator logic
+    // ----------------------------
     const calcBtn = document.getElementById('calcBtn');
     const showResults = (bmr,tdee,bmi,target,adviceHtml) => {
       document.getElementById('resBmr').textContent = Math.round(bmr) + ' kcal/day';
@@ -419,15 +494,138 @@ html.dark .nutrition-disclaimer {
       return {label:'Obese', msg:'BMI in the obese range. Consider speaking to a healthcare professional for a tailored plan.'};
     }
 
-    calcBtn.addEventListener('click', ()=>{
-      const gender = document.getElementById('gender').value;
-      const age = Number(document.getElementById('age').value);
-      const weight = Number(document.getElementById('weight').value);
-      const height = Number(document.getElementById('height').value);
-      const activity = parseFloat(document.getElementById('activity').value);
-      const goal = document.getElementById('goal').value;
+    // WebAudio click sound (plays only on user gesture)
+    let audioCtx = null;
+    function playClickSound(){
+      try {
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(880, audioCtx.currentTime);
+        g.gain.setValueAtTime(0, audioCtx.currentTime);
+        g.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.38);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start();
+        o.stop(audioCtx.currentTime + 0.45);
+      } catch(e){}
+    }
 
-      // basic validation
+    // Confetti implementation (lightweight)
+    function launchConfetti(){
+      const canvas = document.getElementById("confettiCanvas");
+      canvas.style.display = "block";
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const confettiCount = 120;
+      const confetti = [];
+      const colors = ["#3b82f6","#10b981","#60a5fa","#a5b4fc","#facc15"];
+
+      for(let i=0;i<confettiCount;i++){
+        confetti.push({
+          x: Math.random()*canvas.width,
+          y: canvas.height + Math.random()*100,
+          r: Math.random()*6 + 4,
+          color: colors[Math.floor(Math.random()*colors.length)],
+          speed: Math.random()*3 + 2,
+          tilt: Math.random()*10 - 5,
+          rot: Math.random()*360
+        });
+      }
+
+      function draw(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        confetti.forEach((c,i)=>{
+          ctx.save();
+          ctx.translate(c.x,c.y);
+          ctx.rotate(c.rot * Math.PI/180);
+          ctx.fillStyle = c.color;
+          ctx.fillRect(-c.r/2, -c.r/2, c.r, c.r*0.6);
+          ctx.restore();
+
+          c.y -= c.speed;
+          c.x += Math.sin(c.y*0.02)*2;
+          c.rot += 4;
+          if(c.y < -30) confetti[i].y = canvas.height + 30;
+        });
+      }
+
+      let anim;
+      function loop(){ draw(); anim = requestAnimationFrame(loop); }
+      loop();
+
+      setTimeout(()=>{ cancelAnimationFrame(anim); canvas.style.display = "none"; }, 2200);
+    }
+
+    // Ripple creation on button click
+    function createRipple(el, clientX, clientY){
+      const rect = el.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (clientX - rect.left - size/2) + 'px';
+      ripple.style.top = (clientY - rect.top - size/2) + 'px';
+      el.appendChild(ripple);
+      setTimeout(()=> ripple.remove(), 700);
+    }
+
+    // Sparkles inside button
+    function spawnSparkles(el, count=8){
+      for(let i=0;i<count;i++){
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.style.background = ['#fff','#fff','#ffdce6','#ffffff'][Math.floor(Math.random()*4)];
+        s.style.left = (10 + Math.random()*(el.offsetWidth-20)) + 'px';
+        s.style.top = (Math.random()* (el.offsetHeight-6)) + 'px';
+        el.appendChild(s);
+        setTimeout(()=> s.remove(), 900);
+      }
+    }
+
+    // Haptic feedback
+    function haptic(){
+      try { if(navigator.vibrate) navigator.vibrate(18); } catch(e){}
+    }
+
+    // Redirect function
+    function goToMealPlan(finalTDEE){
+      const age = document.getElementById("age")?.value || "";
+      const goal = document.getElementById("goal")?.value || "maintain";
+      const diet = document.getElementById("dietSelect")?.value || "normal";
+      const protein = document.getElementById("proteinSelect")?.value || "any";
+
+      const url =
+        "/tools/meal-plan.html"
+        + "?tdee=" + encodeURIComponent(Math.round(finalTDEE))
+        + "&age=" + encodeURIComponent(age)
+        + "&goal=" + encodeURIComponent(goal)
+        + "&diet=" + encodeURIComponent(diet)
+        + "&protein=" + encodeURIComponent(protein);
+
+      window.location.href = url;
+    }
+
+    // Read inputs helper
+    function readInputs(){
+      return {
+        gender: document.getElementById('gender').value,
+        age: Number(document.getElementById('age').value),
+        weight: Number(document.getElementById('weight').value),
+        height: Number(document.getElementById('height').value),
+        activity: parseFloat(document.getElementById('activity').value),
+        goal: document.getElementById('goal').value
+      };
+    }
+
+    // Calculation & button reveal logic
+    calcBtn.addEventListener('click', ()=>{
+      const {gender,age,weight,height,activity,goal} = readInputs();
+
+      // validations
       if(!age || !weight || !height || age < 10){
         alert('Please enter valid Age, Weight and Height.');
         return;
@@ -435,11 +633,8 @@ html.dark .nutrition-disclaimer {
 
       // Mifflin-St Jeor BMR
       let bmr;
-      if(gender === 'male'){
-        bmr = 10*weight + 6.25*height - 5*age + 5;
-      } else {
-        bmr = 10*weight + 6.25*height - 5*age - 161;
-      }
+      if(gender === 'male'){ bmr = 10*weight + 6.25*height - 5*age + 5; }
+      else { bmr = 10*weight + 6.25*height - 5*age - 161; }
 
       // TDEE
       const tdee = bmr * activity;
@@ -454,7 +649,6 @@ html.dark .nutrition-disclaimer {
         target = tdee;
         advice = '<strong>Maintain</strong>: Eat roughly your TDEE each day. Focus on balanced macros and consistent activity.';
       } else if(goal === 'lose'){
-        // safe deficit: 10-25% depending on starting point; default -20%
         const deficit = 0.20;
         target = tdee * (1 - deficit);
         advice = `<strong>Lose weight</strong>: Aim for a gradual calorie deficit. Example: reduce ~${Math.round(tdee*deficit)} kcal/day (~20% deficit) to lose ~0.4–0.6 kg/week. Combine with protein-rich meals and resistance training.`;
@@ -464,15 +658,84 @@ html.dark .nutrition-disclaimer {
         advice = `<strong>Gain weight</strong>: Moderate surplus of ~${Math.round(tdee*surplus)} kcal/day (~15%) supports slow, lean muscle gain with strength training. Prefer nutrient-dense foods.`;
       }
 
-      // BMI interpretation
       const bmiInterpret = interpretBMI(bmi);
       const fullAdvice = `
         <div><strong>BMI:</strong> ${bmiInterpret.label} — ${bmiInterpret.msg}</div>
         <div style="margin-top:8px">${advice}</div>
-        <div style="margin-top:8px">Use the <strong>Daily target</strong> as an average — daily calories will vary. Track progress weekly, not daily.</div>
+        <div style="margin-top:8px">Use the <strong>Daily target</strong> as an average — track progress weekly.</div>
       `;
 
+      // show results
       showResults(bmr, tdee, bmi, target, fullAdvice);
+
+      // reveal CTA with enhanced animation & effects
+      const label = document.getElementById('recommendedLabel');
+      const arrow = document.getElementById('arrowHint');
+      const ring = document.getElementById('pulseRing');
+      const btn = document.getElementById('goMealPlanBtn');
+
+      // show label + arrow + pulse + button
+      label.style.display = 'block';
+      // small reflow to restart animation
+      label.classList.remove('generate-plan-animate');
+      void label.offsetWidth;
+      label.classList.add('generate-plan-animate');
+
+      arrow.style.display = 'block';
+      ring.style.display = 'block';
+
+      btn.style.display = 'inline-block';
+      btn.classList.remove('generate-plan-animate');
+      void btn.offsetWidth;
+      btn.classList.add('generate-plan-animate');
+
+      // pulse ring appears once (class already animates via CSS)
+      // add breathing idle after a delay
+      setTimeout(()=> { btn.classList.add('breathe'); }, 6000);
+
+      // Ensure button actions: ripple, sparkle, haptic, sound, confetti, redirect
+      btn.onclick = (ev) => {
+        // ripple
+        createRipple(btn, ev.clientX, ev.clientY);
+        // sparkles
+        spawnSparkles(btn, 8);
+        // haptic
+        haptic();
+        // play click sound
+        playClickSound();
+        // confetti
+        launchConfetti();
+        // delay redirect slightly so user sees confetti & ripple
+        setTimeout(()=> { goToMealPlan(target); }, 650);
+      };
+
+      // Accessibility: Enter key support when focused - optional
+      btn.addEventListener('keyup', (e) => { if(e.key === 'Enter') btn.click(); });
+
+      // Small toast
+      toast('Ready — Generate your personalized 7-day meal plan.');
+    });
+
+    // Manual animation reset when recalculated: hide previous CTA first
+    document.getElementById('age').addEventListener('input', ()=> resetCTA());
+    document.getElementById('weight').addEventListener('input', ()=> resetCTA());
+    document.getElementById('height').addEventListener('input', ()=> resetCTA());
+    function resetCTA(){
+      const label = document.getElementById('recommendedLabel');
+      const arrow = document.getElementById('arrowHint');
+      const ring = document.getElementById('pulseRing');
+      const btn = document.getElementById('goMealPlanBtn');
+      label.style.display = 'none';
+      arrow.style.display = 'none';
+      ring.style.display = 'none';
+      btn.style.display = 'none';
+      btn.classList.remove('breathe');
+    }
+
+    // Ensure confetti canvas resizes with window
+    window.addEventListener('resize', ()=> {
+      const c = document.getElementById("confettiCanvas");
+      if(c) { c.width = window.innerWidth; c.height = window.innerHeight; }
     });
   </script>
 </body>
