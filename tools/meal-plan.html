@@ -4,715 +4,604 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>7-Day Meal Plan — Convert Labs</title>
-
-  <!-- Meta -->
-  <meta name="description" content="Personalized 7-day meal plan generated from your TDEE. One day unlocks every 24 hours." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <meta name="theme-color" content="#1e40af" />
+  <meta name="description" content="Personalized 7-day meal plans generated from your TDEE and USDA nutrition data." />
 
-  <!-- Site CSS (ConvertLabs) -->
-  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
-
-  <!-- Analytics + Ads (copied from your tools.html) -->
+  <!-- Analytics / AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P');
-  </script>
+  <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-Z88B03WV7P'); </script>
 
-  <!-- Small local styles to integrate the tool visually with ConvertLabs -->
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <style>
     :root{
-      --brand:#0a4d8c;
-      --muted:#6c6c6c;
-      --bg:#f5faff;
-      --card:#ffffff;
-      --accent:#2b8bd8;
-      --radius:12px;
+      --brand:#0a4d8c; --muted:#6c6c6c; --bg:#f5faff; --card:#fff; --accent:#2b8bd8; --radius:12px;
     }
-    body{ background:var(--bg); font-family: Inter, Arial, sans-serif; color:#111; margin:0; padding:0; }
-    main.tool-page { max-width:1100px; margin: 1.2rem auto; padding: 0 1rem; }
-    .page-controls { display:flex; gap:10px; align-items:center; margin:18px 0; flex-wrap:wrap; }
-    .btn { background:var(--brand); color:#fff; border:0; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600; }
-    .btn.secondary { background:#666; }
-    .btn.ghost { background:transparent; border:1px solid var(--brand); color:var(--brand); }
-    .layout { display:grid; grid-template-columns: 1fr 360px; gap:20px; align-items:start; }
-    @media(max-width:980px){ .layout{ grid-template-columns:1fr; } #side{ position:static; height:auto; } }
-
-    /* Card */
+    body{ background:var(--bg); font-family:Inter,Arial,sans-serif; color:#111; margin:0; }
+    .container{ max-width:1100px; margin:18px auto; padding:0 16px; }
+    header{ background:#1e40af;color:#fff;padding:10px 0; }
+    .nav{ width:90%; max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center; }
+    .brand{display:flex;gap:10px;align-items:center}
+    main.tool-page { margin-top:18px; }
     .card { background:var(--card); padding:14px; border-radius:var(--radius); box-shadow:0 6px 18px rgba(12,40,80,0.04); }
+    .controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
+    .btn { background:var(--brand); color:#fff; border:0; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:600; }
+    .btn.ghost{ background:transparent; border:1px solid var(--brand); color:var(--brand); }
+    .btn.secondary{ background:#666; }
+    .layout { display:grid; grid-template-columns: 1fr 320px; gap:18px; align-items:start; }
+    @media(max-width:980px){ .layout{ grid-template-columns:1fr; } }
 
-    /* Day card & meals */
-    .day-card { padding:14px; border-radius:10px; margin-bottom:14px; position:relative; }
+    .day-card { margin-bottom:12px; border-radius:10px; padding:12px; position:relative; }
     .day-header { display:flex; justify-content:space-between; align-items:center; gap:8px; }
-    .meals { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
-    .meal { flex:1 1 220px; min-width:180px; background:#fbfdff; border-radius:10px; padding:10px; cursor:pointer; border:1px solid rgba(10,77,140,0.06); transition: transform .12s, box-shadow .12s; }
-    .meal:hover{ transform: translateY(-4px); box-shadow:0 8px 22px rgba(10,77,140,0.06); }
-    .meal b{ color:#083a65; display:block; margin-bottom:6px; }
-    .kcal { color:var(--muted); font-size:13px; margin-top:6px; }
+    .meals { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:10px; }
+    .meal { background:#fbfdff; border-radius:10px; padding:10px; border:1px solid rgba(10,77,140,0.06); position:relative; }
+    .meal b{ display:block; color:#083a65; margin-bottom:6px; }
+    .muted-small{ color:var(--muted); font-size:13px; }
+    .kcal{ font-weight:600; margin-top:8px; }
 
-    /* Locked style (option B: blurred / dimmed) */
-    .locked { filter: grayscale(80%) blur(2px) brightness(.85); pointer-events: none; position:relative; }
-    .lock-overlay {
-      position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:4;
-      background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.7));
-      border-radius:10px; pointer-events:none;
-    }
-    .lock-badge {
-      background: rgba(255,255,255,0.95); color:#222; border-radius:8px; padding:8px 10px; font-weight:700;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    }
+    .locked { filter: grayscale(80%) blur(2px) brightness(.85); pointer-events: none; }
+    .lock-overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:4; background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.7)); border-radius:10px; }
+    .lock-badge { background: rgba(255,255,255,0.95); color:#222; border-radius:8px; padding:8px 10px; font-weight:700; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
 
-    /* tracking */
-    .tracking-row { display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap; }
-    .small-input { width:110px; padding:8px; border-radius:8px; border:1px solid #e6e6e6; font-size:14px; }
-    .progress { height:12px; background:#eee; border-radius:8px; overflow:hidden; flex:1 1 200px; }
-    .progress > i { display:block; height:100%; width:0%; background: linear-gradient(90deg,var(--brand),var(--accent)); }
+    .input-grams { width:90px; padding:6px 8px; border-radius:8px; border:1px solid #e6e6e6; margin-top:6px; }
+    .day-summary { margin-top:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
 
-    /* preview & usda popup */
-    #previewModal, #usdaPopup { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.45); z-index:500; padding:20px; }
-    #previewBox, #usdaBox { width:100%; max-width:980px; max-height:86vh; overflow:auto; background:var(--card); border-radius:12px; padding:18px; }
-    .muted-small { color:#666; font-size:13px; }
+    /* modal */
+    .modal-back { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.45); z-index:1200; padding:16px; }
+    .modal-card { width:100%; max-width:980px; max-height:86vh; overflow:auto; background:#fff; border-radius:12px; padding:16px; }
 
-    /* form controls row */
-    .form-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:10px; }
-    select, input[type="number"], input[type="text"] { padding:8px 10px; border-radius:8px; border:1px solid #e6e6e6; font-size:14px; }
+    /* disclaimer */
+    .disclaimer { margin-top:18px; padding:12px; background:#fff7f0; border-left:4px solid #f59e0b; border-radius:8px; color:#333; }
 
-    /* small helpers */
-    .hint { color:var(--muted); font-size:13px; margin-top:8px; }
+    /* pdf button */
+    .export-btn { background:#10b981; border:none; color:white; padding:8px 12px; border-radius:8px; cursor:pointer; }
   </style>
 </head>
 <body>
-
-  <!-- ---------------------------
-       Header (copied from your tools.html)
-       --------------------------- -->
-  <header class="navbar" style="background:#1e40af;color:#fff;padding:10px 0;">
-    <div class="nav-container" style="width:90%;max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;">
-      <div class="logo">
-        <a href="https://convertlabs.online/" aria-label="Convert Labs Home" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px;">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo" style="height:32px;" loading="lazy">
-          <span style="font-weight:600;">Convert Labs</span>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <a href="https://convertlabs.online/" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="logo" style="height:32px;margin-right:8px;">
+          <strong>Convert Labs</strong>
         </a>
       </div>
-      <nav class="nav-links">
-        <ul style="list-style:none;display:flex;gap:1rem;margin:0;padding:0;">
-          <li><a href="https://convertlabs.online/" style="color:#fff;text-decoration:none;">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html" class="active" style="color:#fff;text-decoration:none;opacity:0.9;">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html" style="color:#fff;text-decoration:none;">Blog</a></li>
-          <li><a href="https://convertlabs.online/about.html" style="color:#fff;text-decoration:none;">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html" style="color:#fff;text-decoration:none;">Contact</a></li>
-        </ul>
+      <nav>
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#fff;margin-right:12px;text-decoration:none;">Tools</a>
+        <a href="https://convertlabs.online/guides.html" style="color:#fff;text-decoration:none;">Blog</a>
       </nav>
-      <button id="themeToggle" class="theme-toggle" title="Switch Theme" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;">🌙</button>
     </div>
   </header>
 
-  <!-- ======================
-       Main content (part 1)
-       ====================== -->
-  <main class="tool-page" style="text-align:left;">
-    <h1 style="text-align:center;margin-top:18px;">7-Day Meal Plan</h1>
-    <p style="text-align:center;max-width:800px;margin:8px auto;color:var(--muted);">
-      Personalized meal plans generated from your TDEE. Only the current day is interactive — other days are visible but blurred and locked.
-    </p>
+  <div class="container">
+    <main class="tool-page">
+      <h1 style="text-align:center;margin-bottom:6px;">7-Day Meal Plan</h1>
+      <p style="text-align:center;color:var(--muted);margin-top:0;margin-bottom:14px;">
+        Personalized 7-day meal plan based on your TDEE. Only the current day is editable; other days unlock daily.
+      </p>
 
-    <!-- Controls: TDEE / Age / Goal / Diet / Protein -->
-    <div style="max-width:1100px;margin:12px auto;">
-      <div class="card" style="padding:12px;">
-        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
-          <!-- TDEE display (reads from URL or fallback) -->
+      <!-- Controls -->
+      <div class="card">
+        <div class="controls">
           <div>
-            <label style="display:block;font-weight:700;font-size:13px;">Target Calories (TDEE)</label>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input id="tdeeInput" type="number" placeholder="e.g. 2000" style="width:140px;padding:8px;border-radius:8px;border:1px solid #e6e6e6;">
-              <button id="applyTdeeBtn" class="btn">Apply</button>
-            </div>
-            <div class="hint">TDEE can be passed from <code>/tools/calorie-guide.html</code> or entered here.</div>
+            <label style="font-weight:700;display:block;font-size:13px;">TDEE (target kcal)</label>
+            <input id="tdeeInput" type="number" placeholder="e.g. 1670" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;width:140px;">
+            <div style="font-size:13px;color:var(--muted);margin-top:6px;">(Passed from calorie-guide or enter here)</div>
           </div>
 
-          <!-- Age -->
           <div>
-            <label style="display:block;font-weight:700;font-size:13px;">Age</label>
-            <input id="ageInput" type="number" min="1" max="120" placeholder="e.g. 29" style="width:100px;padding:8px;border-radius:8px;border:1px solid #e6e6e6;">
-            <div class="hint">Age adjusts portion sizes and macros.</div>
+            <label style="font-weight:700;display:block;font-size:13px;">Age</label>
+            <input id="ageInput" type="number" min="1" max="120" placeholder="30" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;width:110px;">
           </div>
 
-          <!-- Goal -->
           <div>
-            <label style="display:block;font-weight:700;font-size:13px;">Goal</label>
-            <select id="goalSelect" style="width:160px;">
-              <option value="maintain">Maintain weight</option>
-              <option value="lose">Lose weight (-300 kcal)</option>
-              <option value="gain">Gain weight (+300 kcal)</option>
+            <label style="font-weight:700;display:block;font-size:13px;">Goal</label>
+            <select id="goalSelect" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;">
+              <option value="maintain">Maintain</option>
+              <option value="lose">Lose (-300 kcal)</option>
+              <option value="gain">Gain (+300 kcal)</option>
             </select>
           </div>
 
-          <!-- Diet style (user chooses before generation) -->
           <div>
-            <label style="display:block;font-weight:700;font-size:13px;">Diet style</label>
-            <select id="dietSelect" style="width:160px;">
+            <label style="font-weight:700;display:block;font-size:13px;">Diet</label>
+            <select id="dietSelect" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;">
               <option value="normal">No preference</option>
               <option value="keto">Keto</option>
               <option value="carnivore">Carnivore</option>
               <option value="vegetarian">Vegetarian</option>
             </select>
-            <div class="hint">Keto / Carnivore / Vegetarian rules will be applied when generating meals.</div>
           </div>
 
-          <!-- Protein preference -->
           <div>
-            <label style="display:block;font-weight:700;font-size:13px;">Protein preference</label>
-            <select id="proteinSelect" style="width:160px;">
+            <label style="font-weight:700;display:block;font-size:13px;">Protein</label>
+            <select id="proteinSelect" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;">
               <option value="any">Any</option>
               <option value="beef">Beef</option>
               <option value="chicken">Chicken</option>
               <option value="fish">Fish</option>
-              <option value="plant">Plant-based</option>
+              <option value="plant">Plant</option>
             </select>
-            <div class="hint">This filters lunch/dinner protein sources.</div>
           </div>
 
-        </div>
-
-        <!-- Actions -->
-        <div class="form-row" style="margin-top:14px;">
-          <button id="generateBtn" class="btn">Generate Preview</button>
-          <button id="acceptBtn" class="btn secondary">Accept & Save Plan</button>
-          <button id="overwriteBtn" class="btn ghost">Overwrite Saved Plan</button>
-          <button id="deleteBtn" class="btn secondary" style="display:none;">Delete Saved Plan</button>
-
-          <div style="margin-left:auto;display:flex;gap:12px;align-items:center;">
-            <div class="muted-small">TDEE final: <strong id="tdeeText">2000</strong> kcal</div>
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+            <button id="generateBtn" class="btn">Generate Preview</button>
+            <button id="acceptBtn" class="btn secondary">Accept & Save</button>
+            <button id="overwriteBtn" class="btn ghost">Overwrite</button>
+            <button id="deleteBtn" class="btn secondary" style="display:none;">Delete</button>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Main layout placeholder (Part 2 & Part 3 will fill the logic and render inside #mainInner) -->
-    <div class="layout" style="max-width:1100px;margin:0 auto;">
-      <main id="main">
-        <div id="mainInner"></div>
-      </main>
+      <!-- layout -->
+      <div class="layout" style="margin-top:14px;">
+        <!-- main -->
+        <div>
+          <div id="mainInner"></div>
+        </div>
 
-      <aside id="side">
-        <div class="card">
-          <strong>Manual USDA search</strong>
-          <div style="margin-top:10px;">
-            <input id="manualSearchInput" placeholder="Search food name..." style="width:100%; padding:8px; border-radius:8px; border:1px solid #eee;">
-            <div style="margin-top:8px; text-align:right;">
-              <button id="manualSearchBtn" class="btn">Search USDA</button>
+        <!-- side -->
+        <aside>
+          <div class="card">
+            <strong>Manual USDA search</strong>
+            <div style="margin-top:10px;">
+              <input id="manualSearchInput" placeholder="Search food..." style="width:100%;padding:8px;border-radius:8px;border:1px solid #eee;">
+              <div style="text-align:right;margin-top:8px;">
+                <button id="manualSearchBtn" class="btn">Search USDA</button>
+              </div>
+            </div>
+            <div id="manualSearchResults" style="margin-top:10px;max-height:260px;overflow:auto;"></div>
+          </div>
+
+          <div class="card" style="margin-top:12px;">
+            <strong>Saved plan</strong>
+            <div id="savedInfo" style="margin-top:8px;color:var(--muted);">No saved plan.</div>
+            <div style="margin-top:10px;">
+              <button id="exportDayBtn" class="export-btn" style="width:100%;">Export Today's Plan (PDF)</button>
             </div>
           </div>
-          <div id="manualSearchResults" style="margin-top:10px;"></div>
-        </div>
+        </aside>
+      </div>
 
-        <div class="card" style="margin-top:12px;">
-          <strong>Saved plan info</strong>
-          <div id="savedInfo" style="margin-top:10px;" class="muted-small">No saved plan yet.</div>
-        </div>
+      <!-- Disclaimer (bottom of page, above footer) -->
+      <div id="pageDisclaimer" class="disclaimer" style="margin-top:18px;">
+        <strong>Nutrition Disclaimer</strong><br>
+        This meal plan is automatically generated using USDA public-domain nutrition data and general dietary heuristics. It is not personalized medical or dietitian advice. For individualized nutrition plans, please consult a licensed nutritionist or healthcare professional.
+      </div>
+    </main>
+  </div>
 
-        <div class="card" style="margin-top:12px;">
-          <strong>Hints</strong>
-          <p class="muted-small" style="margin-top:8px;">
-            - Click any unlocked meal to view USDA matches and choose a replacement.<br>
-            - Replacing a meal updates the plan and saves it automatically.<br>
-            - Only the current day is interactive; locked days show unlock date.
-          </p>
-        </div>
-      </aside>
-    </div>
+  <!-- Modals -->
+  <div id="previewModal" class="modal-back"><div class="modal-card" id="previewBox"></div></div>
+  <div id="usdaPopup" class="modal-back"><div class="modal-card" id="usdaBox"></div></div>
+  <div id="usdaAllModal" class="modal-back"><div class="modal-card" id="usdaAllBox"></div></div>
 
-  </main>
+  <!-- Confetti canvas (kept if needed) -->
+  <canvas id="confettiCanvas" style="display:none;position:fixed;inset:0;z-index:2000;pointer-events:none;"></canvas>
 
-  <!-- PREVIEW & USDA POPUP placeholders (scripts in Part 3 will attach behavior) -->
-  <div id="previewModal"><div id="previewBox"></div></div>
-  <div id="usdaPopup"><div id="usdaBox"></div></div>
-
-  <!-- =========================
-       PART 2/3 goes here (dataset loader + diet food lists + generator)
-       DO NOT paste PART 3 before PART 2.
-       ========================= -->
 <script>
-/************************************************************************
- Part 2/3
- - Multi-dataset nutrition loader (fast → full → USDA)
- - Diet & protein food lists (templates) and generator that respects:
-   - diet style (normal/keto/carnivore/vegetarian)
-   - protein preference (any/beef/chicken/fish/plant)
-   - age groups (child/teen/adult/senior)
-   - goal adjustment (maintain/lose/gain applied to TDEE)
- - Exposes:
-   - window.searchNutrition(query) -> Promise<[matches]>
-   - window.generatePlan(options) -> 7-day plan array
-************************************************************************/
-
-/* ---------------------------
-   CONFIG: dataset paths
-   --------------------------- */
-const DATA_LITE = "/assets/foods-lite.json";
+/* ===========================
+   CONFIG & DATA PATHS
+   =========================== */
+const DATA_USDA = "/assets/usda_food_nutrition.json";
 const DATA_FULL = "/assets/foods-full.json";
-const DATA_BIG  = "/assets/usda_food_nutrition.json";
+const DATA_LITE = "/assets/foods-lite.json";
 
-/* ---------------------------
-   Nutrition loader (progressive)
-   --------------------------- */
-let nutritionIndex = { items: [], hasLite:false, hasFull:false, hasBig:false };
+/* ===========================
+   Utilities & dataset loader
+   =========================== */
+let indexItems = []; // merged search index
+let hasUsda=false, hasFull=false, hasLite=false;
 
-async function safeFetchJSON(url) {
+async function safeFetchJSON(url){
   try {
-    const res = await fetch(url, { cache: "no-cache" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const json = await res.json();
-    if (!Array.isArray(json)) throw new Error("Not an array");
-    return json;
-  } catch (err) {
-    console.warn("safeFetchJSON failed", url, err && err.message);
+    const r = await fetch(url, {cache:"no-cache"});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const j = await r.json();
+    if(Array.isArray(j)) return j;
+    // if object with array? try to find array inside
+    return Array.isArray(j.data) ? j.data : null;
+  } catch(e){
+    console.warn("fetch failed", url, e && e.message);
     return null;
   }
 }
-
-// load lite dataset immediately (fast)
-(async function loadLite(){
-  const lite = await safeFetchJSON(DATA_LITE);
-  if (lite && lite.length) {
-    nutritionIndex.items = lite.slice();
-    nutritionIndex.hasLite = true;
-    console.info("Nutrition: loaded lite", lite.length);
-  } else {
-    console.info("Nutrition: lite not found or empty");
-  }
-})();
-
-async function loadFullIfNeeded() {
-  if (nutritionIndex.hasFull) return true;
-  const full = await safeFetchJSON(DATA_FULL);
-  if (full && full.length) {
-    nutritionIndex.items = nutritionIndex.items.concat(full);
-    nutritionIndex.hasFull = true;
-    console.info("Nutrition: loaded full", full.length);
-    return true;
-  }
+async function loadUsda(){
+  if(hasUsda) return true;
+  const j = await safeFetchJSON(DATA_USDA);
+  if(j){ indexItems = j.concat(indexItems); hasUsda=true; console.info("USDA loaded", j.length); return true; }
+  return false;
+}
+async function loadFull(){
+  if(hasFull) return true;
+  const j = await safeFetchJSON(DATA_FULL);
+  if(j){ indexItems = indexItems.concat(j); hasFull=true; console.info("FULL loaded", j.length); return true; }
+  return false;
+}
+async function loadLite(){
+  if(hasLite) return true;
+  const j = await safeFetchJSON(DATA_LITE);
+  if(j){ indexItems = indexItems.concat(j); hasLite=true; console.info("LITE loaded", j.length); return true; }
   return false;
 }
 
-async function loadBigIfNeeded() {
-  if (nutritionIndex.hasBig) return true;
-  const big = await safeFetchJSON(DATA_BIG);
-  if (big && big.length) {
-    nutritionIndex.items = nutritionIndex.items.concat(big);
-    nutritionIndex.hasBig = true;
-    console.info("Nutrition: loaded big USDA", big.length);
-    return true;
-  }
-  return false;
+// preload lite ASAP (small)
+loadLite();
+
+/* Normalization & scoring */
+function normalize(s){ return (s||"").toString().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase(); }
+function scoreName(name, q){
+  const n = normalize(name||"");
+  if(!n) return 0;
+  if(n === q) return 120;
+  let s=0;
+  if(n.startsWith(q)) s+=50;
+  if(n.includes(q)) s+=30;
+  const qwords = q.split(/\W+/).filter(Boolean);
+  qwords.forEach(w => { if(n.includes(w)) s+=8; });
+  s += Math.max(0, 6 - n.split(" ").length);
+  return s;
 }
 
-function normalizeText(s){ return (s||"").toString().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase(); }
-
-function scoreMatch(name, q) {
-  const n = normalizeText(name||"");
-  if (!n) return 0;
-  if (n === q) return 120;
-  let score = 0;
-  if (n.startsWith(q)) score += 50;
-  if (n.includes(q)) score += 30;
-  const words = q.split(/\W+/).filter(Boolean);
-  words.forEach(w => { if (n.includes(w)) score += 8; });
-  score += Math.max(0, 6 - n.split(" ").length);
-  return score;
+/* Search functionality: USDA primary, then fallback */
+async function searchNutrition(query){
+  const q = normalize(query).trim();
+  if(!q) return [];
+  // ensure usda loaded first for choice A
+  await loadUsda();
+  let matches = indexItems
+    .map(it => ({ it, name: it.name || it.food_name || it.description || "" }))
+    .map(x => ({ it:x.it, score: scoreName(x.name, q), name: x.name }))
+    .filter(x => x.score>0)
+    .sort((a,b)=>b.score-a.score)
+    .map(x => mapItem(x.it, x.score));
+  if(matches.length) return matches;
+  // try full
+  await loadFull();
+  matches = indexItems
+    .map(it => ({ it, name: it.name || it.food_name || it.description || "" }))
+    .map(x => ({ it:x.it, score: scoreName(x.name, q), name: x.name }))
+    .filter(x => x.score>0)
+    .sort((a,b)=>b.score-a.score)
+    .map(x => mapItem(x.it, x.score));
+  if(matches.length) return matches;
+  // ensure lite (may already included)
+  await loadLite();
+  matches = indexItems
+    .map(it => ({ it, name: it.name || it.food_name || it.description || "" }))
+    .map(x => ({ it:x.it, score: scoreName(x.name, q), name: x.name }))
+    .filter(x => x.score>0)
+    .sort((a,b)=>b.score-a.score)
+    .map(x => mapItem(x.it, x.score));
+  return matches;
 }
 
-/**
- * searchNutrition(query) -> returns array of matches (sorted by score)
- * Progressive fallback: search current index -> load full -> load big
- */
-async function searchNutrition(query) {
-  const q = normalizeText(query).trim();
-  if (!q) return [];
-
-  function searchIndex() {
-    return nutritionIndex.items
-      .map(it => {
-        const name = it.name ?? it.food_name ?? it.description ?? "";
-        return { it, score: scoreMatch(name, q), name };
-      })
-      .filter(x => x.score > 0)
-      .sort((a,b) => b.score - a.score)
-      .map(x => {
-        const it = x.it;
-        return {
-          id: it.id ?? it.fdc_id ?? it.code ?? null,
-          name: it.name ?? it.food_name ?? it.description ?? "Unknown",
-          serving: it.serving || it.serving_size || it.serving_description || "",
-          kcal: it.kcal ?? it.calories ?? it.energy_kcal ?? it.energy ?? null,
-          protein_g: it.protein_g ?? it.protein ?? it.prot ?? null,
-          carbs_g: it.carbs_g ?? it.carbohydrate ?? it.carb ?? it.carbs ?? null,
-          fat_g: it.fat_g ?? it.fat ?? null,
-          raw: it,
-          _score: x.score
-        };
-      });
-  }
-
-  // 1) try current index (likely lite)
-  let matches = searchIndex();
-  if (matches.length) return matches;
-
-  // 2) load full and retry
-  const okFull = await loadFullIfNeeded();
-  if (okFull) {
-    matches = searchIndex();
-    if (matches.length) return matches;
-  }
-
-  // 3) load big and retry
-  const okBig = await loadBigIfNeeded();
-  if (okBig) {
-    matches = searchIndex();
-    if (matches.length) return matches;
-  }
-
-  return [];
-}
-window.searchNutrition = searchNutrition;
-
-/* ---------------------------
-   Diet & protein food pools
-   - We'll create sensible lists / templates to select from.
-   - These are fallback templates; USDA replacements will be offered.
-   --------------------------- */
-
-/*
-  Note:
-  - Each pool item is { name, tags: [...], kcalEst }
-  - tags help enforce diet rules and protein preference
+/* Map raw item to common structure
+   We assume your USDA and full/lite use `kcal` field as kcal per 100g (confirmed by your sample).
 */
+function mapItem(it, score=0){
+  const name = it.name || it.food_name || it.description || "Unknown";
+  // kcal per 100g if present
+  let kcal = null;
+  if(typeof it.kcal === "number") kcal = it.kcal;
+  else if(typeof it.calories === "number") kcal = it.calories;
+  else if(it.energy_kcal) kcal = Number(it.energy_kcal);
+  // fallback: if serving size and serving kcal provided
+  // not required in your samples but included for safety
+  if((!kcal) && it.serving_size_g && (it.kcal_per_serving || it.calories_per_serving || it.serving_kcal)){
+    const serveK = it.kcal_per_serving || it.calories_per_serving || it.serving_kcal;
+    kcal = (Number(serveK) / Number(it.serving_size_g)) * 100;
+  }
+  // as last fallback, check nested nutrients
+  // (not common in your files)
+  if(!kcal && it.nutrients && Array.isArray(it.nutrients)){
+    const e = it.nutrients.find(n=>/(energy|kcal|calorie)/i.test(n.name || n.nutrient || ""));
+    if(e && e.value) kcal = Number(e.value);
+  }
+  return {
+    id: it.id ?? it.fdc_id ?? null,
+    name,
+    kcal_per_100g: (typeof kcal === "number" && !isNaN(kcal)) ? Number(kcal) : null,
+    protein: it.protein ?? it.protein_g ?? null,
+    carbs: it.carbs ?? it.carbs_g ?? null,
+    fat: it.fat ?? it.fat_g ?? null,
+    serving: it.serving || it.serving_size || null,
+    raw: it,
+    _score: score
+  };
+}
 
+/* ===========================
+   Heuristic pools (fallback)
+   =========================== */
 const POOLS = {
-  // generic protein items
   proteins: [
-    { name: "Grilled beef steak", tags:["meat","beef","animal"], kcalEst: 350 },
-    { name: "Grilled chicken breast", tags:["meat","chicken","animal"], kcalEst: 240 },
-    { name: "Baked salmon", tags:["fish","animal"], kcalEst: 280 },
-    { name: "Tuna salad", tags:["fish","animal"], kcalEst: 260 },
-    { name: "Lentil stew", tags:["plant","legume","vegetarian"], kcalEst: 320 },
-    { name: "Tofu stir-fry", tags:["plant","vegetarian"], kcalEst: 290 },
-    { name: "Egg omelette", tags:["egg","animal"], kcalEst: 220 },
-    { name: "Beef mince with veg", tags:["meat","beef","animal"], kcalEst: 360 },
-    { name: "Chicken kebab", tags:["meat","chicken","animal"], kcalEst: 250 },
-    { name: "Grilled fish fillet", tags:["fish","animal"], kcalEst: 240 }
+    {name:"Grilled beef steak", kcal_per_100g: 250, tags:["meat","beef"]},
+    {name:"Grilled chicken breast", kcal_per_100g: 165, tags:["meat","chicken"]},
+    {name:"Baked salmon", kcal_per_100g: 206, tags:["fish"]},
+    {name:"Tuna salad", kcal_per_100g: 200, tags:["fish"]},
+    {name:"Lentil stew", kcal_per_100g: 116, tags:["plant","legume"]},
+    {name:"Tofu stir-fry", kcal_per_100g: 144, tags:["plant"]},
+    {name:"Egg omelette", kcal_per_100g: 154, tags:["egg"]},
   ],
-  // carbs / sides
   sides: [
-    { name: "Steamed vegetables", tags:["veg","plant","lowcarb"], kcalEst: 60 },
-    { name: "Mixed salad", tags:["veg","plant","lowcarb"], kcalEst: 80 },
-    { name: "Brown rice", tags:["grain","highcarb"], kcalEst: 210 },
-    { name: "Quinoa", tags:["grain","highcarb","plant"], kcalEst: 200 },
-    { name: "Baked potato", tags:["starch","highcarb"], kcalEst: 160 },
-    { name: "Cauliflower rice", tags:["lowcarb","veg"], kcalEst: 25 },
-    { name: "Avocado", tags:["fat","lowcarb"], kcalEst: 160 }
+    {name:"Steamed vegetables", kcal_per_100g:30, tags:["veg"]},
+    {name:"Mixed salad", kcal_per_100g:25, tags:["veg"]},
+    {name:"Brown rice", kcal_per_100g:123, tags:["grain"]},
+    {name:"Quinoa", kcal_per_100g:120, tags:["grain"]},
+    {name:"Baked potato", kcal_per_100g:93, tags:["starch"]},
+    {name:"Cauliflower rice", kcal_per_100g:25, tags:["veg"]},
+    {name:"Avocado", kcal_per_100g:160, tags:["fat"]}
   ],
-  // breakfasts/snacks
   breakfasts: [
-    { name: "Oatmeal with banana & milk", tags:["grain","highcarb","vegetarian"], kcalEst: 320 },
-    { name: "Greek yogurt with honey", tags:["dairy","vegetarian"], kcalEst: 220 },
-    { name: "Smoothie (banana + whey)", tags:["highcarb","animal"], kcalEst: 300 },
-    { name: "Boiled eggs & toast", tags:["egg","grain"], kcalEst: 310 },
-    { name: "Shakshuka (2 eggs)", tags:["egg","veg"], kcalEst: 270 }
+    {name:"Oatmeal with banana & milk", kcal_per_100g:124, tags:["breakfast"]},
+    {name:"Greek yogurt with honey", kcal_per_100g:95, tags:["dairy"]},
+    {name:"Smoothie (banana + whey)", kcal_per_100g:60, tags:["smoothie"]},
+    {name:"Boiled eggs & toast", kcal_per_100g:160, tags:["egg"]},
+    {name:"Shakshuka (2 eggs)", kcal_per_100g:120, tags:["egg"]}
   ],
   snacks: [
-    { name: "Handful of almonds", tags:["nuts","plant","lowcarb"], kcalEst: 170 },
-    { name: "Protein bar", tags:["processed","any"], kcalEst: 210 },
-    { name: "Apple", tags:["fruit","plant","highcarb"], kcalEst: 95 },
-    { name: "Greek yogurt", tags:["dairy","vegetarian"], kcalEst: 120 },
-    { name: "Carrot sticks", tags:["veg","plant"], kcalEst: 45 }
+    {name:"Handful of almonds", kcal_per_100g:579, tags:["nuts"]},
+    {name:"Protein bar", kcal_per_100g:400, tags:["processed"]},
+    {name:"Apple", kcal_per_100g:52, tags:["fruit"]},
+    {name:"Greek yogurt", kcal_per_100g:95, tags:["dairy"]},
+    {name:"Carrot sticks", kcal_per_100g:41, tags:["veg"]}
   ]
 };
 
-/* ---------------------------
-  Diet rule helpers
-  - Check whether an item is allowed for a diet
-  --------------------------- */
-function allowedByDiet(itemTags, diet) {
-  // normalize
-  const tags = (itemTags||[]).map(t=>t.toLowerCase());
-  if (diet === "normal") return true;
-  if (diet === "keto") {
-    // allow animal, fish, eggs, dairy, lowcarb veg, nuts, avocado
-    // disallow tags: grain, highcarb, starch, fruit, legume
-    const forbidden = ["grain","highcarb","starch","fruit","legume","potato","bread","pasta","rice","sugar"];
-    if (tags.some(t => forbidden.includes(t))) return false;
-    return true;
-  }
-  if (diet === "carnivore") {
-    // allow only animal tags (meat, beef, chicken, fish, egg, dairy)
-    const allow = ["meat","beef","chicken","fish","animal","egg","dairy"];
-    // item allowed if it contains at least one allowed and does NOT contain plant indicators
-    const plant = ["plant","veg","vegetarian","fruit","grain","legume","nuts","seed","tofu"];
-    if (tags.some(t=>plant.includes(t))) return false;
-    return tags.some(t=>allow.includes(t));
-  }
-  if (diet === "vegetarian") {
-    // disallow meat, beef, chicken, fish
-    const forbidden = ["meat","beef","chicken","fish","animal"];
-    if (tags.some(t=>forbidden.includes(t))) return false;
-    return true;
-  }
+/* helpers for diet/protein filtering */
+function allowedByDietTags(tags, diet){
+  const t = (tags||[]).map(s=>s.toLowerCase());
+  if(diet === "normal") return true;
+  if(diet === "keto"){ const forbidden=["grain","highcarb","starch","fruit","legume","potato","bread","pasta","rice","sugar"]; return !t.some(x=>forbidden.includes(x)); }
+  if(diet === "carnivore"){ const plant=["plant","veg","vegetarian","fruit","grain","legume","nuts","tofu"]; return !t.some(x=>plant.includes(x)); }
+  if(diet === "vegetarian"){ const forbidden=["meat","beef","chicken","fish","animal"]; return !t.some(x=>forbidden.includes(x)); }
+  return true;
+}
+function matchesProteinTags(tags, pref){
+  const t=(tags||[]).map(s=>s.toLowerCase());
+  if(!pref || pref==="any") return true;
+  if(pref==="plant") return t.includes("plant")||t.includes("legume")||t.includes("tofu")||t.includes("nuts");
+  if(pref==="beef") return t.includes("beef")||t.includes("meat");
+  if(pref==="chicken") return t.includes("chicken")||t.includes("meat");
+  if(pref==="fish") return t.includes("fish");
   return true;
 }
 
-/* ---------------------------
-   Protein filter helper
-   --------------------------- */
-function matchesProtein(tags, proteinPref) {
-  const t = (tags||[]).map(x=>x.toLowerCase());
-  if (!proteinPref || proteinPref === "any") return true;
-  if (proteinPref === "plant") return t.includes("plant") || t.includes("legume") || t.includes("tofu") || t.includes("nuts");
-  if (proteinPref === "beef") return t.includes("beef") || t.includes("meat");
-  if (proteinPref === "chicken") return t.includes("chicken") || t.includes("meat");
-  if (proteinPref === "fish") return t.includes("fish") || t.includes("tuna") || t.includes("salmon");
-  return true;
+/* age portion multiplier */
+function ageCategory(age){ const a=Number(age)||30; if(a<=12) return "child"; if(a<=19) return "teen"; if(a<=59) return "adult"; return "senior"; }
+function agePortionMultiplier(cat){ if(cat==="child") return 0.7; if(cat==="teen") return 1.05; if(cat==="senior") return 0.9; return 1.0; }
+
+/* pick helper that tries to find a USDA match by name first */
+async function pickFoodByName(prefName, fallbackPool, opts){
+  // attempt to search USDA index for the prefName
+  const results = await searchNutrition(prefName || "");
+  if(results && results.length){
+    // pick first allowed by diet/protein
+    for(const r of results){
+      const tags = []; // no tags in mapItem fallback; but we can match name for protein preference
+      if(allowedByDietTags(tags, opts.diet) && matchesProteinTags(tags, opts.protein)) return r;
+    }
+    return results[0];
+  }
+  // fallback pool entry
+  const poolCandidates = fallbackPool.filter(p => allowedByDietTags(p.tags || [], opts.diet) && matchesProteinTags(p.tags || [], opts.protein));
+  if(poolCandidates.length) return mapItem({name: poolCandidates[Math.floor(Math.random()*poolCandidates.length)].name, kcal: poolCandidates[Math.floor(Math.random()*poolCandidates.length)].kcal_per_100g}, 0);
+  // ultimate fallback: search entire index
+  const idx = (indexItems.length ? mapItem(indexItems[Math.floor(Math.random()*indexItems.length)]) : null);
+  return idx;
 }
 
-/* ---------------------------
-   Age category helper
-   --------------------------- */
-function ageCategory(age) {
-  if (!age) return "adult";
-  const a = Number(age);
-  if (a <= 12) return "child";
-  if (a <= 19) return "teen";
-  if (a <= 59) return "adult";
-  return "senior";
+/* compute grams from kcal_per_100g and meal kcal target */
+function gramsForTarget(kcalPer100g, mealKcal){
+  if(!kcalPer100g || kcalPer100g <= 0) return Math.round(100 * (mealKcal/200)); // fallback: assume 200kcal/100g -> adjust
+  const grams = (mealKcal / kcalPer100g) * 100;
+  return Math.max(1, Math.round(grams)); // round to 1g (your choice A)
 }
 
-/* ---------------------------
-   Macro/portion adjustments by age
-   - Returns multiplier for kcal portions
-   --------------------------- */
-function agePortionMultiplier(cat) {
-  // child smaller portions (0.7-0.9), teen more (1.0-1.05), adult 1.0, senior slightly smaller (0.9)
-  if (cat === "child") return 0.7;
-  if (cat === "teen") return 1.05;
-  if (cat === "senior") return 0.9;
-  return 1.0;
-}
+/* ===========================
+   Plan generation (async)
+   =========================== */
+// percentages (confirmed A)
+const DEFAULT_SPLITS = { breakfast:0.25, lunch:0.35, dinner:0.30, snack:0.10 };
+const DIET_SPLITS = {
+  keto: { breakfast:0.22, lunch:0.36, dinner:0.32, snack:0.10 },
+  carnivore: { breakfast:0.24, lunch:0.36, dinner:0.32, snack:0.08 },
+  vegetarian: { breakfast:0.26, lunch:0.33, dinner:0.31, snack:0.10 }
+};
 
-/* ---------------------------
-   Meal selection utilities
-   - pickFromPool(pool, filters)
-   --------------------------- */
-function pickFromPool(pool, { diet, protein }) {
-  // pool: array of items with tags
-  // filter by diet and protein preference
-  const candidates = pool.filter(it => allowedByDiet(it.tags, diet) && matchesProtein(it.tags, protein));
-  if (!candidates || candidates.length === 0) return null;
-  return candidates[Math.floor(Math.random()*candidates.length)];
-}
+async function generatePlanAsync(opts){
+  // opts: { tdee, age, diet, protein, goal }
+  // ensure usda loaded (we rely on usda)
+  await loadUsda();
+  await loadFull(); await loadLite();
 
-/* ---------------------------
-   generatePlan(options)
-   options:
-     - tdee (number)
-     - age
-     - goal ('maintain'|'lose'|'gain')
-     - diet ('normal'|'keto'|'carnivore'|'vegetarian')
-     - protein ('any'|'beef'|'chicken'|'fish'|'plant')
-   returns: array of 7 day objects:
-     { day, breakfast: {text,kcal,isCustom:false}, lunch: {...}, dinner: {...}, snack: {...} }
-   --------------------------- */
-function generatePlan(opts) {
-  const tdee = Math.max(1200, Number(opts.tdee) || 2000);
-  const goal = opts.goal || "maintain";
+  const tdee = Math.max(1000, Number(opts.tdee) || 2000);
   const age = Number(opts.age) || 30;
   const diet = opts.diet || "normal";
   const protein = opts.protein || "any";
-
-  // adjust for goal
-  let finalTdee = tdee;
-  if (goal === "lose") finalTdee = Math.max(1000, tdee - 300);
-  if (goal === "gain") finalTdee = tdee + 300;
-
-  // age portion multiplier
   const mult = agePortionMultiplier(ageCategory(age));
-
-  // calorie split baseline
-  // adjust macros slightly by diet: keto -> higher fat, carnivore -> high protein, vegetarian -> moderate carbs
-  let breakfastPct = 0.25, lunchPct = 0.35, dinnerPct = 0.30, snackPct = 0.10;
-
-  if (diet === "keto") {
-    // keep calories but favor fat-heavy meals: we won't change percentages drastically here
-    breakfastPct = 0.22; lunchPct = 0.36; dinnerPct = 0.32; snackPct = 0.10;
-  } else if (diet === "carnivore") {
-    breakfastPct = 0.24; lunchPct = 0.36; dinnerPct = 0.32; snackPct = 0.08;
-  } else if (diet === "vegetarian") {
-    breakfastPct = 0.26; lunchPct = 0.33; dinnerPct = 0.31; snackPct = 0.10;
-  }
-
-  // build plan
+  const splits = DIET_SPLITS[diet] || DEFAULT_SPLITS;
   const plan = [];
-  for (let day = 1; day <= 7; day++) {
-    // pick breakfast
-    // For breakfast: prioritize breakfasts pool, then defaults
-    let breakfastItem = pickFromPool(POOLS.breakfasts, { diet, protein }) || POOLS.breakfasts[Math.floor(Math.random()*POOLS.breakfasts.length)];
-    let lunchProtein = pickFromPool(POOLS.proteins, { diet, protein }) || pickFromPool(POOLS.proteins, { diet, protein:"any" }) || POOLS.proteins[0];
-    // choose a side compatible with diet
-    let side = pickFromPool(POOLS.sides, { diet, protein }) || POOLS.sides[0];
-    // for dinner pick another protein (avoid exact duplicate)
-    let dinnerProtein = pickFromPool(POOLS.proteins, { diet, protein }) || lunchProtein;
-    // snack
-    let snackItem = pickFromPool(POOLS.snacks, { diet, protein }) || POOLS.snacks[Math.floor(Math.random()*POOLS.snacks.length)];
 
-    // assemble textual meals (we will allow click-to-replace with USDA)
-    const breakfastText = breakfastItem.name;
-    const lunchText = `${lunchProtein.name} + ${side.name}`;
-    const dinnerText = `${dinnerProtein.name} + ${side.name}`;
-    const snackText = snackItem.name;
+  for(let day=1; day<=7; day++){
+    // target kcals per meal
+    const bK = Math.round(tdee * splits.breakfast);
+    const lK = Math.round(tdee * splits.lunch);
+    const dK = Math.round(tdee * splits.dinner);
+    const sK = Math.round(tdee * splits.snack);
 
-    // estimate kcals with multiplier and pct
-    const kcals = Math.round(finalTdee * mult);
-    const bK = Math.round(kcals * breakfastPct);
-    const lK = Math.round(kcals * lunchPct);
-    const dK = Math.round(kcals * dinnerPct);
-    const sK = Math.round(kcals * snackPct);
+    // pick items (prefer USDA search by name or pool)
+    // For variety, pick random pool fallback items and try to find matching usda items
+    const breakfastChoice = (await pickFoodByName(null, POOLS.breakfasts, {diet,protein})) || mapItem({name:"Breakfast item", kcal:120});
+    const lunchProt = (await pickFoodByName(null, POOLS.proteins, {diet,protein})) || mapItem({name:"Protein", kcal:200});
+    const sideItem = (await pickFoodByName(null, POOLS.sides, {diet,protein})) || mapItem({name:"Side", kcal:80});
+    const dinnerProt = (await pickFoodByName(null, POOLS.proteins, {diet,protein})) || lunchProt;
+    const snack = (await pickFoodByName(null, POOLS.snacks, {diet,protein})) || mapItem({name:"Snack", kcal:100});
+
+    // compute grams and kcal from kcal_per_100g
+    const bf_kcal_per100 = breakfastChoice.kcal_per_100g || breakfastChoice.kcal_per_100 || breakfastChoice.kcal || null;
+    const lunch_p_kcal_per100 = lunchProt.kcal_per_100g || lunchProt.kcal_per_100 || lunchProt.kcal || null;
+    const side_kcal_per100 = sideItem.kcal_per_100g || sideItem.kcal || null;
+    const dinner_p_kcal_per100 = dinnerProt.kcal_per_100g || dinnerProt.kcal || null;
+    const snack_kcal_per100 = snack.kcal_per_100g || snack.kcal || null;
+
+    // fallback if null use pool values or generic 150 kcal/100
+    const bfGram = gramsForTarget(bf_kcal_per100 || 120, bK);
+    const lfGram = gramsForTarget(lunch_p_kcal_per100 || 180, lK * 0.65); // protein itself not whole lunch, allocate 65% to protein, rest to side
+    const sideGram = gramsForTarget(side_kcal_per100 || 120, Math.round(lK * 0.35));
+    const dinnerProtGram = gramsForTarget(dinner_p_kcal_per100 || 180, dK * 0.65);
+    const dinnerSideGram = gramsForTarget(side_kcal_per100 || 120, Math.round(dK * 0.35));
+    const snackGram = gramsForTarget(snack_kcal_per100 || 100, sK);
+
+    // compute real kcal from chosen per100g values
+    const bfCalories = Math.round((bf_kcal_per100 || 120) * (bfGram/100));
+    const lunchProtCalories = Math.round((lunch_p_kcal_per100 || 180) * (lfGram/100));
+    const lunchSideCalories = Math.round((side_kcal_per100 || 120) * (sideGram/100));
+    const dinnerProtCalories = Math.round((dinner_p_kcal_per100 || 180) * (dinnerProtGram/100));
+    const dinnerSideCalories = Math.round((side_kcal_per100 || 120) * (dinnerSideGram/100));
+    const snackCalories = Math.round((snack_kcal_per100 || 100) * (snackGram/100));
+
+    const lunchTotal = lunchProtCalories + lunchSideCalories;
+    const dinnerTotal = dinnerProtCalories + dinnerSideCalories;
 
     plan.push({
       day,
-      breakfast: { text: breakfastText, kcal: bK, isCustom:false },
-      lunch:     { text: lunchText, kcal: lK, isCustom:false },
-      dinner:    { text: dinnerText, kcal: dK, isCustom:false },
-      snack:     { text: snackText, kcal: sK, isCustom:false },
-      meta: { tdee: finalTdee, age: age, diet, protein, portionMultiplier: mult }
+      breakfast: { text: breakfastChoice.name, kcal_per_100g: bf_kcal_per100, grams: bfGram, kcal: bfCalories, source: breakfastChoice.raw || null },
+      lunch: { text: lunchProt.name + " + " + sideItem.name, parts: [
+        { type:"protein", name: lunchProt.name, kcal_per_100g: lunch_p_kcal_per100, grams: lfGram, kcal: lunchProtCalories, source: lunchProt.raw || null },
+        { type:"side", name: sideItem.name, kcal_per_100g: side_kcal_per100, grams: sideGram, kcal: lunchSideCalories, source: sideItem.raw || null }
+      ], kcal: lunchTotal },
+      dinner: { text: dinnerProt.name + " + " + sideItem.name, parts:[
+        { type:"protein", name: dinnerProt.name, kcal_per_100g: dinner_p_kcal_per100, grams: dinnerProtGram, kcal: dinnerProtCalories, source: dinnerProt.raw || null },
+        { type:"side", name: sideItem.name, kcal_per_100g: side_kcal_per100, grams: dinnerSideGram, kcal: dinnerSideCalories, source: sideItem.raw || null }
+      ], kcal: dinnerTotal },
+      snack: { text: snack.name, kcal_per_100g: snack_kcal_per100, grams: snackGram, kcal: snackCalories, source: snack.raw || null },
+      meta: { tdee, age, diet, protein, splits, portionMultiplier: mult }
     });
   }
-
   return plan;
 }
 
-window.generatePlan = generatePlan;
+/* ===========================
+   Storage and rendering + interactions
+   =========================== */
+const KEY = "convertlabs_mealplan_v2";
 
-/* ---------------------------
-  Helper: read URL params (for Part 1 auto-fill)
-  --------------------------- */
-function readUrlParamsToForm() {
-  const params = new URLSearchParams(window.location.search);
-  const tdee = params.get("tdee");
-  const age = params.get("age");
-  const goal = params.get("goal");
-  const diet = params.get("diet");
-  const protein = params.get("protein");
+function savePlan(plan, startDateISO){ localStorage.setItem(KEY, JSON.stringify({ plan, startDate:startDateISO || new Date().toISOString() })); }
+function loadPlan(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){return null;} }
+function deletePlan(){ localStorage.removeItem(KEY); localStorage.removeItem(KEY+"_track"); }
 
-  if (tdee) document.getElementById("tdeeInput").value = tdee;
-  if (age) document.getElementById("ageInput").value = age;
-  if (goal) document.getElementById("goalSelect").value = goal;
-  if (diet) document.getElementById("dietSelect").value = diet;
-  if (protein) document.getElementById("proteinSelect").value = protein;
-
-  // compute final TDEE display (goal adjustment)
-  let finalTdee = Number(tdee) || 2000;
-  if (goal === "lose") finalTdee = Math.max(1000, finalTdee - 300);
-  if (goal === "gain") finalTdee = finalTdee + 300;
-  document.getElementById("tdeeText").innerText = finalTdee;
-  document.getElementById("tdeeInput").value = tdee || "";
+function applyUrlParamsToForm(){
+  const p = new URLSearchParams(window.location.search);
+  const tdee = p.get("tdee"); const age = p.get("age"); const goal = p.get("goal"); const diet = p.get("diet"); const protein = p.get("protein");
+  if(tdee) document.getElementById("tdeeInput").value = tdee;
+  if(age) document.getElementById("ageInput").value = age;
+  if(goal) document.getElementById("goalSelect").value = goal;
+  if(diet) document.getElementById("dietSelect").value = diet;
+  if(protein) document.getElementById("proteinSelect").value = protein;
 }
-document.addEventListener("DOMContentLoaded", readUrlParamsToForm);
-</script>
-<script>
-/**********************************************************************
- PART 3/3
- - Rendering the plan
- - Lock/unlock days
- - Meal click → USDA popup → replacement
- - Manual USDA search
- - Save/load/overwrite/delete
- - Tracking progress
-**********************************************************************/
 
-/* ============================================================
-   Global state
-============================================================ */
-let CURRENT_PLAN = null;  // the generated or loaded plan
-let START_DATE = null;    // when user accepted plan
-let TODAY_INDEX = 0;      // 0-based index: day1 = index 0
-
-/* ============================================================
-   Render the plan into #mainInner
-============================================================ */
-function renderPlan() {
-  if (!CURRENT_PLAN) return;
-
+// Render plan with interactive grams input for unlocked day
+function renderPlan(plan, startDateISO){
   const container = document.getElementById("mainInner");
   container.innerHTML = "";
-
+  const startDate = startDateISO ? new Date(startDateISO) : null;
   const now = new Date();
-  const savedStart = START_DATE ? new Date(START_DATE) : null;
-  let unlockIndex = 0;
+  let unlocked = 0;
+  if(startDate){
+    const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
+    unlocked = Math.max(0, Math.min(6, days));
+  } else unlocked = 0;
 
-  if (savedStart) {
-    const diff = now.getTime() - savedStart.getTime();
-    unlockIndex = Math.floor(diff / (24 * 60 * 60 * 1000));
-    if (unlockIndex < 0) unlockIndex = 0;
-    if (unlockIndex > 6) unlockIndex = 6;
-  }
-
-  TODAY_INDEX = unlockIndex;
-
-  CURRENT_PLAN.forEach((dayObj, idx) => {
-    const dayNum = dayObj.day;
-    const isLocked = idx > unlockIndex;
-
-    const card = document.createElement("div");
-    card.className = "day-card card";
-    card.style.position = "relative";
-
-    // Header
-    const header = document.createElement("div");
-    header.className = "day-header";
-    header.innerHTML = `
-      <strong>Day ${dayNum}</strong>
-      <span>${isLocked ? "🔒 Locked" : "🔥 Unlocked"}</span>
-    `;
+  plan.forEach((d, idx) => {
+    const card = document.createElement("div"); card.className = "day-card card";
+    const isLocked = idx > unlocked;
+    const header = document.createElement("div"); header.className="day-header";
+    header.innerHTML = `<div><strong>Day ${d.day}</strong></div><div class="muted-small">${isLocked ? "Locked" : "Unlocked (You can edit portions)"}</div>`;
     card.appendChild(header);
 
-    // Meals
-    const mealsWrap = document.createElement("div");
-    mealsWrap.className = "meals";
+    const mealsWrap = document.createElement("div"); mealsWrap.className = "meals";
 
-    ["breakfast", "lunch", "dinner", "snack"].forEach(type => {
-      const meal = dayObj[type];
+    // Breakfast (single)
+    const b = document.createElement("div"); b.className="meal";
+    b.innerHTML = `<b>Breakfast</b><div class="meal-name">${escapeHtml(d.breakfast.text)}</div>
+      <div class="muted-small">Per 100g: ${d.breakfast.kcal_per_100g ? d.breakfast.kcal_per_100g + ' kcal' : '—' }</div>
+      <div style="margin-top:6px;">Weight: <input class="input-grams" type="number" value="${d.breakfast.grams}" data-day="${idx}" data-meal="breakfast"></div>
+      <div class="kcal">~ <span class="kcal-val">${d.breakfast.kcal}</span> kcal</div>`;
+    if(isLocked){ b.classList.add("locked"); }
+    else {
+      // attach event listener for grams input
+      b.querySelector('.input-grams').addEventListener('input', onGramChange);
+      b.addEventListener('click', ()=> openUsdaPopup(idx, 'breakfast', d.breakfast.text));
+    }
+    mealsWrap.appendChild(b);
 
-      const box = document.createElement("div");
-      box.className = "meal";
-      box.dataset.dayIndex = idx;
-      box.dataset.field = type;
-      box.innerHTML = `
-        <b>${type.toUpperCase()}</b>
-        <div>${meal.text}</div>
-        <div class="kcal">~ ${meal.kcal} kcal</div>
-      `;
+    // Lunch (two parts)
+    const l = document.createElement("div"); l.className = "meal";
+    let lunchInner = `<b>Lunch</b><div class="meal-name">${escapeHtml(d.lunch.parts[0].name)} + ${escapeHtml(d.lunch.parts[1].name)}</div>`;
+    lunchInner += `<div class="muted-small">Protein per 100g: ${d.lunch.parts[0].kcal_per_100g ? d.lunch.parts[0].kcal_per_100g + ' kcal' : '—' } &nbsp; Side per 100g: ${d.lunch.parts[1].kcal_per_100g ? d.lunch.parts[1].kcal_per_100g + ' kcal' : '—' }</div>`;
+    lunchInner += `<div style="margin-top:6px;">Protein weight: <input class="input-grams" type="number" value="${d.lunch.parts[0].grams}" data-day="${idx}" data-meal="lunch-protein"></div>`;
+    lunchInner += `<div style="margin-top:6px;">Side weight: <input class="input-grams" type="number" value="${d.lunch.parts[1].grams}" data-day="${idx}" data-meal="lunch-side"></div>`;
+    lunchInner += `<div class="kcal">~ <span class="kcal-val">${d.lunch.kcal}</span> kcal</div>`;
+    l.innerHTML = lunchInner;
+    if(isLocked){ l.classList.add("locked"); }
+    else {
+      l.querySelectorAll('.input-grams').forEach(inp => inp.addEventListener('input', onGramChange));
+      l.addEventListener('click', (e)=>{
+        // avoid triggering search when clicking input
+        if(e.target.tagName.toLowerCase() === 'input') return;
+        openUsdaPopup(idx, 'lunch', d.lunch.text);
+      });
+    }
+    mealsWrap.appendChild(l);
 
-      if (!isLocked) {
-        box.addEventListener("click", () => {
-          openUsdaPopup(idx, type, meal.text);
-        });
-      } else {
-        box.classList.add("locked");
-      }
+    // Dinner
+    const di = document.createElement("div"); di.className="meal";
+    let dinnerInner = `<b>Dinner</b><div class="meal-name">${escapeHtml(d.dinner.parts[0].name)} + ${escapeHtml(d.dinner.parts[1].name)}</div>`;
+    dinnerInner += `<div class="muted-small">Protein per 100g: ${d.dinner.parts[0].kcal_per_100g ? d.dinner.parts[0].kcal_per_100g + ' kcal' : '—' } &nbsp; Side per 100g: ${d.dinner.parts[1].kcal_per_100g ? d.dinner.parts[1].kcal_per_100g + ' kcal' : '—' }</div>`;
+    dinnerInner += `<div style="margin-top:6px;">Protein weight: <input class="input-grams" type="number" value="${d.dinner.parts[0].grams}" data-day="${idx}" data-meal="dinner-protein"></div>`;
+    dinnerInner += `<div style="margin-top:6px;">Side weight: <input class="input-grams" type="number" value="${d.dinner.parts[1].grams}" data-day="${idx}" data-meal="dinner-side"></div>`;
+    dinnerInner += `<div class="kcal">~ <span class="kcal-val">${d.dinner.kcal}</span> kcal</div>`;
+    di.innerHTML = dinnerInner;
+    if(isLocked){ di.classList.add("locked"); }
+    else {
+      di.querySelectorAll('.input-grams').forEach(inp => inp.addEventListener('input', onGramChange));
+      di.addEventListener('click', (e)=> { if(e.target.tagName.toLowerCase() === 'input') return; openUsdaPopup(idx, 'dinner', d.dinner.text); });
+    }
+    mealsWrap.appendChild(di);
 
-      mealsWrap.appendChild(box);
-    });
+    // Snack
+    const s = document.createElement("div"); s.className="meal";
+    s.innerHTML = `<b>Snack</b><div class="meal-name">${escapeHtml(d.snack.text)}</div>
+      <div class="muted-small">Per 100g: ${d.snack.kcal_per_100g ? d.snack.kcal_per_100g + ' kcal' : '—' }</div>
+      <div style="margin-top:6px;">Weight: <input class="input-grams" type="number" value="${d.snack.grams}" data-day="${idx}" data-meal="snack"></div>
+      <div class="kcal">~ <span class="kcal-val">${d.snack.kcal}</span> kcal</div>`;
+    if(isLocked){ s.classList.add("locked"); }
+    else {
+      s.querySelector('.input-grams').addEventListener('input', onGramChange);
+      s.addEventListener('click', ()=> openUsdaPopup(idx, 'snack', d.snack.text));
+    }
+    mealsWrap.appendChild(s);
 
     card.appendChild(mealsWrap);
 
-    // Locked overlay
-    if (isLocked) {
-      const overlay = document.createElement("div");
-      overlay.className = "lock-overlay";
-      overlay.innerHTML = `<div class="lock-badge">Unlocks tomorrow</div>`;
+    // day summary (only for unlocked day show totals)
+    const summary = document.createElement("div"); summary.className = "day-summary";
+    const totalKcal = (d.breakfast.kcal) + (d.lunch.kcal) + (d.dinner.kcal) + (d.snack.kcal);
+    summary.innerHTML = `<div class="muted-small">Total for day: <strong class="day-total">${totalKcal}</strong> kcal</div>
+      <div class="muted-small">Target (TDEE): <strong class="day-target">${d.meta.tdee}</strong> kcal</div>
+      <div class="muted-small">Difference: <strong class="day-diff">${totalKcal - d.meta.tdee}</strong> kcal</div>`;
+    card.appendChild(summary);
+
+    // if locked overlay
+    if(isLocked){
+      const overlay = document.createElement("div"); overlay.className = "lock-overlay";
+      const unlockDate = startDate ? new Date(Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()) + (idx*86400000)) : null;
+      const badgeText = unlockDate ? `Unlocks: ${unlockDate.toLocaleDateString()}` : `Locked`;
+      overlay.innerHTML = `<div class="lock-badge">${badgeText}</div>`;
       card.appendChild(overlay);
     }
 
@@ -720,261 +609,345 @@ function renderPlan() {
   });
 }
 
-/* ============================================================
-   USDA Popup for replacing meals
-============================================================ */
-function openUsdaPopup(dayIndex, field, queryText) {
+// handle grams input change
+function onGramChange(e){
+  e.stopPropagation();
+  const input = e.target;
+  const dayIdx = Number(input.dataset.day);
+  const mealKey = input.dataset.meal; // breakfast, lunch-protein, lunch-side, dinner-protein, dinner-side, snack
+  // load stored plan
+  const stored = loadPlan();
+  if(!stored || !stored.plan) return;
+  const plan = stored.plan;
+  const p = plan[dayIdx];
+  if(!p) return;
+
+  const v = Math.max(1, Math.round(Number(input.value) || 0)); // ensure >=1
+  if(mealKey === "breakfast"){
+    p.breakfast.grams = v;
+    const per100 = p.breakfast.kcal_per_100g || p.breakfast.kcal || 120;
+    p.breakfast.kcal = Math.round((per100) * (v/100));
+  } else if(mealKey === "snack"){
+    p.snack.grams = v;
+    const per100 = p.snack.kcal_per_100g || p.snack.kcal || 100;
+    p.snack.kcal = Math.round((per100) * (v/100));
+  } else if(mealKey === "lunch-protein"){
+    p.lunch.parts[0].grams = v;
+    const per100 = p.lunch.parts[0].kcal_per_100g || p.lunch.parts[0].kcal || 150;
+    p.lunch.parts[0].kcal = Math.round(per100 * (v/100));
+    p.lunch.kcal = p.lunch.parts[0].kcal + p.lunch.parts[1].kcal;
+  } else if(mealKey === "lunch-side"){
+    p.lunch.parts[1].grams = v;
+    const per100 = p.lunch.parts[1].kcal_per_100g || p.lunch.parts[1].kcal || 100;
+    p.lunch.parts[1].kcal = Math.round(per100 * (v/100));
+    p.lunch.kcal = p.lunch.parts[0].kcal + p.lunch.parts[1].kcal;
+  } else if(mealKey === "dinner-protein"){
+    p.dinner.parts[0].grams = v;
+    const per100 = p.dinner.parts[0].kcal_per_100g || p.dinner.parts[0].kcal || 150;
+    p.dinner.parts[0].kcal = Math.round(per100 * (v/100));
+    p.dinner.kcal = p.dinner.parts[0].kcal + p.dinner.parts[1].kcal;
+  } else if(mealKey === "dinner-side"){
+    p.dinner.parts[1].grams = v;
+    const per100 = p.dinner.parts[1].kcal_per_100g || p.dinner.parts[1].kcal || 100;
+    p.dinner.parts[1].kcal = Math.round(per100 * (v/100));
+    p.dinner.kcal = p.dinner.parts[0].kcal + p.dinner.parts[1].kcal;
+  }
+
+  // save and re-render
+  savePlan(plan, loadPlan().startDate);
+  renderPlan(plan, loadPlan().startDate);
+}
+
+/* ===========================
+   USDA Popup + Show all + Replace
+   =========================== */
+let currentEditing = { dayIndex: null, field: null, partIndex: null }; // field: breakfast|lunch|dinner|snack
+
+async function openUsdaPopup(dayIndex, field, currentText){
+  currentEditing = { dayIndex, field };
   const popup = document.getElementById("usdaPopup");
   const box = document.getElementById("usdaBox");
   box.innerHTML = `
-    <h3>USDA Search</h3>
-    <p>Meal: <strong>${field.toUpperCase()}</strong></p>
-    <input id="popupSearchInput" value="${queryText}" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;">
-    <button id="popupSearchBtn" class="btn" style="margin-top:8px;">Search</button>
-    <div id="popupResults" style="margin-top:14px;"></div>
-    <button onclick="closeUsdaPopup()" class="btn secondary" style="margin-top:10px;">Close</button>
+    <h3>Search USDA — Replace ${escapeHtml(field)}</h3>
+    <div style="margin-top:8px;"><input id="popupSearchInput" value="${escapeHtml(currentText)}" style="width:100%;padding:8px;border-radius:8px;border:1px solid #ddd;"></div>
+    <div style="margin-top:8px;text-align:right;"><button id="popupSearchBtn" class="btn">Search</button></div>
+    <div id="popupResults" style="margin-top:12px;max-height:420px;overflow:auto;"></div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;">
+      <button id="popupShowAll" class="btn ghost">Show all results</button>
+      <button id="popupClose" class="btn secondary">Close</button>
+    </div>
   `;
-
   popup.style.display = "flex";
-
-  document.getElementById("popupSearchBtn").onclick = async () => {
+  document.getElementById("popupClose").onclick = ()=> { popup.style.display = "none"; currentEditing = {dayIndex:null,field:null}; };
+  document.getElementById("popupSearchBtn").onclick = async ()=>{
+    const q = document.getElementById("popupSearchInput").value.trim();
+    const resBox = document.getElementById("popupResults");
+    resBox.innerHTML = "Searching...";
+    const results = await searchNutrition(q);
+    renderUsdaResultList(results, resBox, true);
+  };
+  document.getElementById("popupShowAll").onclick = async ()=>{
     const q = document.getElementById("popupSearchInput").value.trim();
     const results = await searchNutrition(q);
-    renderUsdaResults(results, dayIndex, field);
+    openUsdaAllModal(results, q);
   };
+  // initial search
+  const initRes = await searchNutrition(currentText);
+  renderUsdaResultList(initRes, document.getElementById("popupResults"), true);
 }
 
-function closeUsdaPopup() {
-  document.getElementById("usdaPopup").style.display = "none";
+function renderUsdaResultList(results, containerEl, allowChoose){
+  containerEl.innerHTML = "";
+  if(!results || !results.length){ containerEl.innerHTML = "<div class='muted-small'>No matches.</div>"; return; }
+  results.slice(0,12).forEach(it=>{
+    const div = document.createElement("div"); div.style.padding="10px"; div.style.borderBottom="1px solid #eee"; div.style.cursor="pointer";
+    const kcalText = it.kcal_per_100g ? `${it.kcal_per_100g} kcal/100g` : "kcal unknown";
+    div.innerHTML = `<div><strong>${escapeHtml(it.name)}</strong></div><div class="muted-small">${kcalText}</div>`;
+    if(allowChoose){
+      div.onclick = ()=> {
+        applyReplacementToPlan(currentEditing.dayIndex, currentEditing.field, it);
+        document.getElementById("usdaPopup").style.display = "none";
+      };
+    }
+    containerEl.appendChild(div);
+  });
+  if(results.length > 12){
+    const more = document.createElement("div"); more.style.textAlign="center"; more.style.padding="10px";
+    more.innerHTML = `<button class="btn ghost" id="moreBtn">Show all ${results.length} results</button>`;
+    containerEl.appendChild(more);
+    more.querySelector("#moreBtn").onclick = ()=> openUsdaAllModal(results, "");
+  }
 }
 
-function renderUsdaResults(list, dayIndex, field) {
-  const box = document.getElementById("popupResults");
-  box.innerHTML = "";
+function openUsdaAllModal(results, q){
+  const modal = document.getElementById("usdaAllModal");
+  const box = document.getElementById("usdaAllBox");
+  let html = `<h3>All results for "${escapeHtml(q)}"</h3><div style="max-height:60vh;overflow:auto;margin-top:10px;">`;
+  if(!results || !results.length) html += `<div class="muted-small">No results</div>`;
+  else results.forEach(it => { const kcalText = it.kcal_per_100g ? `${it.kcal_per_100g} kcal/100g` : "kcal unknown"; html += `<div style="padding:10px;border-bottom:1px solid #eee;cursor:pointer;" data-name="${escapeHtml(it.name)}"><strong>${escapeHtml(it.name)}</strong><div class="muted-small">${kcalText}</div></div>`; });
+  html += `</div><div style="text-align:right;margin-top:12px;"><button id="closeAll" class="btn secondary">Close</button></div>`;
+  box.innerHTML = html; modal.style.display = "flex";
+  box.querySelectorAll('div[style]').forEach(div => {
+    const txt = div.getAttribute('data-name');
+    if(!txt) return;
+    div.addEventListener('click', ()=> {
+      // find object by name
+      const matched = results.find(r => r.name === txt);
+      if(matched) { applyReplacementToPlan(currentEditing.dayIndex, currentEditing.field, matched); modal.style.display = "none"; document.getElementById("usdaPopup").style.display = "none"; }
+    });
+  });
+  document.getElementById("closeAll").onclick = ()=> modal.style.display = "none";
+}
 
-  if (!list.length) {
-    box.innerHTML = `<div>No matches found.</div>`;
-    return;
+// apply replacement: replace the relevant meal or part and recalc grams to match meal target
+function applyReplacementToPlan(dayIndex, field, usdaItem){
+  const stored = loadPlan();
+  if(!stored || !stored.plan) { alert("No saved plan. Accept a plan first."); return; }
+  const plan = stored.plan;
+  const p = plan[dayIndex];
+  if(!p) return;
+
+  // get kcal per100g from usdaItem
+  const per100 = usdaItem.kcal_per_100g || usdaItem.kcal_per_100 || usdaItem.kcal || null;
+  const tdee = p.meta.tdee;
+
+  // compute meal target based on splits in meta
+  const splits = p.meta.splits || DEFAULT_SPLITS;
+  let mealTarget = 0;
+  if(field === "breakfast") mealTarget = Math.round(tdee * splits.breakfast);
+  else if(field === "lunch") mealTarget = Math.round(tdee * splits.lunch);
+  else if(field === "dinner") mealTarget = Math.round(tdee * splits.dinner);
+  else if(field === "snack") mealTarget = Math.round(tdee * splits.snack);
+
+  if(field === "breakfast"){
+    const grams = gramsForTarget(per100 || 120, mealTarget);
+    p.breakfast = { text: usdaItem.name, kcal_per_100g: per100, grams, kcal: Math.round((per100||120)*(grams/100)), source: usdaItem.raw || null };
+  } else if(field === "snack"){
+    const grams = gramsForTarget(per100 || 100, mealTarget);
+    p.snack = { text: usdaItem.name, kcal_per_100g: per100, grams, kcal: Math.round((per100||100)*(grams/100)), source: usdaItem.raw || null };
+  } else if(field === "lunch"){
+    // replace protein with usdaItem and keep existing side but recalc grams
+    const side = p.lunch.parts[1];
+    const sidePer100 = side.kcal_per_100g || side.kcal || 100;
+    // allocate meal target -> 65% protein, 35% side
+    const protTarget = Math.round(mealTarget * 0.65);
+    const sideTarget = Math.round(mealTarget * 0.35);
+    const protGrams = gramsForTarget(per100 || 180, protTarget);
+    const sideGrams = gramsForTarget(sidePer100 || 120, sideTarget);
+    p.lunch.parts[0] = { type:"protein", name: usdaItem.name, kcal_per_100g: per100, grams: protGrams, kcal: Math.round((per100||180)*(protGrams/100)), source: usdaItem.raw || null };
+    p.lunch.parts[1] = { type:"side", name: side.name, kcal_per_100g: sidePer100, grams: sideGrams, kcal: Math.round((sidePer100||120)*(sideGrams/100)), source: side.source || null };
+    p.lunch.kcal = p.lunch.parts[0].kcal + p.lunch.parts[1].kcal;
+    p.lunch.text = p.lunch.parts[0].name + " + " + p.lunch.parts[1].name;
+  } else if(field === "dinner"){
+    // same as lunch
+    const side = p.dinner.parts[1];
+    const sidePer100 = side.kcal_per_100g || side.kcal || 100;
+    const protTarget = Math.round(mealTarget * 0.65);
+    const sideTarget = Math.round(mealTarget * 0.35);
+    const protGrams = gramsForTarget(per100 || 180, protTarget);
+    const sideGrams = gramsForTarget(sidePer100 || 120, sideTarget);
+    p.dinner.parts[0] = { type:"protein", name: usdaItem.name, kcal_per_100g: per100, grams: protGrams, kcal: Math.round((per100||180)*(protGrams/100)), source: usdaItem.raw || null };
+    p.dinner.parts[1] = { type:"side", name: side.name, kcal_per_100g: sidePer100, grams: sideGrams, kcal: Math.round((sidePer100||120)*(sideGrams/100)), source: side.source || null };
+    p.dinner.kcal = p.dinner.parts[0].kcal + p.dinner.parts[1].kcal;
+    p.dinner.text = p.dinner.parts[0].name + " + " + p.dinner.parts[1].name;
   }
 
-  list.slice(0, 25).forEach(item => {
-    const row = document.createElement("div");
-    row.style.padding = "8px";
-    row.style.borderBottom = "1px solid #eee";
-    row.style.cursor = "pointer";
+  // save and re-render
+  savePlan(plan, stored.startDate);
+  renderPlan(plan, stored.startDate);
+  updateSavedInfo();
+  alert("Meal updated and portion weights recalculated.");
+}
 
-    const kcal = item.kcal ? `${Math.round(item.kcal)} kcal` : "Unknown kcal";
+/* ===========================
+   PDF Export for Current Day (jsPDF)
+   =========================== */
+async function exportCurrentDayToPDF(){
+  // find unlocked day index
+  const stored = loadPlan();
+  if(!stored || !stored.plan){ alert("No saved plan to export."); return; }
+  const startDate = new Date(stored.startDate);
+  const now = new Date();
+  const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
+  const unlocked = Math.max(0, Math.min(6, days));
+  const dayObj = stored.plan[unlocked];
+  if(!dayObj){ alert("No plan for today."); return; }
 
-    row.innerHTML = `
-      <div><strong>${item.name}</strong></div>
-      <div class="muted-small">${item.serving}</div>
-      <div class="muted-small">${kcal}</div>
-    `;
+  // compose PDF content
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:"pt", format:"a4" });
+  const margin = 40; let y = 50;
+  doc.setFontSize(14); doc.text("Convert Labs — Daily Meal Plan", margin, y); y+=20;
+  doc.setFontSize(11); doc.text(`Date: ${new Date().toLocaleString()}`, margin, y); y+=18;
+  doc.setFontSize(12); doc.text(`Target (TDEE): ${dayObj.meta.tdee} kcal`, margin, y); y+=18;
+  doc.setFontSize(12); doc.text(`Day ${dayObj.day}`, margin, y); y+=18;
+  doc.setFontSize(11);
 
-    row.onclick = () => {
-      CURRENT_PLAN[dayIndex][field].text = item.name;
-      CURRENT_PLAN[dayIndex][field].kcal = item.kcal ? Math.round(item.kcal) : CURRENT_PLAN[dayIndex][field].kcal;
-      CURRENT_PLAN[dayIndex][field].isCustom = true;
+  // breakfast
+  doc.setFont(undefined,"bold"); doc.text("Breakfast:", margin, y); doc.setFont(undefined,"normal");
+  doc.text(`${dayObj.breakfast.text} — ${dayObj.breakfast.grams} g — ${dayObj.breakfast.kcal} kcal`, margin+10, y+16); y+=34;
+  // lunch parts
+  doc.setFont(undefined,"bold"); doc.text("Lunch:", margin, y); doc.setFont(undefined,"normal");
+  dayObj.lunch.parts.forEach(p => { doc.text(`${p.name} — ${p.grams} g — ${p.kcal} kcal`, margin+10, y+16); y+=18; });
+  y+=6;
+  // dinner
+  doc.setFont(undefined,"bold"); doc.text("Dinner:", margin, y); doc.setFont(undefined,"normal");
+  dayObj.dinner.parts.forEach(p => { doc.text(`${p.name} — ${p.grams} g — ${p.kcal} kcal`, margin+10, y+16); y+=18; });
+  y+=6;
+  // snack
+  doc.setFont(undefined,"bold"); doc.text("Snack:", margin, y); doc.setFont(undefined,"normal");
+  doc.text(`${dayObj.snack.text} — ${dayObj.snack.grams} g — ${dayObj.snack.kcal} kcal`, margin+10, y+16); y+=30;
 
-      savePlanState();
-      renderPlan();
-      closeUsdaPopup();
-    };
+  const total = dayObj.breakfast.kcal + dayObj.lunch.kcal + dayObj.dinner.kcal + dayObj.snack.kcal;
+  doc.setFont(undefined,"bold"); doc.text(`Total kcal: ${total}`, margin, y); y+=18;
+  const diff = total - dayObj.meta.tdee;
+  doc.setFont(undefined,"normal"); doc.text(`Difference vs TDEE: ${diff} kcal`, margin, y); y+=18;
 
-    box.appendChild(row);
+  // disclaimer
+  doc.setFontSize(9);
+  doc.text("Generated by Convert Labs. This plan uses USDA public data and heuristics; not a substitute for professional advice.", margin, y);
+
+  const filename = `convertlabs-mealplan-day${dayObj.day}-${(new Date()).toISOString().slice(0,10)}.pdf`;
+  doc.save(filename);
+}
+
+/* ===========================
+   Save / Load / UI wiring
+   =========================== */
+document.getElementById("generateBtn").addEventListener("click", async ()=>{
+  const opts = { tdee: Number(document.getElementById("tdeeInput").value) || null, age: Number(document.getElementById("ageInput").value) || 30, goal: document.getElementById("goalSelect").value || "maintain", diet: document.getElementById("dietSelect").value || "normal", protein: document.getElementById("proteinSelect").value || "any" };
+  if(!opts.tdee){ alert("Enter TDEE first."); return; }
+  const plan = await generatePlanAsync(opts);
+  // show preview modal
+  const modal = document.getElementById("previewModal"); const box = document.getElementById("previewBox");
+  let html = `<h3>Preview — 7-day plan</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:10px;">`;
+  plan.forEach(d=>{
+    html += `<div style="background:#fff;padding:8px;border-radius:8px;border:1px solid #eee;">
+      <div style="font-weight:700">Day ${d.day}</div>
+      <div style="margin-top:6px;"><strong>Breakfast</strong><div class="muted-small">${d.breakfast.grams} g — ${d.breakfast.kcal} kcal</div></div>
+      <div style="margin-top:6px;"><strong>Lunch</strong><div class="muted-small">${d.lunch.parts[0].grams} g + ${d.lunch.parts[1].grams} g — ${d.lunch.kcal} kcal</div></div>
+      <div style="margin-top:6px;"><strong>Dinner</strong><div class="muted-small">${d.dinner.parts[0].grams} g + ${d.dinner.parts[1].grams} g — ${d.dinner.kcal} kcal</div></div>
+      <div style="margin-top:6px;"><strong>Snack</strong><div class="muted-small">${d.snack.grams} g — ${d.snack.kcal} kcal</div></div>
+    </div>`;
   });
-}
-
-/* ============================================================
-   Manual USDA Search (right sidebar)
-============================================================ */
-async function doManualSearch() {
-  const q = document.getElementById("manualSearchInput").value.trim();
-  const box = document.getElementById("manualSearchResults");
-  box.innerHTML = "Searching...";
-
-  const results = await searchNutrition(q);
-  if (!results.length) {
-    box.innerHTML = "<div>No results.</div>";
-    return;
-  }
-
-  box.innerHTML = "";
-  results.slice(0, 20).forEach(item => {
-    const kcal = item.kcal ? `${Math.round(item.kcal)} kcal` : "Unknown kcal";
-    const div = document.createElement("div");
-    div.style.padding = "6px";
-    div.style.borderBottom = "1px solid #eee";
-    div.innerHTML = `<strong>${item.name}</strong> <span class="muted-small">(${kcal})</span>`;
-    box.appendChild(div);
-  });
-}
-
-/* ============================================================
-   Save / Load / Delete Saved Plan
-============================================================ */
-function savePlanState() {
-  localStorage.setItem("mealPlanData", JSON.stringify({
-    plan: CURRENT_PLAN,
-    startDate: START_DATE || new Date().toISOString()
-  }));
-}
-
-function loadSavedPlan() {
-  const raw = localStorage.getItem("mealPlanData");
-  if (!raw) return false;
-
-  try {
-    const data = JSON.parse(raw);
-    CURRENT_PLAN = data.plan;
-    START_DATE = data.startDate;
-    renderPlan();
+  html += `</div><div style="margin-top:12px;text-align:right;"><button id="previewAccept" class="btn">Accept & Save</button> <button id="previewClose" class="btn ghost">Close</button></div>`;
+  box.innerHTML = html; modal.style.display = "flex";
+  document.getElementById("previewClose").onclick = ()=> modal.style.display = "none";
+  document.getElementById("previewAccept").onclick = ()=> {
+    savePlan(plan, new Date().toISOString());
+    modal.style.display = "none";
+    renderPlan(plan, loadPlan().startDate);
     updateSavedInfo();
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function deleteSavedPlan() {
-  localStorage.removeItem("mealPlanData");
-  CURRENT_PLAN = null;
-  START_DATE = null;
-  updateSavedInfo();
-  document.getElementById("mainInner").innerHTML = "";
-}
-
-/* ============================================================
-   UI Event: Generate Preview
-============================================================ */
-function generatePreview() {
-  const opt = {
-    tdee: Number(document.getElementById("tdeeInput").value) || 2000,
-    age: Number(document.getElementById("ageInput").value) || 30,
-    goal: document.getElementById("goalSelect").value,
-    diet: document.getElementById("dietSelect").value,
-    protein: document.getElementById("proteinSelect").value
+    alert("Plan accepted and saved.");
   };
-
-  const plan = generatePlan(opt);
-
-  // Preview in modal
-  const modal = document.getElementById("previewModal");
-  const box = document.getElementById("previewBox");
-  box.innerHTML = `<h3>Preview</h3><pre>${JSON.stringify(plan, null, 2)}</pre>`;
-  modal.style.display = "flex";
-}
-
-function closePreview() {
-  document.getElementById("previewModal").style.display = "none";
-}
-
-/* ============================================================
-   Accept & Save Plan
-============================================================ */
-function acceptPlan() {
-  const opt = {
-    tdee: Number(document.getElementById("tdeeInput").value) || 2000,
-    age: Number(document.getElementById("ageInput").value) || 30,
-    goal: document.getElementById("goalSelect").value,
-    diet: document.getElementById("dietSelect").value,
-    protein: document.getElementById("proteinSelect").value
-  };
-
-  CURRENT_PLAN = generatePlan(opt);
-  START_DATE = new Date().toISOString();
-
-  savePlanState();
-  renderPlan();
-  updateSavedInfo();
-}
-
-/* ============================================================
-   Overwrite Plan
-============================================================ */
-function overwritePlan() {
-  const ok = confirm("Overwrite your existing saved plan?");
-  if (!ok) return;
-  acceptPlan();
-}
-
-/* ============================================================
-   Saved plan info box
-============================================================ */
-function updateSavedInfo() {
-  const div = document.getElementById("savedInfo");
-  const raw = localStorage.getItem("mealPlanData");
-
-  if (!raw) {
-    div.innerHTML = "No saved plan.";
-    document.getElementById("deleteBtn").style.display = "none";
-    return;
-  }
-
-  const data = JSON.parse(raw);
-  div.innerHTML = `
-    <div>Plan accepted on: <b>${new Date(data.startDate).toLocaleString()}</b></div>
-    <div>Your plan unlocks one day every 24 hours.</div>
-  `;
-  document.getElementById("deleteBtn").style.display = "";
-}
-
-/* ============================================================
-   Tracking – daily calories eaten
-============================================================ */
-// You can expand this later if needed
-
-/* ============================================================
-   Event Listeners
-============================================================ */
-document.getElementById("generateBtn").onclick = generatePreview;
-document.getElementById("acceptBtn").onclick = acceptPlan;
-document.getElementById("overwriteBtn").onclick = overwritePlan;
-document.getElementById("deleteBtn").onclick = deleteSavedPlan;
-
-document.getElementById("applyTdeeBtn").onclick = () => {
-  const tdee = Number(document.getElementById("tdeeInput").value) || 2000;
-  const goal = document.getElementById("goalSelect").value;
-  let finalTdee = tdee;
-  if (goal === "lose") finalTdee -= 300;
-  if (goal === "gain") finalTdee += 300;
-  document.getElementById("tdeeText").innerText = finalTdee;
-};
-
-document.getElementById("manualSearchBtn").onclick = doManualSearch;
-document.getElementById("previewModal").onclick = (e)=>{ if(e.target.id==="previewModal") closePreview(); };
-document.getElementById("usdaPopup").onclick = (e)=>{ if(e.target.id==="usdaPopup") closeUsdaPopup(); };
-
-/* ============================================================
-   Load saved plan on startup
-============================================================ */
-document.addEventListener("DOMContentLoaded", () => {
-  loadSavedPlan();
 });
+
+document.getElementById("acceptBtn").addEventListener("click", async ()=>{
+  const t = Number(document.getElementById("tdeeInput").value) || null;
+  if(!t){ alert("Enter TDEE first."); return; }
+  const opts = { tdee: t, age: Number(document.getElementById("ageInput").value) || 30, goal: document.getElementById("goalSelect").value || "maintain", diet: document.getElementById("dietSelect").value || "normal", protein: document.getElementById("proteinSelect").value || "any" };
+  const plan = await generatePlanAsync(opts);
+  savePlan(plan, new Date().toISOString());
+  renderPlan(plan, loadPlan().startDate);
+  updateSavedInfo();
+  alert("Plan generated and saved.");
+});
+
+document.getElementById("overwriteBtn").addEventListener("click", ()=> {
+  if(!confirm("Overwrite existing saved plan?")) return;
+  document.getElementById("acceptBtn").click();
+});
+document.getElementById("deleteBtn").addEventListener("click", ()=> {
+  if(!confirm("Delete saved plan?")) return;
+  deletePlan();
+  document.getElementById("mainInner").innerHTML = "";
+  updateSavedInfo();
+  alert("Deleted.");
+});
+
+document.getElementById("manualSearchBtn").addEventListener("click", async ()=>{
+  const q = document.getElementById("manualSearchInput").value.trim();
+  const box = document.getElementById("manualSearchResults"); box.innerHTML = "Searching...";
+  const res = await searchNutrition(q);
+  box.innerHTML = "";
+  if(!res || !res.length){ box.innerHTML = "<div class='muted-small'>No results</div>"; return; }
+  res.slice(0,30).forEach(it=>{
+    const d = document.createElement("div"); d.style.padding="8px"; d.style.borderBottom="1px solid #eee";
+    d.innerHTML = `<strong>${escapeHtml(it.name)}</strong><div class="muted-small">${it.kcal_per_100g ? it.kcal_per_100g + " kcal/100g" : ""}</div>`;
+    box.appendChild(d);
+  });
+});
+
+/* Export PDF button */
+document.getElementById("exportDayBtn").addEventListener("click", exportCurrentDayToPDF);
+
+/* apply url params on load */
+applyUrlParamsToForm();
+
+/* initial saved plan load */
+const stored = loadPlan();
+if(stored && stored.plan){ renderPlan(stored.plan, stored.startDate); updateSavedInfo(); } else {
+  document.getElementById("mainInner").innerHTML = `<div class="card" style="text-align:center;padding:28px;color:var(--muted);">No saved plan. Generate a preview or accept a plan to start the unlock schedule.</div>`;
+}
+
+/* update saved info UI */
+function updateSavedInfo(){
+  const s = loadPlan();
+  const box = document.getElementById("savedInfo");
+  if(!s){ box.innerHTML = "No saved plan."; document.getElementById("deleteBtn").style.display = "none"; return; }
+  document.getElementById("deleteBtn").style.display = "";
+  const sd = new Date(s.startDate);
+  box.innerHTML = `Saved: <strong>${sd.toLocaleString()}</strong><div class="muted-small">Plan unlocks one day every 24 hours from this date.</div>`;
+}
+
+/* modal close on background click */
+document.getElementById("previewModal").addEventListener("click", (e)=>{ if(e.target.id==="previewModal") document.getElementById("previewModal").style.display = "none"; });
+document.getElementById("usdaPopup").addEventListener("click", (e)=>{ if(e.target.id==="usdaPopup") document.getElementById("usdaPopup").style.display = "none"; });
+document.getElementById("usdaAllModal").addEventListener("click", (e)=>{ if(e.target.id==="usdaAllModal") document.getElementById("usdaAllModal").style.display = "none"; });
+
+/* helper */
+function escapeHtml(s){ return (s||"").toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
 </script>
-
-<!-- Footer -->
-<footer class="footer" style="background:#1e40af;color:#fff;text-align:center;padding:2rem 1rem;margin-top:3rem;">
-  <div style="max-width:1100px;margin:0 auto;">
-    <div style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
-    </div>
-
-    <p style="margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
-
-    <nav>
-      <a href="https://convertlabs.online/about.html" style="color:#fff;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#fff;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#fff;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#fff;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#fff;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#fff;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-</footer>
-
-<script src="https://convertlabs.online/script.js" defer></script>
-
 </body>
 </html>
