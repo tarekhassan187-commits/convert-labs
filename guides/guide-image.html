@@ -3,140 +3,317 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Image Format Guide — Convert Labs</title>
-  <meta name="description" content="When to use JPG, PNG, WebP or GIF — quality, transparency, and best use cases for web publishing and storage." />
-  <link rel="canonical" href="https://convertlabs.online/guides/guide-image.html" />
-  <meta property="og:image" content="https://convertlabs.online/assets/guide-image.png" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <title>Image Formats & Optimization — Convert Labs</title>
+  <meta name="description" content="Which image format to use (JPG, PNG, WEBP, SVG), how to resize, compress, and keep quality — practical, modern advice for web and apps." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
-  <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config','G-Z88B03WV7P');</script>
-
+  <!-- Page-specific styles: ensure hero title color correct and responsive banner behavior -->
   <style>
-    :root{--nav-blue:#1e40af;--bg:#f8fafc;--text:#0f172a}
-    html,body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:var(--bg);color:var(--text)}
-    header.navbar{background:var(--nav-blue);color:#fff;padding:10px 0}
-    .nav-container{width:90%;max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between}
-    .brand{display:flex;align-items:center;gap:10px}
-    .brand img{width:36px;height:36px;border-radius:6px;background:#fff;padding:4px}
-    .brand .brand-text{color:#fff;font-weight:700}
-    nav.nav-links ul{display:flex;gap:16px;list-style:none;margin:0;padding:0}
-    nav.nav-links a{color:#f1f5f9;text-decoration:none;font-weight:600}
-    .theme-toggle{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+    :root{
+      --page-max: 980px;
+      --brand-blue: #1e40af;
+      --muted: #58616a;
+      --card-radius: 12px;
+      --card-shadow: 0 10px 30px rgba(18,26,40,0.08);
+      --footer-dark: #0e2440;
+      --text-light: #0b1220;
+      --text-dark: #e6eef8;
+    }
 
-    main{max-width:900px;margin:36px auto;padding:0 16px}
-    .card{background:linear-gradient(145deg,#fff,#f1f7ff);border-radius:12px;padding:26px;box-shadow:0 12px 30px rgba(16,24,40,0.06)}
-    h1{margin-top:0;font-size:28px;color:var(--nav-blue)}
-    .hero-img{display:block;margin:18px auto;border-radius:14px;max-width:880px;width:100%;height:220px;object-fit:cover;box-shadow:0 10px 24px rgba(2,6,23,0.12)}
-    .lead{color:#475569;line-height:1.6}
-    h2{color:#0f172a}
-    ul{padding-left:1.2rem}
-    footer.footer{background:var(--nav-blue);color:#fff;padding:28px 0;margin-top:40px}
-    html.dark .card{background:linear-gradient(145deg,#0f172a,#111827);box-shadow:0 12px 30px rgba(0,0,0,0.7)}
-    html.dark h1{color:#93c5fd}
-    html.dark .lead{color:#cbd5e1}
-    @media(max-width:600px){ .hero-img{height:160px} }
+    /* Header + nav */
+    header.navbar {
+      background: var(--brand-blue);
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      box-shadow: 0 2px 6px rgba(2,6,23,0.08);
+    }
+    .nav-container {
+      width: 92%;
+      max-width: var(--page-max);
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .logo { display:flex; align-items:center; gap:10px; }
+    .logo img { height:36px; width:36px; border-radius:8px; object-fit:cover; }
+    .brand-text { font-weight:700; color:#fff; text-decoration:none; } /* removed underline */
+
+    .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; align-items:center; }
+    .nav-links a { color:#fff; text-decoration:none; padding:6px 4px; font-weight:600; font-size:0.95rem; }
+    .nav-links a:hover { opacity:.95; text-decoration:underline; }
+
+    /* Main layout */
+    main.guide { max-width: var(--page-max); margin: 1.5rem auto; padding: 1rem; }
+
+    /* Hero */
+    .hero {
+      border-radius: var(--card-radius);
+      overflow: visible;
+      background: linear-gradient(180deg, rgba(14,24,49,0.04), rgba(14,24,49,0.01));
+      padding: 18px;
+      margin-bottom: 18px;
+      position: relative;
+      box-shadow: var(--card-shadow);
+    }
+    .hero-title {
+      font-size: 2rem;
+      line-height: 1.05;
+      margin: 6px 0;
+      font-weight: 800;
+      color: var(--text-light);
+    }
+    .hero-sub { color: var(--muted); margin-bottom: 12px; max-width:980px; }
+
+    /* Banner container (modern UI / device screens look) */
+    .banner-wrap {
+      width: 100%;
+      max-width: 980px;
+      margin: 12px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(180deg,#f3f7ff,#eef5ff);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding: 16px;
+      box-shadow: var(--card-shadow);
+    }
+    .banner-wrap img {
+      width: 100%;
+      height: auto;
+      max-height: 420px;
+      object-fit: cover;
+      display:block;
+      border-radius: 10px;
+      background: transparent;
+    }
+
+    /* Content card */
+    .guide-card {
+      background: var(--card-bg, #fff);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      padding: 22px;
+      margin-top: 18px;
+    }
+    .guide-card h2{ color:#1345a8; margin-top:0; }
+    .guide-card h3{ color:#0b2a54; margin-top:1.1rem; }
+    .muted { color: var(--muted); }
+
+    pre.code { background:#0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
+    .cheatsheet { background:#0f172a; color:#e6eef8; padding:12px; border-radius:8px; font-family:mono; }
+
+    footer.footer { background: var(--brand-blue); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem; }
+
+    /* Dark-mode overrides (uses html.dark) */
+    html.dark .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color: var(--text-dark); }
+    html.dark .hero-title { color: var(--text-dark); }
+    html.dark .hero-sub { color: #b9c7db; }
+    html.dark .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
+    html.dark .guide-card { background: #07121c; color: #dbeaf8; box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
+    html.dark pre.code { background:#07121c; color:#cfe9ff; }
+    html.dark .muted { color:#94a3b8; }
+    html.dark footer.footer { background: var(--footer-dark); }
+
+    /* Responsive */
+    @media (max-width:720px){
+      .hero-title { font-size:1.6rem; }
+      .banner-wrap img { max-height: 240px; object-position:center top; }
+      .nav-container { width:94%; }
+    }
   </style>
 </head>
-<body>
-  <header class="navbar">
+<body class="theme-transition">
+  <!-- Header -->
+  <header class="navbar" role="banner">
     <div class="nav-container">
-      <a class="brand" href="https://convertlabs.online/index.html">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs">
-        <span class="brand-text">Convert Labs</span>
-      </a>
-      <nav class="nav-links" aria-label="Primary">
+      <div class="logo" aria-hidden="false">
+        <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo" />
+          <span class="brand-text">Convert Labs</span>
+        </a>
+      </div>
+
+      <nav aria-label="Main navigation" class="nav-links">
         <ul>
           <li><a href="https://convertlabs.online/index.html">Home</a></li>
           <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html" class="active">Guides</a></li>
+          <li><a href="https://convertlabs.online/guides.html">Guides</a></li>
           <li><a href="https://convertlabs.online/about.html">About</a></li>
           <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
         </ul>
       </nav>
-      <button id="themeToggle" class="theme-toggle" title="Toggle theme">🌙</button>
+
+      <button id="themeToggle" class="theme-toggle" title="Switch theme" aria-label="Switch theme" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">🌙</button>
     </div>
   </header>
 
-  <main>
-    <div class="card">
-      <h1>Image Format Conversion Guide</h1>
-      <img class="hero-img" src="https://convertlabs.online/assets/guide-image.png" alt="Image format banner">
-      <p class="lead">When to use JPG, PNG, WebP or GIF — quality vs size, transparency needs, and best formats for web and print.</p>
+  <main class="guide" role="main">
+    <section class="hero" aria-labelledby="page-title">
+      <h1 id="page-title" class="hero-title">Image Formats & Optimization — choose the right one</h1>
+      <p class="hero-sub">Practical, modern guidance for JPG, PNG, WEBP, SVG and AVIF — when to use each format, how to compress without noticeably losing quality, DPI vs pixel dimensions, EXIF handling and exporting workflows for web and apps.</p>
 
-      <h2>Quick rules</h2>
+      <div class="banner-wrap" aria-hidden="false">
+        <!-- Put your Banner (modern UI / device screens) at this path -->
+        <img src="https://convertlabs.online/assets/guide-image.jpg" alt="Phone and laptop editing images — banner" id="guide-banner">
+      </div>
+    </section>
+
+    <article class="guide-card" aria-labelledby="guide-h2">
+      <h2 id="guide-h2">What you'll learn</h2>
+      <p class="muted">This guide explains format trade-offs, compression strategies, resizing rules, DPI misconceptions, EXIF metadata considerations, and practical export recipes for web, mobile apps and print.</p>
+
+      <h3>1. Which format when — quick map</h3>
+      <p>
+        Use <strong>JPG / JPEG</strong> for photos where high compression is acceptable and file size matters. Use <strong>PNG</strong> for images needing lossless quality or transparency (logos, screenshots). Use <strong>WEBP</strong> or <strong>AVIF</strong> for best modern web compression — they often reduce file size significantly with similar quality. Use <strong>SVG</strong> for vector graphics and icons (scales perfectly and stays tiny for simple artwork).
+      </p>
+
+      <h3>2. Compression: perceptual quality over numbers</h3>
+      <p>
+        Don't pick compression ratios by percentage alone. Instead, test visually at target screen sizes. For JPEG, quality values around 75–85 often balance size and visible quality for photos. For WEBP/AVIF, aim for visual parity with a lower byte-count — try 70–80 quality when converting photos. When compressing, preview at the pixel size your users will actually see (not full-resolution on desktop).
+      </p>
+
+      <h3>3. DPI vs pixel dimensions — the common trap</h3>
+      <p>
+        DPI (dots per inch) only matters for print. For screens, pixel dimensions (width × height) determine visual size. A 1200×800 image at 72 DPI will render the same on screen as at 300 DPI; DPI only instructs printers how many pixels per inch to place on physical paper. For web, target pixel dimensions by layout — e.g., hero image 1200px wide for desktop, 720px for tablet, 420px for mobile — and serve responsive images via `srcset`.
+      </p>
+
+      <h3>4. EXIF and privacy</h3>
+      <p>
+        Photos from phones often contain EXIF metadata (camera model, GPS coordinates, timestamps). Strip sensitive EXIF fields before publishing if privacy matters; tools like `exiftool` or automated build steps can remove GPS while keeping orientation. If preserving color profile (ICC) for accurate color in print is important, keep the profile, otherwise removing it can save bytes.
+      </p>
+
+      <h3>5. Resizing & responsive delivery</h3>
+      <p>
+        Always resize to multiple sizes and serve the appropriately sized image to the device. Use `srcset`/`sizes` so browsers pick the best file. Example sizes: 480px (mobile), 768px (tablet), 1200–1600px (desktop). For thumbnails, crop responsibly: center-cropping works for portraits but for product photos consider focal-box crops to keep important details visible.
+      </p>
+
+      <h3>6. Export recipes (practical)</h3>
       <ul>
-        <li>Use JPG for photos (lossy, small size).</li>
-        <li>Use PNG for images needing transparency or sharp text.</li>
-        <li>Use WebP where supported — better compression than JPG/PNG.</li>
-        <li>Use GIF only for simple animations; consider MP4/WebP animated instead.</li>
+        <li><strong>Hero photo (web):</strong> export at 1200–1600px wide, WEBP at quality 70–80, fallback JPEG at 80.</li>
+        <li><strong>Product thumbnail:</strong> 400–600px wide, JPEG at 75; for transparency use PNG for small icons only.</li>
+        <li><strong>Logo / icon:</strong> SVG (if vector) or PNG at exact display size with 2× or 3× variants for high-DPI screens.</li>
       </ul>
 
-      <h2>Optimization tip</h2>
-      <p>Resize to the exact display size and compress — avoid uploading giant images unless necessary.</p>
-    </div>
+      <h3>7. Automation & build-time tips</h3>
+      <p>
+        Integrate image processing into your build pipeline (Sharp, ImageMagick, or cloud transforms). Generate WEBP/AVIF variants at build time, and create `srcset` entries automatically. Avoid serving oversized originals — set conservative maximums and enforce them.
+      </p>
+
+      <h3>8. Accessibility & SEO</h3>
+      <p>
+        Always provide descriptive `alt` text for images (concise, informative). For decorative imagery, use empty `alt=""`. Use meaningful file names (e.g., `blue-thermometer-phone.jpg`) and consider `loading="lazy"` for off-screen images to reduce initial load.
+      </p>
+
+      <h3>9. Small code snippets</h3>
+      <pre class="code">
+// Example: HTML responsive image
+<picture>
+  <source type="image/webp" srcset="/assets/photo-1200.webp 1200w, /assets/photo-800.webp 800w" sizes="(max-width: 800px) 100vw, 1200px">
+  <img src="/assets/photo-1200.jpg" srcset="/assets/photo-1200.jpg 1200w, /assets/photo-800.jpg 800w" alt="Short description" loading="lazy">
+</picture>
+      </pre>
+
+      <h3>10. Final checklist before publishing</h3>
+      <ul>
+        <li>Strip unnecessary EXIF if privacy is a concern.</li>
+        <li>Generate modern formats (WEBP/AVIF) with JPEG/PNG fallbacks.</li>
+        <li>Resize to multiple widths and use `srcset`/`sizes`.</li>
+        <li>Test visually at target sizes and on mobile devices.</li>
+        <li>Use descriptive `alt` text and meaningful filenames.</li>
+      </ul>
+
+      <p style="margin-top:12px;"><em>Tip: keep a small "export presets" document for your site (hero, thumbnail, logo) so every contributor or automation produces consistent assets — that consistency directly improves perceived speed and visual quality.</em></p>
+    </article>
   </main>
 
-  <!-- Footer (exact) -->
-  <!-- Footer -->
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <!-- Footer (kept verbatim for consistency) -->
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
     </div>
+     <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+    <p>✅ <strong>Domain Verification & Email Security</strong></p>
+    <p>
+      Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+      Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+      uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+    </p>
+    <p>
+      Email protection includes:
+      <ul style="list-style:none; padding:0; margin:5px 0;">
+        <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+        <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+        <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+      </ul>
+    </p>
+    <p>
+      These records confirm the legitimacy of our domain and improve deliverability,  
+      search engine trust, and AdSense approval readiness.
+    </p>
+  </section>
+  </footer>
 
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+  <!-- Theme toggle script (html.dark / html.light) -->
+  <script>
+    (function(){
+      const html = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
 
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+      const stored = localStorage.getItem('site-theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialDark = stored ? (stored === 'dark') : prefersDark;
 
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
+      function applyTheme(isDark){
+        if(isDark){
+          html.classList.add('dark');
+          html.classList.remove('light');
+          toggle.textContent = '☀️';
+        } else {
+          html.classList.add('light');
+          html.classList.remove('dark');
+          toggle.textContent = '🌙';
+        }
+        localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+      }
 
-</footer>
+      applyTheme(initialDark);
 
-<script>
-  (function(){
-    const btn = document.getElementById('themeToggle');
-    function setTheme(mode){
-      if(mode === 'dark'){ document.documentElement.classList.add('dark'); document.body.classList.add('dark'); btn.textContent='☀️'; }
-      else { document.documentElement.classList.remove('dark'); document.body.classList.remove('dark'); btn.textContent='🌙'; }
-      try{ localStorage.setItem('cl_theme', mode); }catch(e){}
-    }
-    try{ const saved = localStorage.getItem('cl_theme'); if(saved) setTheme(saved); else setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light'); }catch(e){ setTheme('light');}
-    if(btn) btn.addEventListener('click', ()=> setTheme(document.documentElement.classList.contains('dark') ? 'light':'dark'));
-  })();
-</script>
+      toggle.addEventListener('click', function(){
+        const nowDark = html.classList.contains('dark');
+        applyTheme(!nowDark);
+      });
+
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+          const storedPref = localStorage.getItem('site-theme');
+          if (!storedPref) applyTheme(e.matches);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
