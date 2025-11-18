@@ -211,20 +211,61 @@
 
   <!-- FOOTER: Paste your footer HTML here if you want to use a specific footer. -->
   <!-- (I left a clean default footer below; replace with your site's footer if needed.) -->
-  <footer class="footer">
-    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-      <div class="footer-brand" style="margin-bottom:10px;">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
-      </div>
-      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
-      <nav class="footer-links" style="margin-top:8px;">
-        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a>
-      </nav>
+  <!-- Footer -->
+ <footer class="footer">
+  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+    <div class="footer-brand" style="margin-bottom:10px;">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
     </div>
-  </footer>
+
+    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+<div class="footer-verification" style="text-align:center; font-size:13px; margin-top:10px; transition:color 0.3s ease;">
+  <p class="verify-text" style="margin:0;">
+    🔒 Verified by <strong>Convert Labs</strong> — Secure DNS & Email Authentication 
+    (SPF • DKIM • DMARC Active)
+    <a href="/about.html" style="text-decoration:none; color:var(--verify-link-color);">Learn more</a>
+  </p>
+
+  <style>
+    :root {
+      --verify-text-light: #2448a1;    /* dark blue for light mode */
+      --verify-link-light: #0048ff;    /* bright blue link for light mode */
+      --verify-text-dark: #dbe5ff;     /* soft white for dark mode */
+      --verify-link-dark: #9dc6ff;     /* light blue for dark mode */
+    }
+
+    body.light-mode .verify-text {
+      color: var(--verify-text-light);
+    }
+
+    body.light-mode .verify-text a {
+      color: var(--verify-link-light);
+    }
+
+    body.dark-mode .verify-text {
+      color: var(--verify-text-dark);
+    }
+
+    body.dark-mode .verify-text a {
+      color: var(--verify-link-dark);
+    }
+  </style>
+</div>
+
+    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+    <nav class="footer-links" style="margin-top:8px;">
+      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+    </nav>
+  </div>
+</footer>
 
 <script>
 /* =============================
