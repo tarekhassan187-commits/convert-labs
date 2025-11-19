@@ -88,6 +88,14 @@
             <input id="ageInput" type="number" min="1" max="120" placeholder="30" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;width:100%">
           </div>
           <div>
+            <label style="display:block;font-weight:700;font-size:13px">Goal</label>
+            <select id="goalSelect" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;width:100%">
+              <option value="maintain">Maintain weight</option>
+              <option value="lose">Lose weight</option>
+              <option value="gain">Gain weight</option>
+            </select>
+          </div>
+          <div>
             <label style="display:block;font-weight:700;font-size:13px">Diet</label>
             <select id="dietSelect" style="padding:8px;border-radius:8px;border:1px solid #e6e6e6;width:100%">
               <option value="balanced">Balanced</option>
@@ -499,6 +507,89 @@ async function pickFoodByName(prefName, fallbackPool, opts, usedNames){
 }
 
 /* =============================
+   Get parameters from calorie-guide page
+   ============================= */
+function getParamsFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tdee = urlParams.get('tdee');
+  const age = urlParams.get('age');
+  const goal = urlParams.get('goal');
+  const diet = urlParams.get('diet');
+  const protein = urlParams.get('protein');
+  
+  if (tdee) {
+    document.getElementById('tdeeInput').value = tdee;
+  }
+  if (age) {
+    document.getElementById('ageInput').value = age;
+  }
+  if (goal) {
+    document.getElementById('goalSelect').value = goal;
+  }
+  if (diet) {
+    // Map from calorie-guide values to meal-plan values
+    const dietMap = {
+      'normal': 'balanced',
+      'keto': 'keto', 
+      'carnivore': 'carnivore',
+      'vegetarian': 'vegetarian'
+    };
+    document.getElementById('dietSelect').value = dietMap[diet] || 'balanced';
+  }
+  if (protein) {
+    document.getElementById('proteinSelect').value = protein;
+  }
+}
+
+// Also check localStorage for recent values
+function getParamsFromStorage() {
+  try {
+    const recentTDEE = localStorage.getItem('convertlabs_recent_tdee');
+    const recentAge = localStorage.getItem('convertlabs_recent_age');
+    const recentGoal = localStorage.getItem('convertlabs_recent_goal');
+    const recentDiet = localStorage.getItem('convertlabs_recent_diet');
+    const recentProtein = localStorage.getItem('convertlabs_recent_protein');
+    
+    if (recentTDEE && !document.getElementById('tdeeInput').value) {
+      document.getElementById('tdeeInput').value = recentTDEE;
+    }
+    if (recentAge && !document.getElementById('ageInput').value) {
+      document.getElementById('ageInput').value = recentAge;
+    }
+    if (recentGoal && !document.getElementById('goalSelect').value) {
+      document.getElementById('goalSelect').value = recentGoal;
+    }
+    if (recentDiet && !document.getElementById('dietSelect').value) {
+      document.getElementById('dietSelect').value = recentDiet;
+    }
+    if (recentProtein && !document.getElementById('proteinSelect').value) {
+      document.getElementById('proteinSelect').value = recentProtein;
+    }
+  } catch (e) {
+    console.warn('Could not access localStorage:', e);
+  }
+}
+
+// Save values when generating plan
+function saveCurrentParams() {
+  try {
+    const tdee = document.getElementById('tdeeInput').value;
+    const age = document.getElementById('ageInput').value;
+    const goal = document.getElementById('goalSelect').value;
+    const diet = document.getElementById('dietSelect').value;
+    const protein = document.getElementById('proteinSelect').value;
+    
+    if (tdee) localStorage.setItem('convertlabs_recent_tdee', tdee);
+    if (age) localStorage.setItem('convertlabs_recent_age', age);
+    if (goal) localStorage.setItem('convertlabs_recent_goal', goal);
+    if (diet) localStorage.setItem('convertlabs_recent_diet', diet);
+    if (protein) localStorage.setItem('convertlabs_recent_protein', protein);
+  } catch (e) {
+    console.warn('Could not save to localStorage:', e);
+  }
+}
+
+/* =============================
    Enhanced Plan Generation
    ============================= */
 const DEFAULT_SPLITS = { breakfast:0.25, lunch:0.35, dinner:0.30, snack:0.10 };
@@ -721,6 +812,124 @@ function loadPlan(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e
 function deletePlan(){ localStorage.removeItem(KEY); localStorage.removeItem(KEY+"_track"); }
 
 /* =============================
+   Fixed Input handler for grams changes
+   ============================= */
+let currentEditingInput = null;
+
+function onGramChange(e){
+  const input = e.target;
+  currentEditingInput = input;
+  
+  // Use a debounce to prevent too many rapid updates
+  clearTimeout(input._updateTimeout);
+  input._updateTimeout = setTimeout(() => {
+    applyGramChange(Number(input.dataset.day), input.dataset.meal, input.value);
+    currentEditingInput = null;
+  }, 800); // Wait 800ms after user stops typing
+}
+
+function applyGramChange(dayIdx, mealKey, value) {
+  const stored = loadPlan();
+  if(!stored || !stored.plan) return;
+  const plan = stored.plan;
+  const p = plan[dayIdx];
+  if(!p) return;
+  
+  const v = Math.max(1, Math.round(Number(value) || 0));
+  
+  if(mealKey && mealKey.includes('--part--')){
+    const [mKey, ,pi] = mealKey.split('--');
+    const part = p[mKey].parts[Number(pi)];
+    if(!part) return;
+    part.grams = v;
+    part.kcal = Math.round((part.per100 || 100) * (v/100));
+    part.protein = Math.round((part.protein_per_100g||part.protein||0) * (v/100));
+    part.carbs = Math.round((part.carbs_per_100g||part.carbs||0) * (v/100));
+    part.fat = Math.round((part.fat_per_100g||part.fat||0) * (v/100));
+    p[mKey].kcal = p[mKey].parts.reduce((s,x)=>s+(x.kcal||0),0);
+  }
+  
+  savePlan(plan, loadPlan().startDate);
+  renderPlan(plan, loadPlan().startDate);
+  updateSavedInfo();
+}
+
+/* =============================
+   Enhanced Saved Info with Day Macros
+   ============================= */
+function updateSavedInfo(){ 
+  const s = loadPlan(); 
+  const box = document.getElementById("savedInfo"); 
+  if(!s){ 
+    box.innerHTML = "No saved plan."; 
+    document.getElementById("dayMacros").innerText = "";
+    return; 
+  } 
+  const sd = new Date(s.startDate); 
+  box.innerHTML = `Saved: <strong>${sd.toLocaleString()}</strong><div class="muted-small">Plan unlocks one day every 24 hours from this date.</div>`; 
+  
+  // Calculate and display today's macros in the sidebar
+  updateDayMacrosDisplay();
+}
+
+function updateDayMacrosDisplay() {
+  const stored = loadPlan();
+  if (!stored || !stored.plan) return;
+  
+  const startDate = new Date(stored.startDate);
+  const now = new Date();
+  const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - 
+                          Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
+  const unlocked = Math.max(0, Math.min(6, days));
+  const dayObj = stored.plan[unlocked];
+  
+  if (!dayObj) return;
+  
+  // Calculate totals for the current day
+  const totalKcal = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.kcal||0),0):dayObj.breakfast.kcal) + 
+                   (dayObj.lunch.kcal||0) + 
+                   (dayObj.dinner.kcal||0) + 
+                   (dayObj.snack.kcal||0);
+  
+  const totalProtein = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.protein||0),0):0) + 
+                      (dayObj.lunch.parts? dayObj.lunch.parts.reduce((s,x)=>s+(x.protein||0),0):0) + 
+                      (dayObj.dinner.parts? dayObj.dinner.parts.reduce((s,x)=>s+(x.protein||0),0):0) + 
+                      (dayObj.snack.parts? dayObj.snack.parts.reduce((s,x)=>s+(x.protein||0),0):0);
+  
+  const totalCarbs = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + 
+                    (dayObj.lunch.parts? dayObj.lunch.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + 
+                    (dayObj.dinner.parts? dayObj.dinner.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + 
+                    (dayObj.snack.parts? dayObj.snack.parts.reduce((s,x)=>s+(x.carbs||0),0):0);
+  
+  const totalFat = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.fat||0),0):0) + 
+                  (dayObj.lunch.parts? dayObj.lunch.parts.reduce((s,x)=>s+(x.fat||0),0):0) + 
+                  (dayObj.dinner.parts? dayObj.dinner.parts.reduce((s,x)=>s+(x.fat||0),0):0) + 
+                  (dayObj.snack.parts? dayObj.snack.parts.reduce((s,x)=>s+(x.fat||0),0):0);
+  
+  const diff = totalKcal - dayObj.meta.target;
+  
+  // Display in the sidebar
+  const dayMacrosEl = document.getElementById("dayMacros");
+  dayMacrosEl.innerHTML = `
+    <div style="margin-bottom: 8px;">
+      <div><strong>Day ${dayObj.day}${dayObj.free ? ' (FREE DAY)' : ''}</strong></div>
+      <div class="muted-small">Target: ${dayObj.meta.target} kcal</div>
+    </div>
+    <div style="margin-bottom: 8px;">
+      <div><strong>Total: ${totalKcal} kcal</strong></div>
+      <div class="muted-small" style="color: ${diff > 0 ? '#e74c3c' : diff < 0 ? '#3498db' : '#27ae50'}">
+        ${diff > 0 ? '+' : ''}${diff} kcal
+      </div>
+    </div>
+    <div>
+      <div class="muted-small">Protein: ${Math.round(totalProtein)}g</div>
+      <div class="muted-small">Carbs: ${Math.round(totalCarbs)}g</div>
+      <div class="muted-small">Fat: ${Math.round(totalFat)}g</div>
+    </div>
+  `;
+}
+
+/* =============================
    Rendering: main plan -> UI
    ============================= */
 function renderPlan(plan, startDateISO){
@@ -766,6 +975,17 @@ function renderPlan(plan, startDateISO){
         inp.dataset.day = idx; inp.dataset.meal = `${mealKey}--part--${pi}`;
         inp.addEventListener('click', e=>e.stopPropagation());
         inp.addEventListener('input', onGramChange);
+        inp.addEventListener('blur', function(e) {
+          // If there's a pending timeout, cancel it and apply immediately
+          if (this._updateTimeout) {
+            clearTimeout(this._updateTimeout);
+            applyGramChange(Number(this.dataset.day), this.dataset.meal, this.value);
+          }
+        });
+        inp.addEventListener('focus', function(e) {
+          // Select all text when focusing for easy editing
+          this.select();
+        });
         right.appendChild(inp);
         pDiv.style.display="flex"; pDiv.style.justifyContent="space-between"; pDiv.style.alignItems="center";
         pDiv.appendChild(left); pDiv.appendChild(right);
@@ -813,50 +1033,16 @@ function renderPlan(plan, startDateISO){
 
     card.appendChild(mealsWrap);
 
-    // Day summary
+    // Day summary (simplified since macros are now in sidebar)
     const summary = document.createElement("div"); summary.style.marginTop="12px";
     const totalKcal = (d.breakfast.parts? d.breakfast.parts.reduce((s,x)=>s+(x.kcal||0),0):d.breakfast.kcal) + (d.lunch.kcal||0) + (d.dinner.kcal||0) + (d.snack.kcal||0);
-    const totalProtein = (d.breakfast.parts? d.breakfast.parts.reduce((s,x)=>s+(x.protein||0),0):0) + (d.lunch.parts? d.lunch.parts.reduce((s,x)=>s+(x.protein||0),0):0) + (d.dinner.parts? d.dinner.parts.reduce((s,x)=>s+(x.protein||0),0):0) + (d.snack.parts? d.snack.parts.reduce((s,x)=>s+(x.protein||0),0):0);
-    const totalCarbs = (d.breakfast.parts? d.breakfast.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + (d.lunch.parts? d.lunch.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + (d.dinner.parts? d.dinner.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + (d.snack.parts? d.snack.parts.reduce((s,x)=>s+(x.carbs||0),0):0);
-    const totalFat = (d.breakfast.parts? d.breakfast.parts.reduce((s,x)=>s+(x.fat||0),0):0) + (d.lunch.parts? d.lunch.parts.reduce((s,x)=>s+(x.fat||0),0):0) + (d.dinner.parts? d.dinner.parts.reduce((s,x)=>s+(x.fat||0),0):0) + (d.snack.parts? d.snack.parts.reduce((s,x)=>s+(x.fat||0),0):0);
     summary.innerHTML = `<div class="muted-small">Total: <strong class="day-total">${totalKcal}</strong> kcal</div>
       <div class="muted-small">Target (TDEE): <strong class="day-target">${d.meta.target}</strong> kcal</div>
-      <div class="muted-small">Diff: <strong class="day-diff">${totalKcal - d.meta.target}</strong> kcal</div>
-      <div class="muted-small">Macros — P ${Math.round(totalProtein)} g • C ${Math.round(totalCarbs)} g • F ${Math.round(totalFat)} g</div>`;
+      <div class="muted-small">Diff: <strong class="day-diff">${totalKcal - d.meta.target}</strong> kcal</div>`;
     card.appendChild(summary);
 
     container.appendChild(card);
   });
-}
-
-/* =============================
-   Input handler for grams changes
-   ============================= */
-function onGramChange(e){
-  e.stopPropagation();
-  const input = e.target;
-  const dayIdx = Number(input.dataset.day);
-  const mealKey = input.dataset.meal; // like lunch--part--0
-  const stored = loadPlan();
-  if(!stored || !stored.plan) return;
-  const plan = stored.plan;
-  const p = plan[dayIdx];
-  if(!p) return;
-  const v = Math.max(1, Math.round(Number(input.value) || 0));
-  if(mealKey && mealKey.includes('--part--')){
-    const [mKey, ,pi] = mealKey.split('--');
-    const part = p[mKey].parts[Number(pi)];
-    if(!part) return;
-    part.grams = v;
-    part.kcal = Math.round((part.per100 || 100) * (v/100));
-    part.protein = Math.round((part.protein_per_100g||part.protein||0) * (v/100));
-    part.carbs = Math.round((part.carbs_per_100g||part.carbs||0) * (v/100));
-    part.fat = Math.round((part.fat_per_100g||part.fat||0) * (v/100));
-    p[mKey].kcal = p[mKey].parts.reduce((s,x)=>s+(x.kcal||0),0);
-  }
-  savePlan(plan, loadPlan().startDate);
-  renderPlan(plan, loadPlan().startDate);
-  updateSavedInfo();
 }
 
 /* =============================
@@ -1161,10 +1347,11 @@ async function exportCurrentDayToPDF(){
    Wiring (buttons + theme)
    ============================= */
 document.getElementById("generateBtn").addEventListener("click", async ()=>{
+  saveCurrentParams();
   const opts = {
     tdee: Number(document.getElementById("tdeeInput").value) || null,
     age: Number(document.getElementById("ageInput").value) || 30,
-    goal: document.getElementById("goalSelect") ? document.getElementById("goalSelect").value : 'maintain',
+    goal: document.getElementById("goalSelect").value,
     diet: document.getElementById("dietSelect").value,
     protein: document.getElementById("proteinSelect").value,
     oneProteinPerDay: document.getElementById("oneProteinPerDay").checked,
@@ -1193,12 +1380,13 @@ document.getElementById("generateBtn").addEventListener("click", async ()=>{
 });
 
 document.getElementById("acceptBtn").addEventListener("click", async ()=>{
+  saveCurrentParams();
   const t = Number(document.getElementById("tdeeInput").value) || null;
   if(!t){ alert("Enter TDEE first."); return; }
   const opts = {
     tdee: t,
     age: Number(document.getElementById("ageInput").value) || 30,
-    goal: 'maintain',
+    goal: document.getElementById("goalSelect").value,
     diet: document.getElementById("dietSelect").value,
     protein: document.getElementById("proteinSelect").value,
     oneProteinPerDay: document.getElementById("oneProteinPerDay").checked,
@@ -1224,9 +1412,19 @@ function setTheme(mode){ if(mode==='dark'){ document.documentElement.classList.a
 themeToggle.addEventListener('click', ()=> { const isDark = document.documentElement.classList.contains('dark'); setTheme(isDark? 'light' : 'dark'); });
 
 /* Initial render if saved */
-(function initLoad(){ const stored = loadPlan(); if(stored && stored.plan){ renderPlan(stored.plan, stored.startDate); updateSavedInfo(); } else { document.getElementById("mainInner").innerHTML = `<div class="card" style="text-align:center;padding:28px;color:var(--muted)">No saved plan. Generate a preview or accept a plan to start unlock schedule.</div>`; } })();
-
-function updateSavedInfo(){ const s = loadPlan(); const box = document.getElementById("savedInfo"); if(!s){ box.innerHTML = "No saved plan."; return; } const sd = new Date(s.startDate); box.innerHTML = `Saved: <strong>${sd.toLocaleString()}</strong><div class="muted-small">Plan unlocks one day every 24 hours from this date.</div>`; document.getElementById("dayMacros").innerText = ""; }
+(function initLoad(){ 
+  // Load parameters from URL and storage
+  getParamsFromURL();
+  getParamsFromStorage();
+  
+  const stored = loadPlan(); 
+  if(stored && stored.plan){ 
+    renderPlan(stored.plan, stored.startDate); 
+    updateSavedInfo();
+  } else { 
+    document.getElementById("mainInner").innerHTML = `<div class="card" style="text-align:center;padding:28px;color:var(--muted)">No saved plan. Generate a preview or accept a plan to start unlock schedule.</div>`; 
+  } 
+})();
 
 // Close modals on background click
 document.getElementById("previewModal").addEventListener("click",(e)=>{ if(e.target.id==="previewModal") document.getElementById("previewModal").style.display='none'; });
@@ -1237,4 +1435,4 @@ function escapeHtml(s){ return (s||"").toString().replace(/[&<>"']/g,m=>({'&':'&
 
 </script>
 </body>
-              </html>
+</html>
