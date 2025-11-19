@@ -1567,10 +1567,338 @@ function renderPlan(plan, startDateISO){
   });
 }
 
-// ... (rest of the code for modals, PDF export, etc. remains the same as in your original file)
-// The remaining functions (openAddItemModal, renderUsdaAddList, applyAddToPlan, openReplaceModal, 
-// renderUsdaReplaceList, applyReplacementToPlan, suggestAdjustmentForDayWrapper, suggestAdjustmentForDay, 
-// exportCurrentDayToPDF) should be kept as they were in your original file
+/* =============================
+   Add/Replace Item Modals - FIXED
+   ============================= */
+let currentDayForModal = null;
+let currentMealForModal = null;
+
+function openAddItemModal(dayIdx, mealKey) {
+  currentDayForModal = dayIdx;
+  currentMealForModal = mealKey;
+  
+  const modal = document.getElementById("usdaPopup");
+  const box = document.getElementById("usdaBox");
+  
+  box.innerHTML = `
+    <h3>Add Food Item to ${mealKey.charAt(0).toUpperCase() + mealKey.slice(1)} - Day ${dayIdx + 1}</h3>
+    <div style="margin: 12px 0">
+      <input type="text" id="usdaSearchInput" placeholder="Search foods (e.g., chicken, rice, apple)" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e6e6e6">
+    </div>
+    <div id="usdaResults" style="max-height: 400px; overflow-y: auto; margin: 12px 0"></div>
+    <div style="text-align: right">
+      <button id="usdaClose" class="btn ghost">Cancel</button>
+    </div>
+  `;
+  
+  const searchInput = document.getElementById("usdaSearchInput");
+  searchInput.addEventListener('input', debounce(async (e) => {
+    const query = e.target.value.trim();
+    if (query.length < 2) {
+      document.getElementById("usdaResults").innerHTML = "<div class='muted-small'>Enter at least 2 characters to search</div>";
+      return;
+    }
+    
+    const results = await searchNutrition(query, 20);
+    renderUsdaAddList(results);
+  }, 300));
+  
+  document.getElementById("usdaClose").onclick = () => modal.style.display = 'none';
+  modal.style.display = 'flex';
+  
+  // Initial empty state
+  document.getElementById("usdaResults").innerHTML = "<div class='muted-small'>Enter a food name to search</div>";
+}
+
+function renderUsdaAddList(results) {
+  const container = document.getElementById("usdaResults");
+  
+  if (!results || results.length === 0) {
+    container.innerHTML = "<div class='muted-small'>No foods found. Try a different search term.</div>";
+    return;
+  }
+  
+  let html = '<div style="display: grid; gap: 8px">';
+  
+  results.forEach(item => {
+    const kcal = item.kcal_per_100g || 0;
+    const protein = item.protein_per_100g || 0;
+    const carbs = item.carbs_per_100g || 0;
+    const fat = item.fat_per_100g || 0;
+    
+    html += `
+      <div class="meal-list-item" style="cursor: pointer; padding: 12px" onclick="applyAddToPlan('${escapeHtml(item.name)}', ${kcal}, ${protein}, ${carbs}, ${fat})">
+        <div style="font-weight: 700">${escapeHtml(item.name)}</div>
+        <div class="muted-small">
+          ${kcal} kcal • P: ${protein}g • C: ${carbs}g • F: ${fat}g per 100g
+        </div>
+      </div>
+    `;
+  });
+  
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function applyAddToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g) {
+  const stored = loadPlan();
+  if (!stored || !stored.plan) return;
+  
+  const plan = stored.plan;
+  const day = plan[currentDayForModal];
+  
+  if (!day || !day[currentMealForModal]) return;
+  
+  // Create new food part
+  const newPart = {
+    name: name,
+    per100: kcal_per_100g,
+    grams: 100, // Default to 100g
+    type: "added",
+    source: {
+      name: name,
+      kcal_per_100g: kcal_per_100g,
+      protein_per_100g: protein_per_100g,
+      carbs_per_100g: carbs_per_100g,
+      fat_per_100g: fat_per_100g
+    },
+    kcal: Math.round(kcal_per_100g),
+    protein: Math.round(protein_per_100g),
+    carbs: Math.round(carbs_per_100g),
+    fat: Math.round(fat_per_100g)
+  };
+  
+  // Add to meal parts
+  if (!day[currentMealForModal].parts) {
+    day[currentMealForModal].parts = [];
+  }
+  day[currentMealForModal].parts.push(newPart);
+  
+  // Update meal kcal total
+  day[currentMealForModal].kcal = day[currentMealForModal].parts.reduce((sum, part) => sum + (part.kcal || 0), 0);
+  
+  savePlan(plan, stored.startDate);
+  renderPlan(plan, stored.startDate);
+  updateSavedInfo();
+  
+  // Close modal
+  document.getElementById("usdaPopup").style.display = 'none';
+}
+
+function openReplaceModal(dayIdx, mealKey) {
+  currentDayForModal = dayIdx;
+  currentMealForModal = mealKey;
+  
+  const modal = document.getElementById("usdaPopup");
+  const box = document.getElementById("usdaBox");
+  
+  box.innerHTML = `
+    <h3>Replace Food Item in ${mealKey.charAt(0).toUpperCase() + mealKey.slice(1)} - Day ${dayIdx + 1}</h3>
+    <div style="margin: 12px 0">
+      <input type="text" id="usdaSearchInput" placeholder="Search replacement food (e.g., chicken, rice, apple)" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e6e6e6">
+    </div>
+    <div id="usdaResults" style="max-height: 400px; overflow-y: auto; margin: 12px 0"></div>
+    <div style="text-align: right">
+      <button id="usdaClose" class="btn ghost">Cancel</button>
+    </div>
+  `;
+  
+  const searchInput = document.getElementById("usdaSearchInput");
+  searchInput.addEventListener('input', debounce(async (e) => {
+    const query = e.target.value.trim();
+    if (query.length < 2) {
+      document.getElementById("usdaResults").innerHTML = "<div class='muted-small'>Enter at least 2 characters to search</div>";
+      return;
+    }
+    
+    const results = await searchNutrition(query, 20);
+    renderUsdaReplaceList(results);
+  }, 300));
+  
+  document.getElementById("usdaClose").onclick = () => modal.style.display = 'none';
+  modal.style.display = 'flex';
+  
+  // Initial empty state
+  document.getElementById("usdaResults").innerHTML = "<div class='muted-small'>Enter a food name to search for replacements</div>";
+}
+
+function renderUsdaReplaceList(results) {
+  const container = document.getElementById("usdaResults");
+  
+  if (!results || results.length === 0) {
+    container.innerHTML = "<div class='muted-small'>No foods found. Try a different search term.</div>";
+    return;
+  }
+  
+  let html = '<div style="display: grid; gap: 8px">';
+  
+  results.forEach(item => {
+    const kcal = item.kcal_per_100g || 0;
+    const protein = item.protein_per_100g || 0;
+    const carbs = item.carbs_per_100g || 0;
+    const fat = item.fat_per_100g || 0;
+    
+    html += `
+      <div class="meal-list-item" style="cursor: pointer; padding: 12px" onclick="applyReplacementToPlan('${escapeHtml(item.name)}', ${kcal}, ${protein}, ${carbs}, ${fat})">
+        <div style="font-weight: 700">${escapeHtml(item.name)}</div>
+        <div class="muted-small">
+          ${kcal} kcal • P: ${protein}g • C: ${carbs}g • F: ${fat}g per 100g
+        </div>
+      </div>
+    `;
+  });
+  
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function applyReplacementToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g) {
+  const stored = loadPlan();
+  if (!stored || !stored.plan) return;
+  
+  const plan = stored.plan;
+  const day = plan[currentDayForModal];
+  
+  if (!day || !day[currentMealForModal] || !day[currentMealForModal].parts || day[currentMealForModal].parts.length === 0) return;
+  
+  // Replace the first item in the meal (simplest approach)
+  const firstPart = day[currentMealForModal].parts[0];
+  
+  // Update the first part with new food
+  firstPart.name = name;
+  firstPart.per100 = kcal_per_100g;
+  firstPart.source = {
+    name: name,
+    kcal_per_100g: kcal_per_100g,
+    protein_per_100g: protein_per_100g,
+    carbs_per_100g: carbs_per_100g,
+    fat_per_100g: fat_per_100g
+  };
+  
+  // Recalculate nutrition based on existing grams
+  const ratio = firstPart.grams / 100;
+  firstPart.kcal = Math.round(kcal_per_100g * ratio);
+  firstPart.protein = Math.round(protein_per_100g * ratio);
+  firstPart.carbs = Math.round(carbs_per_100g * ratio);
+  firstPart.fat = Math.round(fat_per_100g * ratio);
+  
+  // Update meal kcal total
+  day[currentMealForModal].kcal = day[currentMealForModal].parts.reduce((sum, part) => sum + (part.kcal || 0), 0);
+  
+  savePlan(plan, stored.startDate);
+  renderPlan(plan, stored.startDate);
+  updateSavedInfo();
+  
+  // Close modal
+  document.getElementById("usdaPopup").style.display = 'none';
+}
+
+/* =============================
+   Suggest Adjustment - FIXED
+   ============================= */
+function suggestAdjustmentForDayWrapper(dayIdx) {
+  const stored = loadPlan();
+  if (!stored || !stored.plan) return;
+  
+  const day = stored.plan[dayIdx];
+  if (!day) return;
+  
+  // Calculate current totals
+  const breakfastKcal = day.breakfast.parts ? day.breakfast.parts.reduce((s,x)=>s+(x.kcal||0),0) : (day.breakfast.kcal||0);
+  const lunchKcal = day.lunch.parts ? day.lunch.parts.reduce((s,x)=>s+(x.kcal||0),0) : (day.lunch.kcal||0);
+  const dinnerKcal = day.dinner.parts ? day.dinner.parts.reduce((s,x)=>s+(x.kcal||0),0) : (day.dinner.kcal||0);
+  const snackKcal = day.snack.parts ? day.snack.parts.reduce((s,x)=>s+(x.kcal||0),0) : (day.snack.kcal||0);
+
+  const totalKcal = breakfastKcal + lunchKcal + dinnerKcal + snackKcal;
+  const target = day.meta.target;
+  const diff = totalKcal - target;
+  
+  let suggestion = "";
+  
+  if (Math.abs(diff) < 50) {
+    suggestion = "Your daily calories are well balanced! No adjustment needed.";
+  } else if (diff > 0) {
+    suggestion = `You're ${diff} kcal over target. Consider reducing portion sizes slightly, especially for higher-calorie items.`;
+  } else {
+    suggestion = `You're ${Math.abs(diff)} kcal under target. Consider increasing portion sizes of nutrient-dense foods.`;
+  }
+  
+  alert(`Day ${dayIdx + 1} Adjustment Suggestion:\n\n${suggestion}`);
+}
+
+/* =============================
+   PDF Export - FIXED
+   ============================= */
+function exportCurrentDayToPDF() {
+  const stored = loadPlan();
+  if (!stored || !stored.plan) {
+    alert("No saved plan to export.");
+    return;
+  }
+  
+  const startDate = new Date(stored.startDate);
+  const now = new Date();
+  const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - 
+                          Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
+  const unlocked = Math.max(0, Math.min(6, days));
+  const day = stored.plan[unlocked];
+  
+  if (!day) {
+    alert("No unlocked day to export.");
+    return;
+  }
+  
+  // Simple text-based export for now (jsPDF integration would be more complex)
+  let content = `Convert Labs - Daily Meal Plan\n`;
+  content += `Day ${day.day}${day.free ? ' (FREE DAY)' : ''}\n`;
+  content += `Target: ${day.meta.target} kcal\n\n`;
+  
+  // Breakfast
+  content += `BREAKFAST (${day.breakfast.kcal || 0} kcal)\n`;
+  if (day.breakfast.parts) {
+    day.breakfast.parts.forEach(part => {
+      content += `- ${part.name}: ${part.grams}g (${part.kcal || 0} kcal)\n`;
+    });
+  }
+  content += '\n';
+  
+  // Lunch
+  content += `LUNCH (${day.lunch.kcal || 0} kcal)\n`;
+  if (day.lunch.parts) {
+    day.lunch.parts.forEach(part => {
+      content += `- ${part.name}: ${part.grams}g (${part.kcal || 0} kcal)\n`;
+    });
+  }
+  content += '\n';
+  
+  // Dinner
+  content += `DINNER (${day.dinner.kcal || 0} kcal)\n`;
+  if (day.dinner.parts) {
+    day.dinner.parts.forEach(part => {
+      content += `- ${part.name}: ${part.grams}g (${part.kcal || 0} kcal)\n`;
+    });
+  }
+  content += '\n';
+  
+  // Snack
+  content += `SNACK (${day.snack.kcal || 0} kcal)\n`;
+  if (day.snack.parts) {
+    day.snack.parts.forEach(part => {
+      content += `- ${part.name}: ${part.grams}g (${part.kcal || 0} kcal)\n`;
+    });
+  }
+  
+  // Create a simple text file download
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `convertlabs-mealplan-day-${day.day}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
 /* =============================
    Wiring (buttons + theme) - FIXED
@@ -1689,11 +2017,35 @@ document.getElementById("acceptBtn").addEventListener("click", async ()=>{
 
 document.getElementById("exportDayBtn").addEventListener("click", exportCurrentDayToPDF);
 
-/* Theme toggle */
+/* Theme toggle - FIXED */
 const themeToggle = document.getElementById('themeToggle');
-function setTheme(mode){ if(mode==='dark'){ document.documentElement.classList.add('dark'); themeToggle.textContent='☀️'; } else { document.documentElement.classList.remove('dark'); themeToggle.textContent='🌙'; } try{ localStorage.setItem('cl_theme', mode); }catch(e){} }
-(function initTheme(){ try{ const saved = localStorage.getItem('cl_theme'); if(saved){ setTheme(saved); return; } const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; setTheme(prefersDark ? 'dark' : 'light'); }catch(e){ setTheme('light'); } })();
-themeToggle.addEventListener('click', ()=> { const isDark = document.documentElement.classList.contains('dark'); setTheme(isDark? 'light' : 'dark'); });
+function setTheme(mode){ 
+  if(mode==='dark'){ 
+    document.documentElement.classList.add('dark'); 
+    themeToggle.textContent='☀️'; 
+  } else { 
+    document.documentElement.classList.remove('dark'); 
+    themeToggle.textContent='🌙'; 
+  } 
+  try{ localStorage.setItem('cl_theme', mode); }catch(e){}
+}
+(function initTheme(){ 
+  try{ 
+    const saved = localStorage.getItem('cl_theme'); 
+    if(saved){ 
+      setTheme(saved); 
+      return; 
+    } 
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; 
+    setTheme(prefersDark ? 'dark' : 'light'); 
+  }catch(e){ 
+    setTheme('light'); 
+  } 
+})();
+themeToggle.addEventListener('click', ()=> { 
+  const isDark = document.documentElement.classList.contains('dark'); 
+  setTheme(isDark? 'light' : 'dark'); 
+});
 
 /* Initial render if saved */
 (function initLoad(){ 
@@ -1723,12 +2075,19 @@ themeToggle.addEventListener('click', ()=> { const isDark = document.documentEle
 document.getElementById("previewModal").addEventListener("click",(e)=>{ if(e.target.id==="previewModal") document.getElementById("previewModal").style.display='none'; });
 document.getElementById("usdaPopup").addEventListener("click",(e)=>{ if(e.target.id==="usdaPopup") document.getElementById("usdaPopup").style.display='none'; });
 
-// small util
+// Utility functions
 function escapeHtml(s){ return (s||"").toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-
-// Include all the remaining modal and helper functions from your original file here
-// (openAddItemModal, renderUsdaAddList, applyAddToPlan, openReplaceModal, renderUsdaReplaceList, 
-// applyReplacementToPlan, suggestAdjustmentForDayWrapper, suggestAdjustmentForDay, exportCurrentDayToPDF)
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
 
 </script>
 </body>
