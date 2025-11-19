@@ -27,15 +27,16 @@
     }
     html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; }
     *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-    header{height:64px;background:var(--brand-2);color:#fff;display:flex;align-items:center;padding:0 20px;position:sticky;top:0;z-index:100}
-    .brand{font-weight:700;display:flex;align-items:center;gap:10px;}
-    .nav-links{display:flex;gap:20px;margin:0 auto;}
-    .nav-links a{color:#fff;text-decoration:none;font-weight:500;padding:8px 12px;border-radius:6px;transition:background-color 0.2s;}
+    header{height:auto;min-height:64px;background:var(--brand-2);color:#fff;display:flex;align-items:center;padding:12px 20px;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:12px;}
+    .brand{font-weight:700;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .nav-links{display:flex;gap:12px;margin:0 auto;flex-wrap:wrap;justify-content:center;}
+    .nav-links a{color:#fff;text-decoration:none;font-weight:500;padding:6px 10px;border-radius:6px;transition:background-color 0.2s;font-size:14px;}
     .nav-links a:hover{background:rgba(255,255,255,0.1);}
     .container{max-width:1180px;margin:22px auto;padding:0 16px}
     .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 8px 24px rgba(12,40,80,0.04);margin-bottom:16px}
     .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-    .btn{background:var(--brand);color:#fff;padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+    .btn{background:var(--brand);color:#fff;padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600;transition:all 0.2s;}
+    .btn:hover{opacity:0.9;transform:translateY(-1px);}
     .btn.ghost{background:transparent;border:1px solid var(--brand);color:var(--brand)}
     .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
     @media(max-width:1000px){.grid{grid-template-columns:1fr}}
@@ -55,11 +56,25 @@
     .modal-back{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:1200;padding:12px}
     .modal-card{width:100%;max-width:980px;max-height:86vh;overflow:auto;background:var(--card);border-radius:12px;padding:16px}
     footer.footer{background:var(--brand-2);color:#fff;padding:20px;text-align:center;margin-top:16px}
+    
+    /* Mobile responsiveness improvements */
+    @media (max-width: 768px) {
+      header { padding: 10px 16px; gap: 8px; }
+      .nav-links { gap: 8px; }
+      .nav-links a { padding: 5px 8px; font-size: 13px; }
+      .brand span { font-size: 14px; }
+      .container { padding: 0 12px; margin: 16px auto; }
+    }
+    
+    @media (max-width: 480px) {
+      .nav-links { gap: 6px; }
+      .nav-links a { padding: 4px 6px; font-size: 12px; }
+      header { padding: 8px 12px; }
+    }
   </style>
 </head>
 <body>
   <header>
-    <div style="flex:1"></div>
     <div class="brand">
       <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
       <span>Convert Labs</span>
@@ -71,8 +86,8 @@
       <a href="https://convertlabs.online/about.html">About</a>
       <a href="https://convertlabs.online/contact.html">Contact</a>
     </nav>
-    <div style="flex:1;display:flex;justify-content:flex-end;">
-      <button id="themeToggle" class="btn ghost">🌙</button>
+    <div style="margin-left:auto;">
+      <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
     </div>
   </header>
 
@@ -1113,15 +1128,91 @@ function updateSavedInfo() {
 }
 
 /* =============================
+   Enhanced URL Parameter Handling - FIXED
+   ============================= */
+function getUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  const result = {};
+  
+  // Get all possible parameters
+  if (params.has('tdee')) result.tdee = params.get('tdee');
+  if (params.has('age')) result.age = params.get('age');
+  if (params.has('goal')) result.goal = params.get('goal');
+  if (params.has('diet')) result.diet = params.get('diet');
+  if (params.has('protein')) result.protein = params.get('protein');
+  
+  return result;
+}
+
+function applyUrlParams() {
+  const urlParams = getUrlParams();
+  
+  if (urlParams.tdee) {
+    document.getElementById('tdeeInput').value = urlParams.tdee;
+  }
+  if (urlParams.age) {
+    document.getElementById('ageInput').value = urlParams.age;
+  }
+  if (urlParams.goal) {
+    document.getElementById('goalSelect').value = urlParams.goal;
+  }
+  if (urlParams.diet) {
+    // FIX: Map "normal" from calorie-guide.html to "balanced" for meal-plan.html
+    const dietValue = urlParams.diet === 'normal' ? 'balanced' : urlParams.diet;
+    document.getElementById('dietSelect').value = dietValue;
+  }
+  if (urlParams.protein) {
+    document.getElementById('proteinSelect').value = urlParams.protein;
+  }
+  
+  // If we have parameters, show a notification
+  if (Object.keys(urlParams).length > 0) {
+    console.log('Applied URL parameters:', urlParams);
+    
+    // Auto-generate preview if we have all required data
+    if (urlParams.tdee && urlParams.age && urlParams.goal && urlParams.diet) {
+      setTimeout(() => {
+        document.getElementById('generateBtn').click();
+      }, 500);
+    }
+  }
+}
+
+/* =============================
+   Theme Management
+   ============================= */
+function initTheme() {
+  const savedTheme = localStorage.getItem('convertlabs-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    document.documentElement.classList.add('dark');
+    document.getElementById('themeToggle').textContent = '☀️';
+  } else {
+    document.documentElement.classList.remove('dark');
+    document.getElementById('themeToggle').textContent = '🌙';
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+}
+
+/* =============================
    Event Handlers
    ============================= */
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize theme
+  initTheme();
+  
   // Theme toggle
   const themeToggle = document.getElementById('themeToggle');
-  themeToggle.addEventListener('click', function() {
-    document.documentElement.classList.toggle('dark');
-    this.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
-  });
+  themeToggle.addEventListener('click', toggleTheme);
+  
+  // Apply URL parameters from calorie-guide.html
+  applyUrlParams();
   
   // Generate Preview button
   const generateBtn = document.getElementById('generateBtn');
@@ -1213,18 +1304,6 @@ document.addEventListener('DOMContentLoaded', function() {
     renderPlan(stored.plan, stored.startDate);
   }
   updateSavedInfo();
-  
-  // Try to get parameters from URL (for integration with calorie-guide.html)
-  const urlParams = new URLSearchParams(window.location.search);
-  const tdee = urlParams.get('tdee');
-  const age = urlParams.get('age');
-  const goal = urlParams.get('goal');
-  const diet = urlParams.get('diet');
-  
-  if (tdee) document.getElementById('tdeeInput').value = tdee;
-  if (age) document.getElementById('ageInput').value = age;
-  if (goal) document.getElementById('goalSelect').value = goal;
-  if (diet) document.getElementById('dietSelect').value = diet;
 });
 
 /* =============================
