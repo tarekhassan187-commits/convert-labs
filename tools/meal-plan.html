@@ -6,27 +6,18 @@
   <title>7-Day Meal Plan — Convert Labs</title>
   <meta name="description" content="Personalized 7-day meal plans built from USDA public-domain nutrition data. Auto macro balancing for Balanced / Keto / Carnivore / Vegetarian plans." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
-  <!-- AdSense & Analytics -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
+  <!-- Google Analytics (gtag) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-Z88B03WV7P');>
-</script>
-     <!-- Breadcrumb JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://convertlabs.online/" },
-      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://convertlabs.online/tools/tools.html" },
-      { "@type": "ListItem", "position": 3, "name": "Calorie Calculator" }
-    ]
-  }
-</script>
+    gtag('config', 'G-Z88B03WV7P');
+  </script>
+
+  <!-- AdSense placeholder (replace with your client id) -->
+  <script data-ad-client="ca-pub-XXXXXXXXXXXX" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
   <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -67,28 +58,10 @@
   <header>
     <div class="brand">Convert Labs — 7-Day Meal Plan (Precision)</div>
     <div style="flex:1"></div>
-     <header class="navbar">
-    <div class="nav-container">
-      <a class="brand" href="/index.html">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:36px;height:36px;border-radius:6px;background:#fff;padding:4px;">
-        <span>Convert Labs</span>
-      </a>
-      
-      <nav class="nav-links" aria-label="Primary">
-        <ul>
-          <li><a href="https://convertlabs.online/index.html">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-      <button id="themeToggle" title="Toggle theme" style="background:transparent;border:none;color:#f8fafc;font-size:20px;cursor:pointer;">🌙</button>
+    <div>
+      <button id="themeToggle" class="btn ghost">🌙</button>
     </div>
-    
-
   </header>
-    
 
   <div class="container">
     <main class="tool-page">
@@ -178,67 +151,13 @@
   <div id="previewModal" class="modal-back"><div class="modal-card" id="previewBox"></div></div>
   <div id="usdaPopup" class="modal-back"><div class="modal-card" id="usdaBox"></div></div>
 
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <footer class="footer">
+    <div style="max-width:1100px;margin:0 auto;text-align:center;padding:8px;">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:28px;height:28px;vertical-align:middle;">
+      <span style="margin-left:8px;font-weight:600;color:#fff">Convert Labs</span>
+      <div style="color:#fff;margin-top:8px">© 2025 Convert Labs. All rights reserved.</div>
     </div>
-
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
-<div class="footer-verification" style="text-align:center; font-size:13px; margin-top:10px; transition:color 0.3s ease;">
-  <p class="verify-text" style="margin:0;">
-    🔒 Verified by <strong>Convert Labs</strong> — Secure DNS & Email Authentication 
-    (SPF • DKIM • DMARC Active)
-    <a href="/about.html" style="text-decoration:none; color:var(--verify-link-color);">Learn more</a>
-  </p>
-
-  <style>
-    :root {
-      --verify-text-light: #2448a1;    /* dark blue for light mode */
-      --verify-link-light: #0048ff;    /* bright blue link for light mode */
-      --verify-text-dark: #dbe5ff;     /* soft white for dark mode */
-      --verify-link-dark: #9dc6ff;     /* light blue for dark mode */
-    }
-
-    body.light-mode .verify-text {
-      color: var(--verify-text-light);
-    }
-
-    body.light-mode .verify-text a {
-      color: var(--verify-link-light);
-    }
-
-    body.dark-mode .verify-text {
-      color: var(--verify-text-dark);
-    }
-
-    body.dark-mode .verify-text a {
-      color: var(--verify-link-dark);
-    }
-  </style>
-</div>
-
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
-
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-</footer>
-
-<style>
-  footer.footer a:hover { 
-    text-decoration: underline; 
-    color: #ffffff; 
-  }
-</style>
+  </footer>
 
 <script>
 /* =============================
