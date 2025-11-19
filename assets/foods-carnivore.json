@@ -1,0 +1,356 @@
+[
+  {
+    "name": "Ribeye Steak (grilled)",
+    "serving": 100,
+    "calories": 291,
+    "protein": 24,
+    "carbs": 0,
+    "fat": 21,
+    "category": "beef",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Striploin Steak",
+    "serving": 100,
+    "calories": 275,
+    "protein": 26,
+    "carbs": 0,
+    "fat": 18,
+    "category": "beef",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Beef Mince 20% Fat (cooked)",
+    "serving": 100,
+    "calories": 254,
+    "protein": 20,
+    "carbs": 0,
+    "fat": 20,
+    "category": "beef",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Beef Liver (fried)",
+    "serving": 100,
+    "calories": 175,
+    "protein": 26,
+    "carbs": 4,
+    "fat": 4,
+    "category": "organ",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Beef Kidney (cooked)",
+    "serving": 100,
+    "calories": 159,
+    "protein": 27,
+    "carbs": 0,
+    "fat": 5,
+    "category": "organ",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Beef Heart (grilled)",
+    "serving": 100,
+    "calories": 179,
+    "protein": 26,
+    "carbs": 0,
+    "fat": 7,
+    "category": "organ",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Lamb Chops",
+    "serving": 100,
+    "calories": 282,
+    "protein": 25,
+    "carbs": 0,
+    "fat": 20,
+    "category": "lamb",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Lamb Shoulder (roasted)",
+    "serving": 100,
+    "calories": 292,
+    "protein": 24,
+    "carbs": 0,
+    "fat": 21,
+    "category": "lamb",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Lamb Liver",
+    "serving": 100,
+    "calories": 140,
+    "protein": 20,
+    "carbs": 3.8,
+    "fat": 4,
+    "category": "organ",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Chicken Thigh (skin-on, roasted)",
+    "serving": 100,
+    "calories": 239,
+    "protein": 25,
+    "carbs": 0,
+    "fat": 15,
+    "category": "poultry",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Chicken Drumstick (roasted)",
+    "serving": 100,
+    "calories": 216,
+    "protein": 27,
+    "carbs": 0,
+    "fat": 11,
+    "category": "poultry",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Chicken Wings (roasted)",
+    "serving": 100,
+    "calories": 254,
+    "protein": 23,
+    "carbs": 0,
+    "fat": 17,
+    "category": "poultry",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Duck Breast (roasted)",
+    "serving": 100,
+    "calories": 337,
+    "protein": 19,
+    "carbs": 0,
+    "fat": 28,
+    "category": "poultry",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Turkey Thigh",
+    "serving": 100,
+    "calories": 208,
+    "protein": 24,
+    "carbs": 0,
+    "fat": 12,
+    "category": "poultry",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Egg (boiled)",
+    "serving": 50,
+    "calories": 78,
+    "protein": 6,
+    "carbs": 0.6,
+    "fat": 5.3,
+    "category": "eggs",
+    "tags": ["breakfast", "dinner"]
+  },
+  {
+    "name": "Scrambled Eggs (with butter)",
+    "serving": 100,
+    "calories": 148,
+    "protein": 10,
+    "carbs": 2,
+    "fat": 11,
+    "category": "eggs",
+    "tags": ["breakfast", "dinner"]
+  },
+
+  {
+    "name": "Salmon (grilled)",
+    "serving": 100,
+    "calories": 208,
+    "protein": 20,
+    "carbs": 0,
+    "fat": 13,
+    "category": "fish",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Sardines in Oil",
+    "serving": 100,
+    "calories": 208,
+    "protein": 25,
+    "carbs": 0,
+    "fat": 11,
+    "category": "fish",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Mackerel (grilled)",
+    "serving": 100,
+    "calories": 305,
+    "protein": 19,
+    "carbs": 0,
+    "fat": 25,
+    "category": "fish",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Shrimp (boiled)",
+    "serving": 100,
+    "calories": 99,
+    "protein": 24,
+    "carbs": 0.2,
+    "fat": 0.3,
+    "category": "fish",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Beef Bone Marrow (roasted)",
+    "serving": 100,
+    "calories": 770,
+    "protein": 7,
+    "carbs": 0,
+    "fat": 84,
+    "category": "fat",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Beef Tallow",
+    "serving": 14,
+    "calories": 126,
+    "protein": 0,
+    "carbs": 0,
+    "fat": 14,
+    "category": "fat",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Duck Fat",
+    "serving": 14,
+    "calories": 135,
+    "protein": 0,
+    "carbs": 0,
+    "fat": 15,
+    "category": "fat",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Ghee",
+    "serving": 14,
+    "calories": 123,
+    "protein": 0,
+    "carbs": 0,
+    "fat": 14,
+    "category": "fat",
+    "tags": ["breakfast", "lunch", "dinner"]
+  },
+
+  {
+    "name": "Beef Broth",
+    "serving": 100,
+    "calories": 13,
+    "protein": 2,
+    "carbs": 0.1,
+    "fat": 0.5,
+    "category": "broth",
+    "tags": ["dinner"]
+  },
+  {
+    "name": "Bone Broth",
+    "serving": 100,
+    "calories": 35,
+    "protein": 9,
+    "carbs": 0,
+    "fat": 0.2,
+    "category": "broth",
+    "tags": ["dinner"]
+  },
+
+  {
+    "name": "Beef Sausage (no fillers)",
+    "serving": 100,
+    "calories": 322,
+    "protein": 16,
+    "carbs": 0,
+    "fat": 28,
+    "category": "processed",
+    "tags": ["breakfast", "lunch"]
+  },
+  {
+    "name": "Beef Burger Patty (100% beef)",
+    "serving": 100,
+    "calories": 254,
+    "protein": 20,
+    "carbs": 0,
+    "fat": 20,
+    "category": "processed",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Turkey Bacon",
+    "serving": 100,
+    "calories": 382,
+    "protein": 29,
+    "carbs": 1.2,
+    "fat": 29,
+    "category": "processed",
+    "tags": ["breakfast", "lunch"]
+  },
+
+  {
+    "name": "Beef Fat Trimmings (cooked)",
+    "serving": 100,
+    "calories": 902,
+    "protein": 6,
+    "carbs": 0,
+    "fat": 97,
+    "category": "fat",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Goat Meat (roasted)",
+    "serving": 100,
+    "calories": 143,
+    "protein": 27,
+    "carbs": 0,
+    "fat": 3,
+    "category": "goat",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Camel Meat (roasted)",
+    "serving": 100,
+    "calories": 165,
+    "protein": 28,
+    "carbs": 0,
+    "fat": 5,
+    "category": "camel",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Beef Tongue (boiled)",
+    "serving": 100,
+    "calories": 284,
+    "protein": 16,
+    "carbs": 0,
+    "fat": 23,
+    "category": "organ",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Chicken Liver (fried)",
+    "serving": 100,
+    "calories": 172,
+    "protein": 25,
+    "carbs": 3.9,
+    "fat": 6,
+    "category": "organ",
+    "tags": ["lunch", "dinner"]
+  }
+]
