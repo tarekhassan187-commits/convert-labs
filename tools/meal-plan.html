@@ -132,6 +132,41 @@
         </div>
       </div>
 
+      <!-- Meal Timing Schedule Card -->
+      <div class="card">
+        <h3 style="margin:0 0 12px 0">Suggested Meal Schedule</h3>
+        <div class="meals">
+          <div class="meal">
+            <b>Breakfast</b>
+            <div class="muted-small">Within 1-2 hours of waking</div>
+            <div class="muted-small">6:00 - 9:45 AM</div>
+          </div>
+          <div class="meal">
+            <b>Morning Snack</b>
+            <div class="muted-small">3-4 hours after breakfast</div>
+            <div class="muted-small">10:00 - 11:00 AM</div>
+          </div>
+          <div class="meal">
+            <b>Lunch</b>
+            <div class="muted-small">4-6 hours after breakfast</div>
+            <div class="muted-small">Around 1:00 PM</div>
+          </div>
+          <div class="meal">
+            <b>Afternoon Snack</b>
+            <div class="muted-small">3-4 hours after lunch</div>
+            <div class="muted-small">3:00 - 4:00 PM</div>
+          </div>
+          <div class="meal">
+            <b>Dinner</b>
+            <div class="muted-small">4-6 hours after lunch</div>
+            <div class="muted-small">Before 7:00 PM</div>
+          </div>
+        </div>
+        <div class="muted-small" style="margin-top:12px">
+          <strong>Note:</strong> Eating earlier dinners and maintaining consistent meal timing can improve metabolism and weight management.
+        </div>
+      </div>
+
       <div class="grid">
         <section>
           <div id="mainInner"></div>
@@ -423,6 +458,15 @@ const POOLS = {
     {name:"Sheet pan vegetables", kcal_per_100g:55, carbs_per_100g:8, protein_per_100g:2, fat_per_100g:2, tags:["veg"]},
     {name:"Cauliflower rice", kcal_per_100g:40, carbs_per_100g:7, protein_per_100g:3, fat_per_100g:1, tags:["veg"]},
     {name:"Lettuce wraps", kcal_per_100g:15, carbs_per_100g:3, protein_per_100g:1, fat_per_100g:0, tags:["veg"]}
+  ],
+
+  // KETO PROTEINS (for fat sources)
+  keto_proteins: [
+    {name:"Avocado", kcal_per_100g:160, protein_per_100g:2, carbs_per_100g:9, fat_per_100g:15, tags:["fruit","fat"]},
+    {name:"Olive oil", kcal_per_100g:884, protein_per_100g:0, carbs_per_100g:0, fat_per_100g:100, tags:["fat"]},
+    {name:"Butter", kcal_per_100g:717, protein_per_100g:0.9, carbs_per_100g:0.1, fat_per_100g:81, tags:["dairy","fat"]},
+    {name:"Coconut oil", kcal_per_100g:862, protein_per_100g:0, carbs_per_100g:0, fat_per_100g:100, tags:["fat"]},
+    {name:"Heavy cream", kcal_per_100g:345, protein_per_100g:2.1, carbs_per_100g:2.9, fat_per_100g:37, tags:["dairy","fat"]}
   ],
 
   // BALANCED DIET - Varied meals with multiple components
@@ -791,7 +835,7 @@ function saveCurrentParams() {
 }
 
 /* =============================
-   Enhanced Plan Generation for All Diet Types
+   Enhanced Plan Generation for All Diet Types - FIXED
    ============================= */
 const DEFAULT_SPLITS = { breakfast:0.25, lunch:0.35, dinner:0.30, snack:0.10 };
 
@@ -807,6 +851,39 @@ function calculateMealNutrition(parts) {
       fat: acc.fat + Math.round((foodItem.fat_per_100g || foodItem.fat || 0) * ratio)
     };
   }, {kcal: 0, protein: 0, carbs: 0, fat: 0});
+}
+
+// Helper to ensure keto macro ratios
+function adjustKetoRatios(parts, targetFatPct = 0.70, targetProteinPct = 0.25, targetCarbsPct = 0.05) {
+  const current = calculateMealNutrition(parts);
+  const totalKcal = current.kcal;
+  
+  if (totalKcal === 0) return parts;
+  
+  const currentFatPct = (current.fat * 9) / totalKcal;
+  const currentProteinPct = (current.protein * 4) / totalKcal;
+  const currentCarbsPct = (current.carbs * 4) / totalKcal;
+  
+  // If ratios are way off, adjust high-carb items
+  if (currentCarbsPct > targetCarbsPct + 0.05) {
+    parts.forEach(part => {
+      if (part.carbs_per_100g > 5) {
+        // Reduce high-carb items
+        part.grams = Math.max(10, Math.round(part.grams * 0.7));
+      }
+    });
+  }
+  
+  // Increase high-fat items if needed
+  if (currentFatPct < targetFatPct - 0.05) {
+    parts.forEach(part => {
+      if (part.fat_per_100g > 15) {
+        part.grams = Math.round(part.grams * 1.3);
+      }
+    });
+  }
+  
+  return parts;
 }
 
 async function generatePlanAsync(opts){
@@ -857,47 +934,66 @@ async function generatePlanAsync(opts){
 
     // DIET-SPECIFIC MEAL GENERATION
     if (diet === "carnivore") {
-      // CARNIVORE DIET - Only animal products + water
-      const breakfastMeat = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(breakfastMeat.name);
+      // CARNIVORE DIET - Only animal products + water (RICH COMPONENTS)
+      const breakfastMeat1 = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastMeat1.name);
+      const breakfastMeat2 = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastMeat2.name);
       
-      const lunchMeat = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(lunchMeat.name);
+      const lunchMeat1 = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchMeat1.name);
+      const lunchMeat2 = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchMeat2.name);
       
-      const dinnerMeat = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(dinnerMeat.name);
+      const dinnerMeat1 = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerMeat1.name);
+      const dinnerMeat2 = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerMeat2.name);
       
-      // Carnivore snacks (optional)
+      // Carnivore snacks
       const snack1 = await pickFoodByName(null, POOLS.carnivore_snacks, {diet,protein:proteinPref}, usedNames);
       usedNames.add(snack1.name);
+      const snack2 = await pickFoodByName(null, POOLS.carnivore_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(snack2.name);
 
       // Water for all meals
       const water = POOLS.beverages.find(b => b.name === "Water");
 
-      // Calculate portions - larger portions since it's only meat
-      const bfGram = gramsForTarget(breakfastMeat.kcal_per_100g || 250, bK);
-      const lunchGram = gramsForTarget(lunchMeat.kcal_per_100g || 250, lK);
-      const dinnerGram = gramsForTarget(dinnerMeat.kcal_per_100g || 250, dK);
-      const snackGram = gramsForTarget(snack1.kcal_per_100g || 200, sK);
+      // Calculate portions - distribute across multiple components
+      const bfGram1 = gramsForTarget(breakfastMeat1.kcal_per_100g || 250, bK * 0.6);
+      const bfGram2 = gramsForTarget(breakfastMeat2.kcal_per_100g || 250, bK * 0.4);
 
-      // Build meal parts
+      const lunchGram1 = gramsForTarget(lunchMeat1.kcal_per_100g || 250, lK * 0.5);
+      const lunchGram2 = gramsForTarget(lunchMeat2.kcal_per_100g || 250, lK * 0.5);
+
+      const dinnerGram1 = gramsForTarget(dinnerMeat1.kcal_per_100g || 250, dK * 0.5);
+      const dinnerGram2 = gramsForTarget(dinnerMeat2.kcal_per_100g || 250, dK * 0.5);
+
+      const snack1Gram = gramsForTarget(snack1.kcal_per_100g || 200, sK * 0.6);
+      const snack2Gram = gramsForTarget(snack2.kcal_per_100g || 200, sK * 0.4);
+
+      // Build meal parts with multiple components
       const breakfastParts = [
-        {name: breakfastMeat.name, per100: breakfastMeat.kcal_per_100g || 250, grams: bfGram, type: "meat", source: breakfastMeat},
+        {name: breakfastMeat1.name, per100: breakfastMeat1.kcal_per_100g || 250, grams: bfGram1, type: "meat", source: breakfastMeat1},
+        {name: breakfastMeat2.name, per100: breakfastMeat2.kcal_per_100g || 250, grams: bfGram2, type: "meat", source: breakfastMeat2},
         {name: water.name, per100: water.kcal_per_100g, grams: 240, type: "beverage", source: water}
       ];
 
       const lunchParts = [
-        {name: lunchMeat.name, per100: lunchMeat.kcal_per_100g || 250, grams: lunchGram, type: "meat", source: lunchMeat},
+        {name: lunchMeat1.name, per100: lunchMeat1.kcal_per_100g || 250, grams: lunchGram1, type: "meat", source: lunchMeat1},
+        {name: lunchMeat2.name, per100: lunchMeat2.kcal_per_100g || 250, grams: lunchGram2, type: "meat", source: lunchMeat2},
         {name: water.name, per100: water.kcal_per_100g, grams: 240, type: "beverage", source: water}
       ];
 
       const dinnerParts = [
-        {name: dinnerMeat.name, per100: dinnerMeat.kcal_per_100g || 250, grams: dinnerGram, type: "meat", source: dinnerMeat},
+        {name: dinnerMeat1.name, per100: dinnerMeat1.kcal_per_100g || 250, grams: dinnerGram1, type: "meat", source: dinnerMeat1},
+        {name: dinnerMeat2.name, per100: dinnerMeat2.kcal_per_100g || 250, grams: dinnerGram2, type: "meat", source: dinnerMeat2},
         {name: water.name, per100: water.kcal_per_100g, grams: 240, type: "beverage", source: water}
       ];
 
       const snackParts = [
-        {name: snack1.name, per100: snack1.kcal_per_100g || 200, grams: snackGram, type: "snack", source: snack1}
+        {name: snack1.name, per100: snack1.kcal_per_100g || 200, grams: snack1Gram, type: "snack", source: snack1},
+        {name: snack2.name, per100: snack2.kcal_per_100g || 200, grams: snack2Gram, type: "snack", source: snack2}
       ];
 
       // Calculate nutrition
@@ -910,22 +1006,22 @@ async function generatePlanAsync(opts){
         day,
         free: !!isFreeDay,
         breakfast: { 
-          text: `${breakfastMeat.name} + Water`,
+          text: `${breakfastMeat1.name} + ${breakfastMeat2.name} + Water`,
           parts: breakfastParts,
           kcal: breakfastNutrition.kcal
         },
         lunch: { 
-          text: `${lunchMeat.name} + Water`,
+          text: `${lunchMeat1.name} + ${lunchMeat2.name} + Water`,
           parts: lunchParts,
           kcal: lunchNutrition.kcal
         },
         dinner: { 
-          text: `${dinnerMeat.name} + Water`,
+          text: `${dinnerMeat1.name} + ${dinnerMeat2.name} + Water`,
           parts: dinnerParts,
           kcal: dinnerNutrition.kcal
         },
         snack: { 
-          text: snack1.name,
+          text: `${snack1.name} + ${snack2.name}`,
           parts: snackParts,
           kcal: snackNutrition.kcal
         },
@@ -933,147 +1029,186 @@ async function generatePlanAsync(opts){
       });
 
     } else if (diet === "keto") {
-      // KETO DIET - Multiple components
+      // KETO DIET - Multiple components with STRICT macro control
       const breakfastMain = await pickFoodByName(null, POOLS.keto_breakfasts, {diet,protein:proteinPref}, usedNames);
       usedNames.add(breakfastMain.name);
-      
+      const breakfastFat = await pickFoodByName("avocado", POOLS.keto_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastFat.name);
       const breakfastBeverage = await pickFoodByName(null, POOLS.beverages, {diet,protein:proteinPref}, usedNames);
 
-      const lunchMain = await pickFoodByName(null, POOLS.keto_lunch_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(lunchMain.name);
-      
-      const lunchSide = await pickFoodByName(null, POOLS.keto_lunch_sides, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(lunchSide.name);
+      const lunchProtein = await pickFoodByName(null, POOLS.keto_lunch_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchProtein.name);
+      const lunchVeg = await pickFoodByName(null, POOLS.keto_lunch_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchVeg.name);
+      const lunchFat = await pickFoodByName("olive oil", POOLS.keto_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchFat.name);
+      const lunchDressing = await pickFoodByName(null, POOLS.keto_lunch_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchDressing.name);
 
-      const dinnerMain = await pickFoodByName(null, POOLS.keto_dinner_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(dinnerMain.name);
-      
-      const dinnerSide = await pickFoodByName(null, POOLS.keto_dinner_sides, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(dinnerSide.name);
+      const dinnerProtein = await pickFoodByName(null, POOLS.keto_dinner_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerProtein.name);
+      const dinnerVeg = await pickFoodByName(null, POOLS.keto_dinner_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerVeg.name);
+      const dinnerFat = await pickFoodByName("butter", POOLS.keto_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerFat.name);
+      const dinnerSauce = await pickFoodByName(null, POOLS.keto_dinner_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerSauce.name);
 
-      const snack1 = await pickFoodByName(null, POOLS.keto_snacks, {diet,protein:proteinPref}, usedNames);
+      const snack1 = await pickFoodByName("almonds", POOLS.keto_snacks, {diet,protein:proteinPref}, usedNames);
       usedNames.add(snack1.name);
-      
-      const snack2 = await pickFoodByName(null, POOLS.keto_snacks, {diet,protein:proteinPref}, usedNames);
+      const snack2 = await pickFoodByName("cheese", POOLS.keto_snacks, {diet,protein:proteinPref}, usedNames);
       usedNames.add(snack2.name);
 
-      // Calculate portions with realistic distribution
-      const bfMainGram = gramsForTarget(breakfastMain.kcal_per_100g || 120, bK * 0.8);
-      const beverageGram = gramsForTarget(breakfastBeverage.kcal_per_100g || 10, bK * 0.2);
+      // Calculate portions with keto macro focus (70% fat, 25% protein, 5% carbs)
+      const bfMainGram = gramsForTarget(breakfastMain.kcal_per_100g || 120, bK * 0.4);
+      const bfFatGram = gramsForTarget(breakfastFat.kcal_per_100g || 160, bK * 0.5);
+      const beverageGram = gramsForTarget(breakfastBeverage.kcal_per_100g || 10, bK * 0.1);
 
-      const lunchMainGram = gramsForTarget(lunchMain.kcal_per_100g || 150, lK * 0.6);
-      const lunchSideGram = gramsForTarget(lunchSide.kcal_per_100g || 50, lK * 0.4);
+      const lunchProteinGram = gramsForTarget(lunchProtein.kcal_per_100g || 150, lK * 0.25);
+      const lunchVegGram = gramsForTarget(lunchVeg.kcal_per_100g || 30, lK * 0.05);
+      const lunchFatGram = gramsForTarget(lunchFat.kcal_per_100g || 884, lK * 0.65);
+      const lunchDressingGram = gramsForTarget(lunchDressing.kcal_per_100g || 45, lK * 0.05);
 
-      const dinnerMainGram = gramsForTarget(dinnerMain.kcal_per_100g || 180, dK * 0.6);
-      const dinnerSideGram = gramsForTarget(dinnerSide.kcal_per_100g || 60, dK * 0.4);
+      const dinnerProteinGram = gramsForTarget(dinnerProtein.kcal_per_100g || 180, dK * 0.25);
+      const dinnerVegGram = gramsForTarget(dinnerVeg.kcal_per_100g || 35, dK * 0.05);
+      const dinnerFatGram = gramsForTarget(dinnerFat.kcal_per_100g || 717, dK * 0.65);
+      const dinnerSauceGram = gramsForTarget(dinnerSauce.kcal_per_100g || 45, dK * 0.05);
 
-      const snack1Gram = gramsForTarget(snack1.kcal_per_100g || 150, sK * 0.6);
-      const snack2Gram = gramsForTarget(snack2.kcal_per_100g || 150, sK * 0.4);
+      const snack1Gram = gramsForTarget(snack1.kcal_per_100g || 579, sK * 0.5);
+      const snack2Gram = gramsForTarget(snack2.kcal_per_100g || 400, sK * 0.5);
 
-      // Build meal structure
+      // Build meal structure with multiple components
       const breakfastParts = [
         {name: breakfastMain.name, per100: breakfastMain.kcal_per_100g || 120, grams: bfMainGram, type: "main", source: breakfastMain},
+        {name: breakfastFat.name, per100: breakfastFat.kcal_per_100g || 160, grams: bfFatGram, type: "fat", source: breakfastFat},
         {name: breakfastBeverage.name, per100: breakfastBeverage.kcal_per_100g || 10, grams: beverageGram, type: "beverage", source: breakfastBeverage}
       ];
 
       const lunchParts = [
-        {name: lunchMain.name, per100: lunchMain.kcal_per_100g || 150, grams: lunchMainGram, type: "main", source: lunchMain},
-        {name: lunchSide.name, per100: lunchSide.kcal_per_100g || 50, grams: lunchSideGram, type: "side", source: lunchSide}
+        {name: lunchProtein.name, per100: lunchProtein.kcal_per_100g || 150, grams: lunchProteinGram, type: "protein", source: lunchProtein},
+        {name: lunchVeg.name, per100: lunchVeg.kcal_per_100g || 30, grams: lunchVegGram, type: "vegetable", source: lunchVeg},
+        {name: lunchFat.name, per100: lunchFat.kcal_per_100g || 884, grams: lunchFatGram, type: "fat", source: lunchFat},
+        {name: lunchDressing.name, per100: lunchDressing.kcal_per_100g || 45, grams: lunchDressingGram, type: "dressing", source: lunchDressing}
       ];
 
       const dinnerParts = [
-        {name: dinnerMain.name, per100: dinnerMain.kcal_per_100g || 180, grams: dinnerMainGram, type: "main", source: dinnerMain},
-        {name: dinnerSide.name, per100: dinnerSide.kcal_per_100g || 60, grams: dinnerSideGram, type: "side", source: dinnerSide}
+        {name: dinnerProtein.name, per100: dinnerProtein.kcal_per_100g || 180, grams: dinnerProteinGram, type: "protein", source: dinnerProtein},
+        {name: dinnerVeg.name, per100: dinnerVeg.kcal_per_100g || 35, grams: dinnerVegGram, type: "vegetable", source: dinnerVeg},
+        {name: dinnerFat.name, per100: dinnerFat.kcal_per_100g || 717, grams: dinnerFatGram, type: "fat", source: dinnerFat},
+        {name: dinnerSauce.name, per100: dinnerSauce.kcal_per_100g || 45, grams: dinnerSauceGram, type: "sauce", source: dinnerSauce}
       ];
 
       const snackParts = [
-        {name: snack1.name, per100: snack1.kcal_per_100g || 150, grams: snack1Gram, type: "snack", source: snack1},
-        {name: snack2.name, per100: snack2.kcal_per_100g || 150, grams: snack2Gram, type: "snack", source: snack2}
+        {name: snack1.name, per100: snack1.kcal_per_100g || 579, grams: snack1Gram, type: "snack", source: snack1},
+        {name: snack2.name, per100: snack2.kcal_per_100g || 400, grams: snack2Gram, type: "snack", source: snack2}
       ];
 
-      const breakfastNutrition = calculateMealNutrition(breakfastParts);
-      const lunchNutrition = calculateMealNutrition(lunchParts);
-      const dinnerNutrition = calculateMealNutrition(dinnerParts);
-      const snackNutrition = calculateMealNutrition(snackParts);
+      // Apply keto ratio adjustments
+      const adjustedBreakfastParts = adjustKetoRatios(breakfastParts);
+      const adjustedLunchParts = adjustKetoRatios(lunchParts);
+      const adjustedDinnerParts = adjustKetoRatios(dinnerParts);
+      const adjustedSnackParts = adjustKetoRatios(snackParts);
+
+      const breakfastNutrition = calculateMealNutrition(adjustedBreakfastParts);
+      const lunchNutrition = calculateMealNutrition(adjustedLunchParts);
+      const dinnerNutrition = calculateMealNutrition(adjustedDinnerParts);
+      const snackNutrition = calculateMealNutrition(adjustedSnackParts);
 
       plan.push({
         day,
         free: !!isFreeDay,
         breakfast: { 
-          text: `${breakfastMain.name}`,
-          parts: breakfastParts,
+          text: `${breakfastMain.name} with ${breakfastFat.name}`,
+          parts: adjustedBreakfastParts,
           kcal: breakfastNutrition.kcal
         },
         lunch: { 
-          text: `${lunchMain.name} with ${lunchSide.name}`,
-          parts: lunchParts,
+          text: `${lunchProtein.name} salad with ${lunchVeg.name} and ${lunchFat.name} dressing`,
+          parts: adjustedLunchParts,
           kcal: lunchNutrition.kcal
         },
         dinner: { 
-          text: `${dinnerMain.name} with ${dinnerSide.name}`,
-          parts: dinnerParts,
+          text: `${dinnerProtein.name} with ${dinnerVeg.name} and ${dinnerFat.name} sauce`,
+          parts: adjustedDinnerParts,
           kcal: dinnerNutrition.kcal
         },
         snack: { 
           text: `${snack1.name} and ${snack2.name}`,
-          parts: snackParts,
+          parts: adjustedSnackParts,
           kcal: snackNutrition.kcal
         },
         meta: { target: dayTarget, age, diet, protein: proteinPref, splits, macroTarget }
       });
 
     } else if (diet === "balanced") {
-      // BALANCED DIET - Multiple components with normal portions
+      // BALANCED DIET - Multiple components with normal portions (RICH COMPONENTS)
       const breakfastMain = await pickFoodByName(null, POOLS.balanced_breakfasts, {diet,protein:proteinPref}, usedNames);
       usedNames.add(breakfastMain.name);
-      
-      const breakfastBeverage = await pickFoodByName(null, POOLS.beverages, {diet,protein:proteinPref}, usedNames);
+      const breakfastFruit = await pickFoodByName("berries", POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastFruit.name);
+      const breakfastBeverage = await pickFoodByName("milk", POOLS.beverages, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastBeverage.name);
 
-      const lunchMain = await pickFoodByName(null, POOLS.balanced_lunch_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(lunchMain.name);
-      
-      const lunchSide = await pickFoodByName(null, POOLS.balanced_lunch_sides, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(lunchSide.name);
+      const lunchProtein = await pickFoodByName(null, POOLS.balanced_lunch_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchProtein.name);
+      const lunchGrain = await pickFoodByName("brown rice", POOLS.balanced_lunch_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchGrain.name);
+      const lunchVeg = await pickFoodByName(null, POOLS.balanced_lunch_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchVeg.name);
+      const lunchSalad = await pickFoodByName("mixed greens", POOLS.balanced_lunch_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchSalad.name);
 
-      const dinnerMain = await pickFoodByName(null, POOLS.balanced_dinner_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(dinnerMain.name);
-      
-      const dinnerSide = await pickFoodByName(null, POOLS.balanced_dinner_sides, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(dinnerSide.name);
+      const dinnerProtein = await pickFoodByName(null, POOLS.balanced_dinner_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerProtein.name);
+      const dinnerStarch = await pickFoodByName(null, POOLS.balanced_dinner_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerStarch.name);
+      const dinnerVeg = await pickFoodByName(null, POOLS.balanced_dinner_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerVeg.name);
+      const dinnerSauce = await pickFoodByName(null, POOLS.balanced_dinner_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerSauce.name);
 
       const snack1 = await pickFoodByName(null, POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
       usedNames.add(snack1.name);
-      
       const snack2 = await pickFoodByName(null, POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
       usedNames.add(snack2.name);
 
       // Calculate normal portions for balanced diet
-      const bfMainGram = gramsForTarget(breakfastMain.kcal_per_100g || 150, bK * 0.8);
-      const beverageGram = gramsForTarget(breakfastBeverage.kcal_per_100g || 30, bK * 0.2);
+      const bfMainGram = gramsForTarget(breakfastMain.kcal_per_100g || 150, bK * 0.6);
+      const bfFruitGram = gramsForTarget(breakfastFruit.kcal_per_100g || 50, bK * 0.2);
+      const beverageGram = gramsForTarget(breakfastBeverage.kcal_per_100g || 61, bK * 0.2);
 
-      const lunchMainGram = gramsForTarget(lunchMain.kcal_per_100g || 180, lK * 0.6);
-      const lunchSideGram = gramsForTarget(lunchSide.kcal_per_100g || 120, lK * 0.4);
+      const lunchProteinGram = gramsForTarget(lunchProtein.kcal_per_100g || 180, lK * 0.4);
+      const lunchGrainGram = gramsForTarget(lunchGrain.kcal_per_100g || 123, lK * 0.3);
+      const lunchVegGram = gramsForTarget(lunchVeg.kcal_per_100g || 35, lK * 0.2);
+      const lunchSaladGram = gramsForTarget(lunchSalad.kcal_per_100g || 25, lK * 0.1);
 
-      const dinnerMainGram = gramsForTarget(dinnerMain.kcal_per_100g || 200, dK * 0.6);
-      const dinnerSideGram = gramsForTarget(dinnerSide.kcal_per_100g || 100, dK * 0.4);
+      const dinnerProteinGram = gramsForTarget(dinnerProtein.kcal_per_100g || 200, dK * 0.4);
+      const dinnerStarchGram = gramsForTarget(dinnerStarch.kcal_per_100g || 88, dK * 0.3);
+      const dinnerVegGram = gramsForTarget(dinnerVeg.kcal_per_100g || 65, dK * 0.2);
+      const dinnerSauceGram = gramsForTarget(dinnerSauce.kcal_per_100g || 45, dK * 0.1);
 
       const snack1Gram = gramsForTarget(snack1.kcal_per_100g || 120, sK * 0.6);
       const snack2Gram = gramsForTarget(snack2.kcal_per_100g || 120, sK * 0.4);
 
-      // Build meal structure
+      // Build meal structure with multiple components
       const breakfastParts = [
         {name: breakfastMain.name, per100: breakfastMain.kcal_per_100g || 150, grams: bfMainGram, type: "main", source: breakfastMain},
-        {name: breakfastBeverage.name, per100: breakfastBeverage.kcal_per_100g || 30, grams: beverageGram, type: "beverage", source: breakfastBeverage}
+        {name: breakfastFruit.name, per100: breakfastFruit.kcal_per_100g || 50, grams: bfFruitGram, type: "fruit", source: breakfastFruit},
+        {name: breakfastBeverage.name, per100: breakfastBeverage.kcal_per_100g || 61, grams: beverageGram, type: "beverage", source: breakfastBeverage}
       ];
 
       const lunchParts = [
-        {name: lunchMain.name, per100: lunchMain.kcal_per_100g || 180, grams: lunchMainGram, type: "main", source: lunchMain},
-        {name: lunchSide.name, per100: lunchSide.kcal_per_100g || 120, grams: lunchSideGram, type: "side", source: lunchSide}
+        {name: lunchProtein.name, per100: lunchProtein.kcal_per_100g || 180, grams: lunchProteinGram, type: "protein", source: lunchProtein},
+        {name: lunchGrain.name, per100: lunchGrain.kcal_per_100g || 123, grams: lunchGrainGram, type: "grain", source: lunchGrain},
+        {name: lunchVeg.name, per100: lunchVeg.kcal_per_100g || 35, grams: lunchVegGram, type: "vegetable", source: lunchVeg},
+        {name: lunchSalad.name, per100: lunchSalad.kcal_per_100g || 25, grams: lunchSaladGram, type: "salad", source: lunchSalad}
       ];
 
       const dinnerParts = [
-        {name: dinnerMain.name, per100: dinnerMain.kcal_per_100g || 200, grams: dinnerMainGram, type: "main", source: dinnerMain},
-        {name: dinnerSide.name, per100: dinnerSide.kcal_per_100g || 100, grams: dinnerSideGram, type: "side", source: dinnerSide}
+        {name: dinnerProtein.name, per100: dinnerProtein.kcal_per_100g || 200, grams: dinnerProteinGram, type: "protein", source: dinnerProtein},
+        {name: dinnerStarch.name, per100: dinnerStarch.kcal_per_100g || 88, grams: dinnerStarchGram, type: "starch", source: dinnerStarch},
+        {name: dinnerVeg.name, per100: dinnerVeg.kcal_per_100g || 65, grams: dinnerVegGram, type: "vegetable", source: dinnerVeg},
+        {name: dinnerSauce.name, per100: dinnerSauce.kcal_per_100g || 45, grams: dinnerSauceGram, type: "sauce", source: dinnerSauce}
       ];
 
       const snackParts = [
@@ -1090,17 +1225,17 @@ async function generatePlanAsync(opts){
         day,
         free: !!isFreeDay,
         breakfast: { 
-          text: `${breakfastMain.name}`,
+          text: `${breakfastMain.name} with ${breakfastFruit.name}`,
           parts: breakfastParts,
           kcal: breakfastNutrition.kcal
         },
         lunch: { 
-          text: `${lunchMain.name} with ${lunchSide.name}`,
+          text: `${lunchProtein.name} with ${lunchGrain.name}, ${lunchVeg.name}, and salad`,
           parts: lunchParts,
           kcal: lunchNutrition.kcal
         },
         dinner: { 
-          text: `${dinnerMain.name} with ${dinnerSide.name}`,
+          text: `${dinnerProtein.name} with ${dinnerStarch.name}, ${dinnerVeg.name}, and sauce`,
           parts: dinnerParts,
           kcal: dinnerNutrition.kcal
         },
@@ -1113,93 +1248,99 @@ async function generatePlanAsync(opts){
       });
 
     } else {
-      // VEGETARIAN DIET - Use existing vegetarian logic
-      const breakfastChoice = await pickFoodByName(null, POOLS.vegetarian_breakfasts, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(breakfastChoice.name);
+      // VEGETARIAN DIET - Multiple components
+      const breakfastMain = await pickFoodByName(null, POOLS.vegetarian_breakfasts, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastMain.name);
+      const breakfastFruit = await pickFoodByName("berries", POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastFruit.name);
+      const breakfastBeverage = await pickFoodByName("milk", POOLS.beverages, {diet,protein:proteinPref}, usedNames);
 
-      const lunchProt = await pickFoodByName(null, POOLS.vegetarian_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(lunchProt.name);
-      
-      const dinnerProt = opts.oneProteinPerDay ? lunchProt : await pickFoodByName(null, POOLS.vegetarian_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(dinnerProt.name);
+      const lunchProtein = await pickFoodByName(null, POOLS.vegetarian_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchProtein.name);
+      const lunchGrain = await pickFoodByName("quinoa", POOLS.vegetarian_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchGrain.name);
+      const lunchVeg = await pickFoodByName(null, POOLS.vegetarian_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchVeg.name);
 
-      const sideItem = await pickFoodByName(null, POOLS.vegetarian_sides, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(sideItem.name);
+      const dinnerProtein = await pickFoodByName(null, POOLS.vegetarian_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerProtein.name);
+      const dinnerStarch = await pickFoodByName("sweet potato", POOLS.vegetarian_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerStarch.name);
+      const dinnerVeg = await pickFoodByName(null, POOLS.vegetarian_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerVeg.name);
 
-      const snackItem = await pickFoodByName(null, POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(snackItem.name);
+      const snack1 = await pickFoodByName(null, POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(snack1.name);
+      const snack2 = await pickFoodByName(null, POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(snack2.name);
 
       // Calculate portions
-      const bfPer100 = breakfastChoice.kcal_per_100g || 120;
-      const lpPer100 = lunchProt.kcal_per_100g || 180;
-      const sidePer100 = sideItem.kcal_per_100g || 100;
-      const dpPer100 = dinnerProt.kcal_per_100g || lpPer100;
-      const snPer100 = snackItem.kcal_per_100g || 100;
+      const bfMainGram = gramsForTarget(breakfastMain.kcal_per_100g || 120, bK * 0.7);
+      const bfFruitGram = gramsForTarget(breakfastFruit.kcal_per_100g || 50, bK * 0.2);
+      const beverageGram = gramsForTarget(breakfastBeverage.kcal_per_100g || 61, bK * 0.1);
 
-      const bfGram = gramsForTarget(bfPer100, bK);
-      const lpProtGram = gramsForTarget(lpPer100, lK * 0.65);
-      const lpSideGram = gramsForTarget(sidePer100, lK * 0.35);
-      const dpProtGram = gramsForTarget(dpPer100, dK * 0.65);
-      const dpSideGram = gramsForTarget(sidePer100, dK * 0.35);
-      const snGram = gramsForTarget(snPer100, sK);
+      const lunchProteinGram = gramsForTarget(lunchProtein.kcal_per_100g || 180, lK * 0.4);
+      const lunchGrainGram = gramsForTarget(lunchGrain.kcal_per_100g || 120, lK * 0.4);
+      const lunchVegGram = gramsForTarget(lunchVeg.kcal_per_100g || 35, lK * 0.2);
 
-      function calc(part, per100, g){
-        return {
-          grams: g,
-          kcal: Math.round((per100 || 0) * (g/100)),
-          protein: Math.round((part.protein_per_100g || part.protein || 0) * (g/100)),
-          carbs: Math.round((part.carbs_per_100g || part.carbs || 0) * (g/100)),
-          fat: Math.round((part.fat_per_100g || part.fat || 0) * (g/100))
-        };
-      }
+      const dinnerProteinGram = gramsForTarget(dinnerProtein.kcal_per_100g || 200, dK * 0.4);
+      const dinnerStarchGram = gramsForTarget(dinnerStarch.kcal_per_100g || 86, dK * 0.4);
+      const dinnerVegGram = gramsForTarget(dinnerVeg.kcal_per_100g || 65, dK * 0.2);
 
-      const bfCalc = calc(breakfastChoice, bfPer100, bfGram);
-      const lpProtCalc = calc(lunchProt, lpPer100, lpProtGram);
-      const lpSideCalc = calc(sideItem, sidePer100, lpSideGram);
-      const dpProtCalc = calc(dinnerProt, dpPer100, dpProtGram);
-      const dpSideCalc = calc(sideItem, sidePer100, dpSideGram);
-      const snCalc = calc(snackItem, snPer100, snGram);
+      const snack1Gram = gramsForTarget(snack1.kcal_per_100g || 120, sK * 0.6);
+      const snack2Gram = gramsForTarget(snack2.kcal_per_100g || 120, sK * 0.4);
+
+      // Build meal parts
+      const breakfastParts = [
+        {name: breakfastMain.name, per100: breakfastMain.kcal_per_100g || 120, grams: bfMainGram, type: "main", source: breakfastMain},
+        {name: breakfastFruit.name, per100: breakfastFruit.kcal_per_100g || 50, grams: bfFruitGram, type: "fruit", source: breakfastFruit},
+        {name: breakfastBeverage.name, per100: breakfastBeverage.kcal_per_100g || 61, grams: beverageGram, type: "beverage", source: breakfastBeverage}
+      ];
+
+      const lunchParts = [
+        {name: lunchProtein.name, per100: lunchProtein.kcal_per_100g || 180, grams: lunchProteinGram, type: "protein", source: lunchProtein},
+        {name: lunchGrain.name, per100: lunchGrain.kcal_per_100g || 120, grams: lunchGrainGram, type: "grain", source: lunchGrain},
+        {name: lunchVeg.name, per100: lunchVeg.kcal_per_100g || 35, grams: lunchVegGram, type: "vegetable", source: lunchVeg}
+      ];
+
+      const dinnerParts = [
+        {name: dinnerProtein.name, per100: dinnerProtein.kcal_per_100g || 200, grams: dinnerProteinGram, type: "protein", source: dinnerProtein},
+        {name: dinnerStarch.name, per100: dinnerStarch.kcal_per_100g || 86, grams: dinnerStarchGram, type: "starch", source: dinnerStarch},
+        {name: dinnerVeg.name, per100: dinnerVeg.kcal_per_100g || 65, grams: dinnerVegGram, type: "vegetable", source: dinnerVeg}
+      ];
+
+      const snackParts = [
+        {name: snack1.name, per100: snack1.kcal_per_100g || 120, grams: snack1Gram, type: "snack", source: snack1},
+        {name: snack2.name, per100: snack2.kcal_per_100g || 120, grams: snack2Gram, type: "snack", source: snack2}
+      ];
+
+      const breakfastNutrition = calculateMealNutrition(breakfastParts);
+      const lunchNutrition = calculateMealNutrition(lunchParts);
+      const dinnerNutrition = calculateMealNutrition(dinnerParts);
+      const snackNutrition = calculateMealNutrition(snackParts);
 
       plan.push({
         day,
         free: !!isFreeDay,
         breakfast: { 
-          text: breakfastChoice.name, 
-          per100: bfPer100, 
-          grams: bfGram, 
-          kcal: bfCalc.kcal, 
-          protein: bfCalc.protein, 
-          carbs: bfCalc.carbs, 
-          fat: bfCalc.fat, 
-          source: breakfastChoice.raw||null, 
-          parts: [{name: breakfastChoice.name, ...bfCalc}] 
+          text: `${breakfastMain.name} with ${breakfastFruit.name}`,
+          parts: breakfastParts,
+          kcal: breakfastNutrition.kcal
         },
         lunch: { 
-          text: lunchProt.name + " + " + sideItem.name, 
-          parts:[ 
-            {type:"protein", name:lunchProt.name, per100:lpPer100, ...lpProtCalc}, 
-            {type:"side", name:sideItem.name, per100:sidePer100, ...lpSideCalc}
-          ], 
-          kcal: lpProtCalc.kcal + lpSideCalc.kcal 
+          text: `${lunchProtein.name} with ${lunchGrain.name} and ${lunchVeg.name}`,
+          parts: lunchParts,
+          kcal: lunchNutrition.kcal
         },
         dinner: { 
-          text: dinnerProt.name + " + " + sideItem.name, 
-          parts:[ 
-            {type:"protein", name:dinnerProt.name, per100:dpPer100, ...dpProtCalc}, 
-            {type:"side", name:sideItem.name, per100:sidePer100, ...dpSideCalc}
-          ], 
-          kcal: dpProtCalc.kcal + dpSideCalc.kcal 
+          text: `${dinnerProtein.name} with ${dinnerStarch.name} and ${dinnerVeg.name}`,
+          parts: dinnerParts,
+          kcal: dinnerNutrition.kcal
         },
         snack: { 
-          text: snackItem.name, 
-          per100: snPer100, 
-          grams: snGram, 
-          kcal: snCalc.kcal, 
-          protein: snCalc.protein, 
-          carbs: snCalc.carbs, 
-          fat: snCalc.fat, 
-          source: snackItem.raw||null, 
-          parts: [{name: snackItem.name, ...snCalc}] 
+          text: `${snack1.name} and ${snack2.name}`,
+          parts: snackParts,
+          kcal: snackNutrition.kcal
         },
         meta: { target: dayTarget, age, diet, protein: proteinPref, splits, macroTarget }
       });
@@ -1208,9 +1349,6 @@ async function generatePlanAsync(opts){
 
   return plan;
 }
-
-// ... REST OF THE CODE REMAINS THE SAME (storage helpers, UI rendering, event handlers, etc.)
-// [The rest of your existing JavaScript code for storage, rendering, modals, etc. remains unchanged]
 
 /* =============================
    Storage helpers
@@ -1338,7 +1476,7 @@ function updateDayMacrosDisplay() {
 }
 
 /* =============================
-   Rendering: main plan -> UI
+   Rendering: main plan -> UI - FIXED with unlock dates
    ============================= */
 function renderPlan(plan, startDateISO){
   const container = document.getElementById("mainInner");
@@ -1347,7 +1485,8 @@ function renderPlan(plan, startDateISO){
   const now = new Date();
   let unlocked = 0;
   if(startDate){
-    const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
+    const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - 
+                          Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
     unlocked = Math.max(0, Math.min(6, days));
   } else unlocked = 0;
 
@@ -1356,8 +1495,16 @@ function renderPlan(plan, startDateISO){
     const isLocked = idx > unlocked;
     if(isLocked) card.classList.add("locked");
 
+    // Calculate unlock date for locked days
+    let unlockDateText = "";
+    if (isLocked && startDate) {
+      const unlockDate = new Date(startDate);
+      unlockDate.setDate(unlockDate.getDate() + idx);
+      unlockDateText = `Unlocks: ${unlockDate.toLocaleDateString()}`;
+    }
+
     const header = document.createElement("div"); header.style.display="flex"; header.style.justifyContent="space-between"; header.style.alignItems="center";
-    header.innerHTML = `<div><strong>Day ${d.day}${d.free? ' — FREE':''}</strong><div class="muted-small">${isLocked ? "Locked" : "Unlocked (editable)"}</div></div><div style="text-align:right"><button class="btn ghost" data-day="${idx}" onclick="suggestAdjustmentForDayWrapper(${idx})">Suggest Adjustment</button></div>`;
+    header.innerHTML = `<div><strong>Day ${d.day}${d.free? ' — FREE':''}</strong><div class="muted-small">${isLocked ? `Locked - ${unlockDateText}` : "Unlocked (editable)"}</div></div><div style="text-align:right"><button class="btn ghost" data-day="${idx}" onclick="suggestAdjustmentForDayWrapper(${idx})">Suggest Adjustment</button></div>`;
     card.appendChild(header);
 
     const mealsWrap = document.createElement("div"); mealsWrap.className="meals";
@@ -1368,30 +1515,30 @@ function renderPlan(plan, startDateISO){
       const title = document.createElement("b"); title.innerText = mealKey.charAt(0).toUpperCase()+mealKey.slice(1);
       m.appendChild(title);
 
-      const per100Text = document.createElement("div"); per100Text.className="muted-small"; per100Text.innerText = `Per 100g: ${mealObj.parts && mealObj.parts[0] && mealObj.parts[0].per100 ? mealObj.parts[0].per100 + ' kcal' : (mealObj.per100? mealObj.per100+' kcal':'—')}`;
-      m.appendChild(per100Text);
-
-      // Show part list & grams controls
+      // Show all meal components
       const listWrap = document.createElement("div");
       listWrap.style.marginTop="8px";
+      
       (mealObj.parts || []).forEach((p, pi)=>{
         const pDiv = document.createElement("div"); pDiv.style.marginTop="6px";
         pDiv.className = "meal-list-item";
-        const left = document.createElement("div"); left.innerHTML = `<div style="font-weight:700">${escapeHtml(p.name)}</div><div class="muted-small">Per100: ${p.per100||'—'} kcal • ${p.kcal||0} kcal</div>`;
+        const left = document.createElement("div"); 
+        left.innerHTML = `<div style="font-weight:700">${escapeHtml(p.name)}</div>
+                         <div class="muted-small">${p.grams || 0}g • ${p.kcal || 0} kcal</div>
+                         <div class="muted-small" style="font-size:11px">${p.type || 'main'}</div>`;
         const right = document.createElement("div");
         const inp = document.createElement("input"); inp.type="number"; inp.className="input-grams"; inp.value = p.grams || 0;
         inp.dataset.day = idx; inp.dataset.meal = `${mealKey}--part--${pi}`;
+        inp.disabled = isLocked;
         inp.addEventListener('click', e=>e.stopPropagation());
         inp.addEventListener('input', onGramChange);
         inp.addEventListener('blur', function(e) {
-          // If there's a pending timeout, cancel it and apply immediately
           if (this._updateTimeout) {
             clearTimeout(this._updateTimeout);
             applyGramChange(Number(this.dataset.day), this.dataset.meal, this.value);
           }
         });
         inp.addEventListener('focus', function(e) {
-          // Select all text when focusing for easy editing
           this.select();
         });
         right.appendChild(inp);
@@ -1400,30 +1547,32 @@ function renderPlan(plan, startDateISO){
         listWrap.appendChild(pDiv);
       });
 
-      // Add item button
-      const addBtn = document.createElement("button"); addBtn.className="btn ghost"; addBtn.style.marginTop="8px"; addBtn.innerText="+ Add item";
-      addBtn.addEventListener('click', (e)=>{ e.stopPropagation(); openAddItemModal(idx, mealKey); });
-      listWrap.appendChild(addBtn);
+      // Add item button (only for unlocked days)
+      if (!isLocked) {
+        const addBtn = document.createElement("button"); addBtn.className="btn ghost"; addBtn.style.marginTop="8px"; addBtn.innerText="+ Add item";
+        addBtn.addEventListener('click', (e)=>{ e.stopPropagation(); openAddItemModal(idx, mealKey); });
+        listWrap.appendChild(addBtn);
+      }
 
       m.appendChild(listWrap);
 
       const kcalWrap = document.createElement("div"); kcalWrap.className="kcal"; kcalWrap.style.marginTop="10px";
-      kcalWrap.innerHTML = `~ <span class="kcal-val">${mealObj.kcal || (mealObj.parts? mealObj.parts.reduce((s,x)=>s+(x.kcal||0),0):0)}</span> kcal`;
+      kcalWrap.innerHTML = `Total: <span class="kcal-val">${mealObj.kcal || (mealObj.parts? mealObj.parts.reduce((s,x)=>s+(x.kcal||0),0):0)}</span> kcal`;
       m.appendChild(kcalWrap);
 
-      // macros
+      // Macros for the entire meal
       const totalP = (mealObj.parts? mealObj.parts.reduce((s,x)=>s+(x.protein||0),0) : (mealObj.protein||0));
       const totalC = (mealObj.parts? mealObj.parts.reduce((s,x)=>s+(x.carbs||0),0) : (mealObj.carbs||0));
       const totalF = (mealObj.parts? mealObj.parts.reduce((s,x)=>s+(x.fat||0),0) : (mealObj.fat||0));
       const macros = document.createElement("div"); macros.className="muted-small"; macros.style.marginTop="8px";
-      macros.innerText = `Macros: P ${totalP} g • C ${totalC} g • F ${totalF} g`;
+      macros.innerText = `Meal Macros: P ${Math.round(totalP)}g • C ${Math.round(totalC)}g • F ${Math.round(totalF)}g`;
       m.appendChild(macros);
 
-      // locked overlay
+      // Locked overlay with date
       if(isLocked){
         const overlay = document.createElement("div"); overlay.className='lock-overlay';
         const unlockDate = startDate ? new Date(Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()) + (idx*86400000)) : null;
-        overlay.innerHTML = `<div class="lock-badge">${unlockDate ? 'Unlocks: '+unlockDate.toLocaleDateString() : 'Locked'}</div>`;
+        overlay.innerHTML = `<div class="lock-badge">${unlockDate ? `Unlocks: ${unlockDate.toLocaleDateString()}` : 'Locked'}</div>`;
         m.appendChild(overlay);
       } else {
         const repl = document.createElement('button'); repl.className='btn ghost'; repl.style.marginTop='8px'; repl.innerText='Replace';
@@ -1441,12 +1590,12 @@ function renderPlan(plan, startDateISO){
 
     card.appendChild(mealsWrap);
 
-    // Day summary (simplified since macros are now in sidebar)
+    // Day summary
     const summary = document.createElement("div"); summary.style.marginTop="12px";
     const totalKcal = (d.breakfast.parts? d.breakfast.parts.reduce((s,x)=>s+(x.kcal||0),0):d.breakfast.kcal) + (d.lunch.kcal||0) + (d.dinner.kcal||0) + (d.snack.kcal||0);
-    summary.innerHTML = `<div class="muted-small">Total: <strong class="day-total">${totalKcal}</strong> kcal</div>
+    summary.innerHTML = `<div class="muted-small">Daily Total: <strong class="day-total">${totalKcal}</strong> kcal</div>
       <div class="muted-small">Target (TDEE): <strong class="day-target">${d.meta.target}</strong> kcal</div>
-      <div class="muted-small">Diff: <strong class="day-diff">${totalKcal - d.meta.target}</strong> kcal</div>`;
+      <div class="muted-small">Difference: <strong class="day-diff">${totalKcal - d.meta.target}</strong> kcal</div>`;
     card.appendChild(summary);
 
     container.appendChild(card);
@@ -1793,7 +1942,7 @@ document.getElementById("acceptBtn").addEventListener("click", async ()=>{
   if(!t){ alert("Enter TDEE first."); return; }
   const opts = {
     tdee: t,
-    age: Number(document.getElementById("ageInput").value) || 30,
+    age: Number(document.getElementById("ageInput').value) || 30,
     goal: document.getElementById("goalSelect").value,
     diet: document.getElementById("dietSelect").value,
     protein: document.getElementById("proteinSelect").value,
