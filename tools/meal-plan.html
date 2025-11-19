@@ -700,18 +700,271 @@ async function generatePlanAsync(opts){
     const sK = Math.round(dayTarget * splits.snack);
 
     const usedNames = new Set();
-    mealsWrap.appendChild(makeMealBlock('breakfast', d.breakfast));
-    mealsWrap.appendChild(makeMealBlock('lunch', d.lunch));
-    mealsWrap.appendChild(makeMealBlock('dinner', d.dinner));
-    mealsWrap.appendChild(makeMealBlock('snack', d.snack));
+    
+    // Breakfast
+    const breakfastParts = [];
+    const breakfastFood = await pickFoodByName(null, POOLS.balanced_breakfasts, opts, usedNames);
+    if (breakfastFood) {
+      const grams = gramsForTarget(breakfastFood.kcal_per_100g, bK);
+      breakfastParts.push({
+        name: breakfastFood.name,
+        per100: breakfastFood.kcal_per_100g,
+        grams: grams,
+        source: breakfastFood
+      });
+      usedNames.add(breakfastFood.name);
+    }
+    
+    // Lunch
+    const lunchParts = [];
+    const lunchProtein = await pickFoodByName(null, POOLS.balanced_lunch_proteins, opts, usedNames);
+    if (lunchProtein) {
+      const grams = gramsForTarget(lunchProtein.kcal_per_100g, lK * 0.6);
+      lunchParts.push({
+        name: lunchProtein.name,
+        per100: lunchProtein.kcal_per_100g,
+        grams: grams,
+        source: lunchProtein
+      });
+      usedNames.add(lunchProtein.name);
+    }
+    
+    const lunchSide = await pickFoodByName(null, POOLS.balanced_lunch_sides, opts, usedNames);
+    if (lunchSide) {
+      const grams = gramsForTarget(lunchSide.kcal_per_100g, lK * 0.4);
+      lunchParts.push({
+        name: lunchSide.name,
+        per100: lunchSide.kcal_per_100g,
+        grams: grams,
+        source: lunchSide
+      });
+      usedNames.add(lunchSide.name);
+    }
+    
+    // Dinner
+    const dinnerParts = [];
+    const dinnerProtein = await pickFoodByName(null, POOLS.balanced_dinner_proteins, opts, usedNames);
+    if (dinnerProtein) {
+      const grams = gramsForTarget(dinnerProtein.kcal_per_100g, dK * 0.6);
+      dinnerParts.push({
+        name: dinnerProtein.name,
+        per100: dinnerProtein.kcal_per_100g,
+        grams: grams,
+        source: dinnerProtein
+      });
+      usedNames.add(dinnerProtein.name);
+    }
+    
+    const dinnerSide = await pickFoodByName(null, POOLS.balanced_dinner_sides, opts, usedNames);
+    if (dinnerSide) {
+      const grams = gramsForTarget(dinnerSide.kcal_per_100g, dK * 0.4);
+      dinnerParts.push({
+        name: dinnerSide.name,
+        per100: dinnerSide.kcal_per_100g,
+        grams: grams,
+        source: dinnerSide
+      });
+      usedNames.add(dinnerSide.name);
+    }
+    
+    // Snack
+    const snackParts = [];
+    const snackFood = await pickFoodByName(null, POOLS.balanced_snacks, opts, usedNames);
+    if (snackFood) {
+      const grams = gramsForTarget(snackFood.kcal_per_100g, sK);
+      snackParts.push({
+        name: snackFood.name,
+        per100: snackFood.kcal_per_100g,
+        grams: grams,
+        source: snackFood
+      });
+      usedNames.add(snackFood.name);
+    }
+    
+    // Calculate nutrition for each meal
+    const breakfastNutrition = calculateMealNutrition(breakfastParts);
+    const lunchNutrition = calculateMealNutrition(lunchParts);
+    const dinnerNutrition = calculateMealNutrition(dinnerParts);
+    const snackNutrition = calculateMealNutrition(snackParts);
+    
+    // Adjust for keto if needed
+    if (diet === "keto") {
+      adjustKetoRatios(breakfastParts);
+      adjustKetoRatios(lunchParts);
+      adjustKetoRatios(dinnerParts);
+      adjustKetoRatios(snackParts);
+    }
+    
+    plan.push({
+      day,
+      free: isFreeDay,
+      meta: {
+        target: dayTarget,
+        splits,
+        macroTarget
+      },
+      breakfast: {
+        kcal: breakfastNutrition.kcal,
+        parts: breakfastParts
+      },
+      lunch: {
+        kcal: lunchNutrition.kcal,
+        parts: lunchParts
+      },
+      dinner: {
+        kcal: dinnerNutrition.kcal,
+        parts: dinnerParts
+      },
+      snack: {
+        kcal: snackNutrition.kcal,
+        parts: snackParts
+      }
+    });
+  }
+  
+  return plan;
+}
 
+/* =============================
+   UI Rendering
+   ============================= */
+function renderPlan(plan, startDate) {
+  const container = document.getElementById("mainInner");
+  container.innerHTML = "";
+  
+  if (!plan || !plan.length) {
+    container.innerHTML = "<div class='card'>No plan generated yet.</div>";
+    return;
+  }
+  
+  const now = new Date();
+  const daysSinceStart = Math.floor((now - new Date(startDate)) / (1000 * 60 * 60 * 24));
+  const unlockedDays = Math.max(0, Math.min(6, daysSinceStart));
+  
+  plan.forEach((d, idx) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    
+    const isLocked = idx > unlockedDays;
+    
+    const header = document.createElement("div");
+    header.style.display = "flex";
+    header.style.justifyContent = "space-between";
+    header.style.alignItems = "center";
+    header.style.marginBottom = "12px";
+    
+    const title = document.createElement("h3");
+    title.textContent = `Day ${d.day}${d.free ? ' (FREE DAY)' : ''}`;
+    title.style.margin = "0";
+    
+    const targetInfo = document.createElement("div");
+    targetInfo.className = "muted-small";
+    targetInfo.textContent = `Target: ${d.meta.target} kcal`;
+    
+    header.appendChild(title);
+    header.appendChild(targetInfo);
+    card.appendChild(header);
+    
+    if (isLocked) {
+      const lockOverlay = document.createElement("div");
+      lockOverlay.className = "lock-overlay";
+      lockOverlay.innerHTML = `<div class="lock-badge">🔒 Unlocks in ${idx - unlockedDays} day(s)</div>`;
+      card.appendChild(lockOverlay);
+      card.classList.add("locked");
+    }
+    
+    const mealsWrap = document.createElement("div");
+    mealsWrap.className = "meals";
+    
+    // Create meal blocks
+    const meals = [
+      { key: 'breakfast', label: 'Breakfast' },
+      { key: 'lunch', label: 'Lunch' },
+      { key: 'dinner', label: 'Dinner' },
+      { key: 'snack', label: 'Snack' }
+    ];
+    
+    meals.forEach(meal => {
+      const mealBlock = document.createElement("div");
+      mealBlock.className = "meal";
+      
+      const mealHeader = document.createElement("div");
+      mealHeader.style.display = "flex";
+      mealHeader.style.justifyContent = "space-between";
+      mealHeader.style.alignItems = "center";
+      mealHeader.style.marginBottom = "8px";
+      
+      const mealTitle = document.createElement("b");
+      mealTitle.textContent = meal.label;
+      
+      const mealKcal = document.createElement("span");
+      mealKcal.className = "kcal";
+      mealKcal.textContent = `${d[meal.key].kcal || 0} kcal`;
+      
+      mealHeader.appendChild(mealTitle);
+      mealHeader.appendChild(mealKcal);
+      mealBlock.appendChild(mealHeader);
+      
+      if (d[meal.key].parts && d[meal.key].parts.length) {
+        d[meal.key].parts.forEach(part => {
+          const partDiv = document.createElement("div");
+          partDiv.className = "meal-list-item";
+          
+          const partName = document.createElement("div");
+          partName.textContent = part.name;
+          partName.style.fontWeight = "600";
+          
+          const partInfo = document.createElement("div");
+          partInfo.className = "muted-small";
+          partInfo.textContent = `${part.grams}g — ${part.kcal || 0} kcal`;
+          
+          partDiv.appendChild(partName);
+          partDiv.appendChild(partInfo);
+          mealBlock.appendChild(partDiv);
+        });
+      } else {
+        const emptyMsg = document.createElement("div");
+        emptyMsg.className = "muted-small";
+        emptyMsg.textContent = "No items";
+        mealBlock.appendChild(emptyMsg);
+      }
+      
+      // Add action buttons if not locked
+      if (!isLocked) {
+        const actions = document.createElement("div");
+        actions.style.marginTop = "8px";
+        actions.style.display = "flex";
+        actions.style.gap = "6px";
+        
+        const addBtn = document.createElement("button");
+        addBtn.className = "btn ghost";
+        addBtn.textContent = "Add";
+        addBtn.style.fontSize = "12px";
+        addBtn.style.padding = "4px 8px";
+        addBtn.onclick = () => openAddItemModal(idx, meal.key);
+        
+        const replaceBtn = document.createElement("button");
+        replaceBtn.className = "btn ghost";
+        replaceBtn.textContent = "Replace";
+        replaceBtn.style.fontSize = "12px";
+        replaceBtn.style.padding = "4px 8px";
+        replaceBtn.onclick = () => openReplaceModal(idx, meal.key);
+        
+        actions.appendChild(addBtn);
+        actions.appendChild(replaceBtn);
+        mealBlock.appendChild(actions);
+      }
+      
+      mealsWrap.appendChild(mealBlock);
+    });
+    
     card.appendChild(mealsWrap);
 
-    // Day summary with FIXED calculations
+    // Day summary
     const summary = document.createElement("div"); 
     summary.style.marginTop="12px";
 
-    // Calculate totals PROPERLY
+    // Calculate totals
     const breakfastKcal = d.breakfast.parts ? d.breakfast.parts.reduce((s,x)=>s+(x.kcal||0),0) : (d.breakfast.kcal||0);
     const lunchKcal = d.lunch.parts ? d.lunch.parts.reduce((s,x)=>s+(x.kcal||0),0) : (d.lunch.kcal||0);
     const dinnerKcal = d.dinner.parts ? d.dinner.parts.reduce((s,x)=>s+(x.kcal||0),0) : (d.dinner.kcal||0);
@@ -719,7 +972,7 @@ async function generatePlanAsync(opts){
 
     const totalKcal = breakfastKcal + lunchKcal + dinnerKcal + snackKcal;
 
-    // Calculate macros properly
+    // Calculate macros
     const breakfastMacros = d.breakfast.parts ? calculateMealNutrition(d.breakfast.parts) : {protein:0, carbs:0, fat:0};
     const lunchMacros = d.lunch.parts ? calculateMealNutrition(d.lunch.parts) : {protein:0, carbs:0, fat:0};
     const dinnerMacros = d.dinner.parts ? calculateMealNutrition(d.dinner.parts) : {protein:0, carbs:0, fat:0};
@@ -740,6 +993,240 @@ async function generatePlanAsync(opts){
     container.appendChild(card);
   });
 }
+
+/* =============================
+   Missing Utility Functions
+   ============================= */
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function searchCuratedFoods(query) {
+  const q = normalize(query);
+  if (!q) return [];
+  
+  // Search through our POOLS for matching foods
+  const results = [];
+  
+  // Search all pools
+  Object.values(POOLS).forEach(pool => {
+    pool.forEach(food => {
+      const name = normalize(food.name);
+      if (name.includes(q)) {
+        results.push({
+          name: food.name,
+          kcal: food.kcal_per_100g || food.kcal,
+          protein: food.protein_per_100g || food.protein,
+          carbs: food.carbs_per_100g || food.carbs,
+          fat: food.fat_per_100g || food.fat
+        });
+      }
+    });
+  });
+  
+  // Also search indexItems if available
+  indexItems.forEach(item => {
+    const name = normalize(item.name || item.food_name || item.description || "");
+    if (name.includes(q)) {
+      results.push({
+        name: item.name || item.food_name || item.description,
+        kcal: item.kcal_per_100g || item.kcal,
+        protein: item.protein_per_100g || item.protein,
+        carbs: item.carbs_per_100g || item.carbs,
+        fat: item.fat_per_100g || item.fat
+      });
+    }
+  });
+  
+  // Remove duplicates
+  const uniqueResults = [];
+  const seen = new Set();
+  
+  results.forEach(result => {
+    const key = result.name + result.kcal;
+    if (!seen.has(key)) {
+      seen.add(key);
+      uniqueResults.push(result);
+    }
+  });
+  
+  return uniqueResults.slice(0, 20); // Limit results
+}
+
+/* =============================
+   Local Storage Functions
+   ============================= */
+function savePlan(plan, startDate) {
+  const data = {
+    plan,
+    startDate: startDate || new Date().toISOString(),
+    version: "v4"
+  };
+  localStorage.setItem(KEY, JSON.stringify(data));
+}
+
+function loadPlan() {
+  const stored = localStorage.getItem(KEY);
+  if (!stored) return null;
+  
+  try {
+    return JSON.parse(stored);
+  } catch (e) {
+    console.error("Failed to parse stored plan", e);
+    return null;
+  }
+}
+
+function updateSavedInfo() {
+  const savedInfo = document.getElementById("savedInfo");
+  const stored = loadPlan();
+  
+  if (stored && stored.plan) {
+    const startDate = new Date(stored.startDate);
+    const now = new Date();
+    const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - 
+                            Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
+    const unlocked = Math.max(0, Math.min(6, days));
+    
+    savedInfo.innerHTML = `
+      <div>Plan started: ${startDate.toLocaleDateString()}</div>
+      <div>Unlocked days: ${unlocked + 1}/7</div>
+      <div>Next unlock: ${unlocked < 6 ? "in " + (1) + " day" : "Complete"}</div>
+    `;
+  } else {
+    savedInfo.textContent = "No saved plan.";
+  }
+}
+
+/* =============================
+   Event Handlers
+   ============================= */
+document.addEventListener('DOMContentLoaded', function() {
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', function() {
+    document.documentElement.classList.toggle('dark');
+    this.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
+  });
+  
+  // Generate Preview button
+  const generateBtn = document.getElementById('generateBtn');
+  generateBtn.addEventListener('click', async function() {
+    const tdee = document.getElementById('tdeeInput').value;
+    const age = document.getElementById('ageInput').value;
+    const goal = document.getElementById('goalSelect').value;
+    const diet = document.getElementById('dietSelect').value;
+    const protein = document.getElementById('proteinSelect').value;
+    
+    if (!tdee) {
+      alert("Please enter your TDEE");
+      return;
+    }
+    
+    const opts = {
+      tdee: parseInt(tdee),
+      age: parseInt(age),
+      goal,
+      diet,
+      protein,
+      inputIsAlreadyAdjusted: true
+    };
+    
+    try {
+      const plan = await generatePlanAsync(opts);
+      renderPlan(plan, new Date().toISOString());
+      
+      // Show preview modal
+      const modal = document.getElementById('previewModal');
+      const previewBox = document.getElementById('previewBox');
+      previewBox.innerHTML = `<h3>7-Day Meal Plan Preview</h3><p>Plan generated successfully! Click "Accept & Save" to save this plan.</p>`;
+      modal.style.display = 'flex';
+      
+      // Close modal when clicking outside
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    } catch (error) {
+      console.error("Error generating plan:", error);
+      alert("Error generating plan. Please try again.");
+    }
+  });
+  
+  // Accept & Save button
+  const acceptBtn = document.getElementById('acceptBtn');
+  acceptBtn.addEventListener('click', function() {
+    const tdee = document.getElementById('tdeeInput').value;
+    const age = document.getElementById('ageInput').value;
+    const goal = document.getElementById('goalSelect').value;
+    const diet = document.getElementById('dietSelect').value;
+    const protein = document.getElementById('proteinSelect').value;
+    
+    if (!tdee) {
+      alert("Please enter your TDEE first");
+      return;
+    }
+    
+    const opts = {
+      tdee: parseInt(tdee),
+      age: parseInt(age),
+      goal,
+      diet,
+      protein,
+      inputIsAlreadyAdjusted: true
+    };
+    
+    generatePlanAsync(opts).then(plan => {
+      savePlan(plan, new Date().toISOString());
+      updateSavedInfo();
+      renderPlan(plan, new Date().toISOString());
+      document.getElementById('previewModal').style.display = 'none';
+      alert("Plan saved successfully!");
+    }).catch(error => {
+      console.error("Error saving plan:", error);
+      alert("Error saving plan. Please try again.");
+    });
+  });
+  
+  // Export PDF button
+  const exportBtn = document.getElementById('exportDayBtn');
+  exportBtn.addEventListener('click', exportCurrentDayToPDF);
+  
+  // Load any saved plan on page load
+  const stored = loadPlan();
+  if (stored && stored.plan) {
+    renderPlan(stored.plan, stored.startDate);
+  }
+  updateSavedInfo();
+  
+  // Try to get parameters from URL (for integration with calorie-guide.html)
+  const urlParams = new URLSearchParams(window.location.search);
+  const tdee = urlParams.get('tdee');
+  const age = urlParams.get('age');
+  const goal = urlParams.get('goal');
+  const diet = urlParams.get('diet');
+  
+  if (tdee) document.getElementById('tdeeInput').value = tdee;
+  if (age) document.getElementById('ageInput').value = age;
+  if (goal) document.getElementById('goalSelect').value = goal;
+  if (diet) document.getElementById('dietSelect').value = diet;
+});
+
 /* =============================
    Add/Replace Item Modals - FIXED
    ============================= */
@@ -766,14 +1253,13 @@ function openAddItemModal(dayIdx, mealKey) {
   `;
   
   const searchInput = document.getElementById("usdaSearchInput");
-  searchInput.addEventListener('input', debounce(async (e) => {
+  searchInput.addEventListener('input', debounce((e) => {
     const query = e.target.value.trim();
     if (query.length < 2) {
       document.getElementById("usdaResults").innerHTML = "<div class='muted-small'>Enter at least 2 characters to search</div>";
       return;
     }
 
-    // 🔥 NEW: search curated list instead of USDA
     const results = searchCuratedFoods(query);
     renderAddList(results);
 
@@ -852,6 +1338,7 @@ function applyAddToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, f
   
   document.getElementById("usdaPopup").style.display = 'none';
 }
+
 function openReplaceModal(dayIdx, mealKey) {
   currentDayForModal = dayIdx;
   currentMealForModal = mealKey;
@@ -879,7 +1366,6 @@ function openReplaceModal(dayIdx, mealKey) {
       return;
     }
 
-    // 🔥 NEW — replacement uses curated foods only
     const results = searchCuratedFoods(query);
     renderReplaceList(results);
 
@@ -933,7 +1419,7 @@ function applyReplacementToPlan(name, kcal_per_100g, protein_per_100g, carbs_per
   
   if (!day || !day[currentMealForModal] || !day[currentMealForModal].parts) return;
 
-  // Replace FIRST part in the meal (same logic as before)
+  // Replace FIRST part in the meal
   const first = day[currentMealForModal].parts[0];
   const grams = first.grams || 100;
 
@@ -962,9 +1448,9 @@ function applyReplacementToPlan(name, kcal_per_100g, protein_per_100g, carbs_per
 
   document.getElementById("usdaPopup").style.display = 'none';
 }
+
 /* =============================
    PDF Export — REAL PDF using jsPDF
-   Replaces previous text-download implementation.
    ============================= */
 function exportCurrentDayToPDF() {
   const stored = loadPlan();
@@ -1107,4 +1593,4 @@ function exportCurrentDayToPDF() {
 }
 </script>
 </body>
-</html>
+  </html>
