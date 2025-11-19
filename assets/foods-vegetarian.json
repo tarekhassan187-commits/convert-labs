@@ -1,0 +1,521 @@
+[
+  {
+    "name": "Egg (boiled)",
+    "serving": 50,
+    "calories": 78,
+    "protein": 6,
+    "carbs": 0.6,
+    "fat": 5.3,
+    "category": "protein",
+    "tags": ["breakfast", "dinner"]
+  },
+  {
+    "name": "Scrambled Eggs",
+    "serving": 100,
+    "calories": 148,
+    "protein": 10,
+    "carbs": 2,
+    "fat": 11,
+    "category": "protein",
+    "tags": ["breakfast", "dinner"]
+  },
+  {
+    "name": "Omelette (plain)",
+    "serving": 100,
+    "calories": 154,
+    "protein": 11,
+    "carbs": 1.3,
+    "fat": 11,
+    "category": "protein",
+    "tags": ["breakfast", "dinner"]
+  },
+
+  {
+    "name": "Greek Yogurt (plain)",
+    "serving": 100,
+    "calories": 59,
+    "protein": 10,
+    "carbs": 3.6,
+    "fat": 0.4,
+    "category": "dairy",
+    "tags": ["breakfast", "snack", "dinner"]
+  },
+  {
+    "name": "Milk (whole)",
+    "serving": 100,
+    "calories": 61,
+    "protein": 3.2,
+    "carbs": 4.8,
+    "fat": 3.3,
+    "category": "dairy",
+    "tags": ["breakfast", "snack"]
+  },
+  {
+    "name": "Paneer",
+    "serving": 100,
+    "calories": 296,
+    "protein": 18,
+    "carbs": 6,
+    "fat": 23,
+    "category": "dairy",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Cottage Cheese",
+    "serving": 100,
+    "calories": 98,
+    "protein": 11,
+    "carbs": 3.4,
+    "fat": 4.3,
+    "category": "dairy",
+    "tags": ["snack", "breakfast"]
+  },
+  {
+    "name": "Feta Cheese",
+    "serving": 100,
+    "calories": 264,
+    "protein": 14,
+    "carbs": 4,
+    "fat": 21,
+    "category": "dairy",
+    "tags": ["breakfast", "lunch", "snack"]
+  },
+  {
+    "name": "Mozzarella",
+    "serving": 100,
+    "calories": 280,
+    "protein": 28,
+    "carbs": 3,
+    "fat": 17,
+    "category": "dairy",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Lentils (cooked)",
+    "serving": 100,
+    "calories": 116,
+    "protein": 9,
+    "carbs": 20,
+    "fat": 0.4,
+    "category": "legume",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Chickpeas (boiled)",
+    "serving": 100,
+    "calories": 164,
+    "protein": 9,
+    "carbs": 27,
+    "fat": 2.6,
+    "category": "legume",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Black Beans (cooked)",
+    "serving": 100,
+    "calories": 132,
+    "protein": 9,
+    "carbs": 24,
+    "fat": 0.5,
+    "category": "legume",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Kidney Beans (cooked)",
+    "serving": 100,
+    "calories": 127,
+    "protein": 8.7,
+    "carbs": 22,
+    "fat": 0.5,
+    "category": "legume",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Tofu (firm)",
+    "serving": 100,
+    "calories": 144,
+    "protein": 17,
+    "carbs": 3,
+    "fat": 8.7,
+    "category": "soy",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Tempeh",
+    "serving": 100,
+    "calories": 193,
+    "protein": 20,
+    "carbs": 7.6,
+    "fat": 11,
+    "category": "soy",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Falafel (Taameya)",
+    "serving": 100,
+    "calories": 333,
+    "protein": 13,
+    "carbs": 31,
+    "fat": 18,
+    "category": "prepared",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Hummus",
+    "serving": 100,
+    "calories": 166,
+    "protein": 8,
+    "carbs": 14,
+    "fat": 10,
+    "category": "prepared",
+    "tags": ["lunch", "snack"]
+  },
+  {
+    "name": "Foul Medames",
+    "serving": 100,
+    "calories": 110,
+    "protein": 8,
+    "carbs": 14,
+    "fat": 2,
+    "category": "prepared",
+    "tags": ["breakfast", "lunch"]
+  },
+  {
+    "name": "Tahini Paste",
+    "serving": 100,
+    "calories": 595,
+    "protein": 17,
+    "carbs": 21,
+    "fat": 53,
+    "category": "prepared",
+    "tags": ["breakfast", "lunch"]
+  },
+  {
+    "name": "Koshary",
+    "serving": 100,
+    "calories": 118,
+    "protein": 4.2,
+    "carbs": 20.9,
+    "fat": 1.2,
+    "category": "prepared",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "White Rice (cooked)",
+    "serving": 100,
+    "calories": 130,
+    "protein": 2.7,
+    "carbs": 28,
+    "fat": 0.3,
+    "category": "grain",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Brown Rice (cooked)",
+    "serving": 100,
+    "calories": 112,
+    "protein": 2.3,
+    "carbs": 23,
+    "fat": 0.8,
+    "category": "grain",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Quinoa (cooked)",
+    "serving": 100,
+    "calories": 120,
+    "protein": 4.4,
+    "carbs": 21,
+    "fat": 1.9,
+    "category": "grain",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Oats (raw)",
+    "serving": 100,
+    "calories": 389,
+    "protein": 17,
+    "carbs": 66,
+    "fat": 7,
+    "category": "grain",
+    "tags": ["breakfast"]
+  },
+  {
+    "name": "Whole Wheat Bread",
+    "serving": 100,
+    "calories": 247,
+    "protein": 13,
+    "carbs": 41,
+    "fat": 4.2,
+    "category": "grain",
+    "tags": ["breakfast", "lunch"]
+  },
+  {
+    "name": "Baladi Bread",
+    "serving": 100,
+    "calories": 271,
+    "protein": 9,
+    "carbs": 56,
+    "fat": 1.3,
+    "category": "grain",
+    "tags": ["breakfast", "lunch"]
+  },
+  {
+    "name": "Pasta (cooked)",
+    "serving": 100,
+    "calories": 131,
+    "protein": 5,
+    "carbs": 25,
+    "fat": 1.1,
+    "category": "grain",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Couscous (cooked)",
+    "serving": 100,
+    "calories": 112,
+    "protein": 3.8,
+    "carbs": 23,
+    "fat": 0.2,
+    "category": "grain",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Potatoes (boiled)",
+    "serving": 100,
+    "calories": 87,
+    "protein": 1.9,
+    "carbs": 20,
+    "fat": 0.1,
+    "category": "vegetable",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Sweet Potatoes (baked)",
+    "serving": 100,
+    "calories": 90,
+    "protein": 2,
+    "carbs": 21,
+    "fat": 0.1,
+    "category": "vegetable",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Carrots (raw)",
+    "serving": 100,
+    "calories": 41,
+    "protein": 1,
+    "carbs": 10,
+    "fat": 0.2,
+    "category": "vegetable",
+    "tags": ["snack", "lunch", "dinner"]
+  },
+  {
+    "name": "Broccoli (steamed)",
+    "serving": 100,
+    "calories": 35,
+    "protein": 2.4,
+    "carbs": 7,
+    "fat": 0.4,
+    "category": "vegetable",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Spinach (boiled)",
+    "serving": 100,
+    "calories": 23,
+    "protein": 3,
+    "carbs": 3.8,
+    "fat": 0.3,
+    "category": "vegetable",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Zucchini (grilled)",
+    "serving": 100,
+    "calories": 17,
+    "protein": 1.4,
+    "carbs": 3.1,
+    "fat": 0.3,
+    "category": "vegetable",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Green Beans (steamed)",
+    "serving": 100,
+    "calories": 35,
+    "protein": 1.8,
+    "carbs": 7.9,
+    "fat": 0.3,
+    "category": "vegetable",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Cucumber",
+    "serving": 100,
+    "calories": 15,
+    "protein": 0.7,
+    "carbs": 3.6,
+    "fat": 0.1,
+    "category": "vegetable",
+    "tags": ["snack", "breakfast", "lunch"]
+  },
+  {
+    "name": "Tomatoes",
+    "serving": 100,
+    "calories": 18,
+    "protein": 0.9,
+    "carbs": 3.9,
+    "fat": 0.2,
+    "category": "vegetable",
+    "tags": ["breakfast", "lunch", "dinner"]
+  },
+
+  {
+    "name": "Apple",
+    "serving": 100,
+    "calories": 52,
+    "protein": 0.3,
+    "carbs": 14,
+    "fat": 0.2,
+    "category": "fruit",
+    "tags": ["snack", "breakfast"]
+  },
+  {
+    "name": "Banana",
+    "serving": 100,
+    "calories": 89,
+    "protein": 1.1,
+    "carbs": 23,
+    "fat": 0.3,
+    "category": "fruit",
+    "tags": ["snack", "breakfast"]
+  },
+  {
+    "name": "Orange",
+    "serving": 100,
+    "calories": 47,
+    "protein": 0.9,
+    "carbs": 12,
+    "fat": 0.1,
+    "category": "fruit",
+    "tags": ["snack", "breakfast"]
+  },
+  {
+    "name": "Grapes",
+    "serving": 100,
+    "calories": 69,
+    "protein": 0.7,
+    "carbs": 18,
+    "fat": 0.2,
+    "category": "fruit",
+    "tags": ["snack"]
+  },
+  {
+    "name": "Strawberries",
+    "serving": 100,
+    "calories": 32,
+    "protein": 0.7,
+    "carbs": 7.7,
+    "fat": 0.3,
+    "category": "fruit",
+    "tags": ["snack", "breakfast"]
+  },
+  {
+    "name": "Mango",
+    "serving": 100,
+    "calories": 60,
+    "protein": 0.8,
+    "carbs": 15,
+    "fat": 0.4,
+    "category": "fruit",
+    "tags": ["snack"]
+  },
+  {
+    "name": "Pomegranate",
+    "serving": 100,
+    "calories": 83,
+    "protein": 1.7,
+    "carbs": 19,
+    "fat": 1.2,
+    "category": "fruit",
+    "tags": ["snack"]
+  },
+
+  {
+    "name": "Almonds",
+    "serving": 100,
+    "calories": 579,
+    "protein": 21,
+    "carbs": 22,
+    "fat": 50,
+    "category": "fat",
+    "tags": ["snack"]
+  },
+  {
+    "name": "Walnuts",
+    "serving": 100,
+    "calories": 654,
+    "protein": 15,
+    "carbs": 14,
+    "fat": 65,
+    "category": "fat",
+    "tags": ["snack"]
+  },
+  {
+    "name": "Peanut Butter",
+    "serving": 100,
+    "calories": 588,
+    "protein": 25,
+    "carbs": 20,
+    "fat": 50,
+    "category": "fat",
+    "tags": ["breakfast", "snack"]
+  },
+  {
+    "name": "Olive Oil",
+    "serving": 14,
+    "calories": 119,
+    "protein": 0,
+    "carbs": 0,
+    "fat": 14,
+    "category": "fat",
+    "tags": ["lunch", "dinner"]
+  },
+
+  {
+    "name": "Vegetable Soup",
+    "serving": 100,
+    "calories": 40,
+    "protein": 2,
+    "carbs": 7,
+    "fat": 0.5,
+    "category": "prepared",
+    "tags": ["dinner"]
+  },
+  {
+    "name": "Lentil Soup (Egyptian)",
+    "serving": 100,
+    "calories": 101,
+    "protein": 4.9,
+    "carbs": 16,
+    "fat": 2,
+    "category": "prepared",
+    "tags": ["lunch", "dinner"]
+  },
+  {
+    "name": "Tomato Soup",
+    "serving": 100,
+    "calories": 40,
+    "protein": 1.5,
+    "carbs": 7,
+    "fat": 0.4,
+    "category": "prepared",
+    "tags": ["dinner"]
+  }
+]
