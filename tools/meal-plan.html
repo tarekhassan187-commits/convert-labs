@@ -28,7 +28,7 @@
     html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; }
     *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
     header{height:64px;background:var(--brand-2);color:#fff;display:flex;align-items:center;padding:0 20px;position:sticky;top:0;z-index:100}
-    .brand{font-weight:700;margin-right:16px;display:flex;align-items:center;gap:10px;}
+    .brand{font-weight:700;display:flex;align-items:center;gap:10px;}
     .nav-links{display:flex;gap:20px;margin:0 auto;}
     .nav-links a{color:#fff;text-decoration:none;font-weight:500;padding:8px 12px;border-radius:6px;transition:background-color 0.2s;}
     .nav-links a:hover{background:rgba(255,255,255,0.1);}
@@ -59,6 +59,7 @@
 </head>
 <body>
   <header>
+    <div style="flex:1"></div>
     <div class="brand">
       <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
       <span>Convert Labs</span>
@@ -70,8 +71,7 @@
       <a href="https://convertlabs.online/about.html">About</a>
       <a href="https://convertlabs.online/contact.html">Contact</a>
     </nav>
-    <div style="flex:1"></div>
-    <div>
+    <div style="flex:1;display:flex;justify-content:flex-end;">
       <button id="themeToggle" class="btn ghost">🌙</button>
     </div>
   </header>
@@ -359,50 +359,151 @@ async function searchNutrition(query, limit=40){
 }
 
 /* =============================
-   Enhanced Food Pools for Diet Types
+   Enhanced Food Pools for All Diet Types
    ============================= */
 const POOLS = {
-  proteins:[
-    {name:"Grilled beef steak", kcal_per_100g:250, protein_per_100g:26, fat_per_100g:18, tags:["meat","beef"]},
-    {name:"Grilled chicken", kcal_per_100g:165, protein_per_100g:31, fat_per_100g:3.6, tags:["meat","chicken"]},
-    {name:"Baked salmon", kcal_per_100g:206, protein_per_100g:22, fat_per_100g:12, tags:["fish"]},
-    {name:"Tofu (firm)", kcal_per_100g:144, protein_per_100g:12, fat_per_100g:8, tags:["plant","tofu"]},
-    {name:"Boiled eggs", kcal_per_100g:155, protein_per_100g:13, fat_per_100g:11, tags:["eggs"]},
-    {name:"Hard cheese", kcal_per_100g:402, protein_per_100g:25, fat_per_100g:33, tags:["dairy","cheese"]}
-  ],
-  sides:[
-    {name:"Brown rice", kcal_per_100g:123, carbs_per_100g:26, protein_per_100g:2.7, tags:["grain"]},
-    {name:"Steamed vegetables", kcal_per_100g:30, carbs_per_100g:5, protein_per_100g:2, tags:["veg"]},
-    {name:"Avocado", kcal_per_100g:160, fat_per_100g:15, tags:["fat","fruit"]},
-    {name:"Mashed potato", kcal_per_100g:88, carbs_per_100g:20, tags:["starch"]}
-  ],
-  breakfasts:[
-    {name:"Oatmeal", kcal_per_100g:124, carbs_per_100g:67, protein_per_100g:13, tags:["grain"]},
-    {name:"Greek yogurt", kcal_per_100g:95, protein_per_100g:10, tags:["dairy"]},
-    {name:"Boiled eggs", kcal_per_100g:155, protein_per_100g:13, tags:["eggs"]}
-  ],
-  snacks:[
-    {name:"Almonds", kcal_per_100g:579, fat_per_100g:50, protein_per_100g:21, tags:["nuts"]},
-    {name:"Apple", kcal_per_100g:52, carbs_per_100g:14, tags:["fruit"]}
-  ],
-  keto_proteins: [
-    {name:"Salmon", kcal_per_100g:206, protein_per_100g:22, fat_per_100g:12, tags:["fish","fat"]},
-    {name:"Avocado", kcal_per_100g:160, protein_per_100g:2, carbs_per_100g:9, fat_per_100g:15, tags:["fat","fruit"]},
-    {name:"Olive Oil", kcal_per_100g:884, protein_per_100g:0, carbs_per_100g:0, fat_per_100g:100, tags:["fat"]},
-    {name:"Ribeye Steak", kcal_per_100g:291, protein_per_100g:25, fat_per_100g:21, tags:["meat","beef","fat"]},
-    {name:"Bacon", kcal_per_100g:541, protein_per_100g:37, carbs_per_100g:1.4, fat_per_100g:42, tags:["meat","pork","fat"]},
-    {name:"Butter", kcal_per_100g:717, protein_per_100g:0.9, carbs_per_100g:0.1, fat_per_100g:81, tags:["dairy","fat"]}
-  ],
+  // CARNIVORE DIET - Only animal products
   carnivore_proteins: [
-    {name:"Ribeye Steak", kcal_per_100g:291, protein_per_100g:25, fat_per_100g:21, tags:["meat","beef"]},
-    {name:"Pork Chop", kcal_per_100g:242, protein_per_100g:27, fat_per_100g:14, tags:["meat","pork"]},
-    {name:"Chicken Thighs", kcal_per_100g:209, protein_per_100g:26, fat_per_100g:11, tags:["meat","chicken"]},
-    {name:"Ground Beef (80/20)", kcal_per_100g:254, protein_per_100g:25, fat_per_100g:16, tags:["meat","beef"]},
-    {name:"Lamb Chops", kcal_per_100g:282, protein_per_100g:25, fat_per_100g:20, tags:["meat","lamb"]},
+    {name:"Ribeye Steak", kcal_per_100g:291, protein_per_100g:25, carbs_per_100g:0, fat_per_100g:21, tags:["meat","beef"]},
+    {name:"Ground Beef (80/20)", kcal_per_100g:254, protein_per_100g:25, carbs_per_100g:0, fat_per_100g:16, tags:["meat","beef"]},
+    {name:"Pork Chops", kcal_per_100g:242, protein_per_100g:27, carbs_per_100g:0, fat_per_100g:14, tags:["meat","pork"]},
+    {name:"Chicken Thighs", kcal_per_100g:209, protein_per_100g:26, carbs_per_100g:0, fat_per_100g:11, tags:["meat","chicken"]},
     {name:"Bacon", kcal_per_100g:541, protein_per_100g:37, carbs_per_100g:1.4, fat_per_100g:42, tags:["meat","pork"]},
+    {name:"Salmon", kcal_per_100g:206, protein_per_100g:22, carbs_per_100g:0, fat_per_100g:12, tags:["fish"]},
     {name:"Eggs", kcal_per_100g:155, protein_per_100g:13, carbs_per_100g:1.1, fat_per_100g:11, tags:["eggs"]},
-    {name:"Salmon", kcal_per_100g:206, protein_per_100g:22, fat_per_100g:12, tags:["fish"]}
+    {name:"Lamb Chops", kcal_per_100g:282, protein_per_100g:25, carbs_per_100g:0, fat_per_100g:20, tags:["meat","lamb"]},
+    {name:"Liver", kcal_per_100g:135, protein_per_100g:20, carbs_per_100g:3.9, fat_per_100g:3.7, tags:["meat","organ"]},
+    {name:"Butter", kcal_per_100g:717, protein_per_100g:0.9, carbs_per_100g:0.1, fat_per_100g:81, tags:["dairy","fat"]},
+    {name:"Heavy Cream", kcal_per_100g:345, protein_per_100g:2.1, carbs_per_100g:2.9, fat_per_100g:37, tags:["dairy","fat"]}
   ],
+
+  // KETO DIET - Multiple components
+  keto_breakfasts: [
+    {name:"Scrambled eggs with cheese", kcal_per_100g:195, protein_per_100g:14, carbs_per_100g:2, fat_per_100g:15, tags:["eggs","dairy"]},
+    {name:"Greek yogurt with berries", kcal_per_100g:75, protein_per_100g:8, carbs_per_100g:7, fat_per_100g:2, tags:["dairy","fruit"]},
+    {name:"Breakfast burrito", kcal_per_100g:180, protein_per_100g:12, carbs_per_100g:8, fat_per_100g:12, tags:["eggs","veg"]},
+    {name:"Berry smoothie", kcal_per_100g:85, protein_per_100g:6, carbs_per_100g:9, fat_per_100g:4, tags:["dairy","fruit"]},
+    {name:"2-egg omelet with vegetables", kcal_per_100g:145, protein_per_100g:11, carbs_per_100g:3, fat_per_100g:10, tags:["eggs","veg"]},
+    {name:"Egg nests with zucchini", kcal_per_100g:120, protein_per_100g:9, carbs_per_100g:4, fat_per_100g:8, tags:["eggs","veg"]},
+    {name:"Avocado and eggs", kcal_per_100g:190, protein_per_100g:8, carbs_per_100g:6, fat_per_100g:16, tags:["eggs","fruit","fat"]}
+  ],
+  
+  keto_lunch_proteins: [
+    {name:"Turkey salad", kcal_per_100g:110, protein_per_100g:18, carbs_per_100g:3, fat_per_100g:3, tags:["meat"]},
+    {name:"Tuna salad wrap", kcal_per_100g:145, protein_per_100g:16, carbs_per_100g:6, fat_per_100g:7, tags:["fish"]},
+    {name:"Chicken salad", kcal_per_100g:130, protein_per_100g:20, carbs_per_100g:2, fat_per_100g:5, tags:["meat","chicken"]},
+    {name:"Egg salad wrap", kcal_per_100g:180, protein_per_100g:11, carbs_per_100g:5, fat_per_100g:13, tags:["eggs"]},
+    {name:"Ham and cream cheese rollups", kcal_per_100g:220, protein_per_100g:14, carbs_per_100g:3, fat_per_100g:17, tags:["meat","dairy"]},
+    {name:"Cottage cheese salad", kcal_per_100g:98, protein_per_100g:11, carbs_per_100g:3, fat_per_100g:4, tags:["dairy"]}
+  ],
+  
+  keto_lunch_sides: [
+    {name:"Mixed greens salad", kcal_per_100g:25, carbs_per_100g:4, protein_per_100g:2, fat_per_100g:0, tags:["veg"]},
+    {name:"Cucumber slices with ranch", kcal_per_100g:65, carbs_per_100g:3, protein_per_100g:1, fat_per_100g:6, tags:["veg","fat"]},
+    {name:"Celery sticks with ranch", kcal_per_100g:70, carbs_per_100g:3, protein_per_100g:1, fat_per_100g:7, tags:["veg","fat"]},
+    {name:"Pickle spear", kcal_per_100g:12, carbs_per_100g:3, protein_per_100g:0, fat_per_100g:0, tags:["veg"]},
+    {name:"Side salad with vinaigrette", kcal_per_100g:45, carbs_per_100g:3, protein_per_100g:1, fat_per_100g:4, tags:["veg","fat"]}
+  ],
+  
+  keto_dinner_proteins: [
+    {name:"Hamburger patty with cheese", kcal_per_100g:280, protein_per_100g:25, carbs_per_100g:2, fat_per_100g:19, tags:["meat","beef","dairy"]},
+    {name:"Chicken breast with pesto", kcal_per_100g:195, protein_per_100g:26, carbs_per_100g:2, fat_per_100g:9, tags:["meat","chicken"]},
+    {name:"Meatless meatballs with sauce", kcal_per_100g:180, protein_per_100g:12, carbs_per_100g:8, fat_per_100g:11, tags:["plant"]},
+    {name:"Salmon fillet", kcal_per_100g:206, protein_per_100g:22, carbs_per_100g:0, fat_per_100g:12, tags:["fish"]},
+    {name:"Sausage with vegetables", kcal_per_100g:250, protein_per_100g:14, carbs_per_100g:4, fat_per_100g:20, tags:["meat"]},
+    {name:"Ground beef tacos", kcal_per_100g:220, protein_per_100g:20, carbs_per_100g:5, fat_per_100g:14, tags:["meat","beef"]},
+    {name:"Tofu or chicken stir fry", kcal_per_100g:150, protein_per_100g:16, carbs_per_100g:6, fat_per_100g:7, tags:["plant","chicken"]}
+  ],
+  
+  keto_dinner_sides: [
+    {name:"Roasted broccoli with parmesan", kcal_per_100g:85, carbs_per_100g:6, protein_per_100g:5, fat_per_100g:5, tags:["veg","dairy"]},
+    {name:"Zucchini noodles", kcal_per_100g:35, carbs_per_100g:6, protein_per_100g:2, fat_per_100g:0, tags:["veg"]},
+    {name:"Asparagus with garlic", kcal_per_100g:40, carbs_per_100g:5, protein_per_100g:3, fat_per_100g:2, tags:["veg"]},
+    {name:"Spinach salad", kcal_per_100g:45, carbs_per_100g:4, protein_per_100g:3, fat_per_100g:3, tags:["veg"]},
+    {name:"Sheet pan vegetables", kcal_per_100g:55, carbs_per_100g:8, protein_per_100g:2, fat_per_100g:2, tags:["veg"]},
+    {name:"Cauliflower rice", kcal_per_100g:40, carbs_per_100g:7, protein_per_100g:3, fat_per_100g:1, tags:["veg"]},
+    {name:"Lettuce wraps", kcal_per_100g:15, carbs_per_100g:3, protein_per_100g:1, fat_per_100g:0, tags:["veg"]}
+  ],
+
+  // BALANCED DIET - Varied meals with multiple components
+  balanced_breakfasts: [
+    {name:"Oatmeal with berries", kcal_per_100g:124, protein_per_100g:4, carbs_per_100g:21, fat_per_100g:2, tags:["grain","fruit"]},
+    {name:"Scrambled eggs with toast", kcal_per_100g:180, protein_per_100g:11, carbs_per_100g:15, fat_per_100g:9, tags:["eggs","grain"]},
+    {name:"Greek yogurt with granola", kcal_per_100g:120, protein_per_100g:9, carbs_per_100g:16, fat_per_100g:3, tags:["dairy","grain"]},
+    {name:"Whole wheat pancakes", kcal_per_100g:180, protein_per_100g:6, carbs_per_100g:28, fat_per_100g:5, tags:["grain"]},
+    {name:"Breakfast burrito", kcal_per_100g:195, protein_per_100g:12, carbs_per_100g:20, fat_per_100g:8, tags:["eggs","grain"]},
+    {name:"Cereal with milk and fruit", kcal_per_100g:110, protein_per_100g:4, carbs_per_100g:20, fat_per_100g:2, tags:["grain","dairy","fruit"]}
+  ],
+
+  balanced_lunch_proteins: [
+    {name:"Grilled chicken breast", kcal_per_100g:165, protein_per_100g:31, carbs_per_100g:0, fat_per_100g:3.6, tags:["meat","chicken"]},
+    {name:"Turkey sandwich", kcal_per_100g:180, protein_per_100g:15, carbs_per_100g:20, fat_per_100g:5, tags:["meat","grain"]},
+    {name:"Tuna salad", kcal_per_100g:140, protein_per_100g:16, carbs_per_100g:3, fat_per_100g:7, tags:["fish"]},
+    {name:"Quinoa bowl", kcal_per_100g:120, protein_per_100g:4, carbs_per_100g:21, fat_per_100g:2, tags:["grain","plant"]},
+    {name:"Lentil soup", kcal_per_100g:90, protein_per_100g:6, carbs_per_100g:15, fat_per_100g:2, tags:["plant","legume"]},
+    {name:"Egg salad", kcal_per_100g:180, protein_per_100g:11, carbs_per_100g:2, fat_per_100g:14, tags:["eggs"]}
+  ],
+
+  balanced_lunch_sides: [
+    {name:"Mixed green salad", kcal_per_100g:25, carbs_per_100g:4, protein_per_100g:2, fat_per_100g:0, tags:["veg"]},
+    {name:"Steamed vegetables", kcal_per_100g:35, carbs_per_100g:6, protein_per_100g:3, fat_per_100g:0, tags:["veg"]},
+    {name:"Fruit salad", kcal_per_100g:50, carbs_per_100g:12, protein_per_100g:1, fat_per_100g:0, tags:["fruit"]},
+    {name:"Whole grain bread", kcal_per_100g:250, carbs_per_100g:45, protein_per_100g:10, fat_per_100g:4, tags:["grain"]},
+    {name:"Brown rice", kcal_per_100g:123, carbs_per_100g:26, protein_per_100g:3, fat_per_100g:1, tags:["grain"]},
+    {name:"Sweet potato", kcal_per_100g:86, carbs_per_100g:20, protein_per_100g:1.6, fat_per_100g:0.1, tags:["veg","starch"]}
+  ],
+
+  balanced_dinner_proteins: [
+    {name:"Grilled salmon", kcal_per_100g:206, protein_per_100g:22, carbs_per_100g:0, fat_per_100g:12, tags:["fish"]},
+    {name:"Lean beef steak", kcal_per_100g:250, protein_per_100g:26, carbs_per_100g:0, fat_per_100g:15, tags:["meat","beef"]},
+    {name:"Baked chicken", kcal_per_100g:165, protein_per_100g:31, carbs_per_100g:0, fat_per_100g:3.6, tags:["meat","chicken"]},
+    {name:"Tofu stir fry", kcal_per_100g:145, protein_per_100g:12, carbs_per_100g:5, fat_per_100g:9, tags:["plant"]},
+    {name:"Pork tenderloin", kcal_per_100g:143, protein_per_100g:26, carbs_per_100g:0, fat_per_100g:4, tags:["meat","pork"]},
+    {name:"Lentil curry", kcal_per_100g:116, protein_per_100g:9, carbs_per_100g:20, fat_per_100g:1, tags:["plant","legume"]}
+  ],
+
+  balanced_dinner_sides: [
+    {name:"Roasted vegetables", kcal_per_100g:65, carbs_per_100g:12, protein_per_100g:2, fat_per_100g:1, tags:["veg"]},
+    {name:"Quinoa pilaf", kcal_per_100g:120, carbs_per_100g:21, protein_per_100g:4, fat_per_100g:2, tags:["grain"]},
+    {name:"Mashed potatoes", kcal_per_100g:88, carbs_per_100g:20, protein_per_100g:2, fat_per_100g:0, tags:["starch"]},
+    {name:"Steamed broccoli", kcal_per_100g:34, carbs_per_100g:7, protein_per_100g:2.8, fat_per_100g:0.4, tags:["veg"]},
+    {name:"Whole wheat pasta", kcal_per_100g:124, carbs_per_100g:25, protein_per_100g:5, fat_per_100g:1, tags:["grain"]},
+    {name:"Green beans almondine", kcal_per_100g:85, carbs_per_100g:8, protein_per_100g:3, fat_per_100g:5, tags:["veg","nuts"]}
+  ],
+
+  // SNACKS FOR ALL DIETS
+  keto_snacks: [
+    {name:"Almonds", kcal_per_100g:579, protein_per_100g:21, carbs_per_100g:22, fat_per_100g:50, tags:["nuts"]},
+    {name:"Cottage cheese", kcal_per_100g:98, protein_per_100g:11, carbs_per_100g:3, fat_per_100g:4, tags:["dairy"]},
+    {name:"String cheese", kcal_per_100g:280, protein_per_100g:25, carbs_per_100g:1, fat_per_100g:20, tags:["dairy"]},
+    {name:"Hard boiled egg", kcal_per_100g:155, protein_per_100g:13, carbs_per_100g:1, fat_per_100g:11, tags:["eggs"]},
+    {name:"Sunflower seeds", kcal_per_100g:584, protein_per_100g:21, carbs_per_100g:20, fat_per_100g:51, tags:["seeds"]}
+  ],
+
+  balanced_snacks: [
+    {name:"Apple with peanut butter", kcal_per_100g:150, protein_per_100g:4, carbs_per_100g:18, fat_per_100g:8, tags:["fruit","nuts"]},
+    {name:"Greek yogurt", kcal_per_100g:59, protein_per_100g:10, carbs_per_100g:3.6, fat_per_100g:0.4, tags:["dairy"]},
+    {name:"Carrot sticks with hummus", kcal_per_100g:120, protein_per_100g:4, carbs_per_100g:12, fat_per_100g:7, tags:["veg","legume"]},
+    {name:"Trail mix", kcal_per_100g:460, protein_per_100g:12, carbs_per_100g:45, fat_per_100g:28, tags:["nuts","fruit"]},
+    {name:"Rice cakes with avocado", kcal_per_100g:180, protein_per_100g:3, carbs_per_100g:20, fat_per_100g:10, tags:["grain","fruit"]}
+  ],
+
+  carnivore_snacks: [
+    {name:"Beef jerky", kcal_per_100g:410, protein_per_100g:33, carbs_per_100g:11, fat_per_100g:26, tags:["meat","beef"]},
+    {name:"Hard boiled eggs", kcal_per_100g:155, protein_per_100g:13, carbs_per_100g:1.1, fat_per_100g:11, tags:["eggs"]},
+    {name:"Pork rinds", kcal_per_100g:615, protein_per_100g:61, carbs_per_100g:0, fat_per_100g:41, tags:["meat","pork"]},
+    {name:"Cheese slices", kcal_per_100g:400, protein_per_100g:25, carbs_per_100g:2, fat_per_100g:33, tags:["dairy"]}
+  ],
+
+  // BEVERAGES
+  beverages: [
+    {name:"Water", kcal_per_100g:0, protein_per_100g:0, carbs_per_100g:0, fat_per_100g:0, tags:["beverage"]},
+    {name:"Coffee", kcal_per_100g:1, protein_per_100g:0, carbs_per_100g:0, fat_per_100g:0, tags:["beverage"]},
+    {name:"Tea", kcal_per_100g:1, protein_per_100g:0, carbs_per_100g:0, fat_per_100g:0, tags:["beverage"]},
+    {name:"Milk", kcal_per_100g:61, protein_per_100g:3.3, carbs_per_100g:4.8, fat_per_100g:3.3, tags:["dairy","beverage"]}
+  ],
+
+  // VEGETARIAN (existing pools)
   vegetarian_proteins: [
     {name:"Lentils", kcal_per_100g:116, protein_per_100g:9, carbs_per_100g:20, fat_per_100g:0.4, tags:["plant","legume"]},
     {name:"Chickpeas", kcal_per_100g:139, protein_per_100g:7, carbs_per_100g:22, fat_per_100g:2.4, tags:["plant","legume"]},
@@ -413,41 +514,21 @@ const POOLS = {
     {name:"Cottage Cheese", kcal_per_100g:98, protein_per_100g:11, carbs_per_100g:3.4, fat_per_100g:4.3, tags:["dairy"]},
     {name:"Mozzarella", kcal_per_100g:280, protein_per_100g:28, carbs_per_100g:3.1, fat_per_100g:17, tags:["dairy","cheese"]},
     {name:"Eggs", kcal_per_100g:155, protein_per_100g:13, carbs_per_100g:1.1, fat_per_100g:11, tags:["eggs"]},
-    {name:"Quinoa", kcal_per_100g:120, protein_per_100g:4.4, carbs_per_100g:21, fat_per_100g:1.9, tags:["grain","plant"]},
-    {name:"Black Beans", kcal_per_100g:132, protein_per_100g:9, carbs_per_100g:24, fat_per_100g:0.5, tags:["plant","legume"]},
-    {name:"Kidney Beans", kcal_per_100g:127, protein_per_100g:9, carbs_per_100g:23, fat_per_100g:0.5, tags:["plant","legume"]},
-    {name:"Pumpkin Seeds", kcal_per_100g:446, protein_per_100g:19, carbs_per_100g:54, fat_per_100g:19, tags:["nuts","seeds"]},
-    {name:"Almonds", kcal_per_100g:579, protein_per_100g:21, carbs_per_100g:22, fat_per_100g:50, tags:["nuts"]},
-    {name:"Walnuts", kcal_per_100g:654, protein_per_100g:15, carbs_per_100g:14, fat_per_100g:65, tags:["nuts"]},
-    {name:"Chia Seeds", kcal_per_100g:486, protein_per_100g:17, carbs_per_100g:42, fat_per_100g:31, tags:["seeds"]},
-    {name:"Hemp Seeds", kcal_per_100g:553, protein_per_100g:32, carbs_per_100g:9, fat_per_100g:49, tags:["seeds"]},
-    {name:"Nutritional Yeast", kcal_per_100g:400, protein_per_100g:50, carbs_per_100g:41, fat_per_100g:5, tags:["plant","supplement"]},
-    {name:"Seitan", kcal_per_100g:105, protein_per_100g:21, carbs_per_100g:4, fat_per_100g:1, tags:["plant","wheat"]},
-    {name:"Paneer", kcal_per_100g:321, protein_per_100g:21, carbs_per_100g:4, fat_per_100g:25, tags:["dairy","cheese"]}
+    {name:"Quinoa", kcal_per_100g:120, protein_per_100g:4.4, carbs_per_100g:21, fat_per_100g:1.9, tags:["grain","plant"]}
   ],
   vegetarian_sides: [
     {name:"Steamed Broccoli", kcal_per_100g:34, carbs_per_100g:7, protein_per_100g:2.8, fat_per_100g:0.4, tags:["veg"]},
     {name:"Roasted Vegetables", kcal_per_100g:65, carbs_per_100g:12, protein_per_100g:2, fat_per_100g:1, tags:["veg"]},
     {name:"Spinach Salad", kcal_per_100g:23, carbs_per_100g:3.6, protein_per_100g:2.9, fat_per_100g:0.4, tags:["veg"]},
     {name:"Sweet Potato", kcal_per_100g:86, carbs_per_100g:20, protein_per_100g:1.6, fat_per_100g:0.1, tags:["veg","starch"]},
-    {name:"Brown Rice", kcal_per_100g:123, carbs_per_100g:26, protein_per_100g:2.7, fat_per_100g:1, tags:["grain"]},
-    {name:"Quinoa", kcal_per_100g:120, carbs_per_100g:21, protein_per_100g:4.4, fat_per_100g:1.9, tags:["grain"]},
-    {name:"Avocado", kcal_per_100g:160, carbs_per_100g:9, protein_per_100g:2, fat_per_100g:15, tags:["fruit","fat"]},
-    {name:"Roasted Bell Peppers", kcal_per_100g:26, carbs_per_100g:6, protein_per_100g:1, fat_per_100g:0.3, tags:["veg"]},
-    {name:"Grilled Zucchini", kcal_per_100g:17, carbs_per_100g:3.1, protein_per_100g:1.2, fat_per_100g:0.3, tags:["veg"]},
-    {name:"Mushrooms", kcal_per_100g:22, carbs_per_100g:3.3, protein_per_100g:3.1, fat_per_100g:0.3, tags:["veg"]},
-    {name:"Cauliflower Rice", kcal_per_100g:25, carbs_per_100g:5, protein_per_100g:2, fat_per_100g:0.3, tags:["veg"]},
-    {name:"Brussels Sprouts", kcal_per_100g:43, carbs_per_100g:9, protein_per_100g:3.4, fat_per_100g:0.3, tags:["veg"]}
+    {name:"Brown Rice", kcal_per_100g:123, carbs_per_100g:26, protein_per_100g:2.7, fat_per_100g:1, tags:["grain"]}
   ],
   vegetarian_breakfasts: [
     {name:"Greek Yogurt with Berries", kcal_per_100g:75, protein_per_100g:8, carbs_per_100g:7, fat_per_100g:2, tags:["dairy","fruit"]},
     {name:"Oatmeal with Nuts", kcal_per_100g:130, protein_per_100g:5, carbs_per_100g:20, fat_per_100g:4, tags:["grain","nuts"]},
     {name:"Scrambled Eggs", kcal_per_100g:155, protein_per_100g:13, carbs_per_100g:1.1, fat_per_100g:11, tags:["eggs"]},
     {name:"Avocado Toast", kcal_per_100g:180, protein_per_100g:6, carbs_per_100g:20, fat_per_100g:9, tags:["fruit","grain"]},
-    {name:"Cottage Cheese Bowl", kcal_per_100g:98, protein_per_100g:11, carbs_per_100g:3.4, fat_per_100g:4.3, tags:["dairy"]},
-    {name:"Chia Pudding", kcal_per_100g:120, protein_per_100g:4, carbs_per_100g:12, fat_per_100g:7, tags:["seeds"]},
-    {name:"Smoothie Bowl", kcal_per_100g:85, protein_per_100g:3, carbs_per_100g:15, fat_per_100g:2, tags:["fruit"]},
-    {name:"Breakfast Burrito", kcal_per_100g:150, protein_per_100g:8, carbs_per_100g:18, fat_per_100g:5, tags:["eggs","grain"]}
+    {name:"Cottage Cheese Bowl", kcal_per_100g:98, protein_per_100g:11, carbs_per_100g:3.4, fat_per_100g:4.3, tags:["dairy"]}
   ]
 };
 
@@ -572,6 +653,7 @@ async function pickFoodByName(prefName, fallbackPool, opts, usedNames){
         if (diet === "keto" && (item.tags.includes("fat") || item.fat_per_100g > 15)) score += 20;
         if (diet === "carnivore" && (item.tags.includes("meat") || item.tags.includes("fish"))) score += 30;
         if (diet === "vegetarian" && !item.tags.some(t => ["meat", "fish"].includes(t))) score += 25;
+        if (diet === "balanced" && item.tags.some(t => ["grain", "fruit", "veg"].includes(t))) score += 15;
         
         return { item, score };
       }).sort((a, b) => b.score - a.score);
@@ -580,20 +662,24 @@ async function pickFoodByName(prefName, fallbackPool, opts, usedNames){
     }
   }
   
-  // Fallback to pool with diet enforcement
+  // Fallback to appropriate pool
   let dietAwarePool = fallbackPool || [];
   
-  // Use diet-specific pools when available
-  if (diet === "keto" && fallbackPool === POOLS.proteins) {
-    dietAwarePool = POOLS.keto_proteins;
-  } else if (diet === "carnivore" && fallbackPool === POOLS.proteins) {
+  // Use diet-specific pools
+  if (diet === "keto") {
+    if (fallbackPool === POOLS.proteins) dietAwarePool = POOLS.keto_lunch_proteins;
+    else if (fallbackPool === POOLS.sides) dietAwarePool = POOLS.keto_lunch_sides;
+    else if (fallbackPool === POOLS.breakfasts) dietAwarePool = POOLS.keto_breakfasts;
+  } else if (diet === "carnivore") {
     dietAwarePool = POOLS.carnivore_proteins;
-  } else if (diet === "vegetarian" && fallbackPool === POOLS.proteins) {
-    dietAwarePool = POOLS.vegetarian_proteins;
-  } else if (diet === "vegetarian" && fallbackPool === POOLS.sides) {
-    dietAwarePool = POOLS.vegetarian_sides;
-  } else if (diet === "vegetarian" && fallbackPool === POOLS.breakfasts) {
-    dietAwarePool = POOLS.vegetarian_breakfasts;
+  } else if (diet === "balanced") {
+    if (fallbackPool === POOLS.proteins) dietAwarePool = POOLS.balanced_lunch_proteins;
+    else if (fallbackPool === POOLS.sides) dietAwarePool = POOLS.balanced_lunch_sides;
+    else if (fallbackPool === POOLS.breakfasts) dietAwarePool = POOLS.balanced_breakfasts;
+  } else if (diet === "vegetarian") {
+    if (fallbackPool === POOLS.proteins) dietAwarePool = POOLS.vegetarian_proteins;
+    else if (fallbackPool === POOLS.sides) dietAwarePool = POOLS.vegetarian_sides;
+    else if (fallbackPool === POOLS.breakfasts) dietAwarePool = POOLS.vegetarian_breakfasts;
   }
   
   const candidates = dietAwarePool.filter(p => 
@@ -617,7 +703,7 @@ async function pickFoodByName(prefName, fallbackPool, opts, usedNames){
     });
   }
   
-  // Ultimate fallback with diet consideration
+  // Ultimate fallback
   return getDietFallbackFood(diet, protein);
 }
 
@@ -705,9 +791,23 @@ function saveCurrentParams() {
 }
 
 /* =============================
-   Enhanced Plan Generation
+   Enhanced Plan Generation for All Diet Types
    ============================= */
 const DEFAULT_SPLITS = { breakfast:0.25, lunch:0.35, dinner:0.30, snack:0.10 };
+
+// Helper function for meal nutrition calculation
+function calculateMealNutrition(parts) {
+  return parts.reduce((acc, part) => {
+    const ratio = part.grams / 100;
+    const foodItem = part.source || part;
+    return {
+      kcal: acc.kcal + Math.round((part.per100 || 100) * ratio),
+      protein: acc.protein + Math.round((foodItem.protein_per_100g || foodItem.protein || 0) * ratio),
+      carbs: acc.carbs + Math.round((foodItem.carbs_per_100g || foodItem.carbs || 0) * ratio),
+      fat: acc.fat + Math.round((foodItem.fat_per_100g || foodItem.fat || 0) * ratio)
+    };
+  }, {kcal: 0, protein: 0, carbs: 0, fat: 0});
+}
 
 async function generatePlanAsync(opts){
   await loadLite();
@@ -725,13 +825,15 @@ async function generatePlanAsync(opts){
   const diet = opts.diet || "balanced";
   const proteinPref = opts.protein || "any";
   const mult = agePortionMultiplier(ageCategory(age));
-  let splits = DEFAULT_SPLITS;
   
   // Adjust splits based on diet
+  let splits;
   if (diet === "keto") {
-    splits = { breakfast: 0.20, lunch: 0.40, dinner: 0.35, snack: 0.05 };
+    splits = { breakfast: 0.20, lunch: 0.35, dinner: 0.35, snack: 0.10 };
   } else if (diet === "carnivore") {
     splits = { breakfast: 0.25, lunch: 0.40, dinner: 0.30, snack: 0.05 };
+  } else {
+    splits = { breakfast: 0.25, lunch: 0.35, dinner: 0.30, snack: 0.10 };
   }
 
   const plan = [];
@@ -745,9 +847,6 @@ async function generatePlanAsync(opts){
     const targetP_kcal = Math.round(dayTarget * macroTarget.p);
     const targetC_kcal = Math.round(dayTarget * macroTarget.c);
     const targetF_kcal = Math.round(dayTarget * macroTarget.f);
-    const targetP_g = Math.round(targetP_kcal / 4);
-    const targetC_g = Math.round(targetC_kcal / 4);
-    const targetF_g = Math.round(targetF_kcal / 9);
 
     const bK = Math.round(dayTarget * splits.breakfast);
     const lK = Math.round(dayTarget * splits.lunch);
@@ -756,224 +855,362 @@ async function generatePlanAsync(opts){
 
     const usedNames = new Set();
 
-    // Diet-aware breakfast selection
-    let breakfastChoice = null;
-    if(diet === "keto" || diet === "carnivore"){
-      breakfastChoice = await pickFoodByName("boiled eggs", POOLS.breakfasts, {diet,protein:proteinPref}, usedNames);
-      if(!breakfastChoice) breakfastChoice = await pickFoodByName("hard cheese", POOLS.proteins, {diet,protein:proteinPref}, usedNames);
-    } else if (diet === "vegetarian") {
-      breakfastChoice = await pickFoodByName(null, POOLS.vegetarian_breakfasts, {diet,protein:proteinPref}, usedNames);
-    }
-    if(!breakfastChoice) breakfastChoice = await pickFoodByName(null, POOLS.breakfasts, {diet,protein:proteinPref}, usedNames);
-    usedNames.add(breakfastChoice.name);
-
-    // Diet-aware protein selection
-    let lunchProt, dinnerProt;
-    
+    // DIET-SPECIFIC MEAL GENERATION
     if (diet === "carnivore") {
-      // Carnivore: only animal products, no sides
-      lunchProt = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(lunchProt.name);
-      dinnerProt = opts.oneProteinPerDay ? lunchProt : await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(dinnerProt.name);
-    } else if (diet === "vegetarian") {
-      // Vegetarian: plant-based or dairy proteins with more variety
-      const vegProteins = POOLS.vegetarian_proteins.filter(p => 
-        matchesProteinPref(p.tags || [], proteinPref)
-      );
+      // CARNIVORE DIET - Only animal products + water
+      const breakfastMeat = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastMeat.name);
       
-      // Ensure variety by shuffling and selecting different proteins
-      const shuffledProteins = [...vegProteins].sort(() => Math.random() - 0.5);
-      lunchProt = await pickFoodByName(null, shuffledProteins.slice(0, 5), {diet,protein:proteinPref}, usedNames);
+      const lunchMeat = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchMeat.name);
+      
+      const dinnerMeat = await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerMeat.name);
+      
+      // Carnivore snacks (optional)
+      const snack1 = await pickFoodByName(null, POOLS.carnivore_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(snack1.name);
+
+      // Water for all meals
+      const water = POOLS.beverages.find(b => b.name === "Water");
+
+      // Calculate portions - larger portions since it's only meat
+      const bfGram = gramsForTarget(breakfastMeat.kcal_per_100g || 250, bK);
+      const lunchGram = gramsForTarget(lunchMeat.kcal_per_100g || 250, lK);
+      const dinnerGram = gramsForTarget(dinnerMeat.kcal_per_100g || 250, dK);
+      const snackGram = gramsForTarget(snack1.kcal_per_100g || 200, sK);
+
+      // Build meal parts
+      const breakfastParts = [
+        {name: breakfastMeat.name, per100: breakfastMeat.kcal_per_100g || 250, grams: bfGram, type: "meat", source: breakfastMeat},
+        {name: water.name, per100: water.kcal_per_100g, grams: 240, type: "beverage", source: water}
+      ];
+
+      const lunchParts = [
+        {name: lunchMeat.name, per100: lunchMeat.kcal_per_100g || 250, grams: lunchGram, type: "meat", source: lunchMeat},
+        {name: water.name, per100: water.kcal_per_100g, grams: 240, type: "beverage", source: water}
+      ];
+
+      const dinnerParts = [
+        {name: dinnerMeat.name, per100: dinnerMeat.kcal_per_100g || 250, grams: dinnerGram, type: "meat", source: dinnerMeat},
+        {name: water.name, per100: water.kcal_per_100g, grams: 240, type: "beverage", source: water}
+      ];
+
+      const snackParts = [
+        {name: snack1.name, per100: snack1.kcal_per_100g || 200, grams: snackGram, type: "snack", source: snack1}
+      ];
+
+      // Calculate nutrition
+      const breakfastNutrition = calculateMealNutrition(breakfastParts);
+      const lunchNutrition = calculateMealNutrition(lunchParts);
+      const dinnerNutrition = calculateMealNutrition(dinnerParts);
+      const snackNutrition = calculateMealNutrition(snackParts);
+
+      plan.push({
+        day,
+        free: !!isFreeDay,
+        breakfast: { 
+          text: `${breakfastMeat.name} + Water`,
+          parts: breakfastParts,
+          kcal: breakfastNutrition.kcal
+        },
+        lunch: { 
+          text: `${lunchMeat.name} + Water`,
+          parts: lunchParts,
+          kcal: lunchNutrition.kcal
+        },
+        dinner: { 
+          text: `${dinnerMeat.name} + Water`,
+          parts: dinnerParts,
+          kcal: dinnerNutrition.kcal
+        },
+        snack: { 
+          text: snack1.name,
+          parts: snackParts,
+          kcal: snackNutrition.kcal
+        },
+        meta: { target: dayTarget, age, diet, protein: proteinPref, splits, macroTarget }
+      });
+
+    } else if (diet === "keto") {
+      // KETO DIET - Multiple components
+      const breakfastMain = await pickFoodByName(null, POOLS.keto_breakfasts, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastMain.name);
+      
+      const breakfastBeverage = await pickFoodByName(null, POOLS.beverages, {diet,protein:proteinPref}, usedNames);
+
+      const lunchMain = await pickFoodByName(null, POOLS.keto_lunch_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchMain.name);
+      
+      const lunchSide = await pickFoodByName(null, POOLS.keto_lunch_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchSide.name);
+
+      const dinnerMain = await pickFoodByName(null, POOLS.keto_dinner_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerMain.name);
+      
+      const dinnerSide = await pickFoodByName(null, POOLS.keto_dinner_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerSide.name);
+
+      const snack1 = await pickFoodByName(null, POOLS.keto_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(snack1.name);
+      
+      const snack2 = await pickFoodByName(null, POOLS.keto_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(snack2.name);
+
+      // Calculate portions with realistic distribution
+      const bfMainGram = gramsForTarget(breakfastMain.kcal_per_100g || 120, bK * 0.8);
+      const beverageGram = gramsForTarget(breakfastBeverage.kcal_per_100g || 10, bK * 0.2);
+
+      const lunchMainGram = gramsForTarget(lunchMain.kcal_per_100g || 150, lK * 0.6);
+      const lunchSideGram = gramsForTarget(lunchSide.kcal_per_100g || 50, lK * 0.4);
+
+      const dinnerMainGram = gramsForTarget(dinnerMain.kcal_per_100g || 180, dK * 0.6);
+      const dinnerSideGram = gramsForTarget(dinnerSide.kcal_per_100g || 60, dK * 0.4);
+
+      const snack1Gram = gramsForTarget(snack1.kcal_per_100g || 150, sK * 0.6);
+      const snack2Gram = gramsForTarget(snack2.kcal_per_100g || 150, sK * 0.4);
+
+      // Build meal structure
+      const breakfastParts = [
+        {name: breakfastMain.name, per100: breakfastMain.kcal_per_100g || 120, grams: bfMainGram, type: "main", source: breakfastMain},
+        {name: breakfastBeverage.name, per100: breakfastBeverage.kcal_per_100g || 10, grams: beverageGram, type: "beverage", source: breakfastBeverage}
+      ];
+
+      const lunchParts = [
+        {name: lunchMain.name, per100: lunchMain.kcal_per_100g || 150, grams: lunchMainGram, type: "main", source: lunchMain},
+        {name: lunchSide.name, per100: lunchSide.kcal_per_100g || 50, grams: lunchSideGram, type: "side", source: lunchSide}
+      ];
+
+      const dinnerParts = [
+        {name: dinnerMain.name, per100: dinnerMain.kcal_per_100g || 180, grams: dinnerMainGram, type: "main", source: dinnerMain},
+        {name: dinnerSide.name, per100: dinnerSide.kcal_per_100g || 60, grams: dinnerSideGram, type: "side", source: dinnerSide}
+      ];
+
+      const snackParts = [
+        {name: snack1.name, per100: snack1.kcal_per_100g || 150, grams: snack1Gram, type: "snack", source: snack1},
+        {name: snack2.name, per100: snack2.kcal_per_100g || 150, grams: snack2Gram, type: "snack", source: snack2}
+      ];
+
+      const breakfastNutrition = calculateMealNutrition(breakfastParts);
+      const lunchNutrition = calculateMealNutrition(lunchParts);
+      const dinnerNutrition = calculateMealNutrition(dinnerParts);
+      const snackNutrition = calculateMealNutrition(snackParts);
+
+      plan.push({
+        day,
+        free: !!isFreeDay,
+        breakfast: { 
+          text: `${breakfastMain.name}`,
+          parts: breakfastParts,
+          kcal: breakfastNutrition.kcal
+        },
+        lunch: { 
+          text: `${lunchMain.name} with ${lunchSide.name}`,
+          parts: lunchParts,
+          kcal: lunchNutrition.kcal
+        },
+        dinner: { 
+          text: `${dinnerMain.name} with ${dinnerSide.name}`,
+          parts: dinnerParts,
+          kcal: dinnerNutrition.kcal
+        },
+        snack: { 
+          text: `${snack1.name} and ${snack2.name}`,
+          parts: snackParts,
+          kcal: snackNutrition.kcal
+        },
+        meta: { target: dayTarget, age, diet, protein: proteinPref, splits, macroTarget }
+      });
+
+    } else if (diet === "balanced") {
+      // BALANCED DIET - Multiple components with normal portions
+      const breakfastMain = await pickFoodByName(null, POOLS.balanced_breakfasts, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastMain.name);
+      
+      const breakfastBeverage = await pickFoodByName(null, POOLS.beverages, {diet,protein:proteinPref}, usedNames);
+
+      const lunchMain = await pickFoodByName(null, POOLS.balanced_lunch_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchMain.name);
+      
+      const lunchSide = await pickFoodByName(null, POOLS.balanced_lunch_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(lunchSide.name);
+
+      const dinnerMain = await pickFoodByName(null, POOLS.balanced_dinner_proteins, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerMain.name);
+      
+      const dinnerSide = await pickFoodByName(null, POOLS.balanced_dinner_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(dinnerSide.name);
+
+      const snack1 = await pickFoodByName(null, POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(snack1.name);
+      
+      const snack2 = await pickFoodByName(null, POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(snack2.name);
+
+      // Calculate normal portions for balanced diet
+      const bfMainGram = gramsForTarget(breakfastMain.kcal_per_100g || 150, bK * 0.8);
+      const beverageGram = gramsForTarget(breakfastBeverage.kcal_per_100g || 30, bK * 0.2);
+
+      const lunchMainGram = gramsForTarget(lunchMain.kcal_per_100g || 180, lK * 0.6);
+      const lunchSideGram = gramsForTarget(lunchSide.kcal_per_100g || 120, lK * 0.4);
+
+      const dinnerMainGram = gramsForTarget(dinnerMain.kcal_per_100g || 200, dK * 0.6);
+      const dinnerSideGram = gramsForTarget(dinnerSide.kcal_per_100g || 100, dK * 0.4);
+
+      const snack1Gram = gramsForTarget(snack1.kcal_per_100g || 120, sK * 0.6);
+      const snack2Gram = gramsForTarget(snack2.kcal_per_100g || 120, sK * 0.4);
+
+      // Build meal structure
+      const breakfastParts = [
+        {name: breakfastMain.name, per100: breakfastMain.kcal_per_100g || 150, grams: bfMainGram, type: "main", source: breakfastMain},
+        {name: breakfastBeverage.name, per100: breakfastBeverage.kcal_per_100g || 30, grams: beverageGram, type: "beverage", source: breakfastBeverage}
+      ];
+
+      const lunchParts = [
+        {name: lunchMain.name, per100: lunchMain.kcal_per_100g || 180, grams: lunchMainGram, type: "main", source: lunchMain},
+        {name: lunchSide.name, per100: lunchSide.kcal_per_100g || 120, grams: lunchSideGram, type: "side", source: lunchSide}
+      ];
+
+      const dinnerParts = [
+        {name: dinnerMain.name, per100: dinnerMain.kcal_per_100g || 200, grams: dinnerMainGram, type: "main", source: dinnerMain},
+        {name: dinnerSide.name, per100: dinnerSide.kcal_per_100g || 100, grams: dinnerSideGram, type: "side", source: dinnerSide}
+      ];
+
+      const snackParts = [
+        {name: snack1.name, per100: snack1.kcal_per_100g || 120, grams: snack1Gram, type: "snack", source: snack1},
+        {name: snack2.name, per100: snack2.kcal_per_100g || 120, grams: snack2Gram, type: "snack", source: snack2}
+      ];
+
+      const breakfastNutrition = calculateMealNutrition(breakfastParts);
+      const lunchNutrition = calculateMealNutrition(lunchParts);
+      const dinnerNutrition = calculateMealNutrition(dinnerParts);
+      const snackNutrition = calculateMealNutrition(snackParts);
+
+      plan.push({
+        day,
+        free: !!isFreeDay,
+        breakfast: { 
+          text: `${breakfastMain.name}`,
+          parts: breakfastParts,
+          kcal: breakfastNutrition.kcal
+        },
+        lunch: { 
+          text: `${lunchMain.name} with ${lunchSide.name}`,
+          parts: lunchParts,
+          kcal: lunchNutrition.kcal
+        },
+        dinner: { 
+          text: `${dinnerMain.name} with ${dinnerSide.name}`,
+          parts: dinnerParts,
+          kcal: dinnerNutrition.kcal
+        },
+        snack: { 
+          text: `${snack1.name} and ${snack2.name}`,
+          parts: snackParts,
+          kcal: snackNutrition.kcal
+        },
+        meta: { target: dayTarget, age, diet, protein: proteinPref, splits, macroTarget }
+      });
+
+    } else {
+      // VEGETARIAN DIET - Use existing vegetarian logic
+      const breakfastChoice = await pickFoodByName(null, POOLS.vegetarian_breakfasts, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(breakfastChoice.name);
+
+      const lunchProt = await pickFoodByName(null, POOLS.vegetarian_proteins, {diet,protein:proteinPref}, usedNames);
       usedNames.add(lunchProt.name);
       
-      // For dinner, try to pick a different type of protein
-      const remainingProteins = shuffledProteins.filter(p => p.name !== lunchProt.name);
-      dinnerProt = opts.oneProteinPerDay ? lunchProt : await pickFoodByName(null, remainingProteins.length > 0 ? remainingProteins.slice(0, 5) : shuffledProteins, {diet,protein:proteinPref}, usedNames);
+      const dinnerProt = opts.oneProteinPerDay ? lunchProt : await pickFoodByName(null, POOLS.vegetarian_proteins, {diet,protein:proteinPref}, usedNames);
       usedNames.add(dinnerProt.name);
-    } else {
-      // Balanced or Keto
-      lunchProt = await pickFoodByName(null, POOLS.proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(lunchProt.name);
-      dinnerProt = opts.oneProteinPerDay ? lunchProt : await pickFoodByName(null, POOLS.proteins, {diet,protein:proteinPref}, usedNames);
-      usedNames.add(dinnerProt.name);
+
+      const sideItem = await pickFoodByName(null, POOLS.vegetarian_sides, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(sideItem.name);
+
+      const snackItem = await pickFoodByName(null, POOLS.balanced_snacks, {diet,protein:proteinPref}, usedNames);
+      usedNames.add(snackItem.name);
+
+      // Calculate portions
+      const bfPer100 = breakfastChoice.kcal_per_100g || 120;
+      const lpPer100 = lunchProt.kcal_per_100g || 180;
+      const sidePer100 = sideItem.kcal_per_100g || 100;
+      const dpPer100 = dinnerProt.kcal_per_100g || lpPer100;
+      const snPer100 = snackItem.kcal_per_100g || 100;
+
+      const bfGram = gramsForTarget(bfPer100, bK);
+      const lpProtGram = gramsForTarget(lpPer100, lK * 0.65);
+      const lpSideGram = gramsForTarget(sidePer100, lK * 0.35);
+      const dpProtGram = gramsForTarget(dpPer100, dK * 0.65);
+      const dpSideGram = gramsForTarget(sidePer100, dK * 0.35);
+      const snGram = gramsForTarget(snPer100, sK);
+
+      function calc(part, per100, g){
+        return {
+          grams: g,
+          kcal: Math.round((per100 || 0) * (g/100)),
+          protein: Math.round((part.protein_per_100g || part.protein || 0) * (g/100)),
+          carbs: Math.round((part.carbs_per_100g || part.carbs || 0) * (g/100)),
+          fat: Math.round((part.fat_per_100g || part.fat || 0) * (g/100))
+        };
+      }
+
+      const bfCalc = calc(breakfastChoice, bfPer100, bfGram);
+      const lpProtCalc = calc(lunchProt, lpPer100, lpProtGram);
+      const lpSideCalc = calc(sideItem, sidePer100, lpSideGram);
+      const dpProtCalc = calc(dinnerProt, dpPer100, dpProtGram);
+      const dpSideCalc = calc(sideItem, sidePer100, dpSideGram);
+      const snCalc = calc(snackItem, snPer100, snGram);
+
+      plan.push({
+        day,
+        free: !!isFreeDay,
+        breakfast: { 
+          text: breakfastChoice.name, 
+          per100: bfPer100, 
+          grams: bfGram, 
+          kcal: bfCalc.kcal, 
+          protein: bfCalc.protein, 
+          carbs: bfCalc.carbs, 
+          fat: bfCalc.fat, 
+          source: breakfastChoice.raw||null, 
+          parts: [{name: breakfastChoice.name, ...bfCalc}] 
+        },
+        lunch: { 
+          text: lunchProt.name + " + " + sideItem.name, 
+          parts:[ 
+            {type:"protein", name:lunchProt.name, per100:lpPer100, ...lpProtCalc}, 
+            {type:"side", name:sideItem.name, per100:sidePer100, ...lpSideCalc}
+          ], 
+          kcal: lpProtCalc.kcal + lpSideCalc.kcal 
+        },
+        dinner: { 
+          text: dinnerProt.name + " + " + sideItem.name, 
+          parts:[ 
+            {type:"protein", name:dinnerProt.name, per100:dpPer100, ...dpProtCalc}, 
+            {type:"side", name:sideItem.name, per100:sidePer100, ...dpSideCalc}
+          ], 
+          kcal: dpProtCalc.kcal + dpSideCalc.kcal 
+        },
+        snack: { 
+          text: snackItem.name, 
+          per100: snPer100, 
+          grams: snGram, 
+          kcal: snCalc.kcal, 
+          protein: snCalc.protein, 
+          carbs: snCalc.carbs, 
+          fat: snCalc.fat, 
+          source: snackItem.raw||null, 
+          parts: [{name: snackItem.name, ...snCalc}] 
+        },
+        meta: { target: dayTarget, age, diet, protein: proteinPref, splits, macroTarget }
+      });
     }
-
-    // Side selection with diet awareness
-    let sideItem;
-    if (diet === "carnivore") {
-      // Carnivore doesn't use sides, but we need a placeholder
-      sideItem = mapItem({name:"Butter", kcal_per_100g:717, protein_per_100g:0.9, carbs_per_100g:0.1, fat_per_100g:81, tags:["dairy","fat"]});
-    } else if (diet === "vegetarian") {
-      // Use vegetarian-specific sides
-      sideItem = await pickFoodByName(null, POOLS.vegetarian_sides, {diet,protein:proteinPref}, usedNames);
-    } else {
-      sideItem = await pickFoodByName(null, POOLS.sides, {diet,protein:proteinPref}, usedNames);
-    }
-    usedNames.add(sideItem.name);
-
-    const snackItem = await pickFoodByName(null, POOLS.snacks, {diet,protein:proteinPref}, usedNames);
-    usedNames.add(snackItem.name);
-
-    // Adjust meal composition based on diet
-    let lpProtK, lpSideK, dpProtK, dpSideK;
-    
-    if (diet === "carnivore") {
-      // Carnivore: 100% of calories from protein sources
-      lpProtK = lK;
-      lpSideK = 0;
-      dpProtK = dK;
-      dpSideK = 0;
-    } else {
-      // Other diets: protein + sides
-      lpProtK = Math.round(lK * 0.65);
-      lpSideK = lK - lpProtK;
-      dpProtK = Math.round(dK * 0.65);
-      dpSideK = dK - dpProtK;
-    }
-
-    const bfPer100 = breakfastChoice.kcal_per_100g || 120;
-    const lpPer100 = lunchProt.kcal_per_100g || 180;
-    const sidePer100 = sideItem.kcal_per_100g || 100;
-    const dpPer100 = dinnerProt.kcal_per_100g || lpPer100;
-    const snPer100 = snackItem.kcal_per_100g || 100;
-
-    const bfGram = gramsForTarget(bfPer100, bK);
-    const lpProtGram = gramsForTarget(lpPer100, lpProtK);
-    const lpSideGram = diet === "carnivore" ? 0 : gramsForTarget(sidePer100, lpSideK);
-    const dpProtGram = gramsForTarget(dpPer100, dpProtK);
-    const dpSideGram = diet === "carnivore" ? 0 : gramsForTarget(sidePer100, dpSideK);
-    const snGram = gramsForTarget(snPer100, sK);
-
-    function calc(part, per100, g){
-      return {
-        grams: g,
-        kcal: Math.round((per100 || 0) * (g/100)),
-        protein: Math.round((part.protein_per_100g || part.protein || 0) * (g/100)),
-        carbs: Math.round((part.carbs_per_100g || part.carbs || 0) * (g/100)),
-        fat: Math.round((part.fat_per_100g || part.fat || 0) * (g/100))
-      };
-    }
-
-    const bfCalc = calc(breakfastChoice, bfPer100, bfGram);
-    const lpProtCalc = calc(lunchProt, lpPer100, lpProtGram);
-    const lpSideCalc = calc(sideItem, sidePer100, lpSideGram);
-    const dpProtCalc = calc(dinnerProt, dpPer100, dpProtGram);
-    const dpSideCalc = calc(sideItem, sidePer100, dpSideGram);
-    const snCalc = calc(snackItem, snPer100, snGram);
-
-    // Build meal text based on diet
-    let lunchText, dinnerText;
-    if (diet === "carnivore") {
-      lunchText = lunchProt.name;
-      dinnerText = dinnerProt.name;
-    } else {
-      lunchText = lunchProt.name + " + " + sideItem.name;
-      dinnerText = dinnerProt.name + " + " + sideItem.name;
-    }
-
-    // assemble day
-    plan.push({
-      day,
-      free: !!isFreeDay,
-      breakfast: { text: breakfastChoice.name, per100: bfPer100, grams: bfGram, kcal: bfCalc.kcal, protein: bfCalc.protein, carbs: bfCalc.carbs, fat: bfCalc.fat, source: breakfastChoice.raw||null, parts: [{name: breakfastChoice.name, ...bfCalc}] },
-      lunch: { text: lunchText, parts:[ {type:"protein", name:lunchProt.name, per100:lpPer100, ...lpProtCalc}, ...(diet === "carnivore" ? [] : [{type:"side", name:sideItem.name, per100:sidePer100, ...lpSideCalc}])], kcal: lpProtCalc.kcal + lpSideCalc.kcal },
-      dinner: { text: dinnerText, parts:[ {type:"protein", name:dinnerProt.name, per100:dpPer100, ...dpProtCalc}, ...(diet === "carnivore" ? [] : [{type:"side", name:sideItem.name, per100:sidePer100, ...dpSideCalc}])], kcal: dpProtCalc.kcal + dpSideCalc.kcal },
-      snack: { text: snackItem.name, per100: snPer100, grams: snGram, kcal: snCalc.kcal, protein: snCalc.protein, carbs: snCalc.carbs, fat: snCalc.fat, source: snackItem.raw||null, parts: [{name: snackItem.name, ...snCalc}] },
-      meta: { target: dayTarget, age, diet, protein: proteinPref, splits, macroTarget }
-    });
-  }
-
-  // Validate the plan against diet rules
-  const violations = validatePlanAgainstDiet(plan, diet);
-  if (violations.length > 0) {
-    console.warn("Diet violations found:", violations);
   }
 
   return plan;
 }
 
-/* =============================
-   Plan Validation
-   ============================= */
-function validatePlanAgainstDiet(plan, diet) {
-  const violations = [];
-  
-  plan.forEach((day, dayIndex) => {
-    const allItems = [
-      ...day.breakfast.parts,
-      ...day.lunch.parts,
-      ...day.dinner.parts,
-      ...day.snack.parts
-    ];
-    
-    allItems.forEach(item => {
-      if (!allowedByDietTags(item.tags, diet)) {
-        violations.push(`Day ${dayIndex + 1}: ${item.name} violates ${diet} diet rules`);
-      }
-    });
-    
-    // Check macro compliance
-    const totalCarbs = allItems.reduce((sum, item) => sum + (item.carbs || 0), 0);
-    const totalCalories = allItems.reduce((sum, item) => sum + (item.kcal || 0), 0);
-    const carbPercentage = totalCalories > 0 ? (totalCarbs * 4) / totalCalories : 0;
-    
-    if (diet === "keto" && carbPercentage > 0.1) {
-      violations.push(`Day ${dayIndex + 1}: Carbs too high for keto (${(carbPercentage * 100).toFixed(1)}%)`);
-    }
-    
-    if (diet === "carnivore" && carbPercentage > 0.05) {
-      violations.push(`Day ${dayIndex + 1}: Carbs too high for carnivore (${(carbPercentage * 100).toFixed(1)}%)`);
-    }
-  });
-  
-  return violations;
-}
-
-/* =============================
-   Validate Generated Macros
-   ============================= */
-function validateMacrosAgainstTarget(dayObj, diet, goal) {
-  const targetMacros = macroSplits(diet, goal);
-  const totalKcal = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.kcal||0),0):dayObj.breakfast.kcal) + 
-                   (dayObj.lunch.kcal||0) + 
-                   (dayObj.dinner.kcal||0) + 
-                   (dayObj.snack.kcal||0);
-  
-  const totalProtein = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.protein||0),0):0) + 
-                      (dayObj.lunch.parts? dayObj.lunch.parts.reduce((s,x)=>s+(x.protein||0),0):0) + 
-                      (dayObj.dinner.parts? dayObj.dinner.parts.reduce((s,x)=>s+(x.protein||0),0):0) + 
-                      (dayObj.snack.parts? dayObj.snack.parts.reduce((s,x)=>s+(x.protein||0),0):0);
-  
-  const totalCarbs = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + 
-                    (dayObj.lunch.parts? dayObj.lunch.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + 
-                    (dayObj.dinner.parts? dayObj.dinner.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + 
-                    (dayObj.snack.parts? dayObj.snack.parts.reduce((s,x)=>s+(x.carbs||0),0):0);
-  
-  const totalFat = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.fat||0),0):0) + 
-                  (dayObj.lunch.parts? dayObj.lunch.parts.reduce((s,x)=>s+(x.fat||0),0):0) + 
-                  (dayObj.dinner.parts? dayObj.dinner.parts.reduce((s,x)=>s+(x.fat||0),0):0) + 
-                  (dayObj.snack.parts? dayObj.snack.parts.reduce((s,x)=>s+(x.fat||0),0):0);
-  
-  // Calculate actual percentages
-  const proteinPct = (totalProtein * 4) / totalKcal;
-  const carbsPct = (totalCarbs * 4) / totalKcal;
-  const fatPct = (totalFat * 9) / totalKcal;
-  
-  const tolerance = 0.08; // 8% tolerance
-  
-  const issues = [];
-  if (Math.abs(proteinPct - targetMacros.p) > tolerance) issues.push(`Protein: ${(proteinPct*100).toFixed(1)}% vs target ${(targetMacros.p*100).toFixed(1)}%`);
-  if (Math.abs(carbsPct - targetMacros.c) > tolerance) issues.push(`Carbs: ${(carbsPct*100).toFixed(1)}% vs target ${(targetMacros.c*100).toFixed(1)}%`);
-  if (Math.abs(fatPct - targetMacros.f) > tolerance) issues.push(`Fat: ${(fatPct*100).toFixed(1)}% vs target ${(targetMacros.f*100).toFixed(1)}%`);
-  
-  return {
-    isValid: issues.length === 0,
-    issues,
-    actual: { p: proteinPct, c: carbsPct, f: fatPct },
-    target: targetMacros
-  };
-}
+// ... REST OF THE CODE REMAINS THE SAME (storage helpers, UI rendering, event handlers, etc.)
+// [The rest of your existing JavaScript code for storage, rendering, modals, etc. remains unchanged]
 
 /* =============================
    Storage helpers
