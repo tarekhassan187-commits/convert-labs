@@ -15,8 +15,8 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- AdSense placeholder (replace with your client id) -->
-  <script data-ad-client="ca-pub-XXXXXXXXXXXX" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- ✅ Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
 
   <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -28,7 +28,10 @@
     html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; }
     *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
     header{height:64px;background:var(--brand-2);color:#fff;display:flex;align-items:center;padding:0 20px;position:sticky;top:0;z-index:100}
-    .brand{font-weight:700;margin-right:16px}
+    .brand{font-weight:700;margin-right:16px;display:flex;align-items:center;gap:10px;}
+    .nav-links{display:flex;gap:20px;margin:0 auto;}
+    .nav-links a{color:#fff;text-decoration:none;font-weight:500;padding:8px 12px;border-radius:6px;transition:background-color 0.2s;}
+    .nav-links a:hover{background:rgba(255,255,255,0.1);}
     .container{max-width:1180px;margin:22px auto;padding:0 16px}
     .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 8px 24px rgba(12,40,80,0.04);margin-bottom:16px}
     .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
@@ -56,7 +59,17 @@
 </head>
 <body>
   <header>
-    <div class="brand">Convert Labs — 7-Day Meal Plan (Precision)</div>
+    <div class="brand">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+      <span>Convert Labs</span>
+    </div>
+    <nav class="nav-links">
+      <a href="https://convertlabs.online/index.html">Home</a>
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+      <a href="https://convertlabs.online/guides.html">Blog</a>
+      <a href="https://convertlabs.online/about.html">About</a>
+      <a href="https://convertlabs.online/contact.html">Contact</a>
+    </nav>
     <div style="flex:1"></div>
     <div>
       <button id="themeToggle" class="btn ghost">🌙</button>
@@ -151,13 +164,56 @@
   <div id="previewModal" class="modal-back"><div class="modal-card" id="previewBox"></div></div>
   <div id="usdaPopup" class="modal-back"><div class="modal-card" id="usdaBox"></div></div>
 
-  <footer class="footer">
-    <div style="max-width:1100px;margin:0 auto;text-align:center;padding:8px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:28px;height:28px;vertical-align:middle;">
-      <span style="margin-left:8px;font-weight:600;color:#fff">Convert Labs</span>
-      <div style="color:#fff;margin-top:8px">© 2025 Convert Labs. All rights reserved.</div>
+ <!-- Footer -->
+ <footer class="footer">
+  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+    <div class="footer-brand" style="margin-bottom:10px;">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
     </div>
-  </footer>
+
+    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+    <nav class="footer-links" style="margin-top:8px;">
+      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+    </nav>
+  </div>
+   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+  <p>✅ <strong>Domain Verification & Email Security</strong></p>
+  <p>
+    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+  </p>
+  <p>
+    Email protection includes:
+    <ul style="list-style:none; padding:0; margin:5px 0;">
+      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+    </ul>
+  </p>
+  <p>
+    These records confirm the legitimacy of our domain and improve deliverability,  
+    search engine trust, and AdSense approval readiness.
+  </p>
+</section>
+
+</footer>
+<style>
+  footer.footer a:hover { 
+    text-decoration: underline; 
+    color: #ffffff; 
+  }
+</style>
 
 <script>
 /* =============================
@@ -332,17 +388,66 @@ const POOLS = {
   keto_proteins: [
     {name:"Salmon", kcal_per_100g:206, protein_per_100g:22, fat_per_100g:12, tags:["fish","fat"]},
     {name:"Avocado", kcal_per_100g:160, protein_per_100g:2, carbs_per_100g:9, fat_per_100g:15, tags:["fat","fruit"]},
-    {name:"Olive Oil", kcal_per_100g:884, protein_per_100g:0, carbs_per_100g:0, fat_per_100g:100, tags:["fat"]}
+    {name:"Olive Oil", kcal_per_100g:884, protein_per_100g:0, carbs_per_100g:0, fat_per_100g:100, tags:["fat"]},
+    {name:"Ribeye Steak", kcal_per_100g:291, protein_per_100g:25, fat_per_100g:21, tags:["meat","beef","fat"]},
+    {name:"Bacon", kcal_per_100g:541, protein_per_100g:37, carbs_per_100g:1.4, fat_per_100g:42, tags:["meat","pork","fat"]},
+    {name:"Butter", kcal_per_100g:717, protein_per_100g:0.9, carbs_per_100g:0.1, fat_per_100g:81, tags:["dairy","fat"]}
   ],
   carnivore_proteins: [
     {name:"Ribeye Steak", kcal_per_100g:291, protein_per_100g:25, fat_per_100g:21, tags:["meat","beef"]},
     {name:"Pork Chop", kcal_per_100g:242, protein_per_100g:27, fat_per_100g:14, tags:["meat","pork"]},
-    {name:"Chicken Thighs", kcal_per_100g:209, protein_per_100g:26, fat_per_100g:11, tags:["meat","chicken"]}
+    {name:"Chicken Thighs", kcal_per_100g:209, protein_per_100g:26, fat_per_100g:11, tags:["meat","chicken"]},
+    {name:"Ground Beef (80/20)", kcal_per_100g:254, protein_per_100g:25, fat_per_100g:16, tags:["meat","beef"]},
+    {name:"Lamb Chops", kcal_per_100g:282, protein_per_100g:25, fat_per_100g:20, tags:["meat","lamb"]},
+    {name:"Bacon", kcal_per_100g:541, protein_per_100g:37, carbs_per_100g:1.4, fat_per_100g:42, tags:["meat","pork"]},
+    {name:"Eggs", kcal_per_100g:155, protein_per_100g:13, carbs_per_100g:1.1, fat_per_100g:11, tags:["eggs"]},
+    {name:"Salmon", kcal_per_100g:206, protein_per_100g:22, fat_per_100g:12, tags:["fish"]}
   ],
   vegetarian_proteins: [
     {name:"Lentils", kcal_per_100g:116, protein_per_100g:9, carbs_per_100g:20, fat_per_100g:0.4, tags:["plant","legume"]},
     {name:"Chickpeas", kcal_per_100g:139, protein_per_100g:7, carbs_per_100g:22, fat_per_100g:2.4, tags:["plant","legume"]},
-    {name:"Greek Yogurt", kcal_per_100g:59, protein_per_100g:10, carbs_per_100g:3.6, fat_per_100g:0.4, tags:["dairy"]}
+    {name:"Tofu (firm)", kcal_per_100g:144, protein_per_100g:12, carbs_per_100g:3, fat_per_100g:8, tags:["plant","tofu"]},
+    {name:"Tempeh", kcal_per_100g:193, protein_per_100g:19, carbs_per_100g:9, fat_per_100g:11, tags:["plant","tofu"]},
+    {name:"Edamame", kcal_per_100g:122, protein_per_100g:11, carbs_per_100g:10, fat_per_100g:5, tags:["plant","soy"]},
+    {name:"Greek Yogurt", kcal_per_100g:59, protein_per_100g:10, carbs_per_100g:3.6, fat_per_100g:0.4, tags:["dairy"]},
+    {name:"Cottage Cheese", kcal_per_100g:98, protein_per_100g:11, carbs_per_100g:3.4, fat_per_100g:4.3, tags:["dairy"]},
+    {name:"Mozzarella", kcal_per_100g:280, protein_per_100g:28, carbs_per_100g:3.1, fat_per_100g:17, tags:["dairy","cheese"]},
+    {name:"Eggs", kcal_per_100g:155, protein_per_100g:13, carbs_per_100g:1.1, fat_per_100g:11, tags:["eggs"]},
+    {name:"Quinoa", kcal_per_100g:120, protein_per_100g:4.4, carbs_per_100g:21, fat_per_100g:1.9, tags:["grain","plant"]},
+    {name:"Black Beans", kcal_per_100g:132, protein_per_100g:9, carbs_per_100g:24, fat_per_100g:0.5, tags:["plant","legume"]},
+    {name:"Kidney Beans", kcal_per_100g:127, protein_per_100g:9, carbs_per_100g:23, fat_per_100g:0.5, tags:["plant","legume"]},
+    {name:"Pumpkin Seeds", kcal_per_100g:446, protein_per_100g:19, carbs_per_100g:54, fat_per_100g:19, tags:["nuts","seeds"]},
+    {name:"Almonds", kcal_per_100g:579, protein_per_100g:21, carbs_per_100g:22, fat_per_100g:50, tags:["nuts"]},
+    {name:"Walnuts", kcal_per_100g:654, protein_per_100g:15, carbs_per_100g:14, fat_per_100g:65, tags:["nuts"]},
+    {name:"Chia Seeds", kcal_per_100g:486, protein_per_100g:17, carbs_per_100g:42, fat_per_100g:31, tags:["seeds"]},
+    {name:"Hemp Seeds", kcal_per_100g:553, protein_per_100g:32, carbs_per_100g:9, fat_per_100g:49, tags:["seeds"]},
+    {name:"Nutritional Yeast", kcal_per_100g:400, protein_per_100g:50, carbs_per_100g:41, fat_per_100g:5, tags:["plant","supplement"]},
+    {name:"Seitan", kcal_per_100g:105, protein_per_100g:21, carbs_per_100g:4, fat_per_100g:1, tags:["plant","wheat"]},
+    {name:"Paneer", kcal_per_100g:321, protein_per_100g:21, carbs_per_100g:4, fat_per_100g:25, tags:["dairy","cheese"]}
+  ],
+  vegetarian_sides: [
+    {name:"Steamed Broccoli", kcal_per_100g:34, carbs_per_100g:7, protein_per_100g:2.8, fat_per_100g:0.4, tags:["veg"]},
+    {name:"Roasted Vegetables", kcal_per_100g:65, carbs_per_100g:12, protein_per_100g:2, fat_per_100g:1, tags:["veg"]},
+    {name:"Spinach Salad", kcal_per_100g:23, carbs_per_100g:3.6, protein_per_100g:2.9, fat_per_100g:0.4, tags:["veg"]},
+    {name:"Sweet Potato", kcal_per_100g:86, carbs_per_100g:20, protein_per_100g:1.6, fat_per_100g:0.1, tags:["veg","starch"]},
+    {name:"Brown Rice", kcal_per_100g:123, carbs_per_100g:26, protein_per_100g:2.7, fat_per_100g:1, tags:["grain"]},
+    {name:"Quinoa", kcal_per_100g:120, carbs_per_100g:21, protein_per_100g:4.4, fat_per_100g:1.9, tags:["grain"]},
+    {name:"Avocado", kcal_per_100g:160, carbs_per_100g:9, protein_per_100g:2, fat_per_100g:15, tags:["fruit","fat"]},
+    {name:"Roasted Bell Peppers", kcal_per_100g:26, carbs_per_100g:6, protein_per_100g:1, fat_per_100g:0.3, tags:["veg"]},
+    {name:"Grilled Zucchini", kcal_per_100g:17, carbs_per_100g:3.1, protein_per_100g:1.2, fat_per_100g:0.3, tags:["veg"]},
+    {name:"Mushrooms", kcal_per_100g:22, carbs_per_100g:3.3, protein_per_100g:3.1, fat_per_100g:0.3, tags:["veg"]},
+    {name:"Cauliflower Rice", kcal_per_100g:25, carbs_per_100g:5, protein_per_100g:2, fat_per_100g:0.3, tags:["veg"]},
+    {name:"Brussels Sprouts", kcal_per_100g:43, carbs_per_100g:9, protein_per_100g:3.4, fat_per_100g:0.3, tags:["veg"]}
+  ],
+  vegetarian_breakfasts: [
+    {name:"Greek Yogurt with Berries", kcal_per_100g:75, protein_per_100g:8, carbs_per_100g:7, fat_per_100g:2, tags:["dairy","fruit"]},
+    {name:"Oatmeal with Nuts", kcal_per_100g:130, protein_per_100g:5, carbs_per_100g:20, fat_per_100g:4, tags:["grain","nuts"]},
+    {name:"Scrambled Eggs", kcal_per_100g:155, protein_per_100g:13, carbs_per_100g:1.1, fat_per_100g:11, tags:["eggs"]},
+    {name:"Avocado Toast", kcal_per_100g:180, protein_per_100g:6, carbs_per_100g:20, fat_per_100g:9, tags:["fruit","grain"]},
+    {name:"Cottage Cheese Bowl", kcal_per_100g:98, protein_per_100g:11, carbs_per_100g:3.4, fat_per_100g:4.3, tags:["dairy"]},
+    {name:"Chia Pudding", kcal_per_100g:120, protein_per_100g:4, carbs_per_100g:12, fat_per_100g:7, tags:["seeds"]},
+    {name:"Smoothie Bowl", kcal_per_100g:85, protein_per_100g:3, carbs_per_100g:15, fat_per_100g:2, tags:["fruit"]},
+    {name:"Breakfast Burrito", kcal_per_100g:150, protein_per_100g:8, carbs_per_100g:18, fat_per_100g:5, tags:["eggs","grain"]}
   ]
 };
 
@@ -394,34 +499,40 @@ function agePortionMultiplier(cat){ if(cat==="child") return 0.7; if(cat==="teen
 /* grams for target */
 function gramsForTarget(kcalPer100g, mealKcal){ if(!kcalPer100g || kcalPer100g<=0) return Math.max(1,Math.round(100*(mealKcal/200))); const grams = (mealKcal / kcalPer100g) * 100; return Math.max(1,Math.round(grams)); }
 
-/* Enhanced Macro Splits */
+/* =============================
+   Corrected Macro Splits for Each Diet
+   ============================= */
 function macroSplits(diet, goal){
   // Return {p, c, f} as fractions of total calories
   
   if (diet === "balanced") {
-    if (goal === "lose") return { p: 0.35, c: 0.35, f: 0.30 };
-    if (goal === "gain") return { p: 0.25, c: 0.50, f: 0.25 };
-    return { p: 0.30, c: 0.40, f: 0.30 }; // maintain
+    if (goal === "lose") return { p: 0.35, c: 0.35, f: 0.30 };      // 35% protein, 35% carbs, 30% fat
+    if (goal === "gain") return { p: 0.30, c: 0.45, f: 0.25 };      // 30% protein, 45% carbs, 25% fat
+    return { p: 0.25, c: 0.45, f: 0.30 };                          // 25% protein, 45% carbs, 30% fat (maintain)
   }
   
   if (diet === "keto") {
-    // Standard keto: very low carb, moderate protein, high fat
-    return { p: 0.20, c: 0.05, f: 0.75 };
+    // Keto: Very low carb, moderate protein, high fat
+    if (goal === "lose") return { p: 0.25, c: 0.05, f: 0.70 };     // 25% protein, 5% carbs, 70% fat
+    if (goal === "gain") return { p: 0.20, c: 0.05, f: 0.75 };     // 20% protein, 5% carbs, 75% fat
+    return { p: 0.20, c: 0.05, f: 0.75 };                          // 20% protein, 5% carbs, 75% fat (maintain)
   }
   
   if (diet === "carnivore") {
-    // Mostly protein and fat, minimal carbs
-    return { p: 0.35, c: 0.02, f: 0.63 };
+    // Carnivore: Mostly protein and fat, minimal to no carbs
+    if (goal === "lose") return { p: 0.35, c: 0.02, f: 0.63 };     // 35% protein, 2% carbs, 63% fat
+    if (goal === "gain") return { p: 0.30, c: 0.03, f: 0.67 };     // 30% protein, 3% carbs, 67% fat
+    return { p: 0.30, c: 0.02, f: 0.68 };                          // 30% protein, 2% carbs, 68% fat (maintain)
   }
   
   if (diet === "vegetarian") {
-    // Vegetarian often needs higher protein to compensate
-    if (goal === "lose") return { p: 0.35, c: 0.35, f: 0.30 };
-    if (goal === "gain") return { p: 0.25, c: 0.50, f: 0.25 };
-    return { p: 0.30, c: 0.45, f: 0.25 }; // maintain
+    // Vegetarian: Balanced with plant-based focus
+    if (goal === "lose") return { p: 0.35, c: 0.35, f: 0.30 };     // 35% protein, 35% carbs, 30% fat
+    if (goal === "gain") return { p: 0.25, c: 0.50, f: 0.25 };     // 25% protein, 50% carbs, 25% fat
+    return { p: 0.30, c: 0.45, f: 0.25 };                          // 30% protein, 45% carbs, 25% fat (maintain)
   }
   
-  return { p: 0.30, c: 0.40, f: 0.30 };
+  return { p: 0.30, c: 0.40, f: 0.30 }; // Fallback
 }
 
 /* =============================
@@ -479,6 +590,10 @@ async function pickFoodByName(prefName, fallbackPool, opts, usedNames){
     dietAwarePool = POOLS.carnivore_proteins;
   } else if (diet === "vegetarian" && fallbackPool === POOLS.proteins) {
     dietAwarePool = POOLS.vegetarian_proteins;
+  } else if (diet === "vegetarian" && fallbackPool === POOLS.sides) {
+    dietAwarePool = POOLS.vegetarian_sides;
+  } else if (diet === "vegetarian" && fallbackPool === POOLS.breakfasts) {
+    dietAwarePool = POOLS.vegetarian_breakfasts;
   }
   
   const candidates = dietAwarePool.filter(p => 
@@ -647,8 +762,7 @@ async function generatePlanAsync(opts){
       breakfastChoice = await pickFoodByName("boiled eggs", POOLS.breakfasts, {diet,protein:proteinPref}, usedNames);
       if(!breakfastChoice) breakfastChoice = await pickFoodByName("hard cheese", POOLS.proteins, {diet,protein:proteinPref}, usedNames);
     } else if (diet === "vegetarian") {
-      breakfastChoice = await pickFoodByName("greek yogurt", POOLS.breakfasts, {diet,protein:proteinPref}, usedNames);
-      if(!breakfastChoice) breakfastChoice = await pickFoodByName("oatmeal", POOLS.breakfasts, {diet,protein:proteinPref}, usedNames);
+      breakfastChoice = await pickFoodByName(null, POOLS.vegetarian_breakfasts, {diet,protein:proteinPref}, usedNames);
     }
     if(!breakfastChoice) breakfastChoice = await pickFoodByName(null, POOLS.breakfasts, {diet,protein:proteinPref}, usedNames);
     usedNames.add(breakfastChoice.name);
@@ -663,10 +777,19 @@ async function generatePlanAsync(opts){
       dinnerProt = opts.oneProteinPerDay ? lunchProt : await pickFoodByName(null, POOLS.carnivore_proteins, {diet,protein:proteinPref}, usedNames);
       usedNames.add(dinnerProt.name);
     } else if (diet === "vegetarian") {
-      // Vegetarian: plant-based or dairy proteins
-      lunchProt = await pickFoodByName(null, POOLS.vegetarian_proteins, {diet,protein:proteinPref}, usedNames);
+      // Vegetarian: plant-based or dairy proteins with more variety
+      const vegProteins = POOLS.vegetarian_proteins.filter(p => 
+        matchesProteinPref(p.tags || [], proteinPref)
+      );
+      
+      // Ensure variety by shuffling and selecting different proteins
+      const shuffledProteins = [...vegProteins].sort(() => Math.random() - 0.5);
+      lunchProt = await pickFoodByName(null, shuffledProteins.slice(0, 5), {diet,protein:proteinPref}, usedNames);
       usedNames.add(lunchProt.name);
-      dinnerProt = opts.oneProteinPerDay ? lunchProt : await pickFoodByName(null, POOLS.vegetarian_proteins, {diet,protein:proteinPref}, usedNames);
+      
+      // For dinner, try to pick a different type of protein
+      const remainingProteins = shuffledProteins.filter(p => p.name !== lunchProt.name);
+      dinnerProt = opts.oneProteinPerDay ? lunchProt : await pickFoodByName(null, remainingProteins.length > 0 ? remainingProteins.slice(0, 5) : shuffledProteins, {diet,protein:proteinPref}, usedNames);
       usedNames.add(dinnerProt.name);
     } else {
       // Balanced or Keto
@@ -681,6 +804,9 @@ async function generatePlanAsync(opts){
     if (diet === "carnivore") {
       // Carnivore doesn't use sides, but we need a placeholder
       sideItem = mapItem({name:"Butter", kcal_per_100g:717, protein_per_100g:0.9, carbs_per_100g:0.1, fat_per_100g:81, tags:["dairy","fat"]});
+    } else if (diet === "vegetarian") {
+      // Use vegetarian-specific sides
+      sideItem = await pickFoodByName(null, POOLS.vegetarian_sides, {diet,protein:proteinPref}, usedNames);
     } else {
       sideItem = await pickFoodByName(null, POOLS.sides, {diet,protein:proteinPref}, usedNames);
     }
@@ -802,6 +928,51 @@ function validatePlanAgainstDiet(plan, diet) {
   });
   
   return violations;
+}
+
+/* =============================
+   Validate Generated Macros
+   ============================= */
+function validateMacrosAgainstTarget(dayObj, diet, goal) {
+  const targetMacros = macroSplits(diet, goal);
+  const totalKcal = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.kcal||0),0):dayObj.breakfast.kcal) + 
+                   (dayObj.lunch.kcal||0) + 
+                   (dayObj.dinner.kcal||0) + 
+                   (dayObj.snack.kcal||0);
+  
+  const totalProtein = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.protein||0),0):0) + 
+                      (dayObj.lunch.parts? dayObj.lunch.parts.reduce((s,x)=>s+(x.protein||0),0):0) + 
+                      (dayObj.dinner.parts? dayObj.dinner.parts.reduce((s,x)=>s+(x.protein||0),0):0) + 
+                      (dayObj.snack.parts? dayObj.snack.parts.reduce((s,x)=>s+(x.protein||0),0):0);
+  
+  const totalCarbs = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + 
+                    (dayObj.lunch.parts? dayObj.lunch.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + 
+                    (dayObj.dinner.parts? dayObj.dinner.parts.reduce((s,x)=>s+(x.carbs||0),0):0) + 
+                    (dayObj.snack.parts? dayObj.snack.parts.reduce((s,x)=>s+(x.carbs||0),0):0);
+  
+  const totalFat = (dayObj.breakfast.parts? dayObj.breakfast.parts.reduce((s,x)=>s+(x.fat||0),0):0) + 
+                  (dayObj.lunch.parts? dayObj.lunch.parts.reduce((s,x)=>s+(x.fat||0),0):0) + 
+                  (dayObj.dinner.parts? dayObj.dinner.parts.reduce((s,x)=>s+(x.fat||0),0):0) + 
+                  (dayObj.snack.parts? dayObj.snack.parts.reduce((s,x)=>s+(x.fat||0),0):0);
+  
+  // Calculate actual percentages
+  const proteinPct = (totalProtein * 4) / totalKcal;
+  const carbsPct = (totalCarbs * 4) / totalKcal;
+  const fatPct = (totalFat * 9) / totalKcal;
+  
+  const tolerance = 0.08; // 8% tolerance
+  
+  const issues = [];
+  if (Math.abs(proteinPct - targetMacros.p) > tolerance) issues.push(`Protein: ${(proteinPct*100).toFixed(1)}% vs target ${(targetMacros.p*100).toFixed(1)}%`);
+  if (Math.abs(carbsPct - targetMacros.c) > tolerance) issues.push(`Carbs: ${(carbsPct*100).toFixed(1)}% vs target ${(targetMacros.c*100).toFixed(1)}%`);
+  if (Math.abs(fatPct - targetMacros.f) > tolerance) issues.push(`Fat: ${(fatPct*100).toFixed(1)}% vs target ${(targetMacros.f*100).toFixed(1)}%`);
+  
+  return {
+    isValid: issues.length === 0,
+    issues,
+    actual: { p: proteinPct, c: carbsPct, f: fatPct },
+    target: targetMacros
+  };
 }
 
 /* =============================
