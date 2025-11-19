@@ -217,7 +217,7 @@
 
 <script>
 /* =============================
-   CONFIG: dataset paths
+   CONFIG: dataset paths - FIXED with correct paths
    ============================= */
 const DATA_USDA = "/assets/usda_food_nutrition.json";
 const DATA_FULL = "/assets/foods-full.json";
@@ -2047,7 +2047,7 @@ themeToggle.addEventListener('click', ()=> {
   setTheme(isDark? 'light' : 'dark'); 
 });
 
-/* Initial render if saved */
+/* Initial render if saved - FIXED URL parameter loading */
 (function initLoad(){ 
   // Load parameters from URL and storage
   getParamsFromURL();
