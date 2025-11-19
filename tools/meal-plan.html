@@ -752,7 +752,7 @@ async function pickFoodByName(prefName, fallbackPool, opts, usedNames){
 }
 
 /* =============================
-   Get parameters from calorie-guide page
+   Get parameters from calorie-guide page - FIXED
    ============================= */
 function getParamsFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -761,6 +761,8 @@ function getParamsFromURL() {
   const goal = urlParams.get('goal');
   const diet = urlParams.get('diet');
   const protein = urlParams.get('protein');
+  
+  console.log('URL Params:', { tdee, age, goal, diet, protein }); // Debug log
   
   if (tdee) {
     document.getElementById('tdeeInput').value = tdee;
@@ -779,13 +781,13 @@ function getParamsFromURL() {
       'carnivore': 'carnivore',
       'vegetarian': 'vegetarian'
     };
-    document.getElementById('dietSelect').value = dietMap[diet] || 'balanced';
+    const mappedDiet = dietMap[diet] || 'balanced';
+    document.getElementById('dietSelect').value = mappedDiet;
   }
   if (protein) {
     document.getElementById('proteinSelect').value = protein;
   }
 }
-
 // Also check localStorage for recent values
 function getParamsFromStorage() {
   try {
@@ -1905,8 +1907,94 @@ async function exportCurrentDayToPDF(){
    ============================= */
 document.getElementById("generateBtn").addEventListener("click", async ()=>{
   saveCurrentParams();
+  const tdeeValue = Number(document.getElementById("tdeeInput").value);
+  const ageValue = Number(document.getElementById("ageInput").value);
+  
+  if(!tdeeValue || tdeeValue < 800){ 
+    alert("Please enter a valid TDEE (at least 800 kcal)."); 
+    return; 
+  }
+  
   const opts = {
-    tdee: Number(document.getElementById("tdeeInput").value) || null,
+    tdee: tdeeValue,
+    age: ageValue || 30,
+    goal: document.getElementById("goalSelect").value,
+    diet: document.getElementById("dietSelect").value,
+    protein: document.getElementById("proteinSelect").value,
+    oneProteinPerDay: document.getElementById("oneProteinPerDay").checked,
+    inputIsAlreadyAdjusted: true,
+    freeDay: true,
+    freeDayIndex: 2
+  };
+  
+  console.log('Generation options:', opts); // Debug log
+  
+  try{
+    const plan = await generatePlanAsync(opts);
+    console.log('Generated plan:', plan); // Debug log
+    
+    // show preview
+    const modal = document.getElementById("previewModal"); 
+    const box = document.getElementById("previewBox");
+    
+    if (!plan || plan.length === 0) {
+      box.innerHTML = `<h3>Error</h3><p>No plan was generated. Please try again.</p><div style="margin-top:12px;text-align:right"><button id="previewClose" class="btn ghost">Close</button></div>`;
+      modal.style.display = "flex";
+      document.getElementById("previewClose").onclick = ()=> modal.style.display = "none";
+      return;
+    }
+    
+    let html = `<h3>Preview — 7-day plan</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:10px">`;
+    
+    plan.forEach(d=>{
+      const breakfastKcal = d.breakfast.parts ? d.breakfast.parts.reduce((s,x)=>s+(x.kcal||0),0) : d.breakfast.kcal;
+      const lunchKcal = d.lunch.parts ? d.lunch.parts.reduce((s,x)=>s+(x.kcal||0),0) : d.lunch.kcal;
+      const dinnerKcal = d.dinner.parts ? d.dinner.parts.reduce((s,x)=>s+(x.kcal||0),0) : d.dinner.kcal;
+      const snackKcal = d.snack.parts ? d.snack.parts.reduce((s,x)=>s+(x.kcal||0),0) : d.snack.kcal;
+      
+      html += `<div style="background:var(--card);padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.04)">
+        <div style="font-weight:700">Day ${d.day}${d.free? ' — FREE':''}</div>
+        <div style="margin-top:8px"><strong>Breakfast</strong><div class="muted-small">${breakfastKcal} kcal</div></div>
+        <div style="margin-top:8px"><strong>Lunch</strong><div class="muted-small">${lunchKcal} kcal</div></div>
+        <div style="margin-top:8px"><strong>Dinner</strong><div class="muted-small">${dinnerKcal} kcal</div></div>
+        <div style="margin-top:8px"><strong>Snack</strong><div class="muted-small">${snackKcal} kcal</div></div>
+      </div>`;
+    });
+    
+    html += `</div><div style="margin-top:12px;text-align:right">
+      <button id="previewAccept" class="btn">Accept & Save</button> 
+      <button id="previewClose" class="btn ghost">Close</button>
+    </div>`;
+    
+    box.innerHTML = html; 
+    modal.style.display = "flex";
+    
+    document.getElementById("previewClose").onclick = ()=> modal.style.display = "none";
+    document.getElementById("previewAccept").onclick = ()=> { 
+      savePlan(plan, new Date().toISOString()); 
+      modal.style.display = "none"; 
+      renderPlan(plan, loadPlan().startDate); 
+      updateSavedInfo(); 
+      alert("Plan saved."); 
+    };
+    
+  } catch(err){ 
+    console.error("Generation error:", err); 
+    alert("Error generating plan: " + (err.message || err)); 
+  }
+});
+
+document.getElementById("acceptBtn").addEventListener("click", async ()=>{
+  saveCurrentParams();
+  const tdeeValue = Number(document.getElementById("tdeeInput").value);
+  
+  if(!tdeeValue || tdeeValue < 800){ 
+    alert("Please enter a valid TDEE (at least 800 kcal)."); 
+    return; 
+  }
+  
+  const opts = {
+    tdee: tdeeValue,
     age: Number(document.getElementById("ageInput").value) || 30,
     goal: document.getElementById("goalSelect").value,
     diet: document.getElementById("dietSelect").value,
@@ -1916,50 +2004,18 @@ document.getElementById("generateBtn").addEventListener("click", async ()=>{
     freeDay: true,
     freeDayIndex: 2
   };
-  if(!opts.tdee){ alert("Enter TDEE first."); return; }
-  try{
-    const plan = await generatePlanAsync(opts);
-    // show preview
-    const modal = document.getElementById("previewModal"); const box = document.getElementById("previewBox");
-    let html = `<h3>Preview — 7-day plan</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:10px">`;
-    plan.forEach(d=>{
-      html += `<div style="background:var(--card);padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.04)"><div style="font-weight:700">Day ${d.day}${d.free? ' — FREE':''}</div>
-        <div style="margin-top:8px"><strong>Breakfast</strong><div class="muted-small">${d.breakfast.parts[0].grams} g — ${d.breakfast.parts[0].kcal} kcal</div></div>
-        <div style="margin-top:8px"><strong>Lunch</strong><div class="muted-small">${d.lunch.parts[0].grams} g ${d.lunch.parts[1] ? '+ ' + d.lunch.parts[1].grams + ' g' : ''} — ${d.lunch.kcal} kcal</div></div>
-        <div style="margin-top:8px"><strong>Dinner</strong><div class="muted-small">${d.dinner.parts[0].grams} g ${d.dinner.parts[1] ? '+ ' + d.dinner.parts[1].grams + ' g' : ''} — ${d.dinner.kcal} kcal</div></div>
-        <div style="margin-top:8px"><strong>Snack</strong><div class="muted-small">${d.snack.parts[0].grams} g — ${d.snack.parts[0].kcal} kcal</div></div></div>`;
-    });
-    html += `</div><div style="margin-top:12px;text-align:right"><button id="previewAccept" class="btn">Accept & Save</button> <button id="previewClose" class="btn ghost">Close</button></div>`;
-    box.innerHTML = html; modal.style.display = "flex";
-    document.getElementById("previewClose").onclick = ()=> modal.style.display = "none";
-    document.getElementById("previewAccept").onclick = ()=> { savePlan(plan, new Date().toISOString()); modal.style.display = "none"; renderPlan(plan, loadPlan().startDate); updateSavedInfo(); alert("Plan saved."); };
-  }catch(err){ console.error(err); alert("Error generating plan: "+(err.message||err)); }
-});
-
-document.getElementById("acceptBtn").addEventListener("click", async ()=>{
-  saveCurrentParams();
-  const t = Number(document.getElementById("tdeeInput").value) || null;
-  if(!t){ alert("Enter TDEE first."); return; }
-  const opts = {
-    tdee: t,
-    age: Number(document.getElementById("ageInput').value) || 30,
-    goal: document.getElementById("goalSelect").value,
-    diet: document.getElementById("dietSelect").value,
-    protein: document.getElementById("proteinSelect").value,
-    oneProteinPerDay: document.getElementById("oneProteinPerDay").checked,
-    inputIsAlreadyAdjusted: true,
-    freeDay: true,
-    freeDayIndex: 2
-  };
+  
   try{
     const plan = await generatePlanAsync(opts);
     savePlan(plan, new Date().toISOString());
     renderPlan(plan, loadPlan().startDate);
     updateSavedInfo();
     alert("Plan generated and saved.");
-  }catch(e){ console.error(e); alert("Failed to generate and save: "+(e.message||e)); }
+  } catch(e){ 
+    console.error(e); 
+    alert("Failed to generate and save: " + (e.message || e)); 
+  }
 });
-
 document.getElementById("exportDayBtn").addEventListener("click", exportCurrentDayToPDF);
 
 /* Theme toggle */
@@ -1973,6 +2029,15 @@ themeToggle.addEventListener('click', ()=> { const isDark = document.documentEle
   // Load parameters from URL and storage
   getParamsFromURL();
   getParamsFromStorage();
+  
+  // Debug: log current values
+  console.log('Initial values:', {
+    tdee: document.getElementById('tdeeInput').value,
+    age: document.getElementById('ageInput').value,
+    goal: document.getElementById('goalSelect').value,
+    diet: document.getElementById('dietSelect').value,
+    protein: document.getElementById('proteinSelect').value
+  });
   
   const stored = loadPlan(); 
   if(stored && stored.plan){ 
