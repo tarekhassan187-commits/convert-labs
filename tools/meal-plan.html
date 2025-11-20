@@ -71,6 +71,14 @@
     /* Dropdown styling */
     .food-dropdown { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e6e6e6; margin-bottom: 8px; }
     
+    /* Helper section styling */
+    .helper-section { background: var(--card); padding: 14px; border-radius: 12px; margin-top: 12px; }
+    .helper-title { font-weight: 700; margin-bottom: 10px; color: var(--brand-2); }
+    .helper-item { margin-bottom: 12px; }
+    .helper-item:last-child { margin-bottom: 0; }
+    .helper-question { font-weight: 600; margin-bottom: 4px; color: var(--text); }
+    .helper-answer { font-size: 13px; color: var(--muted); line-height: 1.4; }
+    
     /* Mobile responsiveness improvements */
     @media (max-width: 768px) {
       header { padding: 10px 16px; gap: 8px; }
@@ -200,6 +208,46 @@
             <strong>Current Day Macros</strong>
             <div id="dayMacros" style="margin-top:8px;color:var(--muted)">—</div>
           </div>
+
+          <!-- NEW HELPER SECTION -->
+          <div class="helper-section">
+            <div class="helper-title">Meal Plan Helper</div>
+            
+            <div class="helper-item">
+              <div class="helper-question">How to adjust portion sizes?</div>
+              <div class="helper-answer">Use the + and - buttons or type directly in the gram input next to each food item to adjust quantities.</div>
+            </div>
+            
+            <div class="helper-item">
+              <div class="helper-question">How to add more foods?</div>
+              <div class="helper-answer">Click "Add Food" in any meal to add additional items from your diet's food database.</div>
+            </div>
+            
+            <div class="helper-item">
+              <div class="helper-question">How to replace foods?</div>
+              <div class="helper-answer">Use the dropdown above each meal or click "Replace Food" to swap items while maintaining similar calories.</div>
+            </div>
+            
+            <div class="helper-item">
+              <div class="helper-question">How to check my macros?</div>
+              <div class="helper-answer">Your daily macro progress is shown below each day and in the "Current Day Macros" panel.</div>
+            </div>
+            
+            <div class="helper-item">
+              <div class="helper-question">What if I exceed my targets?</div>
+              <div class="helper-answer">Reduce portion sizes, remove snack items, or replace high-calorie foods with lower-calorie options.</div>
+            </div>
+            
+            <div class="helper-item">
+              <div class="helper-question">What if I'm below my targets?</div>
+              <div class="helper-answer">Increase portion sizes, add an extra snack, or include more calorie-dense foods like nuts, oils, or avocados.</div>
+            </div>
+            
+            <div class="helper-item">
+              <div class="helper-question">Why are future days locked?</div>
+              <div class="helper-answer">The plan unlocks one day every 24 hours to help you stay consistent with your nutrition journey.</div>
+            </div>
+          </div>
         </aside>
       </div>
 
@@ -243,6 +291,8 @@
     color: #ffffff; 
   }
 </style>
+
+<!-- THE REST OF YOUR JAVASCRIPT CODE REMAINS EXACTLY THE SAME -->
 <script>
 /* =============================
    CONFIG: Diet-specific JSON files
