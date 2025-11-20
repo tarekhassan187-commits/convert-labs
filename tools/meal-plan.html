@@ -24,8 +24,9 @@
   <style>
     :root{
       --brand:#0a4d8c; --brand-2:#134b8b; --muted:#6c6c6c; --bg:#f5faff; --card:#fff; --accent:#2b8bd8; --radius:12px; --text:#111;
+      --danger-color: #f44336;
     }
-    html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; }
+    html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; --danger-color: #ef4444; }
     *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased; overflow-x: hidden;}
     header{height:auto;min-height:64px;background:var(--brand-2);color:#fff;display:flex;align-items:center;padding:12px 20px;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:12px; width:100%;}
     .brand{font-weight:700;display:flex;align-items:center;gap:10px;flex-shrink:0;}
@@ -50,7 +51,7 @@
     .meal-list-item{background:var(--card);border-radius:8px;padding:8px;margin-top:8px;border:1px solid rgba(0,0,0,0.04); display:flex; justify-content:space-between; align-items:center; gap:8px;}
     .meal-item-info{flex:1;}
     .meal-item-actions{display:flex; gap:6px; align-items:center;}
-    .locked{filter:grayscale(70%);opacity:0.25;pointer-events:none}
+    .locked{filter:grayscale(70%);opacity:0.6;pointer-events:none;position:relative;}
     .lock-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:30}
     .lock-badge{background:var(--card);padding:10px 14px;border-radius:10px;font-weight:700;box-shadow:0 8px 24px rgba(12,40,80,0.04)}
     .small-muted{font-size:12px;color:var(--muted)}
@@ -248,7 +249,7 @@ const DATA_USDA = "/assets/usda_food_nutrition.json";
 const KEY = "convertlabs_mealplan_v4";
 
 /* =============================
-   Data Loaders for Diet-Specific Files
+   Data Loaders for Diet-Specific Files - WITH CALORIES FIX
    ============================= */
 let currentDietData = [];
 let usdaData = [];
@@ -258,7 +259,22 @@ async function safeFetchJSON(url){
     const r = await fetch(url,{cache:"no-cache"});
     if(!r.ok) throw new Error("HTTP "+r.status);
     const j = await r.json();
-    return Array.isArray(j) ? j : (Array.isArray(j.data) ? j.data : null);
+    let data = Array.isArray(j) ? j : (Array.isArray(j.data) ? j.data : null);
+    
+    // FIX: Convert "calories" field to "kcal_per_100g" if it exists
+    if (data) {
+      data = data.map(item => {
+        if (item.calories !== undefined && item.kcal_per_100g === undefined) {
+          item.kcal_per_100g = item.calories;
+        }
+        if (item.kcal !== undefined && item.kcal_per_100g === undefined) {
+          item.kcal_per_100g = item.kcal;
+        }
+        return item;
+      });
+    }
+    
+    return data;
   } catch(e){
     console.warn("fetch failed", url, e && e.message);
     return null;
@@ -535,7 +551,7 @@ function createSampleMeal(diet, calories, day) {
 }
 
 /* =============================
-   UI Rendering with Improved Blurring & Dates
+   UI Rendering with Improved Blurring, Dates & Delete Buttons
    ============================= */
 function renderPlan(plan, startDate) {
   const container = document.getElementById("mainInner");
@@ -688,9 +704,22 @@ function renderPlan(plan, startDate) {
             updatePortionSize(d.day, meal.key, partIndex, newGrams);
           };
           
+          // DELETE BUTTON
+          const deleteBtn = document.createElement("button");
+          deleteBtn.className = "btn ghost";
+          deleteBtn.textContent = "×";
+          deleteBtn.style.padding = "4px 8px";
+          deleteBtn.style.fontSize = "12px";
+          deleteBtn.style.color = "var(--danger-color)";
+          deleteBtn.style.borderColor = "var(--danger-color)";
+          deleteBtn.onclick = () => {
+            deleteFoodItem(d.day, meal.key, partIndex);
+          };
+          
           partActions.appendChild(minusBtn);
           partActions.appendChild(gramInput);
           partActions.appendChild(plusBtn);
+          partActions.appendChild(deleteBtn);
           
           partDiv.appendChild(partInfo);
           partDiv.appendChild(partActions);
@@ -810,6 +839,33 @@ function updateCurrentMacrosDisplay(day) {
       <div class="macro-bar"><div class="macro-fill fat-fill" style="width: ${Math.min(100, (totals.fat/targets.fat)*100)}%"></div></div>
     </div>
   `;
+}
+
+/* =============================
+   Delete Food Item Function
+   ============================= */
+function deleteFoodItem(day, mealKey, partIndex) {
+  const stored = loadPlan();
+  if (!stored || !stored.plan) return;
+  
+  const plan = stored.plan;
+  const dayPlan = plan.find(d => d.day === day);
+  if (!dayPlan || !dayPlan[mealKey] || !dayPlan[mealKey].parts) return;
+  
+  // Remove the food item from the parts array
+  dayPlan[mealKey].parts.splice(partIndex, 1);
+  
+  // If no parts left, set empty array
+  if (dayPlan[mealKey].parts.length === 0) {
+    dayPlan[mealKey].parts = [];
+  }
+  
+  // Recalculate meal total kcal
+  dayPlan[mealKey].kcal = dayPlan[mealKey].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
+  
+  savePlan(plan, stored.startDate);
+  renderPlan(plan, stored.startDate);
+  updateSavedInfo();
 }
 
 /* =============================
@@ -1091,7 +1147,7 @@ function renderReplaceList(results) {
   container.innerHTML = html;
 }
 
-// FIXED: Proper kcal calculation when replacing items
+// FIXED: Proper kcal calculation when adding items
 function applyAddToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g) {
   const stored = loadPlan();
   if (!stored || !stored.plan) return;
@@ -1317,4 +1373,4 @@ function exportCurrentDayToPDF() {
 }
 </script>
 </body>
-              </html>
+  </html>
