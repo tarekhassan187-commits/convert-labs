@@ -2,7 +2,7 @@
   {
     "name": "Ribeye Steak (grilled)",
     "serving": 100,
-    "calories": 291,
+    "kcal": 291,
     "protein": 24,
     "carbs": 0,
     "fat": 21,
@@ -12,7 +12,7 @@
   {
     "name": "Striploin Steak",
     "serving": 100,
-    "calories": 275,
+    "kcal": 275,
     "protein": 26,
     "carbs": 0,
     "fat": 18,
@@ -22,7 +22,7 @@
   {
     "name": "Beef Mince 20% Fat (cooked)",
     "serving": 100,
-    "calories": 254,
+    "kcal": 254,
     "protein": 20,
     "carbs": 0,
     "fat": 20,
@@ -32,7 +32,7 @@
   {
     "name": "Beef Liver (fried)",
     "serving": 100,
-    "calories": 175,
+    "kcal": 175,
     "protein": 26,
     "carbs": 4,
     "fat": 4,
@@ -42,7 +42,7 @@
   {
     "name": "Beef Kidney (cooked)",
     "serving": 100,
-    "calories": 159,
+    "kcal": 159,
     "protein": 27,
     "carbs": 0,
     "fat": 5,
@@ -52,7 +52,7 @@
   {
     "name": "Beef Heart (grilled)",
     "serving": 100,
-    "calories": 179,
+    "kcal": 179,
     "protein": 26,
     "carbs": 0,
     "fat": 7,
@@ -63,7 +63,7 @@
   {
     "name": "Lamb Chops",
     "serving": 100,
-    "calories": 282,
+    "kcal": 282,
     "protein": 25,
     "carbs": 0,
     "fat": 20,
@@ -73,7 +73,7 @@
   {
     "name": "Lamb Shoulder (roasted)",
     "serving": 100,
-    "calories": 292,
+    "kcal": 292,
     "protein": 24,
     "carbs": 0,
     "fat": 21,
@@ -83,7 +83,7 @@
   {
     "name": "Lamb Liver",
     "serving": 100,
-    "calories": 140,
+    "kcal": 140,
     "protein": 20,
     "carbs": 3.8,
     "fat": 4,
@@ -94,7 +94,7 @@
   {
     "name": "Chicken Thigh (skin-on, roasted)",
     "serving": 100,
-    "calories": 239,
+    "kcal": 239,
     "protein": 25,
     "carbs": 0,
     "fat": 15,
@@ -104,7 +104,7 @@
   {
     "name": "Chicken Drumstick (roasted)",
     "serving": 100,
-    "calories": 216,
+    "kcal": 216,
     "protein": 27,
     "carbs": 0,
     "fat": 11,
@@ -114,7 +114,7 @@
   {
     "name": "Chicken Wings (roasted)",
     "serving": 100,
-    "calories": 254,
+    "kcal": 254,
     "protein": 23,
     "carbs": 0,
     "fat": 17,
@@ -125,7 +125,7 @@
   {
     "name": "Duck Breast (roasted)",
     "serving": 100,
-    "calories": 337,
+    "kcal": 337,
     "protein": 19,
     "carbs": 0,
     "fat": 28,
@@ -136,7 +136,7 @@
   {
     "name": "Turkey Thigh",
     "serving": 100,
-    "calories": 208,
+    "kcal": 208,
     "protein": 24,
     "carbs": 0,
     "fat": 12,
@@ -147,7 +147,7 @@
   {
     "name": "Egg (boiled)",
     "serving": 50,
-    "calories": 78,
+    "kcal": 78,
     "protein": 6,
     "carbs": 0.6,
     "fat": 5.3,
@@ -157,7 +157,7 @@
   {
     "name": "Scrambled Eggs (with butter)",
     "serving": 100,
-    "calories": 148,
+    "kcal": 148,
     "protein": 10,
     "carbs": 2,
     "fat": 11,
@@ -168,7 +168,7 @@
   {
     "name": "Salmon (grilled)",
     "serving": 100,
-    "calories": 208,
+    "kcal": 208,
     "protein": 20,
     "carbs": 0,
     "fat": 13,
@@ -178,7 +178,7 @@
   {
     "name": "Sardines in Oil",
     "serving": 100,
-    "calories": 208,
+    "kcal": 208,
     "protein": 25,
     "carbs": 0,
     "fat": 11,
@@ -188,7 +188,7 @@
   {
     "name": "Mackerel (grilled)",
     "serving": 100,
-    "calories": 305,
+    "kcal": 305,
     "protein": 19,
     "carbs": 0,
     "fat": 25,
@@ -198,7 +198,7 @@
   {
     "name": "Shrimp (boiled)",
     "serving": 100,
-    "calories": 99,
+    "kcal": 99,
     "protein": 24,
     "carbs": 0.2,
     "fat": 0.3,
@@ -209,7 +209,7 @@
   {
     "name": "Beef Bone Marrow (roasted)",
     "serving": 100,
-    "calories": 770,
+    "kcal": 770,
     "protein": 7,
     "carbs": 0,
     "fat": 84,
@@ -219,7 +219,7 @@
   {
     "name": "Beef Tallow",
     "serving": 14,
-    "calories": 126,
+    "kcal": 126,
     "protein": 0,
     "carbs": 0,
     "fat": 14,
@@ -229,7 +229,7 @@
   {
     "name": "Duck Fat",
     "serving": 14,
-    "calories": 135,
+    "kcal": 135,
     "protein": 0,
     "carbs": 0,
     "fat": 15,
@@ -239,7 +239,7 @@
   {
     "name": "Ghee",
     "serving": 14,
-    "calories": 123,
+    "kcal": 123,
     "protein": 0,
     "carbs": 0,
     "fat": 14,
@@ -250,7 +250,7 @@
   {
     "name": "Beef Broth",
     "serving": 100,
-    "calories": 13,
+    "kcal": 13,
     "protein": 2,
     "carbs": 0.1,
     "fat": 0.5,
@@ -260,7 +260,7 @@
   {
     "name": "Bone Broth",
     "serving": 100,
-    "calories": 35,
+    "kcal": 35,
     "protein": 9,
     "carbs": 0,
     "fat": 0.2,
@@ -271,7 +271,7 @@
   {
     "name": "Beef Sausage (no fillers)",
     "serving": 100,
-    "calories": 322,
+    "kcal": 322,
     "protein": 16,
     "carbs": 0,
     "fat": 28,
@@ -281,7 +281,7 @@
   {
     "name": "Beef Burger Patty (100% beef)",
     "serving": 100,
-    "calories": 254,
+    "kcal": 254,
     "protein": 20,
     "carbs": 0,
     "fat": 20,
@@ -291,7 +291,7 @@
   {
     "name": "Turkey Bacon",
     "serving": 100,
-    "calories": 382,
+    "kcal": 382,
     "protein": 29,
     "carbs": 1.2,
     "fat": 29,
@@ -302,7 +302,7 @@
   {
     "name": "Beef Fat Trimmings (cooked)",
     "serving": 100,
-    "calories": 902,
+    "kcal": 902,
     "protein": 6,
     "carbs": 0,
     "fat": 97,
@@ -313,7 +313,7 @@
   {
     "name": "Goat Meat (roasted)",
     "serving": 100,
-    "calories": 143,
+    "kcal": 143,
     "protein": 27,
     "carbs": 0,
     "fat": 3,
@@ -324,7 +324,7 @@
   {
     "name": "Camel Meat (roasted)",
     "serving": 100,
-    "calories": 165,
+    "kcal": 165,
     "protein": 28,
     "carbs": 0,
     "fat": 5,
@@ -335,7 +335,7 @@
   {
     "name": "Beef Tongue (boiled)",
     "serving": 100,
-    "calories": 284,
+    "kcal": 284,
     "protein": 16,
     "carbs": 0,
     "fat": 23,
@@ -346,11 +346,11 @@
   {
     "name": "Chicken Liver (fried)",
     "serving": 100,
-    "calories": 172,
+    "kcal": 172,
     "protein": 25,
     "carbs": 3.9,
     "fat": 6,
     "category": "organ",
     "tags": ["lunch", "dinner"]
   }
-]
+    ]
