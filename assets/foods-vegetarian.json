@@ -2,7 +2,7 @@
   {
     "name": "Egg (boiled)",
     "serving": 50,
-    "calories": 78,
+    "kcal": 78,
     "protein": 6,
     "carbs": 0.6,
     "fat": 5.3,
@@ -12,7 +12,7 @@
   {
     "name": "Scrambled Eggs",
     "serving": 100,
-    "calories": 148,
+    "kcal": 148,
     "protein": 10,
     "carbs": 2,
     "fat": 11,
@@ -22,7 +22,7 @@
   {
     "name": "Omelette (plain)",
     "serving": 100,
-    "calories": 154,
+    "kcal": 154,
     "protein": 11,
     "carbs": 1.3,
     "fat": 11,
@@ -33,7 +33,7 @@
   {
     "name": "Greek Yogurt (plain)",
     "serving": 100,
-    "calories": 59,
+    "kcal": 59,
     "protein": 10,
     "carbs": 3.6,
     "fat": 0.4,
@@ -43,7 +43,7 @@
   {
     "name": "Milk (whole)",
     "serving": 100,
-    "calories": 61,
+    "kcal": 61,
     "protein": 3.2,
     "carbs": 4.8,
     "fat": 3.3,
@@ -53,7 +53,7 @@
   {
     "name": "Paneer",
     "serving": 100,
-    "calories": 296,
+    "kcal": 296,
     "protein": 18,
     "carbs": 6,
     "fat": 23,
@@ -63,7 +63,7 @@
   {
     "name": "Cottage Cheese",
     "serving": 100,
-    "calories": 98,
+    "kcal": 98,
     "protein": 11,
     "carbs": 3.4,
     "fat": 4.3,
@@ -73,7 +73,7 @@
   {
     "name": "Feta Cheese",
     "serving": 100,
-    "calories": 264,
+    "kcal": 264,
     "protein": 14,
     "carbs": 4,
     "fat": 21,
@@ -83,7 +83,7 @@
   {
     "name": "Mozzarella",
     "serving": 100,
-    "calories": 280,
+    "kcal": 280,
     "protein": 28,
     "carbs": 3,
     "fat": 17,
@@ -94,7 +94,7 @@
   {
     "name": "Lentils (cooked)",
     "serving": 100,
-    "calories": 116,
+    "kcal": 116,
     "protein": 9,
     "carbs": 20,
     "fat": 0.4,
@@ -104,7 +104,7 @@
   {
     "name": "Chickpeas (boiled)",
     "serving": 100,
-    "calories": 164,
+    "kcal": 164,
     "protein": 9,
     "carbs": 27,
     "fat": 2.6,
@@ -114,7 +114,7 @@
   {
     "name": "Black Beans (cooked)",
     "serving": 100,
-    "calories": 132,
+    "kcal": 132,
     "protein": 9,
     "carbs": 24,
     "fat": 0.5,
@@ -124,7 +124,7 @@
   {
     "name": "Kidney Beans (cooked)",
     "serving": 100,
-    "calories": 127,
+    "kcal": 127,
     "protein": 8.7,
     "carbs": 22,
     "fat": 0.5,
@@ -135,7 +135,7 @@
   {
     "name": "Tofu (firm)",
     "serving": 100,
-    "calories": 144,
+    "kcal": 144,
     "protein": 17,
     "carbs": 3,
     "fat": 8.7,
@@ -145,7 +145,7 @@
   {
     "name": "Tempeh",
     "serving": 100,
-    "calories": 193,
+    "kcal": 193,
     "protein": 20,
     "carbs": 7.6,
     "fat": 11,
@@ -156,7 +156,7 @@
   {
     "name": "Falafel (Taameya)",
     "serving": 100,
-    "calories": 333,
+    "kcal": 333,
     "protein": 13,
     "carbs": 31,
     "fat": 18,
@@ -166,7 +166,7 @@
   {
     "name": "Hummus",
     "serving": 100,
-    "calories": 166,
+    "kcal": 166,
     "protein": 8,
     "carbs": 14,
     "fat": 10,
@@ -176,7 +176,7 @@
   {
     "name": "Foul Medames",
     "serving": 100,
-    "calories": 110,
+    "kcal": 110,
     "protein": 8,
     "carbs": 14,
     "fat": 2,
@@ -186,7 +186,7 @@
   {
     "name": "Tahini Paste",
     "serving": 100,
-    "calories": 595,
+    "kcal": 595,
     "protein": 17,
     "carbs": 21,
     "fat": 53,
@@ -196,7 +196,7 @@
   {
     "name": "Koshary",
     "serving": 100,
-    "calories": 118,
+    "kcal": 118,
     "protein": 4.2,
     "carbs": 20.9,
     "fat": 1.2,
@@ -207,7 +207,7 @@
   {
     "name": "White Rice (cooked)",
     "serving": 100,
-    "calories": 130,
+    "kcal": 130,
     "protein": 2.7,
     "carbs": 28,
     "fat": 0.3,
@@ -217,7 +217,7 @@
   {
     "name": "Brown Rice (cooked)",
     "serving": 100,
-    "calories": 112,
+    "kcal": 112,
     "protein": 2.3,
     "carbs": 23,
     "fat": 0.8,
@@ -227,7 +227,7 @@
   {
     "name": "Quinoa (cooked)",
     "serving": 100,
-    "calories": 120,
+    "kcal": 120,
     "protein": 4.4,
     "carbs": 21,
     "fat": 1.9,
@@ -237,7 +237,7 @@
   {
     "name": "Oats (raw)",
     "serving": 100,
-    "calories": 389,
+    "kcal": 389,
     "protein": 17,
     "carbs": 66,
     "fat": 7,
@@ -247,7 +247,7 @@
   {
     "name": "Whole Wheat Bread",
     "serving": 100,
-    "calories": 247,
+    "kcal": 247,
     "protein": 13,
     "carbs": 41,
     "fat": 4.2,
@@ -257,7 +257,7 @@
   {
     "name": "Baladi Bread",
     "serving": 100,
-    "calories": 271,
+    "kcal": 271,
     "protein": 9,
     "carbs": 56,
     "fat": 1.3,
@@ -267,7 +267,7 @@
   {
     "name": "Pasta (cooked)",
     "serving": 100,
-    "calories": 131,
+    "kcal": 131,
     "protein": 5,
     "carbs": 25,
     "fat": 1.1,
@@ -277,7 +277,7 @@
   {
     "name": "Couscous (cooked)",
     "serving": 100,
-    "calories": 112,
+    "kcal": 112,
     "protein": 3.8,
     "carbs": 23,
     "fat": 0.2,
@@ -288,7 +288,7 @@
   {
     "name": "Potatoes (boiled)",
     "serving": 100,
-    "calories": 87,
+    "kcal": 87,
     "protein": 1.9,
     "carbs": 20,
     "fat": 0.1,
@@ -298,7 +298,7 @@
   {
     "name": "Sweet Potatoes (baked)",
     "serving": 100,
-    "calories": 90,
+    "kcal": 90,
     "protein": 2,
     "carbs": 21,
     "fat": 0.1,
@@ -308,7 +308,7 @@
   {
     "name": "Carrots (raw)",
     "serving": 100,
-    "calories": 41,
+    "kcal": 41,
     "protein": 1,
     "carbs": 10,
     "fat": 0.2,
@@ -318,7 +318,7 @@
   {
     "name": "Broccoli (steamed)",
     "serving": 100,
-    "calories": 35,
+    "kcal": 35,
     "protein": 2.4,
     "carbs": 7,
     "fat": 0.4,
@@ -328,7 +328,7 @@
   {
     "name": "Spinach (boiled)",
     "serving": 100,
-    "calories": 23,
+    "kcal": 23,
     "protein": 3,
     "carbs": 3.8,
     "fat": 0.3,
@@ -338,7 +338,7 @@
   {
     "name": "Zucchini (grilled)",
     "serving": 100,
-    "calories": 17,
+    "kcal": 17,
     "protein": 1.4,
     "carbs": 3.1,
     "fat": 0.3,
@@ -348,7 +348,7 @@
   {
     "name": "Green Beans (steamed)",
     "serving": 100,
-    "calories": 35,
+    "kcal": 35,
     "protein": 1.8,
     "carbs": 7.9,
     "fat": 0.3,
@@ -358,7 +358,7 @@
   {
     "name": "Cucumber",
     "serving": 100,
-    "calories": 15,
+    "kcal": 15,
     "protein": 0.7,
     "carbs": 3.6,
     "fat": 0.1,
@@ -368,7 +368,7 @@
   {
     "name": "Tomatoes",
     "serving": 100,
-    "calories": 18,
+    "kcal": 18,
     "protein": 0.9,
     "carbs": 3.9,
     "fat": 0.2,
@@ -379,7 +379,7 @@
   {
     "name": "Apple",
     "serving": 100,
-    "calories": 52,
+    "kcal": 52,
     "protein": 0.3,
     "carbs": 14,
     "fat": 0.2,
@@ -389,7 +389,7 @@
   {
     "name": "Banana",
     "serving": 100,
-    "calories": 89,
+    "kcal": 89,
     "protein": 1.1,
     "carbs": 23,
     "fat": 0.3,
@@ -399,7 +399,7 @@
   {
     "name": "Orange",
     "serving": 100,
-    "calories": 47,
+    "kcal": 47,
     "protein": 0.9,
     "carbs": 12,
     "fat": 0.1,
@@ -409,7 +409,7 @@
   {
     "name": "Grapes",
     "serving": 100,
-    "calories": 69,
+    "kcal": 69,
     "protein": 0.7,
     "carbs": 18,
     "fat": 0.2,
@@ -419,7 +419,7 @@
   {
     "name": "Strawberries",
     "serving": 100,
-    "calories": 32,
+    "kcal": 32,
     "protein": 0.7,
     "carbs": 7.7,
     "fat": 0.3,
@@ -429,7 +429,7 @@
   {
     "name": "Mango",
     "serving": 100,
-    "calories": 60,
+    "kcal": 60,
     "protein": 0.8,
     "carbs": 15,
     "fat": 0.4,
@@ -439,7 +439,7 @@
   {
     "name": "Pomegranate",
     "serving": 100,
-    "calories": 83,
+    "kcal": 83,
     "protein": 1.7,
     "carbs": 19,
     "fat": 1.2,
@@ -450,7 +450,7 @@
   {
     "name": "Almonds",
     "serving": 100,
-    "calories": 579,
+    "kcal": 579,
     "protein": 21,
     "carbs": 22,
     "fat": 50,
@@ -460,7 +460,7 @@
   {
     "name": "Walnuts",
     "serving": 100,
-    "calories": 654,
+    "kcal": 654,
     "protein": 15,
     "carbs": 14,
     "fat": 65,
@@ -470,7 +470,7 @@
   {
     "name": "Peanut Butter",
     "serving": 100,
-    "calories": 588,
+    "kcal": 588,
     "protein": 25,
     "carbs": 20,
     "fat": 50,
@@ -480,7 +480,7 @@
   {
     "name": "Olive Oil",
     "serving": 14,
-    "calories": 119,
+    "kcal": 119,
     "protein": 0,
     "carbs": 0,
     "fat": 14,
@@ -491,7 +491,7 @@
   {
     "name": "Vegetable Soup",
     "serving": 100,
-    "calories": 40,
+    "kcal": 40,
     "protein": 2,
     "carbs": 7,
     "fat": 0.5,
@@ -501,7 +501,7 @@
   {
     "name": "Lentil Soup (Egyptian)",
     "serving": 100,
-    "calories": 101,
+    "kcal": 101,
     "protein": 4.9,
     "carbs": 16,
     "fat": 2,
@@ -511,7 +511,7 @@
   {
     "name": "Tomato Soup",
     "serving": 100,
-    "calories": 40,
+    "kcal": 40,
     "protein": 1.5,
     "carbs": 7,
     "fat": 0.4,
