@@ -67,6 +67,7 @@
     .alert-info { background: #dbeafe; border-left-color: #3b82f6; color: #1e40af; }
     .alert-warning { background: #fef3c7; border-left-color: #f59e0b; color: #92400e; }
     .alert-success { background: #d1fae5; border-left-color: #10b981; color: #065f46; }
+    .alert-error { background: #fee2e2; border-left-color: #ef4444; color: #991b1b; }
     
     /* Suggestion tags */
     .suggestion-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
@@ -348,8 +349,53 @@ const KEY = "convertlabs_mealplan_v4";
    ============================= */
 let currentDietData = [];
 let usdaData = [];
-let currentPlan = null; // This will track the CURRENT plan with all modifications
-let isPreviewMode = false; // Track if we're in preview mode vs saved plan mode
+let currentPlan = null;
+let isPreviewMode = false;
+
+/* =============================
+   FALLBACK FOOD DATA (in case JSON files fail to load)
+   ============================= */
+const FALLBACK_FOODS = {
+  balanced: [
+    { name: "Chicken Breast", kcal_per_100g: 165, protein_per_100g: 31, carbs_per_100g: 0, fat_per_100g: 3.6 },
+    { name: "Brown Rice", kcal_per_100g: 111, protein_per_100g: 2.6, carbs_per_100g: 23, fat_per_100g: 0.9 },
+    { name: "Broccoli", kcal_per_100g: 34, protein_per_100g: 2.8, carbs_per_100g: 7, fat_per_100g: 0.4 },
+    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
+    { name: "Whole Wheat Bread", kcal_per_100g: 265, protein_per_100g: 13, carbs_per_100g: 51, fat_per_100g: 3.2 },
+    { name: "Greek Yogurt", kcal_per_100g: 59, protein_per_100g: 10, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
+    { name: "Banana", kcal_per_100g: 89, protein_per_100g: 1.1, carbs_per_100g: 23, fat_per_100g: 0.3 },
+    { name: "Almonds", kcal_per_100g: 579, protein_per_100g: 21, carbs_per_100g: 22, fat_per_100g: 50 }
+  ],
+  keto: [
+    { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 },
+    { name: "Avocado", kcal_per_100g: 160, protein_per_100g: 2, carbs_per_100g: 9, fat_per_100g: 15 },
+    { name: "Bacon", kcal_per_100g: 541, protein_per_100g: 37, carbs_per_100g: 1.4, fat_per_100g: 42 },
+    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
+    { name: "Spinach", kcal_per_100g: 23, protein_per_100g: 2.9, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
+    { name: "Cheese", kcal_per_100g: 402, protein_per_100g: 25, carbs_per_100g: 1.3, fat_per_100g: 33 },
+    { name: "Olive Oil", kcal_per_100g: 884, protein_per_100g: 0, carbs_per_100g: 0, fat_per_100g: 100 },
+    { name: "Almonds", kcal_per_100g: 579, protein_per_100g: 21, carbs_per_100g: 22, fat_per_100g: 50 }
+  ],
+  carnivore: [
+    { name: "Beef Steak", kcal_per_100g: 271, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 19 },
+    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
+    { name: "Bacon", kcal_per_100g: 541, protein_per_100g: 37, carbs_per_100g: 1.4, fat_per_100g: 42 },
+    { name: "Chicken Thighs", kcal_per_100g: 209, protein_per_100g: 26, carbs_per_100g: 0, fat_per_100g: 11 },
+    { name: "Pork Chops", kcal_per_100g: 242, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 15 },
+    { name: "Butter", kcal_per_100g: 717, protein_per_100g: 0.9, carbs_per_100g: 0.1, fat_per_100g: 81 },
+    { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 }
+  ],
+  vegetarian: [
+    { name: "Tofu", kcal_per_100g: 76, protein_per_100g: 8, carbs_per_100g: 1.9, fat_per_100g: 4.8 },
+    { name: "Quinoa", kcal_per_100g: 120, protein_per_100g: 4.4, carbs_per_100g: 21, fat_per_100g: 1.9 },
+    { name: "Lentils", kcal_per_100g: 116, protein_per_100g: 9, carbs_per_100g: 20, fat_per_100g: 0.4 },
+    { name: "Chickpeas", kcal_per_100g: 139, protein_per_100g: 7, carbs_per_100g: 22, fat_per_100g: 2.1 },
+    { name: "Greek Yogurt", kcal_per_100g: 59, protein_per_100g: 10, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
+    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
+    { name: "Mozzarella", kcal_per_100g: 280, protein_per_100g: 28, carbs_per_100g: 3.1, fat_per_100g: 17 },
+    { name: "Almonds", kcal_per_100g: 579, protein_per_100g: 21, carbs_per_100g: 22, fat_per_100g: 50 }
+  ]
+};
 
 /* =============================
    PRE-DEFINED SENSIBLE MEAL COMBINATIONS
@@ -359,104 +405,76 @@ const MEAL_TEMPLATES = {
     breakfast: [
       { name: "Scrambled Eggs with Whole Wheat Toast", components: ["eggs", "whole wheat bread", "butter"] },
       { name: "Greek Yogurt with Berries and Nuts", components: ["greek yogurt", "mixed berries", "almonds"] },
-      { name: "Oatmeal with Banana and Peanut Butter", components: ["oatmeal", "banana", "peanut butter"] },
-      { name: "Protein Smoothie", components: ["protein powder", "banana", "spinach", "milk"] }
+      { name: "Oatmeal with Banana and Peanut Butter", components: ["oatmeal", "banana", "peanut butter"] }
     ],
     lunch: [
       { name: "Grilled Chicken Salad", components: ["chicken breast", "mixed greens", "tomato", "cucumber", "olive oil"] },
       { name: "Turkey Sandwich", components: ["turkey breast", "whole wheat bread", "lettuce", "tomato", "mayonnaise"] },
-      { name: "Quinoa Bowl with Vegetables", components: ["quinoa", "broccoli", "carrots", "chickpeas", "olive oil"] },
-      { name: "Salmon with Sweet Potato", components: ["salmon", "sweet potato", "asparagus", "lemon"] }
+      { name: "Quinoa Bowl with Vegetables", components: ["quinoa", "broccoli", "carrots", "chickpeas", "olive oil"] }
     ],
     dinner: [
       { name: "Beef Stir-fry with Rice", components: ["beef strips", "brown rice", "bell peppers", "broccoli", "soy sauce"] },
       { name: "Baked Chicken with Roasted Vegetables", components: ["chicken thighs", "potatoes", "carrots", "onions", "olive oil"] },
-      { name: "Pasta with Meat Sauce", components: ["whole wheat pasta", "ground beef", "tomato sauce", "parmesan cheese"] },
       { name: "Fish with Quinoa and Greens", components: ["white fish", "quinoa", "spinach", "lemon", "olive oil"] }
     ],
     snack: [
       { name: "Apple with Peanut Butter", components: ["apple", "peanut butter"] },
       { name: "Greek Yogurt with Honey", components: ["greek yogurt", "honey"] },
-      { name: "Mixed Nuts", components: ["almonds", "walnuts", "cashews"] },
-      { name: "Protein Bar", components: ["protein bar"] }
+      { name: "Mixed Nuts", components: ["almonds", "walnuts", "cashews"] }
     ]
   },
   keto: {
     breakfast: [
       { name: "Keto Scrambled Eggs with Avocado", components: ["eggs", "avocado", "butter", "spinach"] },
-      { name: "Bulletproof Coffee", components: ["coffee", "coconut oil", "butter"] },
-      { name: "Keto Pancakes", components: ["almond flour", "eggs", "cream cheese", "butter"] },
       { name: "Bacon and Eggs", components: ["bacon", "eggs", "avocado"] }
     ],
     lunch: [
       { name: "Chicken Caesar Salad", components: ["chicken breast", "romaine lettuce", "parmesan cheese", "caesar dressing"] },
-      { name: "Bunless Burger with Salad", components: ["beef patty", "cheese", "lettuce", "tomato", "mayonnaise"] },
-      { name: "Tuna Salad Lettuce Wraps", components: ["tuna", "mayonnaise", "celery", "lettuce leaves"] },
-      { name: "Zucchini Noodles with Pesto", components: ["zucchini", "pesto", "chicken", "parmesan"] }
+      { name: "Bunless Burger with Salad", components: ["beef patty", "cheese", "lettuce", "tomato", "mayonnaise"] }
     ],
     dinner: [
       { name: "Steak with Creamed Spinach", components: ["steak", "spinach", "heavy cream", "butter"] },
-      { name: "Salmon with Asparagus", components: ["salmon", "asparagus", "butter", "lemon"] },
-      { name: "Chicken Alfredo with Zoodles", components: ["chicken breast", "zucchini", "heavy cream", "parmesan"] },
-      { name: "Pork Chops with Green Beans", components: ["pork chops", "green beans", "butter", "almonds"] }
+      { name: "Salmon with Asparagus", components: ["salmon", "asparagus", "butter", "lemon"] }
     ],
     snack: [
       { name: "Cheese and Nuts", components: ["cheese", "almonds"] },
-      { name: "Keto Fat Bombs", components: ["coconut oil", "peanut butter", "cocoa powder"] },
-      { name: "Beef Jerky", components: ["beef jerky"] },
-      { name: "Avocado with Salt", components: ["avocado"] }
+      { name: "Beef Jerky", components: ["beef jerky"] }
     ]
   },
   carnivore: {
     breakfast: [
       { name: "Steak and Eggs", components: ["beef steak", "eggs", "butter"] },
-      { name: "Bacon and Eggs", components: ["bacon", "eggs"] },
-      { name: "Ground Beef Scramble", components: ["ground beef", "eggs"] },
-      { name: "Pork Chops", components: ["pork chops", "butter"] }
+      { name: "Bacon and Eggs", components: ["bacon", "eggs"] }
     ],
     lunch: [
       { name: "Beef Burger Patties", components: ["ground beef", "cheese"] },
-      { name: "Chicken Thighs", components: ["chicken thighs"] },
-      { name: "Salmon Steak", components: ["salmon", "butter"] },
-      { name: "Ribeye Steak", components: ["ribeye steak"] }
+      { name: "Chicken Thighs", components: ["chicken thighs"] }
     ],
     dinner: [
       { name: "Prime Rib", components: ["beef rib", "butter"] },
-      { name: "Whole Chicken", components: ["chicken", "butter"] },
-      { name: "Pork Belly", components: ["pork belly"] },
-      { name: "Lamb Chops", components: ["lamb chops"] }
+      { name: "Pork Belly", components: ["pork belly"] }
     ],
     snack: [
       { name: "Beef Jerky", components: ["beef jerky"] },
-      { name: "Hard Boiled Eggs", components: ["eggs"] },
-      { name: "Pork Rinds", components: ["pork rinds"] },
-      { name: "Cheese", components: ["cheese"] }
+      { name: "Hard Boiled Eggs", components: ["eggs"] }
     ]
   },
   vegetarian: {
     breakfast: [
       { name: "Vegetable Omelette", components: ["eggs", "spinach", "mushrooms", "cheese"] },
-      { name: "Greek Yogurt Parfait", components: ["greek yogurt", "granola", "berries", "honey"] },
-      { name: "Avocado Toast", components: ["whole wheat bread", "avocado", "eggs"] },
-      { name: "Oatmeal with Fruits", components: ["oatmeal", "banana", "berries", "almonds"] }
+      { name: "Greek Yogurt Parfait", components: ["greek yogurt", "granola", "berries", "honey"] }
     ],
     lunch: [
       { name: "Quinoa Salad Bowl", components: ["quinoa", "chickpeas", "cucumber", "tomato", "feta cheese"] },
-      { name: "Vegetable Stir-fry with Tofu", components: ["tofu", "broccoli", "bell peppers", "rice", "soy sauce"] },
-      { name: "Lentil Soup", components: ["lentils", "carrots", "celery", "onions"] },
-      { name: "Caprese Salad", components: ["mozzarella", "tomato", "basil", "olive oil"] }
+      { name: "Lentil Soup", components: ["lentils", "carrots", "celery", "onions"] }
     ],
     dinner: [
       { name: "Vegetable Curry with Rice", components: ["chickpeas", "coconut milk", "curry powder", "vegetables", "rice"] },
-      { name: "Stuffed Bell Peppers", components: ["bell peppers", "quinoa", "black beans", "cheese"] },
-      { name: "Vegetable Lasagna", components: ["lasagna noodles", "ricotta cheese", "spinach", "tomato sauce"] },
-      { name: "Bean Burgers with Sweet Potato", components: ["black beans", "sweet potato", "whole wheat bun"] }
+      { name: "Stuffed Bell Peppers", components: ["bell peppers", "quinoa", "black beans", "cheese"] }
     ],
     snack: [
       { name: "Hummus with Vegetables", components: ["hummus", "carrot sticks", "celery"] },
-      { name: "Greek Yogurt", components: ["greek yogurt"] },
-      { name: "Mixed Nuts", components: ["almonds", "walnuts", "cashews"] },
-      { name: "Apple with Peanut Butter", components: ["apple", "peanut butter"] }
+      { name: "Greek Yogurt", components: ["greek yogurt"] }
     ]
   }
 };
@@ -605,8 +623,12 @@ async function loadDietData(dietType) {
     currentDietData = data;
     console.log(`Loaded ${dietType} foods:`, data.length);
     return true;
+  } else {
+    // Use fallback data if JSON files fail to load
+    console.log(`Using fallback data for ${dietType}`);
+    currentDietData = FALLBACK_FOODS[dietType] || FALLBACK_FOODS.balanced;
+    return true;
   }
-  return false;
 }
 
 async function loadUSDAData() {
@@ -838,33 +860,14 @@ function createSensibleMeal(diet, calories, day, mealType) {
 }
 
 function createFallbackMeal(diet, calories) {
-  const fallbackFoods = {
-    balanced: [
-      { name: "Chicken Breast", kcal_per_100g: 165, protein_per_100g: 31, carbs_per_100g: 0, fat_per_100g: 3.6 },
-      { name: "Brown Rice", kcal_per_100g: 111, protein_per_100g: 2.6, carbs_per_100g: 23, fat_per_100g: 0.9 },
-      { name: "Mixed Vegetables", kcal_per_100g: 65, protein_per_100g: 3, carbs_per_100g: 12, fat_per_100g: 1 }
-    ],
-    keto: [
-      { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 },
-      { name: "Avocado", kcal_per_100g: 160, protein_per_100g: 2, carbs_per_100g: 9, fat_per_100g: 15 },
-      { name: "Spinach", kcal_per_100g: 23, protein_per_100g: 2.9, carbs_per_100g: 3.6, fat_per_100g: 0.4 }
-    ],
-    carnivore: [
-      { name: "Beef Steak", kcal_per_100g: 271, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 19 },
-      { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 }
-    ],
-    vegetarian: [
-      { name: "Tofu", kcal_per_100g: 76, protein_per_100g: 8, carbs_per_100g: 1.9, fat_per_100g: 4.8 },
-      { name: "Quinoa", kcal_per_100g: 120, protein_per_100g: 4.4, carbs_per_100g: 21, fat_per_100g: 1.9 },
-      { name: "Mixed Vegetables", kcal_per_100g: 65, protein_per_100g: 3, carbs_per_100g: 12, fat_per_100g: 1 }
-    ]
-  };
-  
-  const foods = fallbackFoods[diet] || fallbackFoods.balanced;
+  const foods = FALLBACK_FOODS[diet] || FALLBACK_FOODS.balanced;
   const parts = [];
   
-  foods.forEach((food, index) => {
-    const calorieShare = index === 0 ? 0.5 : (index === 1 ? 0.3 : 0.2);
+  // Use first 2-3 foods from the fallback list
+  const numFoods = Math.min(3, foods.length);
+  for (let i = 0; i < numFoods; i++) {
+    const food = foods[i];
+    const calorieShare = i === 0 ? 0.5 : (i === 1 ? 0.3 : 0.2);
     const grams = gramsForTarget(food.kcal_per_100g, calories * calorieShare);
     
     parts.push({
@@ -873,63 +876,68 @@ function createFallbackMeal(diet, calories) {
       grams: grams,
       source: food
     });
-  });
+  }
   
   return parts;
 }
 
 async function generatePlanAsync(opts){
-  const targetTdee = Math.max(800, Number(opts.tdee) || 2000);
-  const diet = opts.diet || "balanced";
-  const goal = opts.goal || "maintain";
-  
-  // Load appropriate diet data
-  await loadDietData(diet);
-  
-  const macroSplitsValue = macroSplits(diet, goal);
-  const targetMacros = calculateMacroGrams(targetTdee, macroSplitsValue);
-  
-  // Update macro targets display
-  updateMacroTargetsDisplay(targetTdee, diet, goal);
-  
-  const plan = [];
-  const splits = { breakfast: 0.25, lunch: 0.35, dinner: 0.30, snack: 0.10 };
-
-  for(let day=1; day<=7; day++){
-    const dayTarget = Math.round(targetTdee);
+  try {
+    const targetTdee = Math.max(800, Number(opts.tdee) || 2000);
+    const diet = opts.diet || "balanced";
+    const goal = opts.goal || "maintain";
     
-    const bK = Math.round(dayTarget * splits.breakfast);
-    const lK = Math.round(dayTarget * splits.lunch);
-    const dK = Math.round(dayTarget * splits.dinner);
-    const sK = Math.round(dayTarget * splits.snack);
+    // Load appropriate diet data
+    await loadDietData(diet);
+    
+    const macroSplitsValue = macroSplits(diet, goal);
+    const targetMacros = calculateMacroGrams(targetTdee, macroSplitsValue);
+    
+    // Update macro targets display
+    updateMacroTargetsDisplay(targetTdee, diet, goal);
+    
+    const plan = [];
+    const splits = { breakfast: 0.25, lunch: 0.35, dinner: 0.30, snack: 0.10 };
 
-    // Create meals with SENSIBLE combinations
-    const breakfastParts = createSensibleMeal(diet, bK, day, 'breakfast');
-    const lunchParts = createSensibleMeal(diet, lK, day, 'lunch');
-    const dinnerParts = createSensibleMeal(diet, dK, day, 'dinner');
-    const snackParts = createSensibleMeal(diet, sK, day, 'snack');
+    for(let day=1; day<=7; day++){
+      const dayTarget = Math.round(targetTdee);
+      
+      const bK = Math.round(dayTarget * splits.breakfast);
+      const lK = Math.round(dayTarget * splits.lunch);
+      const dK = Math.round(dayTarget * splits.dinner);
+      const sK = Math.round(dayTarget * splits.snack);
 
-    const breakfastNutrition = calculateMealNutrition(breakfastParts);
-    const lunchNutrition = calculateMealNutrition(lunchParts);
-    const dinnerNutrition = calculateMealNutrition(dinnerParts);
-    const snackNutrition = calculateMealNutrition(snackParts);
+      // Create meals with SENSIBLE combinations
+      const breakfastParts = createSensibleMeal(diet, bK, day, 'breakfast');
+      const lunchParts = createSensibleMeal(diet, lK, day, 'lunch');
+      const dinnerParts = createSensibleMeal(diet, dK, day, 'dinner');
+      const snackParts = createSensibleMeal(diet, sK, day, 'snack');
 
-    plan.push({
-      day,
-      meta: {
-        target: dayTarget,
-        splits,
-        macroTarget: targetMacros,
-        macroSplits: macroSplitsValue
-      },
-      breakfast: { kcal: breakfastNutrition.kcal, parts: breakfastParts },
-      lunch: { kcal: lunchNutrition.kcal, parts: lunchParts },
-      dinner: { kcal: dinnerNutrition.kcal, parts: dinnerParts },
-      snack: { kcal: snackNutrition.kcal, parts: snackParts }
-    });
+      const breakfastNutrition = calculateMealNutrition(breakfastParts);
+      const lunchNutrition = calculateMealNutrition(lunchParts);
+      const dinnerNutrition = calculateMealNutrition(dinnerParts);
+      const snackNutrition = calculateMealNutrition(snackParts);
+
+      plan.push({
+        day,
+        meta: {
+          target: dayTarget,
+          splits,
+          macroTarget: targetMacros,
+          macroSplits: macroSplitsValue
+        },
+        breakfast: { kcal: breakfastNutrition.kcal, parts: breakfastParts },
+        lunch: { kcal: lunchNutrition.kcal, parts: lunchParts },
+        dinner: { kcal: dinnerNutrition.kcal, parts: dinnerParts },
+        snack: { kcal: snackNutrition.kcal, parts: snackParts }
+      });
+    }
+    
+    return plan;
+  } catch (error) {
+    console.error("Error generating plan:", error);
+    throw new Error("Failed to generate meal plan. Please check your inputs and try again.");
   }
-  
-  return plan;
 }
 
 /* =============================
@@ -1925,6 +1933,12 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     try {
+      // Show loading state
+      const generateBtn = document.getElementById('generateBtn');
+      const originalText = generateBtn.textContent;
+      generateBtn.textContent = 'Generating...';
+      generateBtn.disabled = true;
+      
       const plan = await generatePlanAsync(opts); 
       currentPlan = plan; // Store the generated plan in currentPlan
       isPreviewMode = true; // Enter preview mode
@@ -1959,7 +1973,21 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     } catch (error) { 
       console.error("Error generating plan:", error); 
-      alert("Error generating plan. Please try again."); 
+      // Show error message to user
+      const errorAlert = document.createElement('div');
+      errorAlert.className = 'alert alert-error';
+      errorAlert.innerHTML = `<strong>Error:</strong> ${error.message}`;
+      errorAlert.style.marginTop = '12px';
+      
+      const mainInner = document.getElementById('mainInner');
+      if (mainInner.firstChild) {
+        mainInner.insertBefore(errorAlert, mainInner.firstChild);
+      }
+    } finally {
+      // Restore button state
+      const generateBtn = document.getElementById('generateBtn');
+      generateBtn.textContent = originalText;
+      generateBtn.disabled = false;
     }
   });
   
