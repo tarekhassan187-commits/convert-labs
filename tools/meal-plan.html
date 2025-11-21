@@ -356,68 +356,68 @@ let currentMealForModal = null;
 let currentDietForModal = null;
 
 /* =============================
-   COMPLETE FALLBACK FOOD DATABASE
+   COMPLETE FALLBACK FOOD DATABASE - STANDARDIZED FIELD NAMES
    ============================= */
 const COMPLETE_FOOD_DATABASE = {
   balanced: [
-    { name: "Chicken Breast", kcal_per_100g: 165, protein_per_100g: 31, carbs_per_100g: 0, fat_per_100g: 3.6 },
-    { name: "Brown Rice", kcal_per_100g: 111, protein_per_100g: 2.6, carbs_per_100g: 23, fat_per_100g: 0.9 },
-    { name: "Broccoli", kcal_per_100g: 34, protein_per_100g: 2.8, carbs_per_100g: 7, fat_per_100g: 0.4 },
-    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
-    { name: "Whole Wheat Bread", kcal_per_100g: 265, protein_per_100g: 13, carbs_per_100g: 51, fat_per_100g: 3.2 },
-    { name: "Greek Yogurt", kcal_per_100g: 59, protein_per_100g: 10, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Banana", kcal_per_100g: 89, protein_per_100g: 1.1, carbs_per_100g: 23, fat_per_100g: 0.3 },
-    { name: "Almonds", kcal_per_100g: 579, protein_per_100g: 21, carbs_per_100g: 22, fat_per_100g: 50 },
-    { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 },
-    { name: "Sweet Potato", kcal_per_100g: 86, protein_per_100g: 1.6, carbs_per_100g: 20, fat_per_100g: 0.1 },
-    { name: "Spinach", kcal_per_100g: 23, protein_per_100g: 2.9, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Avocado", kcal_per_100g: 160, protein_per_100g: 2, carbs_per_100g: 9, fat_per_100g: 15 },
-    { name: "Oatmeal", kcal_per_100g: 68, protein_per_100g: 2.4, carbs_per_100g: 12, fat_per_100g: 1.4 },
-    { name: "Apple", kcal_per_100g: 52, protein_per_100g: 0.3, carbs_per_100g: 14, fat_per_100g: 0.2 },
-    { name: "Ground Beef", kcal_per_100g: 250, protein_per_100g: 26, carbs_per_100g: 0, fat_per_100g: 15 },
-    { name: "Turkey Breast", kcal_per_100g: 135, protein_per_100g: 30, carbs_per_100g: 0, fat_per_100g: 1 },
-    { name: "Quinoa", kcal_per_100g: 120, protein_per_100g: 4.4, carbs_per_100g: 21, fat_per_100g: 1.9 }
+    { name: "Chicken Breast", kcal: 165, protein: 31, carbs: 0, fat: 3.6 },
+    { name: "Brown Rice", kcal: 111, protein: 2.6, carbs: 23, fat: 0.9 },
+    { name: "Broccoli", kcal: 34, protein: 2.8, carbs: 7, fat: 0.4 },
+    { name: "Eggs", kcal: 155, protein: 13, carbs: 1.1, fat: 11 },
+    { name: "Whole Wheat Bread", kcal: 265, protein: 13, carbs: 51, fat: 3.2 },
+    { name: "Greek Yogurt", kcal: 59, protein: 10, carbs: 3.6, fat: 0.4 },
+    { name: "Banana", kcal: 89, protein: 1.1, carbs: 23, fat: 0.3 },
+    { name: "Almonds", kcal: 579, protein: 21, carbs: 22, fat: 50 },
+    { name: "Salmon", kcal: 208, protein: 20, carbs: 0, fat: 13 },
+    { name: "Sweet Potato", kcal: 86, protein: 1.6, carbs: 20, fat: 0.1 },
+    { name: "Spinach", kcal: 23, protein: 2.9, carbs: 3.6, fat: 0.4 },
+    { name: "Avocado", kcal: 160, protein: 2, carbs: 9, fat: 15 },
+    { name: "Oatmeal", kcal: 68, protein: 2.4, carbs: 12, fat: 1.4 },
+    { name: "Apple", kcal: 52, protein: 0.3, carbs: 14, fat: 0.2 },
+    { name: "Ground Beef", kcal: 250, protein: 26, carbs: 0, fat: 15 },
+    { name: "Turkey Breast", kcal: 135, protein: 30, carbs: 0, fat: 1 },
+    { name: "Quinoa", kcal: 120, protein: 4.4, carbs: 21, fat: 1.9 }
   ],
   keto: [
-    { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 },
-    { name: "Avocado", kcal_per_100g: 160, protein_per_100g: 2, carbs_per_100g: 9, fat_per_100g: 15 },
-    { name: "Bacon", kcal_per_100g: 541, protein_per_100g: 37, carbs_per_100g: 1.4, fat_per_100g: 42 },
-    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
-    { name: "Spinach", kcal_per_100g: 23, protein_per_100g: 2.9, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Cheese", kcal_per_100g: 402, protein_per_100g: 25, carbs_per_100g: 1.3, fat_per_100g: 33 },
-    { name: "Olive Oil", kcal_per_100g: 884, protein_per_100g: 0, carbs_per_100g: 0, fat_per_100g: 100 },
-    { name: "Almonds", kcal_per_100g: 579, protein_per_100g: 21, carbs_per_100g: 22, fat_per_100g: 50 },
-    { name: "Chicken Thighs", kcal_per_100g: 209, protein_per_100g: 26, carbs_per_100g: 0, fat_per_100g: 11 },
-    { name: "Butter", kcal_per_100g: 717, protein_per_100g: 0.9, carbs_per_100g: 0.1, fat_per_100g: 81 },
-    { name: "Beef Steak", kcal_per_100g: 271, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 19 },
-    { name: "Pork Chops", kcal_per_100g: 242, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 15 }
+    { name: "Salmon", kcal: 208, protein: 20, carbs: 0, fat: 13 },
+    { name: "Avocado", kcal: 160, protein: 2, carbs: 9, fat: 15 },
+    { name: "Bacon", kcal: 541, protein: 37, carbs: 1.4, fat: 42 },
+    { name: "Eggs", kcal: 155, protein: 13, carbs: 1.1, fat: 11 },
+    { name: "Spinach", kcal: 23, protein: 2.9, carbs: 3.6, fat: 0.4 },
+    { name: "Cheese", kcal: 402, protein: 25, carbs: 1.3, fat: 33 },
+    { name: "Olive Oil", kcal: 884, protein: 0, carbs: 0, fat: 100 },
+    { name: "Almonds", kcal: 579, protein: 21, carbs: 22, fat: 50 },
+    { name: "Chicken Thighs", kcal: 209, protein: 26, carbs: 0, fat: 11 },
+    { name: "Butter", kcal: 717, protein: 0.9, carbs: 0.1, fat: 81 },
+    { name: "Beef Steak", kcal: 271, protein: 25, carbs: 0, fat: 19 },
+    { name: "Pork Chops", kcal: 242, protein: 25, carbs: 0, fat: 15 }
   ],
   carnivore: [
-    { name: "Beef Steak", kcal_per_100g: 271, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 19 },
-    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
-    { name: "Bacon", kcal_per_100g: 541, protein_per_100g: 37, carbs_per_100g: 1.4, fat_per_100g: 42 },
-    { name: "Chicken Thighs", kcal_per_100g: 209, protein_per_100g: 26, carbs_per_100g: 0, fat_per_100g: 11 },
-    { name: "Pork Chops", kcal_per_100g: 242, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 15 },
-    { name: "Butter", kcal_per_100g: 717, protein_per_100g: 0.9, carbs_per_100g: 0.1, fat_per_100g: 81 },
-    { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 },
-    { name: "Ground Beef", kcal_per_100g: 250, protein_per_100g: 26, carbs_per_100g: 0, fat_per_100g: 15 },
-    { name: "Ribeye Steak", kcal_per_100g: 291, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 21 },
-    { name: "Liver", kcal_per_100g: 135, protein_per_100g: 20, carbs_per_100g: 3, fat_per_100g: 4 }
+    { name: "Beef Steak", kcal: 271, protein: 25, carbs: 0, fat: 19 },
+    { name: "Eggs", kcal: 155, protein: 13, carbs: 1.1, fat: 11 },
+    { name: "Bacon", kcal: 541, protein: 37, carbs: 1.4, fat: 42 },
+    { name: "Chicken Thighs", kcal: 209, protein: 26, carbs: 0, fat: 11 },
+    { name: "Pork Chops", kcal: 242, protein: 25, carbs: 0, fat: 15 },
+    { name: "Butter", kcal: 717, protein: 0.9, carbs: 0.1, fat: 81 },
+    { name: "Salmon", kcal: 208, protein: 20, carbs: 0, fat: 13 },
+    { name: "Ground Beef", kcal: 250, protein: 26, carbs: 0, fat: 15 },
+    { name: "Ribeye Steak", kcal: 291, protein: 25, carbs: 0, fat: 21 },
+    { name: "Liver", kcal: 135, protein: 20, carbs: 3, fat: 4 }
   ],
   vegetarian: [
-    { name: "Tofu", kcal_per_100g: 76, protein_per_100g: 8, carbs_per_100g: 1.9, fat_per_100g: 4.8 },
-    { name: "Quinoa", kcal_per_100g: 120, protein_per_100g: 4.4, carbs_per_100g: 21, fat_per_100g: 1.9 },
-    { name: "Lentils", kcal_per_100g: 116, protein_per_100g: 9, carbs_per_100g: 20, fat_per_100g: 0.4 },
-    { name: "Chickpeas", kcal_per_100g: 139, protein_per_100g: 7, carbs_per_100g: 22, fat_per_100g: 2.1 },
-    { name: "Greek Yogurt", kcal_per_100g: 59, protein_per_100g: 10, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
-    { name: "Mozzarella", kcal_per_100g: 280, protein_per_100g: 28, carbs_per_100g: 3.1, fat_per_100g: 17 },
-    { name: "Almonds", kcal_per_100g: 579, protein_per_100g: 21, carbs_per_100g: 22, fat_per_100g: 50 },
-    { name: "Spinach", kcal_per_100g: 23, protein_per_100g: 2.9, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Broccoli", kcal_per_100g: 34, protein_per_100g: 2.8, carbs_per_100g: 7, fat_per_100g: 0.4 },
-    { name: "Sweet Potato", kcal_per_100g: 86, protein_per_100g: 1.6, carbs_per_100g: 20, fat_per_100g: 0.1 },
-    { name: "Brown Rice", kcal_per_100g: 111, protein_per_100g: 2.6, carbs_per_100g: 23, fat_per_100g: 0.9 },
-    { name: "Cottage Cheese", kcal_per_100g: 98, protein_per_100g: 11, carbs_per_100g: 3.4, fat_per_100g: 4.3 }
+    { name: "Tofu", kcal: 76, protein: 8, carbs: 1.9, fat: 4.8 },
+    { name: "Quinoa", kcal: 120, protein: 4.4, carbs: 21, fat: 1.9 },
+    { name: "Lentils", kcal: 116, protein: 9, carbs: 20, fat: 0.4 },
+    { name: "Chickpeas", kcal: 139, protein: 7, carbs: 22, fat: 2.1 },
+    { name: "Greek Yogurt", kcal: 59, protein: 10, carbs: 3.6, fat: 0.4 },
+    { name: "Eggs", kcal: 155, protein: 13, carbs: 1.1, fat: 11 },
+    { name: "Mozzarella", kcal: 280, protein: 28, carbs: 3.1, fat: 17 },
+    { name: "Almonds", kcal: 579, protein: 21, carbs: 22, fat: 50 },
+    { name: "Spinach", kcal: 23, protein: 2.9, carbs: 3.6, fat: 0.4 },
+    { name: "Broccoli", kcal: 34, protein: 2.8, carbs: 7, fat: 0.4 },
+    { name: "Sweet Potato", kcal: 86, protein: 1.6, carbs: 20, fat: 0.1 },
+    { name: "Brown Rice", kcal: 111, protein: 2.6, carbs: 23, fat: 0.9 },
+    { name: "Cottage Cheese", kcal: 98, protein: 11, carbs: 3.4, fat: 4.3 }
   ]
 };
 
@@ -503,7 +503,7 @@ const MEAL_TEMPLATES = {
 };
 
 /* =============================
-   IMPROVED DATA LOADERS
+   IMPROVED DATA LOADERS - STANDARDIZED FIELD NAMES
    ============================= */
 async function safeFetchJSON(url){
   try {
@@ -514,21 +514,22 @@ async function safeFetchJSON(url){
     let data = Array.isArray(j) ? j : (Array.isArray(j.data) ? j.data : null);
     
     if (data) {
-      // Ensure all foods have the required fields
+      // STANDARDIZE FIELD NAMES: Convert all field names to consistent format
       data = data.map(item => {
-        // Handle different field names
+        // Handle different field names and standardize them
         const kcal = item.kcal_per_100g || item.calories || item.kcal || 200;
         const protein = item.protein_per_100g || item.protein || 0;
         const carbs = item.carbs_per_100g || item.carbs || 0;
         const fat = item.fat_per_100g || item.fat || 0;
         const name = item.name || item.food_name || "Unknown Food";
         
+        // Return standardized object with consistent field names
         return {
           name: name,
-          kcal_per_100g: kcal,
-          protein_per_100g: protein,
-          carbs_per_100g: carbs,
-          fat_per_100g: fat
+          kcal: kcal,  // Always use 'kcal' for consistency
+          protein: protein,  // Always use 'protein'
+          carbs: carbs,  // Always use 'carbs'
+          fat: fat  // Always use 'fat'
         };
       });
     }
@@ -559,7 +560,7 @@ async function loadDietData(dietType) {
     console.log(`✅ Loaded ${dietType} foods from JSON:`, data.length);
     return true;
   } else {
-    // Use fallback data
+    // Use fallback data (already standardized)
     currentDietData = COMPLETE_FOOD_DATABASE[dietType] || COMPLETE_FOOD_DATABASE.balanced;
     console.log(`⚠️ Using fallback data for ${dietType}:`, currentDietData.length);
     return true;
@@ -670,7 +671,7 @@ function updateMacroTargetsDisplay(tdee, diet, goal) {
 }
 
 /* =============================
-   WORKING MEAL GENERATION
+   WORKING MEAL GENERATION - UPDATED FOR STANDARDIZED FIELDS
    ============================= */
 function gramsForTarget(kcalPer100g, mealKcal){ 
   if(!kcalPer100g || kcalPer100g <= 0) return Math.max(50, Math.round(100 * (mealKcal / 200)));
@@ -682,10 +683,12 @@ function calculateMealNutrition(parts) {
   return parts.reduce((acc, part) => {
     const ratio = (part.grams || 0) / 100;
     const foodItem = part.source || part;
-    const kcal = Math.round((foodItem.kcal_per_100g || part.per100 || 0) * ratio);
-    const protein = Math.round((foodItem.protein_per_100g || foodItem.protein || 0) * ratio);
-    const carbs = Math.round((foodItem.carbs_per_100g || foodItem.carbs || 0) * ratio);
-    const fat = Math.round((foodItem.fat_per_100g || foodItem.fat || 0) * ratio);
+    
+    // Use standardized field names: kcal, protein, carbs, fat
+    const kcal = Math.round((foodItem.kcal || part.per100 || 0) * ratio);
+    const protein = Math.round((foodItem.protein || 0) * ratio);
+    const carbs = Math.round((foodItem.carbs || 0) * ratio);
+    const fat = Math.round((foodItem.fat || 0) * ratio);
     
     part.kcal = kcal; 
     part.protein = protein; 
@@ -724,16 +727,16 @@ function createSimpleMeal(diet, calories, day, mealType) {
     if (foodItem) {
       // Simple calorie distribution - equal share for each food
       const calorieShare = 1 / selectedTemplate.foods.length;
-      const grams = gramsForTarget(foodItem.kcal_per_100g, calories * calorieShare);
+      const grams = gramsForTarget(foodItem.kcal, calories * calorieShare);
       
       parts.push({
         name: foodItem.name,
-        per100: foodItem.kcal_per_100g,
+        per100: foodItem.kcal,  // Now using standardized 'kcal' field
         grams: Math.max(30, grams),
         source: foodItem
       });
       
-      console.log(`  - Added ${foodItem.name}: ${grams}g`);
+      console.log(`  - Added ${foodItem.name}: ${grams}g (${foodItem.kcal} kcal/100g)`);
     } else {
       console.log(`  - Could not find: ${foodName}`);
     }
@@ -745,11 +748,11 @@ function createSimpleMeal(diet, calories, day, mealType) {
     const fallbackFoods = currentDietData.slice(0, 2);
     fallbackFoods.forEach((food, index) => {
       const calorieShare = index === 0 ? 0.7 : 0.3;
-      const grams = gramsForTarget(food.kcal_per_100g, calories * calorieShare);
+      const grams = gramsForTarget(food.kcal, calories * calorieShare);
       
       parts.push({
         name: food.name,
-        per100: food.kcal_per_100g,
+        per100: food.kcal,
         grams: Math.max(30, grams),
         source: food
       });
@@ -1142,7 +1145,7 @@ function renderPlan(plan, startDate) {
 }
 
 /* =============================
-   PLAN MODIFICATION FUNCTIONS
+   PLAN MODIFICATION FUNCTIONS - UPDATED FOR STANDARDIZED FIELDS
    ============================= */
 function replaceMealWithFood(day, mealKey, foodItem) {
   if (!currentPlan) return;
@@ -1151,11 +1154,11 @@ function replaceMealWithFood(day, mealKey, foodItem) {
   if (!dayPlan || !dayPlan[mealKey]) return;
   
   const targetKcal = dayPlan[mealKey].kcal || 500;
-  const grams = gramsForTarget(foodItem.kcal_per_100g, targetKcal);
+  const grams = gramsForTarget(foodItem.kcal, targetKcal);
   
   dayPlan[mealKey].parts = [{
     name: foodItem.name,
-    per100: foodItem.kcal_per_100g,
+    per100: foodItem.kcal,  // Using standardized 'kcal' field
     grams: grams,
     source: foodItem
   }];
@@ -1194,10 +1197,12 @@ function updatePortionSize(day, mealKey, partIndex, newGrams) {
   
   const ratio = newGrams / 100;
   const foodItem = part.source || part;
-  part.kcal = Math.round((foodItem.kcal_per_100g || part.per100 || 0) * ratio);
-  part.protein = Math.round((foodItem.protein_per_100g || foodItem.protein || 0) * ratio);
-  part.carbs = Math.round((foodItem.carbs_per_100g || foodItem.carbs || 0) * ratio);
-  part.fat = Math.round((foodItem.fat_per_100g || foodItem.fat || 0) * ratio);
+  
+  // Use standardized field names
+  part.kcal = Math.round((foodItem.kcal || part.per100 || 0) * ratio);
+  part.protein = Math.round((foodItem.protein || 0) * ratio);
+  part.carbs = Math.round((foodItem.carbs || 0) * ratio);
+  part.fat = Math.round((foodItem.fat || 0) * ratio);
   
   dayPlan[mealKey].kcal = dayPlan[mealKey].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
   
@@ -1252,7 +1257,7 @@ function updateCurrentMacrosDisplay(day) {
 }
 
 /* =============================
-   ADD/REPLACE ITEM MODALS
+   ADD/REPLACE ITEM MODALS - UPDATED FOR STANDARDIZED FIELDS
    ============================= */
 function openAddItemModal(dayIdx, mealKey) {
   currentDayForModal = dayIdx;
@@ -1273,8 +1278,8 @@ function openAddItemModal(dayIdx, mealKey) {
           <option value="">Choose a food...</option>
           ${currentDietData.map(food => {
             const name = food.name || "Unknown";
-            const kcal = food.kcal_per_100g || 0;
-            return `<option value="${escapeHtml(name)}" data-kcal="${kcal}" data-protein="${food.protein_per_100g || 0}" data-carbs="${food.carbs_per_100g || 0}" data-fat="${food.fat_per_100g || 0}">
+            const kcal = food.kcal || 0;
+            return `<option value="${escapeHtml(name)}" data-kcal="${kcal}" data-protein="${food.protein || 0}" data-carbs="${food.carbs || 0}" data-fat="${food.fat || 0}">
               ${escapeHtml(name)} (${kcal} kcal/100g)
             </option>`;
           }).join('')}
@@ -1298,12 +1303,12 @@ function openAddItemModal(dayIdx, mealKey) {
         const selectedOption = this.options[this.selectedIndex];
         const foodItem = {
           name: this.value,
-          kcal_per_100g: parseFloat(selectedOption.getAttribute('data-kcal')),
-          protein_per_100g: parseFloat(selectedOption.getAttribute('data-protein')),
-          carbs_per_100g: parseFloat(selectedOption.getAttribute('data-carbs')),
-          fat_per_100g: parseFloat(selectedOption.getAttribute('data-fat'))
+          kcal: parseFloat(selectedOption.getAttribute('data-kcal')),
+          protein: parseFloat(selectedOption.getAttribute('data-protein')),
+          carbs: parseFloat(selectedOption.getAttribute('data-carbs')),
+          fat: parseFloat(selectedOption.getAttribute('data-fat'))
         };
-        applyAddToPlan(foodItem.name, foodItem.kcal_per_100g, foodItem.protein_per_100g, foodItem.carbs_per_100g, foodItem.fat_per_100g);
+        applyAddToPlan(foodItem.name, foodItem.kcal, foodItem.protein, foodItem.carbs, foodItem.fat);
       }
     });
     
@@ -1346,8 +1351,8 @@ function openReplaceModal(dayIdx, mealKey) {
           <option value="">Choose a food...</option>
           ${currentDietData.map(food => {
             const name = food.name || "Unknown";
-            const kcal = food.kcal_per_100g || 0;
-            return `<option value="${escapeHtml(name)}" data-kcal="${kcal}" data-protein="${food.protein_per_100g || 0}" data-carbs="${food.carbs_per_100g || 0}" data-fat="${food.fat_per_100g || 0}">
+            const kcal = food.kcal || 0;
+            return `<option value="${escapeHtml(name)}" data-kcal="${kcal}" data-protein="${food.protein || 0}" data-carbs="${food.carbs || 0}" data-fat="${food.fat || 0}">
               ${escapeHtml(name)} (${kcal} kcal/100g)
             </option>`;
           }).join('')}
@@ -1371,12 +1376,12 @@ function openReplaceModal(dayIdx, mealKey) {
         const selectedOption = this.options[this.selectedIndex];
         const foodItem = {
           name: this.value,
-          kcal_per_100g: parseFloat(selectedOption.getAttribute('data-kcal')),
-          protein_per_100g: parseFloat(selectedOption.getAttribute('data-protein')),
-          carbs_per_100g: parseFloat(selectedOption.getAttribute('data-carbs')),
-          fat_per_100g: parseFloat(selectedOption.getAttribute('data-fat'))
+          kcal: parseFloat(selectedOption.getAttribute('data-kcal')),
+          protein: parseFloat(selectedOption.getAttribute('data-protein')),
+          carbs: parseFloat(selectedOption.getAttribute('data-carbs')),
+          fat: parseFloat(selectedOption.getAttribute('data-fat'))
         };
-        applyReplacementToPlan(foodItem.name, foodItem.kcal_per_100g, foodItem.protein_per_100g, foodItem.carbs_per_100g, foodItem.fat_per_100g);
+        applyReplacementToPlan(foodItem.name, foodItem.kcal, foodItem.protein, foodItem.carbs, foodItem.fat);
       }
     });
     
@@ -1412,10 +1417,10 @@ function renderAddList(results) {
   
   results.forEach(item => {
     const name = item.name || item.food_name || item.description || "Unknown";
-    const kcal = item.kcal_per_100g || item.kcal || 0;
-    const protein = item.protein_per_100g || item.protein || 0;
-    const carbs = item.carbs_per_100g || item.carbs || 0;
-    const fat = item.fat_per_100g || item.fat || 0;
+    const kcal = item.kcal || 0;
+    const protein = item.protein || 0;
+    const carbs = item.carbs || 0;
+    const fat = item.fat || 0;
     
     html += `
       <div class="meal-list-item" style="cursor: pointer; padding: 12px" 
@@ -1444,10 +1449,10 @@ function renderReplaceList(results) {
   
   results.forEach(item => {
     const name = item.name || item.food_name || item.description || "Unknown";
-    const kcal = item.kcal_per_100g || item.kcal || 0;
-    const protein = item.protein_per_100g || item.protein || 0;
-    const carbs = item.carbs_per_100g || item.carbs || 0;
-    const fat = item.fat_per_100g || item.fat || 0;
+    const kcal = item.kcal || 0;
+    const protein = item.protein || 0;
+    const carbs = item.carbs || 0;
+    const fat = item.fat || 0;
     
     html += `
       <div class="meal-list-item" style="cursor:pointer;padding:12px"
@@ -1470,7 +1475,7 @@ function renderReplaceList(results) {
   container.innerHTML = html;
 }
 
-function applyAddToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g) {
+function applyAddToPlan(name, kcal, protein, carbs, fat) {
   if (!currentPlan) return;
   
   const day = currentPlan[currentDayForModal];
@@ -1479,20 +1484,20 @@ function applyAddToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, f
   
   const newPart = {
     name,
-    per100: kcal_per_100g,
+    per100: kcal,
     grams: 100,
     type: "added",
     source: {
       name,
-      kcal_per_100g,
-      protein_per_100g,
-      carbs_per_100g,
-      fat_per_100g
+      kcal,
+      protein,
+      carbs,
+      fat
     },
-    kcal: Math.round(kcal_per_100g),
-    protein: Math.round(protein_per_100g),
-    carbs: Math.round(carbs_per_100g),
-    fat: Math.round(fat_per_100g)
+    kcal: Math.round(kcal),
+    protein: Math.round(protein),
+    carbs: Math.round(carbs),
+    fat: Math.round(fat)
   };
   
   if (!day[currentMealForModal].parts) {
@@ -1507,7 +1512,7 @@ function applyAddToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, f
   document.getElementById("usdaPopup").style.display = 'none';
 }
 
-function applyReplacementToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g) {
+function applyReplacementToPlan(name, kcal, protein, carbs, fat) {
   if (!currentPlan) return;
   
   const day = currentPlan[currentDayForModal];
@@ -1519,21 +1524,21 @@ function applyReplacementToPlan(name, kcal_per_100g, protein_per_100g, carbs_per
   const grams = first.grams || 100;
 
   first.name = name;
-  first.per100 = kcal_per_100g;
+  first.per100 = kcal;
   first.source = {
     name,
-    kcal_per_100g,
-    protein_per_100g,
-    carbs_per_100g,
-    fat_per_100g
+    kcal,
+    protein,
+    carbs,
+    fat
   };
 
   // Properly calculate nutrition based on grams
   const ratio = grams / 100;
-  first.kcal = Math.round(kcal_per_100g * ratio);
-  first.protein = Math.round(protein_per_100g * ratio);
-  first.carbs = Math.round(carbs_per_100g * ratio);
-  first.fat = Math.round(fat_per_100g * ratio);
+  first.kcal = Math.round(kcal * ratio);
+  first.protein = Math.round(protein * ratio);
+  first.carbs = Math.round(carbs * ratio);
+  first.fat = Math.round(fat * ratio);
 
   // Update total meal kcal
   day[currentMealForModal].kcal = day[currentMealForModal].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
