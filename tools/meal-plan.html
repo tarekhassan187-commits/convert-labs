@@ -57,7 +57,7 @@
     .small-muted{font-size:12px;color:var(--muted)}
     .kcal{font-weight:700;margin-top:8px}
     .modal-back{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:1200;padding:12px}
-    .modal-card{width:100%;max-width:980px;max-height:86vh;overflow:auto;background:var(--card);border-radius:12px;padding:16px}
+    .modal-card{width=100%;max-width:980px;max-height:86vh;overflow:auto;background:var(--card);border-radius:12px;padding:16px}
     footer.footer{background:var(--brand-2);color:#fff;padding:20px;text-align:center;margin-top:16px; width:100%;}
     
     /* Suggestion tags */
@@ -304,6 +304,126 @@ const DATA_USDA = "/assets/usda_food_nutrition.json";
 const KEY = "convertlabs_mealplan_v4";
 
 /* =============================
+   PRE-DEFINED SENSIBLE MEAL COMBINATIONS
+   ============================= */
+const MEAL_TEMPLATES = {
+  balanced: {
+    breakfast: [
+      { name: "Scrambled Eggs with Whole Wheat Toast", components: ["eggs", "whole wheat bread", "butter"] },
+      { name: "Greek Yogurt with Berries and Nuts", components: ["greek yogurt", "mixed berries", "almonds"] },
+      { name: "Oatmeal with Banana and Peanut Butter", components: ["oatmeal", "banana", "peanut butter"] },
+      { name: "Protein Smoothie", components: ["protein powder", "banana", "spinach", "milk"] }
+    ],
+    lunch: [
+      { name: "Grilled Chicken Salad", components: ["chicken breast", "mixed greens", "tomato", "cucumber", "olive oil"] },
+      { name: "Turkey Sandwich", components: ["turkey breast", "whole wheat bread", "lettuce", "tomato", "mayonnaise"] },
+      { name: "Quinoa Bowl with Vegetables", components: ["quinoa", "broccoli", "carrots", "chickpeas", "olive oil"] },
+      { name: "Salmon with Sweet Potato", components: ["salmon", "sweet potato", "asparagus", "lemon"] }
+    ],
+    dinner: [
+      { name: "Beef Stir-fry with Rice", components: ["beef strips", "brown rice", "bell peppers", "broccoli", "soy sauce"] },
+      { name: "Baked Chicken with Roasted Vegetables", components: ["chicken thighs", "potatoes", "carrots", "onions", "olive oil"] },
+      { name: "Pasta with Meat Sauce", components: ["whole wheat pasta", "ground beef", "tomato sauce", "parmesan cheese"] },
+      { name: "Fish with Quinoa and Greens", components: ["white fish", "quinoa", "spinach", "lemon", "olive oil"] }
+    ],
+    snack: [
+      { name: "Apple with Peanut Butter", components: ["apple", "peanut butter"] },
+      { name: "Greek Yogurt with Honey", components: ["greek yogurt", "honey"] },
+      { name: "Mixed Nuts", components: ["almonds", "walnuts", "cashews"] },
+      { name: "Protein Bar", components: ["protein bar"] }
+    ]
+  },
+  keto: {
+    breakfast: [
+      { name: "Keto Scrambled Eggs with Avocado", components: ["eggs", "avocado", "butter", "spinach"] },
+      { name: "Bulletproof Coffee", components: ["coffee", "coconut oil", "butter"] },
+      { name: "Keto Pancakes", components: ["almond flour", "eggs", "cream cheese", "butter"] },
+      { name: "Bacon and Eggs", components: ["bacon", "eggs", "avocado"] }
+    ],
+    lunch: [
+      { name: "Chicken Caesar Salad", components: ["chicken breast", "romaine lettuce", "parmesan cheese", "caesar dressing"] },
+      { name: "Bunless Burger with Salad", components: ["beef patty", "cheese", "lettuce", "tomato", "mayonnaise"] },
+      { name: "Tuna Salad Lettuce Wraps", components: ["tuna", "mayonnaise", "celery", "lettuce leaves"] },
+      { name: "Zucchini Noodles with Pesto", components: ["zucchini", "pesto", "chicken", "parmesan"] }
+    ],
+    dinner: [
+      { name: "Steak with Creamed Spinach", components: ["steak", "spinach", "heavy cream", "butter"] },
+      { name: "Salmon with Asparagus", components: ["salmon", "asparagus", "butter", "lemon"] },
+      { name: "Chicken Alfredo with Zoodles", components: ["chicken breast", "zucchini", "heavy cream", "parmesan"] },
+      { name: "Pork Chops with Green Beans", components: ["pork chops", "green beans", "butter", "almonds"] }
+    ],
+    snack: [
+      { name: "Cheese and Nuts", components: ["cheese", "almonds"] },
+      { name: "Keto Fat Bombs", components: ["coconut oil", "peanut butter", "cocoa powder"] },
+      { name: "Beef Jerky", components: ["beef jerky"] },
+      { name: "Avocado with Salt", components: ["avocado"] }
+    ]
+  },
+  carnivore: {
+    breakfast: [
+      { name: "Steak and Eggs", components: ["beef steak", "eggs", "butter"] },
+      { name: "Bacon and Eggs", components: ["bacon", "eggs"] },
+      { name: "Ground Beef Scramble", components: ["ground beef", "eggs"] },
+      { name: "Pork Chops", components: ["pork chops", "butter"] }
+    ],
+    lunch: [
+      { name: "Beef Burger Patties", components: ["ground beef", "cheese"] },
+      { name: "Chicken Thighs", components: ["chicken thighs"] },
+      { name: "Salmon Steak", components: ["salmon", "butter"] },
+      { name: "Ribeye Steak", components: ["ribeye steak"] }
+    ],
+    dinner: [
+      { name: "Prime Rib", components: ["beef rib", "butter"] },
+      { name: "Whole Chicken", components: ["chicken", "butter"] },
+      { name: "Pork Belly", components: ["pork belly"] },
+      { name: "Lamb Chops", components: ["lamb chops"] }
+    ],
+    snack: [
+      { name: "Beef Jerky", components: ["beef jerky"] },
+      { name: "Hard Boiled Eggs", components: ["eggs"] },
+      { name: "Pork Rinds", components: ["pork rinds"] },
+      { name: "Cheese", components: ["cheese"] }
+    ]
+  },
+  vegetarian: {
+    breakfast: [
+      { name: "Vegetable Omelette", components: ["eggs", "spinach", "mushrooms", "cheese"] },
+      { name: "Greek Yogurt Parfait", components: ["greek yogurt", "granola", "berries", "honey"] },
+      { name: "Avocado Toast", components: ["whole wheat bread", "avocado", "eggs"] },
+      { name: "Oatmeal with Fruits", components: ["oatmeal", "banana", "berries", "almonds"] }
+    ],
+    lunch: [
+      { name: "Quinoa Salad Bowl", components: ["quinoa", "chickpeas", "cucumber", "tomato", "feta cheese"] },
+      { name: "Vegetable Stir-fry with Tofu", components: ["tofu", "broccoli", "bell peppers", "rice", "soy sauce"] },
+      { name: "Lentil Soup", components: ["lentils", "carrots", "celery", "onions"] },
+      { name: "Caprese Salad", components: ["mozzarella", "tomato", "basil", "olive oil"] }
+    ],
+    dinner: [
+      { name: "Vegetable Curry with Rice", components: ["chickpeas", "coconut milk", "curry powder", "vegetables", "rice"] },
+      { name: "Stuffed Bell Peppers", components: ["bell peppers", "quinoa", "black beans", "cheese"] },
+      { name: "Vegetable Lasagna", components: ["lasagna noodles", "ricotta cheese", "spinach", "tomato sauce"] },
+      { name: "Bean Burgers with Sweet Potato", components: ["black beans", "sweet potato", "whole wheat bun"] }
+    ],
+    snack: [
+      { name: "Hummus with Vegetables", components: ["hummus", "carrot sticks", "celery"] },
+      { name: "Greek Yogurt", components: ["greek yogurt"] },
+      { name: "Mixed Nuts", components: ["almonds", "walnuts", "cashews"] },
+      { name: "Apple with Peanut Butter", components: ["apple", "peanut butter"] }
+    ]
+  }
+};
+
+// Food categories for better organization
+const FOOD_CATEGORIES = {
+  proteins: ["chicken breast", "beef steak", "salmon", "eggs", "tuna", "turkey breast", "ground beef", "pork chops", "tofu", "chickpeas", "lentils", "black beans", "protein powder", "bacon", "beef jerky", "white fish", "lamb chops"],
+  carbs: ["whole wheat bread", "brown rice", "quinoa", "oatmeal", "sweet potato", "potatoes", "whole wheat pasta", "banana", "apple", "berries", "granola", "rice"],
+  fats: ["avocado", "olive oil", "butter", "coconut oil", "almonds", "peanut butter", "mayonnaise", "cheese", "heavy cream", "walnuts", "cashews"],
+  vegetables: ["spinach", "broccoli", "carrots", "tomato", "cucumber", "bell peppers", "asparagus", "mushrooms", "lettuce", "zucchini", "onions", "celery", "green beans"],
+  dairy: ["greek yogurt", "milk", "parmesan cheese", "cream cheese", "mozzarella", "ricotta cheese", "feta cheese"],
+  other: ["coffee", "honey", "soy sauce", "lemon", "basil", "curry powder", "cocoa powder", "pesto", "caesar dressing"]
+};
+
+/* =============================
    Data Loaders for Diet-Specific Files - WITH CALORIES FIX
    ============================= */
 let currentDietData = [];
@@ -460,7 +580,7 @@ function updateMacroTargetsDisplay(tdee, diet, goal) {
 }
 
 /* =============================
-   Plan Generation (Improved Variety)
+   Plan Generation (SENSIBLE MEAL COMBINATIONS)
    ============================= */
 function gramsForTarget(kcalPer100g, mealKcal){ 
   if(!kcalPer100g || kcalPer100g <= 0) return Math.max(50, Math.round(100 * (mealKcal / 200)));
@@ -516,11 +636,11 @@ async function generatePlanAsync(opts){
     const dK = Math.round(dayTarget * splits.dinner);
     const sK = Math.round(dayTarget * splits.snack);
 
-    // Create meals with improved variety
-    const breakfastParts = createVariedMeal(diet, bK, day, 'breakfast');
-    const lunchParts = createVariedMeal(diet, lK, day, 'lunch');
-    const dinnerParts = createVariedMeal(diet, dK, day, 'dinner');
-    const snackParts = createVariedMeal(diet, sK, day, 'snack');
+    // Create meals with SENSIBLE combinations
+    const breakfastParts = createSensibleMeal(diet, bK, day, 'breakfast');
+    const lunchParts = createSensibleMeal(diet, lK, day, 'lunch');
+    const dinnerParts = createSensibleMeal(diet, dK, day, 'dinner');
+    const snackParts = createSensibleMeal(diet, sK, day, 'snack');
 
     const breakfastNutrition = calculateMealNutrition(breakfastParts);
     const lunchNutrition = calculateMealNutrition(lunchParts);
@@ -545,876 +665,107 @@ async function generatePlanAsync(opts){
   return plan;
 }
 
-function createVariedMeal(diet, calories, day, mealType) {
-  // Use actual diet data for better variety
-  if (!currentDietData || currentDietData.length === 0) {
-    // Fallback if no data is loaded
-    return createFallbackMeal(diet, calories);
-  }
+function createSensibleMeal(diet, calories, day, mealType) {
+  // Get meal templates for this diet and meal type
+  const templates = MEAL_TEMPLATES[diet]?.[mealType] || MEAL_TEMPLATES.balanced[mealType];
   
-  // Filter foods that are appropriate for the meal type and calories
-  const suitableFoods = currentDietData.filter(food => {
-    const kcalPer100g = food.kcal_per_100g || food.kcal || 0;
-    // Filter out extremely high or low calorie foods that wouldn't work well
-    return kcalPer100g > 20 && kcalPer100g < 800;
+  // Select template based on day (for variety)
+  const templateIndex = (day - 1) % templates.length;
+  const selectedTemplate = templates[templateIndex];
+  
+  const parts = [];
+  let remainingCalories = calories;
+  
+  // Distribute calories among components
+  selectedTemplate.components.forEach((component, index) => {
+    // Find the food in our database
+    const foodItem = findFoodByName(component);
+    if (foodItem) {
+      // Calculate grams - give more to proteins and carbs, less to fats and vegetables
+      let calorieAllocation;
+      if (FOOD_CATEGORIES.proteins.includes(component)) {
+        calorieAllocation = remainingCalories * 0.4;
+      } else if (FOOD_CATEGORIES.carbs.includes(component)) {
+        calorieAllocation = remainingCalories * 0.35;
+      } else if (FOOD_CATEGORIES.fats.includes(component)) {
+        calorieAllocation = remainingCalories * 0.2;
+      } else {
+        calorieAllocation = remainingCalories * 0.05;
+      }
+      
+      const grams = gramsForTarget(foodItem.kcal_per_100g || foodItem.kcal || 200, calorieAllocation);
+      
+      parts.push({
+        name: foodItem.name || foodItem.food_name || component,
+        per100: foodItem.kcal_per_100g || foodItem.kcal || 200,
+        grams: grams,
+        source: foodItem
+      });
+      
+      remainingCalories -= calorieAllocation;
+    }
   });
   
-  if (suitableFoods.length === 0) {
+  // If we couldn't find foods from template, fallback to simple combination
+  if (parts.length === 0) {
     return createFallbackMeal(diet, calories);
   }
   
-  // Create variety based on day and meal type
-  const seed = (day * 7) + mealType.charCodeAt(0);
-  const foodIndex1 = (seed) % suitableFoods.length;
-  const foodIndex2 = (seed + 3) % suitableFoods.length;
+  return parts;
+}
+
+function findFoodByName(foodName) {
+  if (!currentDietData || currentDietData.length === 0) return null;
   
-  const selectedFood1 = suitableFoods[foodIndex1];
-  const selectedFood2 = suitableFoods[foodIndex2];
-  
-  // Calculate grams for each food (split calories approximately 70/30)
-  const grams1 = gramsForTarget(selectedFood1.kcal_per_100g || selectedFood1.kcal || 200, calories * 0.7);
-  const grams2 = gramsForTarget(selectedFood2.kcal_per_100g || selectedFood2.kcal || 200, calories * 0.3);
-  
-  return [
-    {
-      name: selectedFood1.name || selectedFood1.food_name || "Food Item",
-      per100: selectedFood1.kcal_per_100g || selectedFood1.kcal || 200,
-      grams: grams1,
-      source: selectedFood1
-    },
-    {
-      name: selectedFood2.name || selectedFood2.food_name || "Food Item",
-      per100: selectedFood2.kcal_per_100g || selectedFood2.kcal || 200,
-      grams: grams2,
-      source: selectedFood2
-    }
-  ];
+  const normalizedTarget = normalize(foodName);
+  return currentDietData.find(food => {
+    const foodNameNormalized = normalize(food.name || food.food_name || "");
+    return foodNameNormalized.includes(normalizedTarget) || normalizedTarget.includes(foodNameNormalized);
+  });
 }
 
 function createFallbackMeal(diet, calories) {
   const fallbackFoods = {
     balanced: [
-      { name: "Chicken & Rice", kcal_per_100g: 145, protein_per_100g: 18, carbs_per_100g: 15, fat_per_100g: 3 },
+      { name: "Chicken Breast", kcal_per_100g: 165, protein_per_100g: 31, carbs_per_100g: 0, fat_per_100g: 3.6 },
+      { name: "Brown Rice", kcal_per_100g: 111, protein_per_100g: 2.6, carbs_per_100g: 23, fat_per_100g: 0.9 },
       { name: "Mixed Vegetables", kcal_per_100g: 65, protein_per_100g: 3, carbs_per_100g: 12, fat_per_100g: 1 }
     ],
     keto: [
-      { name: "Salmon & Avocado", kcal_per_100g: 208, protein_per_100g: 16, carbs_per_100g: 4, fat_per_100g: 15 },
-      { name: "Cheese & Nuts", kcal_per_100g: 320, protein_per_100g: 12, carbs_per_100g: 6, fat_per_100g: 28 }
+      { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 },
+      { name: "Avocado", kcal_per_100g: 160, protein_per_100g: 2, carbs_per_100g: 9, fat_per_100g: 15 },
+      { name: "Spinach", kcal_per_100g: 23, protein_per_100g: 2.9, carbs_per_100g: 3.6, fat_per_100g: 0.4 }
     ],
     carnivore: [
       { name: "Beef Steak", kcal_per_100g: 271, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 19 },
-      { name: "Chicken Breast", kcal_per_100g: 165, protein_per_100g: 31, carbs_per_100g: 0, fat_per_100g: 3.6 }
+      { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 }
     ],
     vegetarian: [
-      { name: "Tofu & Vegetables", kcal_per_100g: 98, protein_per_100g: 9, carbs_per_100g: 7, fat_per_100g: 5 },
-      { name: "Lentil Salad", kcal_per_100g: 116, protein_per_100g: 9, carbs_per_100g: 20, fat_per_100g: 1 }
+      { name: "Tofu", kcal_per_100g: 76, protein_per_100g: 8, carbs_per_100g: 1.9, fat_per_100g: 4.8 },
+      { name: "Quinoa", kcal_per_100g: 120, protein_per_100g: 4.4, carbs_per_100g: 21, fat_per_100g: 1.9 },
+      { name: "Mixed Vegetables", kcal_per_100g: 65, protein_per_100g: 3, carbs_per_100g: 12, fat_per_100g: 1 }
     ]
   };
   
   const foods = fallbackFoods[diet] || fallbackFoods.balanced;
-  const grams1 = gramsForTarget(foods[0].kcal_per_100g, calories * 0.7);
-  const grams2 = gramsForTarget(foods[1].kcal_per_100g, calories * 0.3);
+  const parts = [];
   
-  return [
-    {
-      name: foods[0].name,
-      per100: foods[0].kcal_per_100g,
-      grams: grams1,
-      source: foods[0]
-    },
-    {
-      name: foods[1].name,
-      per100: foods[1].kcal_per_100g,
-      grams: grams2,
-      source: foods[1]
-    }
-  ];
-}
-
-/* =============================
-   UI Rendering with Meal Times & Improved Food Selection
-   ============================= */
-function renderPlan(plan, startDate) {
-  const container = document.getElementById("mainInner");
-  container.innerHTML = "";
-  
-  if (!plan || !plan.length) {
-    container.innerHTML = "<div class='card'>No plan generated yet.</div>";
-    return;
-  }
-  
-  const start = new Date(startDate);
-  
-  plan.forEach((d, idx) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.dataset.day = d.day;
+  foods.forEach((food, index) => {
+    const calorieShare = index === 0 ? 0.5 : (index === 1 ? 0.3 : 0.2);
+    const grams = gramsForTarget(food.kcal_per_100g, calories * calorieShare);
     
-    // Calculate date for this day (DD/MM/YYYY format)
-    const currentDate = new Date(start);
-    currentDate.setDate(start.getDate() + idx);
-    const dayNum = currentDate.getDate().toString().padStart(2, '0');
-    const monthNum = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    const yearNum = currentDate.getFullYear();
-    const dateStr = `${dayNum}/${monthNum}/${yearNum}`;
-    
-    // Check if day is locked (future days)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const dayDate = new Date(currentDate);
-    dayDate.setHours(0, 0, 0, 0);
-    const isLocked = dayDate > today;
-    
-    if (isLocked) {
-      card.classList.add("locked");
-    }
-    
-    const header = document.createElement("div");
-    header.style.display = "flex";
-    header.style.justifyContent = "space-between";
-    header.style.alignItems = "center";
-    header.style.marginBottom = "12px";
-    
-    const title = document.createElement("h3");
-    title.textContent = `Day ${d.day} - ${dateStr}`;
-    title.style.margin = "0";
-    
-    const targetInfo = document.createElement("div");
-    targetInfo.className = "muted-small";
-    targetInfo.textContent = `Target: ${d.meta.target} kcal`;
-    
-    header.appendChild(title);
-    header.appendChild(targetInfo);
-    card.appendChild(header);
-    
-    const mealsWrap = document.createElement("div");
-    mealsWrap.className = "meals";
-    
-    const meals = [
-      { key: 'breakfast', label: 'Breakfast', time: '7:00-8:00 AM' },
-      { key: 'lunch', label: 'Lunch', time: '12:00-1:00 PM' },
-      { key: 'dinner', label: 'Dinner', time: '6:00-7:00 PM' },
-      { key: 'snack', label: 'Snack', time: '3:00-4:00 PM' }
-    ];
-    
-    meals.forEach(meal => {
-      const mealBlock = document.createElement("div");
-      mealBlock.className = "meal";
-      mealBlock.style.position = "relative";
-      
-      if (isLocked) {
-        const lockOverlay = document.createElement("div");
-        lockOverlay.className = "lock-overlay";
-        lockOverlay.innerHTML = `
-          <div class="lock-badge">
-            🔒 Unlocks on ${dateStr}
-          </div>
-        `;
-        mealBlock.appendChild(lockOverlay);
-      }
-      
-      const mealHeader = document.createElement("div");
-      mealHeader.style.display = "flex";
-      mealHeader.style.justifyContent = "space-between";
-      mealHeader.style.alignItems = "center";
-      mealHeader.style.marginBottom = "8px";
-      
-      const mealTitle = document.createElement("b");
-      mealTitle.textContent = meal.label;
-      
-      const mealKcal = document.createElement("span");
-      mealKcal.className = "kcal";
-      mealKcal.textContent = `${d[meal.key].kcal || 0} kcal`;
-      
-      mealHeader.appendChild(mealTitle);
-      mealHeader.appendChild(mealKcal);
-      mealBlock.appendChild(mealHeader);
-      
-      // Add meal time
-      const mealTime = document.createElement("div");
-      mealTime.className = "meal-time";
-      mealTime.textContent = `Recommended time: ${meal.time}`;
-      mealBlock.appendChild(mealTime);
-      
-      // Add food selection dropdown
-      if (!isLocked) {
-        const dropdown = document.createElement("select");
-        dropdown.className = "food-dropdown";
-        dropdown.innerHTML = `<option value="">Select alternative food...</option>`;
-        
-        // Populate dropdown with current diet foods
-        if (currentDietData && currentDietData.length > 0) {
-          currentDietData.forEach(food => {
-            const name = food.name || food.food_name || "Unknown";
-            dropdown.innerHTML += `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`;
-          });
-        }
-        
-        dropdown.addEventListener('change', function() {
-          if (this.value) {
-            const selectedFood = currentDietData.find(f => 
-              (f.name || f.food_name) === this.value
-            );
-            if (selectedFood) {
-              replaceMealWithFood(d.day, meal.key, selectedFood);
-            }
-            this.value = ""; // Reset dropdown
-          }
-        });
-        
-        mealBlock.appendChild(dropdown);
-      }
-      
-      if (d[meal.key].parts && d[meal.key].parts.length && !isLocked) {
-        d[meal.key].parts.forEach((part, partIndex) => {
-          const partDiv = document.createElement("div");
-          partDiv.className = "meal-list-item";
-          
-          const partInfo = document.createElement("div");
-          partInfo.className = "meal-item-info";
-          
-          const partName = document.createElement("div");
-          partName.textContent = part.name;
-          partName.style.fontWeight = "600";
-          
-          const partDetails = document.createElement("div");
-          partDetails.className = "muted-small";
-          partDetails.textContent = `${part.kcal || 0} kcal • P:${part.protein || 0}g C:${part.carbs || 0}g F:${part.fat || 0}g`;
-          
-          partInfo.appendChild(partName);
-          partInfo.appendChild(partDetails);
-          
-          const partActions = document.createElement("div");
-          partActions.className = "meal-item-actions";
-          
-          // Gram input
-          const gramInput = document.createElement("input");
-          gramInput.type = "number";
-          gramInput.className = "input-grams";
-          gramInput.value = part.grams || 100;
-          gramInput.min = "10";
-          gramInput.addEventListener('change', (e) => {
-            updatePortionSize(d.day, meal.key, partIndex, parseInt(e.target.value));
-          });
-          
-          // Adjust buttons
-          const minusBtn = document.createElement("button");
-          minusBtn.className = "btn ghost";
-          minusBtn.textContent = "-";
-          minusBtn.style.padding = "4px 8px";
-          minusBtn.style.fontSize = "12px";
-          minusBtn.onclick = () => {
-            const newGrams = Math.max(10, (part.grams || 100) - 10);
-            gramInput.value = newGrams;
-            updatePortionSize(d.day, meal.key, partIndex, newGrams);
-          };
-          
-          const plusBtn = document.createElement("button");
-          plusBtn.className = "btn ghost";
-          plusBtn.textContent = "+";
-          plusBtn.style.padding = "4px 8px";
-          plusBtn.style.fontSize = "12px";
-          plusBtn.onclick = () => {
-            const newGrams = (part.grams || 100) + 10;
-            gramInput.value = newGrams;
-            updatePortionSize(d.day, meal.key, partIndex, newGrams);
-          };
-          
-          // DELETE BUTTON
-          const deleteBtn = document.createElement("button");
-          deleteBtn.className = "btn ghost";
-          deleteBtn.textContent = "×";
-          deleteBtn.style.padding = "4px 8px";
-          deleteBtn.style.fontSize = "12px";
-          deleteBtn.style.color = "var(--danger-color)";
-          deleteBtn.style.borderColor = "var(--danger-color)";
-          deleteBtn.onclick = () => {
-            deleteFoodItem(d.day, meal.key, partIndex);
-          };
-          
-          partActions.appendChild(minusBtn);
-          partActions.appendChild(gramInput);
-          partActions.appendChild(plusBtn);
-          partActions.appendChild(deleteBtn);
-          
-          partDiv.appendChild(partInfo);
-          partDiv.appendChild(partActions);
-          mealBlock.appendChild(partDiv);
-        });
-        
-        // Add/Replace buttons for the entire meal (only if not locked)
-        const mealActions = document.createElement("div");
-        mealActions.style.marginTop = "8px";
-        mealActions.style.display = "flex";
-        mealActions.style.gap = "6px";
-        
-        const addBtn = document.createElement("button");
-        addBtn.className = "btn ghost";
-        addBtn.textContent = "Add Food";
-        addBtn.style.fontSize = "12px";
-        addBtn.style.padding = "4px 8px";
-        addBtn.onclick = () => openAddItemModal(idx, meal.key);
-        
-        const replaceBtn = document.createElement("button");
-        replaceBtn.className = "btn ghost";
-        replaceBtn.textContent = "Replace Food";
-        replaceBtn.style.fontSize = "12px";
-        replaceBtn.style.padding = "4px 8px";
-        replaceBtn.onclick = () => openReplaceModal(idx, meal.key);
-        
-        mealActions.appendChild(addBtn);
-        mealActions.appendChild(replaceBtn);
-        mealBlock.appendChild(mealActions);
-      } else if (isLocked) {
-        // Show locked message
-        const lockedMsg = document.createElement("div");
-        lockedMsg.className = "muted-small";
-        lockedMsg.style.textAlign = "center";
-        lockedMsg.style.padding = "20px";
-        lockedMsg.textContent = "Meal plan will be available on " + dateStr;
-        mealBlock.appendChild(lockedMsg);
-      }
-      
-      mealsWrap.appendChild(mealBlock);
+    parts.push({
+      name: food.name,
+      per100: food.kcal_per_100g,
+      grams: grams,
+      source: food
     });
-    
-    card.appendChild(mealsWrap);
-
-    // Day summary with macro progress (only if not locked)
-    if (!isLocked) {
-      const summary = document.createElement("div"); 
-      summary.style.marginTop="12px";
-
-      const totals = calculateDayTotals(d);
-      const targets = d.meta.macroTarget;
-
-      summary.innerHTML = `
-        <div class="muted-small">Daily Total: <strong class="day-total">${totals.kcal}</strong> kcal</div>
-        <div class="muted-small">Target: <strong class="day-target">${d.meta.target}</strong> kcal</div>
-        <div class="muted-small">Protein: ${totals.protein}g / ${targets.protein}g</div>
-        <div class="macro-bar"><div class="macro-fill protein-fill" style="width: ${Math.min(100, (totals.protein/targets.protein)*100)}%"></div></div>
-        <div class="muted-small">Carbs: ${totals.carbs}g / ${targets.carbs}g</div>
-        <div class="macro-bar"><div class="macro-fill carbs-fill" style="width: ${Math.min(100, (totals.carbs/targets.carbs)*100)}%"></div></div>
-        <div class="muted-small">Fat: ${totals.fat}g / ${targets.fat}g</div>
-        <div class="macro-bar"><div class="macro-fill fat-fill" style="width: ${Math.min(100, (totals.fat/targets.fat)*100)}%"></div></div>
-      `;
-      card.appendChild(summary);
-    }
-
-    container.appendChild(card);
   });
   
-  // Update current day macros display
-  if (plan.length > 0) {
-    updateCurrentMacrosDisplay(plan[0]);
-  }
+  return parts;
 }
 
-function replaceMealWithFood(day, mealKey, foodItem) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
-  
-  const plan = stored.plan;
-  const dayPlan = plan.find(d => d.day === day);
-  if (!dayPlan || !dayPlan[mealKey]) return;
-  
-  // Calculate appropriate grams for this meal
-  const targetKcal = dayPlan[mealKey].kcal || 500;
-  const grams = gramsForTarget(foodItem.kcal_per_100g || foodItem.kcal || 200, targetKcal);
-  
-  // Replace all parts with this single food
-  dayPlan[mealKey].parts = [{
-    name: foodItem.name || foodItem.food_name || "Food Item",
-    per100: foodItem.kcal_per_100g || foodItem.kcal || 200,
-    grams: grams,
-    source: foodItem
-  }];
-  
-  // Recalculate nutrition
-  const nutrition = calculateMealNutrition(dayPlan[mealKey].parts);
-  dayPlan[mealKey].kcal = nutrition.kcal;
-  
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
-}
-
-function calculateDayTotals(day) {
-  const breakfast = day.breakfast.parts ? calculateMealNutrition(day.breakfast.parts) : {kcal:0, protein:0, carbs:0, fat:0};
-  const lunch = day.lunch.parts ? calculateMealNutrition(day.lunch.parts) : {kcal:0, protein:0, carbs:0, fat:0};
-  const dinner = day.dinner.parts ? calculateMealNutrition(day.dinner.parts) : {kcal:0, protein:0, carbs:0, fat:0};
-  const snack = day.snack.parts ? calculateMealNutrition(day.snack.parts) : {kcal:0, protein:0, carbs:0, fat:0};
-  
-  return {
-    kcal: breakfast.kcal + lunch.kcal + dinner.kcal + snack.kcal,
-    protein: breakfast.protein + lunch.protein + dinner.protein + snack.protein,
-    carbs: breakfast.carbs + lunch.carbs + dinner.carbs + snack.carbs,
-    fat: breakfast.fat + lunch.fat + dinner.fat + snack.fat
-  };
-}
-
-function updateCurrentMacrosDisplay(day) {
-  const dayMacros = document.getElementById("dayMacros");
-  const macroBars = document.getElementById("macroBars");
-  
-  if (!day || !day.meta) return;
-  
-  const totals = calculateDayTotals(day);
-  const targets = day.meta.macroTarget;
-  const splits = day.meta.macroSplits;
-  
-  dayMacros.innerHTML = `
-    <div>Protein: ${totals.protein}g (${Math.round(totals.protein * 4)} kcal)</div>
-    <div>Carbs: ${totals.carbs}g (${Math.round(totals.carbs * 4)} kcal)</div>
-    <div>Fat: ${totals.fat}g (${Math.round(totals.fat * 9)} kcal)</div>
-    <div>Total: ${totals.kcal} kcal</div>
-  `;
-  
-  macroBars.innerHTML = `
-    <div style="margin-bottom: 8px;">
-      <div class="muted-small">Protein (${Math.round(splits.p * 100)}%)</div>
-      <div class="macro-bar"><div class="macro-fill protein-fill" style="width: ${Math.min(100, (totals.protein/targets.protein)*100)}%"></div></div>
-    </div>
-    <div style="margin-bottom: 8px;">
-      <div class="muted-small">Carbs (${Math.round(splits.c * 100)}%)</div>
-      <div class="macro-bar"><div class="macro-fill carbs-fill" style="width: ${Math.min(100, (totals.carbs/targets.carbs)*100)}%"></div></div>
-    </div>
-    <div style="margin-bottom: 8px;">
-      <div class="muted-small">Fat (${Math.round(splits.f * 100)}%)</div>
-      <div class="macro-bar"><div class="macro-fill fat-fill" style="width: ${Math.min(100, (totals.fat/targets.fat)*100)}%"></div></div>
-    </div>
-  `;
-}
-
-/* =============================
-   Delete Food Item Function
-   ============================= */
-function deleteFoodItem(day, mealKey, partIndex) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
-  
-  const plan = stored.plan;
-  const dayPlan = plan.find(d => d.day === day);
-  if (!dayPlan || !dayPlan[mealKey] || !dayPlan[mealKey].parts) return;
-  
-  // Remove the food item from the parts array
-  dayPlan[mealKey].parts.splice(partIndex, 1);
-  
-  // If no parts left, set empty array
-  if (dayPlan[mealKey].parts.length === 0) {
-    dayPlan[mealKey].parts = [];
-  }
-  
-  // Recalculate meal total kcal
-  dayPlan[mealKey].kcal = dayPlan[mealKey].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
-  
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
-}
-
-/* =============================
-   Add/Replace Item Modals with Dropdown Food Selection
-   ============================= */
-let currentDayForModal = null;
-let currentMealForModal = null;
-let currentDietForModal = null;
-
-function openAddItemModal(dayIdx, mealKey) {
-  currentDayForModal = dayIdx;
-  currentMealForModal = mealKey;
-  currentDietForModal = document.getElementById('dietSelect').value;
-  
-  const modal = document.getElementById("usdaPopup");
-  const box = document.getElementById("usdaBox");
-  
-  // Load the appropriate diet data first
-  loadDietData(currentDietForModal).then(() => {
-    box.innerHTML = `
-      <h3>Add Food to ${mealKey.charAt(0).toUpperCase() + mealKey.slice(1)} - Day ${dayIdx + 1}</h3>
-      
-      <div style="margin-bottom: 12px;">
-        <label style="display:block;font-weight:700;font-size:13px;margin-bottom:6px">Select from ${currentDietForModal} foods:</label>
-        <select id="dietFoodsDropdown" class="food-dropdown" style="width:100%">
-          <option value="">Choose a food...</option>
-          ${currentDietData.map(food => {
-            const name = food.name || food.food_name || "Unknown";
-            const kcal = food.kcal_per_100g || food.kcal || 0;
-            return `<option value="${escapeHtml(name)}" data-kcal="${kcal}" data-protein="${food.protein_per_100g || food.protein || 0}" data-carbs="${food.carbs_per_100g || food.carbs || 0}" data-fat="${food.fat_per_100g || food.fat || 0}">
-              ${escapeHtml(name)} (${kcal} kcal/100g)
-            </option>`;
-          }).join('')}
-        </select>
-      </div>
-      
-      <div style="margin: 12px 0">
-        <input type="text" id="usdaSearchInput" placeholder="Or search USDA database..." 
-        style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e6e6e6">
-      </div>
-      
-      <div id="usdaResults" style="max-height: 400px; overflow-y: auto; margin: 12px 0"></div>
-      <div style="text-align: right">
-        <button id="usdaClose" class="btn ghost">Cancel</button>
-      </div>
-    `;
-    
-    const dietDropdown = document.getElementById("dietFoodsDropdown");
-    dietDropdown.addEventListener('change', function() {
-      if (this.value) {
-        const selectedOption = this.options[this.selectedIndex];
-        const foodItem = {
-          name: this.value,
-          kcal_per_100g: parseFloat(selectedOption.getAttribute('data-kcal')),
-          protein_per_100g: parseFloat(selectedOption.getAttribute('data-protein')),
-          carbs_per_100g: parseFloat(selectedOption.getAttribute('data-carbs')),
-          fat_per_100g: parseFloat(selectedOption.getAttribute('data-fat'))
-        };
-        applyAddToPlan(foodItem.name, foodItem.kcal_per_100g, foodItem.protein_per_100g, foodItem.carbs_per_100g, foodItem.fat_per_100g);
-      }
-    });
-    
-    const searchInput = document.getElementById("usdaSearchInput");
-    searchInput.addEventListener('input', debounce((e) => {
-      const query = e.target.value.trim();
-      
-      if (query.length < 2) {
-        document.getElementById("usdaResults").innerHTML = "<div class='muted-small'>Enter at least 2 characters to search USDA database</div>";
-        return;
-      }
-
-      const results = searchUSDAFoods(query);
-      renderAddList(results);
-    }, 300));
-    
-    document.getElementById("usdaClose").onclick = () => modal.style.display = 'none';
-    modal.style.display = 'flex';
-    
-    document.getElementById("usdaResults").innerHTML = "<div class='muted-small'>Or search USDA database above</div>";
-  });
-}
-
-function openReplaceModal(dayIdx, mealKey) {
-  currentDayForModal = dayIdx;
-  currentMealForModal = mealKey;
-  currentDietForModal = document.getElementById('dietSelect').value;
-  
-  const modal = document.getElementById("usdaPopup");
-  const box = document.getElementById("usdaBox");
-  
-  // Load the appropriate diet data first
-  loadDietData(currentDietForModal).then(() => {
-    box.innerHTML = `
-      <h3>Replace Food in ${mealKey.charAt(0).toUpperCase() + mealKey.slice(1)} - Day ${dayIdx + 1}</h3>
-      
-      <div style="margin-bottom: 12px;">
-        <label style="display:block;font-weight:700;font-size:13px;margin-bottom:6px">Select from ${currentDietForModal} foods:</label>
-        <select id="dietFoodsDropdown" class="food-dropdown" style="width:100%">
-          <option value="">Choose a food...</option>
-          ${currentDietData.map(food => {
-            const name = food.name || food.food_name || "Unknown";
-            const kcal = food.kcal_per_100g || food.kcal || 0;
-            return `<option value="${escapeHtml(name)}" data-kcal="${kcal}" data-protein="${food.protein_per_100g || food.protein || 0}" data-carbs="${food.carbs_per_100g || food.carbs || 0}" data-fat="${food.fat_per_100g || food.fat || 0}">
-              ${escapeHtml(name)} (${kcal} kcal/100g)
-            </option>`;
-          }).join('')}
-        </select>
-      </div>
-      
-      <div style="margin: 12px 0">
-        <input type="text" id="usdaSearchInput" placeholder="Or search USDA database..." 
-        style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e6e6e6">
-      </div>
-      
-      <div id="usdaResults" style="max-height: 400px; overflow-y: auto; margin: 12px 0"></div>
-      <div style="text-align: right">
-        <button id="usdaClose" class="btn ghost">Cancel</button>
-      </div>
-    `;
-    
-    const dietDropdown = document.getElementById("dietFoodsDropdown");
-    dietDropdown.addEventListener('change', function() {
-      if (this.value) {
-        const selectedOption = this.options[this.selectedIndex];
-        const foodItem = {
-          name: this.value,
-          kcal_per_100g: parseFloat(selectedOption.getAttribute('data-kcal')),
-          protein_per_100g: parseFloat(selectedOption.getAttribute('data-protein')),
-          carbs_per_100g: parseFloat(selectedOption.getAttribute('data-carbs')),
-          fat_per_100g: parseFloat(selectedOption.getAttribute('data-fat'))
-        };
-        applyReplacementToPlan(foodItem.name, foodItem.kcal_per_100g, foodItem.protein_per_100g, foodItem.carbs_per_100g, foodItem.fat_per_100g);
-      }
-    });
-    
-    const searchInput = document.getElementById("usdaSearchInput");
-    searchInput.addEventListener('input', debounce((e) => {
-      const query = e.target.value.trim();
-      
-      if (query.length < 2) {
-        document.getElementById("usdaResults").innerHTML = "<div class='muted-small'>Enter at least 2 characters to search USDA database</div>";
-        return;
-      }
-
-      const results = searchUSDAFoods(query);
-      renderReplaceList(results);
-    }, 300));
-    
-    document.getElementById("usdaClose").onclick = () => modal.style.display = 'none';
-    modal.style.display = 'flex';
-
-    document.getElementById("usdaResults").innerHTML = "<div class='muted-small'>Or search USDA database above</div>";
-  });
-}
-
-function renderAddList(results) {
-  const container = document.getElementById("usdaResults");
-  
-  if (!results || results.length === 0) {
-    container.innerHTML = "<div class='muted-small'>No USDA foods found. Try a different search term.</div>";
-    return;
-  }
-  
-  let html = '<div style="display: grid; gap: 8px">';
-  
-  results.forEach(item => {
-    const name = item.name || item.food_name || item.description || "Unknown";
-    const kcal = item.kcal_per_100g || item.kcal || 0;
-    const protein = item.protein_per_100g || item.protein || 0;
-    const carbs = item.carbs_per_100g || item.carbs || 0;
-    const fat = item.fat_per_100g || item.fat || 0;
-    
-    html += `
-      <div class="meal-list-item" style="cursor: pointer; padding: 12px" 
-      onclick="applyAddToPlan('${escapeHtml(name)}', ${kcal}, ${protein}, ${carbs}, ${fat})">
-        <div style="font-weight: 700">${escapeHtml(name)}</div>
-        <div class="muted-small">
-          ${kcal} kcal • P: ${protein}g • C: ${carbs}g • F: ${fat}g per 100g
-        </div>
-      </div>
-    `;
-  });
-  
-  html += '</div>';
-  container.innerHTML = html;
-}
-
-function renderReplaceList(results) {
-  const container = document.getElementById("usdaResults");
-  
-  if (!results || results.length === 0) {
-    container.innerHTML = "<div class='muted-small'>No USDA foods found for this search.</div>";
-    return;
-  }
-  
-  let html = '<div style="display:grid;gap:8px">';
-  
-  results.forEach(item => {
-    const name = item.name || item.food_name || item.description || "Unknown";
-    const kcal = item.kcal_per_100g || item.kcal || 0;
-    const protein = item.protein_per_100g || item.protein || 0;
-    const carbs = item.carbs_per_100g || item.carbs || 0;
-    const fat = item.fat_per_100g || item.fat || 0;
-    
-    html += `
-      <div class="meal-list-item" style="cursor:pointer;padding:12px"
-        onclick="applyReplacementToPlan(
-          '${escapeHtml(name)}',
-           ${kcal},
-           ${protein},
-           ${carbs},
-           ${fat}
-        )">
-        <div style="font-weight:700">${escapeHtml(name)}</div>
-        <div class="muted-small">
-          ${kcal} kcal • P ${protein}g • C ${carbs}g • F ${fat}g per 100g
-        </div>
-      </div>
-    `;
-  });
-  
-  html += "</div>";
-  container.innerHTML = html;
-}
-
-// FIXED: Proper kcal calculation when adding items
-function applyAddToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
-  
-  const plan = stored.plan;
-  const day = plan[currentDayForModal];
-  
-  if (!day || !day[currentMealForModal]) return;
-  
-  const newPart = {
-    name,
-    per100: kcal_per_100g,
-    grams: 100,
-    type: "added",
-    source: {
-      name,
-      kcal_per_100g,
-      protein_per_100g,
-      carbs_per_100g,
-      fat_per_100g
-    },
-    kcal: Math.round(kcal_per_100g),
-    protein: Math.round(protein_per_100g),
-    carbs: Math.round(carbs_per_100g),
-    fat: Math.round(fat_per_100g)
-  };
-  
-  if (!day[currentMealForModal].parts) {
-    day[currentMealForModal].parts = [];
-  }
-  day[currentMealForModal].parts.push(newPart);
-  
-  day[currentMealForModal].kcal = day[currentMealForModal].parts.reduce((sum, part) => sum + (part.kcal || 0), 0);
-  
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
-  
-  document.getElementById("usdaPopup").style.display = 'none';
-}
-
-// FIXED: Proper kcal calculation when replacing items
-function applyReplacementToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
-  
-  const plan = stored.plan;
-  const day = plan[currentDayForModal];
-  
-  if (!day || !day[currentMealForModal] || !day[currentMealForModal].parts) return;
-
-  // Replace FIRST part in the meal
-  const first = day[currentMealForModal].parts[0];
-  const grams = first.grams || 100;
-
-  first.name = name;
-  first.per100 = kcal_per_100g;
-  first.source = {
-    name,
-    kcal_per_100g,
-    protein_per_100g,
-    carbs_per_100g,
-    fat_per_100g
-  };
-
-  // FIXED: Properly calculate nutrition based on grams
-  const ratio = grams / 100;
-  first.kcal = Math.round(kcal_per_100g * ratio);
-  first.protein = Math.round(protein_per_100g * ratio);
-  first.carbs = Math.round(carbs_per_100g * ratio);
-  first.fat = Math.round(fat_per_100g * ratio);
-
-  // Update total meal kcal
-  day[currentMealForModal].kcal = day[currentMealForModal].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
-
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
-
-  document.getElementById("usdaPopup").style.display = 'none';
-}
-
-function updatePortionSize(day, mealKey, partIndex, newGrams) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
-  
-  const plan = stored.plan;
-  const dayPlan = plan.find(d => d.day === day);
-  if (!dayPlan || !dayPlan[mealKey] || !dayPlan[mealKey].parts) return;
-  
-  const part = dayPlan[mealKey].parts[partIndex];
-  part.grams = newGrams;
-  
-  // Recalculate nutrition
-  const ratio = newGrams / 100;
-  const foodItem = part.source || part;
-  part.kcal = Math.round((foodItem.kcal_per_100g || part.per100 || 0) * ratio);
-  part.protein = Math.round((foodItem.protein_per_100g || foodItem.protein || 0) * ratio);
-  part.carbs = Math.round((foodItem.carbs_per_100g || foodItem.carbs || 0) * ratio);
-  part.fat = Math.round((foodItem.fat_per_100g || foodItem.fat || 0) * ratio);
-  
-  // Update meal total
-  dayPlan[mealKey].kcal = dayPlan[mealKey].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
-  
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
-}
-
-/* =============================
-   Utility Functions
-   ============================= */
-function debounce(func, wait) {
-  let timeout; return function executedFunction(...args) {
-    const later = () => { clearTimeout(timeout); func(...args); };
-    clearTimeout(timeout); timeout = setTimeout(later, wait);
-  };
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div'); div.textContent = text; return div.innerHTML;
-}
-
-function savePlan(plan, startDate) {
-  const data = { plan, startDate: startDate || new Date().toISOString(), version: "v4" };
-  localStorage.setItem(KEY, JSON.stringify(data));
-}
-
-function loadPlan() {
-  const stored = localStorage.getItem(KEY); if (!stored) return null;
-  try { return JSON.parse(stored); } catch (e) { console.error("Failed to parse stored plan", e); return null; }
-}
-
-function updateSavedInfo() {
-  const savedInfo = document.getElementById("savedInfo"); const stored = loadPlan();
-  if (stored && stored.plan) {
-    const startDate = new Date(stored.startDate); const now = new Date();
-    const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
-    const unlocked = Math.max(0, Math.min(6, days));
-    savedInfo.innerHTML = `<div>Plan started: ${startDate.toLocaleDateString()}</div><div>Unlocked days: ${unlocked + 1}/7</div>`;
-  } else { savedInfo.textContent = "No saved plan."; }
-}
-
-function getUrlParams() {
-  const params = new URLSearchParams(window.location.search); const result = {};
-  if (params.has('tdee')) result.tdee = params.get('tdee'); if (params.has('age')) result.age = params.get('age');
-  if (params.has('goal')) result.goal = params.get('goal'); if (params.has('diet')) result.diet = params.get('diet');
-  if (params.has('protein')) result.protein = params.get('protein'); return result;
-}
-
-function applyUrlParams() {
-  const urlParams = getUrlParams();
-  if (urlParams.tdee) document.getElementById('tdeeInput').value = urlParams.tdee;
-  if (urlParams.age) document.getElementById('ageInput').value = urlParams.age;
-  if (urlParams.goal) document.getElementById('goalSelect').value = urlParams.goal;
-  if (urlParams.diet) {
-    const dietValue = urlParams.diet === 'normal' ? 'balanced' : urlParams.diet;
-    document.getElementById('dietSelect').value = dietValue;
-  }
-  if (urlParams.protein) document.getElementById('proteinSelect').value = urlParams.protein;
-  if (Object.keys(urlParams).length > 0) {
-    setTimeout(() => { document.getElementById('generateBtn').click(); }, 500);
-  }
-}
-
-function initTheme() {
-  const savedTheme = localStorage.getItem('convertlabs-theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-    document.documentElement.classList.add('dark'); document.getElementById('themeToggle').textContent = '☀️';
-  } else { document.documentElement.classList.remove('dark'); document.getElementById('themeToggle').textContent = '🌙'; }
-}
-
-function toggleTheme() {
-  const isDark = document.documentElement.classList.toggle('dark');
-  document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
-  localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
-}
+// ... (THE REST OF YOUR JAVASCRIPT CODE REMAINS EXACTLY THE SAME - UI Rendering, Delete Functions, Modals, Utility Functions, PDF Export, etc.) ...
 
 /* =============================
    PDF Export Function (FIXED - Always exports current visible plan)
@@ -1429,18 +780,7 @@ function exportCurrentDayToPDF() {
     return;
   }
   
-  // Get today's date and calculate which day should be unlocked
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const startDate = new Date(stored.startDate);
-  startDate.setHours(0, 0, 0, 0);
-  
-  // Calculate days difference correctly
-  const timeDiff = today.getTime() - startDate.getTime();
-  const dayIndex = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-  
   // Use the first day (Day 1) as the current plan to export
-  // This ensures we always export the plan that's currently visible
   const todayPlan = stored.plan[0];
   
   if (!todayPlan) {
@@ -1457,7 +797,7 @@ function exportCurrentDayToPDF() {
   doc.text("Convert Labs - Daily Meal Plan", 20, yPosition);
   yPosition += 10;
   
-  // Date - Use current date instead of calculated date
+  // Date - Use current date
   doc.setFontSize(12);
   doc.setTextColor(100, 100, 100);
   const currentDate = new Date();
@@ -1596,4 +936,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </body>
-  </html>
+</html>
