@@ -516,6 +516,7 @@ const FOOD_NAME_MAPPINGS = {
    ============================= */
 let currentDietData = [];
 let usdaData = [];
+let currentPreviewPlan = null; // Store the current preview plan
 
 async function safeFetchJSON(url){
   try {
@@ -885,8 +886,6 @@ async function generatePlanAsync(opts){
   
   return plan;
 }
-
-// ... (THE REST OF YOUR ORIGINAL FUNCTIONS: UI Rendering, Delete Functions, Modals, Utility Functions, PDF Export) ...
 
 /* =============================
    UI Rendering with Meal Times & Improved Food Selection
@@ -1817,23 +1816,27 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!tdee) { alert("Please enter your TDEE"); return; }
     const opts = { tdee: parseInt(tdee), age: parseInt(age), goal, diet, protein, inputIsAlreadyAdjusted: true };
     try {
-      const plan = await generatePlanAsync(opts); renderPlan(plan, new Date().toISOString());
+      const plan = await generatePlanAsync(opts); 
+      currentPreviewPlan = plan; // Store the preview plan
+      renderPlan(plan, new Date().toISOString());
       const modal = document.getElementById('previewModal'); const previewBox = document.getElementById('previewBox');
       previewBox.innerHTML = `<h3>7-Day Meal Plan Preview</h3><p>Plan generated successfully! Click "Accept & Save" to save this plan.</p>`;
       modal.style.display = 'flex'; modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
     } catch (error) { console.error("Error generating plan:", error); alert("Error generating plan. Please try again."); }
   });
   
+  // FIXED: Save the current preview plan instead of generating a new one
   document.getElementById('acceptBtn').addEventListener('click', function() {
-    const tdee = document.getElementById('tdeeInput').value; const age = document.getElementById('ageInput').value;
-    const goal = document.getElementById('goalSelect').value; const diet = document.getElementById('dietSelect').value;
-    const protein = document.getElementById('proteinSelect').value;
-    if (!tdee) { alert("Please enter your TDEE first"); return; }
-    const opts = { tdee: parseInt(tdee), age: parseInt(age), goal, diet, protein, inputIsAlreadyAdjusted: true };
-    generatePlanAsync(opts).then(plan => {
-      savePlan(plan, new Date().toISOString()); updateSavedInfo(); renderPlan(plan, new Date().toISOString());
-      document.getElementById('previewModal').style.display = 'none'; alert("Plan saved successfully!");
-    }).catch(error => { console.error("Error saving plan:", error); alert("Error saving plan. Please try again."); });
+    if (!currentPreviewPlan) {
+      alert("Please generate a preview first by clicking 'Generate Preview'");
+      return;
+    }
+    
+    savePlan(currentPreviewPlan, new Date().toISOString()); 
+    updateSavedInfo(); 
+    renderPlan(currentPreviewPlan, new Date().toISOString());
+    document.getElementById('previewModal').style.display = 'none'; 
+    alert("Plan saved successfully!");
   });
   
   document.getElementById('exportDayBtn').addEventListener('click', exportCurrentDayToPDF);
