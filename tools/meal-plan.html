@@ -25,8 +25,9 @@
     :root{
       --brand:#0a4d8c; --brand-2:#134b8b; --muted:#6c6c6c; --bg:#f5faff; --card:#fff; --accent:#2b8bd8; --radius:12px; --text:#111;
       --danger-color: #f44336;
+      --success-color: #10b981;
     }
-    html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; --danger-color: #ef4444; }
+    html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; --danger-color: #ef4444; --success-color: #10b981; }
     *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased; overflow-x: hidden;}
     header{height:auto;min-height:64px;background:var(--brand-2);color:#fff;display:flex;align-items:center;padding:12px 20px;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:12px; width:100%;}
     .brand{font-weight:700;display:flex;align-items:center;gap:10px;flex-shrink:0;}
@@ -39,6 +40,7 @@
     .btn{background:var(--brand);color:#fff;padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600;transition:all 0.2s;}
     .btn:hover{opacity:0.9;transform:translateY(-1px);}
     .btn.ghost{background:transparent;border:1px solid var(--brand);color:var(--brand)}
+    .btn.success{background:var(--success-color);color:#fff;}
     .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
     @media(max-width:1000px){.grid{grid-template-columns:1fr}}
     .meals{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
@@ -59,6 +61,12 @@
     .modal-back{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:1200;padding:12px}
     .modal-card{width:100%;max-width:980px;max-height:86vh;overflow:auto;background:var(--card);border-radius:12px;padding:16px}
     footer.footer{background:var(--brand-2);color:#fff;padding:20px;text-align:center;margin-top:16px; width:100%;}
+    
+    /* Alert styling */
+    .alert { padding: 12px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid; }
+    .alert-info { background: #dbeafe; border-left-color: #3b82f6; color: #1e40af; }
+    .alert-warning { background: #fef3c7; border-left-color: #f59e0b; color: #92400e; }
+    .alert-success { background: #d1fae5; border-left-color: #10b981; color: #065f46; }
     
     /* Suggestion tags */
     .suggestion-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
@@ -137,9 +145,23 @@
             <div class="small-muted">TDEE input should be already adjusted (do not apply goal again if copying from calorie tool).</div>
           </div>
           <div style="min-width:260px;text-align:right">
-            <div style="margin-bottom:6px"><button id="generateBtn" class="btn">Generate Preview</button> <button id="acceptBtn" class="btn ghost">Accept & Save</button></div>
+            <div style="margin-bottom:6px">
+              <button id="generateBtn" class="btn">Generate Preview</button> 
+              <button id="acceptBtn" class="btn success">Accept & Save</button>
+            </div>
             <div class="small-muted">Saved plan unlocks one day every 24 hours.</div>
           </div>
+        </div>
+
+        <!-- User Guidance Alert -->
+        <div id="userGuidance" class="alert alert-info" style="display:none;">
+          <strong>💡 Template Instructions:</strong> This is a starting template. You can customize it by:
+          <ul style="margin:8px 0 0 20px;">
+            <li>Adjusting portion sizes using the + / - buttons</li>
+            <li>Replacing foods using the dropdown or "Replace Food" button</li>
+            <li>Adding more foods with "Add Food" button</li>
+            <li>Search USDA database if your food isn't in the diet list</li>
+          </ul>
         </div>
 
         <div style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
@@ -186,7 +208,22 @@
 
       <div class="grid">
         <section>
-          <div id="mainInner"></div>
+          <div id="mainInner">
+            <!-- Initial state message -->
+            <div id="initialState" class="card">
+              <h3 style="margin:0 0 12px 0">Welcome to Your 7-Day Meal Plan</h3>
+              <p>To get started:</p>
+              <ol>
+                <li>Enter your TDEE and preferences above</li>
+                <li>Click "Generate Preview" to create your initial meal plan template</li>
+                <li>Customize the template by adjusting portions or replacing foods</li>
+                <li>Click "Accept & Save" to save your personalized plan</li>
+              </ol>
+              <div class="alert alert-info">
+                <strong>Note:</strong> Your saved plan will persist across browser sessions and unlock one day every 24 hours.
+              </div>
+            </div>
+          </div>
         </section>
 
         <aside>
@@ -195,6 +232,9 @@
             <div id="savedInfo" style="margin-top:8px;color:var(--muted)">No saved plan.</div>
             <div style="margin-top:10px">
               <button id="exportDayBtn" class="btn" style="width:100%">Export Today's Plan (PDF)</button>
+            </div>
+            <div style="margin-top:8px">
+              <button id="resetPlanBtn" class="btn ghost" style="width:100%">Reset & Create New Plan</button>
             </div>
           </div>
 
@@ -309,6 +349,7 @@ const KEY = "convertlabs_mealplan_v4";
 let currentDietData = [];
 let usdaData = [];
 let currentPlan = null; // This will track the CURRENT plan with all modifications
+let isPreviewMode = false; // Track if we're in preview mode vs saved plan mode
 
 /* =============================
    PRE-DEFINED SENSIBLE MEAL COMBINATIONS
@@ -898,12 +939,21 @@ function renderPlan(plan, startDate) {
   const container = document.getElementById("mainInner");
   container.innerHTML = "";
   
+  // Hide initial state message
+  document.getElementById('initialState').style.display = 'none';
+  
   if (!plan || !plan.length) {
     container.innerHTML = "<div class='card'>No plan generated yet.</div>";
     return;
   }
   
   const start = new Date(startDate);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  // Calculate days since start
+  const daysSinceStart = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+  const unlockedDays = Math.min(7, Math.max(1, daysSinceStart + 1));
   
   plan.forEach((d, idx) => {
     const card = document.createElement("div");
@@ -918,12 +968,10 @@ function renderPlan(plan, startDate) {
     const yearNum = currentDate.getFullYear();
     const dateStr = `${dayNum}/${monthNum}/${yearNum}`;
     
-    // Check if day is locked (future days)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Check if day is locked (future days based on start date)
     const dayDate = new Date(currentDate);
     dayDate.setHours(0, 0, 0, 0);
-    const isLocked = dayDate > today;
+    const isLocked = idx >= unlockedDays;
     
     if (isLocked) {
       card.classList.add("locked");
@@ -946,6 +994,14 @@ function renderPlan(plan, startDate) {
     header.appendChild(title);
     header.appendChild(targetInfo);
     card.appendChild(header);
+    
+    // Show unlock info for locked days
+    if (isLocked) {
+      const unlockInfo = document.createElement("div");
+      unlockInfo.className = "alert alert-warning";
+      unlockInfo.innerHTML = `<strong>🔒 Locked</strong> - This day will unlock on ${dateStr}`;
+      card.appendChild(unlockInfo);
+    }
     
     const mealsWrap = document.createElement("div");
     mealsWrap.className = "meals";
@@ -996,8 +1052,8 @@ function renderPlan(plan, startDate) {
       mealTime.textContent = `Recommended time: ${meal.time}`;
       mealBlock.appendChild(mealTime);
       
-      // Add food selection dropdown
-      if (!isLocked) {
+      // Add food selection dropdown (only for unlocked days in preview mode)
+      if (!isLocked && isPreviewMode) {
         const dropdown = document.createElement("select");
         dropdown.className = "food-dropdown";
         dropdown.innerHTML = `<option value="">Select alternative food...</option>`;
@@ -1047,84 +1103,99 @@ function renderPlan(plan, startDate) {
           const partActions = document.createElement("div");
           partActions.className = "meal-item-actions";
           
-          // Gram input
+          // Gram input (only editable in preview mode)
           const gramInput = document.createElement("input");
           gramInput.type = "number";
           gramInput.className = "input-grams";
           gramInput.value = part.grams || 100;
           gramInput.min = "10";
+          gramInput.disabled = !isPreviewMode; // Disable if not in preview mode
           gramInput.addEventListener('change', (e) => {
-            updatePortionSize(d.day, meal.key, partIndex, parseInt(e.target.value));
+            if (isPreviewMode) {
+              updatePortionSize(d.day, meal.key, partIndex, parseInt(e.target.value));
+            }
           });
           
-          // Adjust buttons
-          const minusBtn = document.createElement("button");
-          minusBtn.className = "btn ghost";
-          minusBtn.textContent = "-";
-          minusBtn.style.padding = "4px 8px";
-          minusBtn.style.fontSize = "12px";
-          minusBtn.onclick = () => {
-            const newGrams = Math.max(10, (part.grams || 100) - 10);
-            gramInput.value = newGrams;
-            updatePortionSize(d.day, meal.key, partIndex, newGrams);
-          };
+          // Adjust buttons (only show in preview mode)
+          if (isPreviewMode) {
+            const minusBtn = document.createElement("button");
+            minusBtn.className = "btn ghost";
+            minusBtn.textContent = "-";
+            minusBtn.style.padding = "4px 8px";
+            minusBtn.style.fontSize = "12px";
+            minusBtn.onclick = () => {
+              const newGrams = Math.max(10, (part.grams || 100) - 10);
+              gramInput.value = newGrams;
+              updatePortionSize(d.day, meal.key, partIndex, newGrams);
+            };
+            
+            const plusBtn = document.createElement("button");
+            plusBtn.className = "btn ghost";
+            plusBtn.textContent = "+";
+            plusBtn.style.padding = "4px 8px";
+            plusBtn.style.fontSize = "12px";
+            plusBtn.onclick = () => {
+              const newGrams = (part.grams || 100) + 10;
+              gramInput.value = newGrams;
+              updatePortionSize(d.day, meal.key, partIndex, newGrams);
+            };
+            
+            partActions.appendChild(minusBtn);
+            partActions.appendChild(gramInput);
+            partActions.appendChild(plusBtn);
+          } else {
+            // Just show the grams display without editing
+            const gramDisplay = document.createElement("span");
+            gramDisplay.className = "muted-small";
+            gramDisplay.textContent = `${part.grams || 100}g`;
+            partActions.appendChild(gramDisplay);
+          }
           
-          const plusBtn = document.createElement("button");
-          plusBtn.className = "btn ghost";
-          plusBtn.textContent = "+";
-          plusBtn.style.padding = "4px 8px";
-          plusBtn.style.fontSize = "12px";
-          plusBtn.onclick = () => {
-            const newGrams = (part.grams || 100) + 10;
-            gramInput.value = newGrams;
-            updatePortionSize(d.day, meal.key, partIndex, newGrams);
-          };
-          
-          // DELETE BUTTON
-          const deleteBtn = document.createElement("button");
-          deleteBtn.className = "btn ghost";
-          deleteBtn.textContent = "×";
-          deleteBtn.style.padding = "4px 8px";
-          deleteBtn.style.fontSize = "12px";
-          deleteBtn.style.color = "var(--danger-color)";
-          deleteBtn.style.borderColor = "var(--danger-color)";
-          deleteBtn.onclick = () => {
-            deleteFoodItem(d.day, meal.key, partIndex);
-          };
-          
-          partActions.appendChild(minusBtn);
-          partActions.appendChild(gramInput);
-          partActions.appendChild(plusBtn);
-          partActions.appendChild(deleteBtn);
+          // DELETE BUTTON (only in preview mode)
+          if (isPreviewMode) {
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "btn ghost";
+            deleteBtn.textContent = "×";
+            deleteBtn.style.padding = "4px 8px";
+            deleteBtn.style.fontSize = "12px";
+            deleteBtn.style.color = "var(--danger-color)";
+            deleteBtn.style.borderColor = "var(--danger-color)";
+            deleteBtn.onclick = () => {
+              deleteFoodItem(d.day, meal.key, partIndex);
+            };
+            partActions.appendChild(deleteBtn);
+          }
           
           partDiv.appendChild(partInfo);
           partDiv.appendChild(partActions);
           mealBlock.appendChild(partDiv);
         });
         
-        // Add/Replace buttons for the entire meal (only if not locked)
-        const mealActions = document.createElement("div");
-        mealActions.style.marginTop = "8px";
-        mealActions.style.display = "flex";
-        mealActions.style.gap = "6px";
-        
-        const addBtn = document.createElement("button");
-        addBtn.className = "btn ghost";
-        addBtn.textContent = "Add Food";
-        addBtn.style.fontSize = "12px";
-        addBtn.style.padding = "4px 8px";
-        addBtn.onclick = () => openAddItemModal(idx, meal.key);
-        
-        const replaceBtn = document.createElement("button");
-        replaceBtn.className = "btn ghost";
-        replaceBtn.textContent = "Replace Food";
-        replaceBtn.style.fontSize = "12px";
-        replaceBtn.style.padding = "4px 8px";
-        replaceBtn.onclick = () => openReplaceModal(idx, meal.key);
-        
-        mealActions.appendChild(addBtn);
-        mealActions.appendChild(replaceBtn);
-        mealBlock.appendChild(mealActions);
+        // Add/Replace buttons for the entire meal (only if not locked and in preview mode)
+        if (isPreviewMode) {
+          const mealActions = document.createElement("div");
+          mealActions.style.marginTop = "8px";
+          mealActions.style.display = "flex";
+          mealActions.style.gap = "6px";
+          
+          const addBtn = document.createElement("button");
+          addBtn.className = "btn ghost";
+          addBtn.textContent = "Add Food";
+          addBtn.style.fontSize = "12px";
+          addBtn.style.padding = "4px 8px";
+          addBtn.onclick = () => openAddItemModal(idx, meal.key);
+          
+          const replaceBtn = document.createElement("button");
+          replaceBtn.className = "btn ghost";
+          replaceBtn.textContent = "Replace Food";
+          replaceBtn.style.fontSize = "12px";
+          replaceBtn.style.padding = "4px 8px";
+          replaceBtn.onclick = () => openReplaceModal(idx, meal.key);
+          
+          mealActions.appendChild(addBtn);
+          mealActions.appendChild(replaceBtn);
+          mealBlock.appendChild(mealActions);
+        }
       } else if (isLocked) {
         // Show locked message
         const lockedMsg = document.createElement("div");
@@ -1167,6 +1238,13 @@ function renderPlan(plan, startDate) {
   // Update current day macros display
   if (plan.length > 0) {
     updateCurrentMacrosDisplay(plan[0]);
+  }
+  
+  // Show user guidance in preview mode
+  if (isPreviewMode) {
+    document.getElementById('userGuidance').style.display = 'block';
+  } else {
+    document.getElementById('userGuidance').style.display = 'none';
   }
 }
 
@@ -1607,23 +1685,50 @@ function escapeHtml(text) {
 }
 
 function savePlan(plan, startDate) {
-  const data = { plan, startDate: startDate || new Date().toISOString(), version: "v4" };
+  const data = { 
+    plan, 
+    startDate: startDate || new Date().toISOString(), 
+    version: "v4",
+    lastSaved: new Date().toISOString()
+  };
   localStorage.setItem(KEY, JSON.stringify(data));
 }
 
 function loadPlan() {
-  const stored = localStorage.getItem(KEY); if (!stored) return null;
-  try { return JSON.parse(stored); } catch (e) { console.error("Failed to parse stored plan", e); return null; }
+  const stored = localStorage.getItem(KEY); 
+  if (!stored) return null;
+  try { 
+    const data = JSON.parse(stored);
+    // Validate the stored data structure
+    if (data && data.plan && Array.isArray(data.plan) && data.startDate) {
+      return data;
+    }
+    return null;
+  } catch (e) { 
+    console.error("Failed to parse stored plan", e); 
+    return null; 
+  }
 }
 
 function updateSavedInfo() {
-  const savedInfo = document.getElementById("savedInfo"); const stored = loadPlan();
+  const savedInfo = document.getElementById("savedInfo"); 
+  const stored = loadPlan();
   if (stored && stored.plan) {
-    const startDate = new Date(stored.startDate); const now = new Date();
-    const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
+    const startDate = new Date(stored.startDate); 
+    const now = new Date();
+    const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - 
+                            Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
     const unlocked = Math.max(0, Math.min(6, days));
-    savedInfo.innerHTML = `<div>Plan started: ${startDate.toLocaleDateString()}</div><div>Unlocked days: ${unlocked + 1}/7</div>`;
-  } else { savedInfo.textContent = "No saved plan."; }
+    const lastSaved = new Date(stored.lastSaved).toLocaleDateString();
+    
+    savedInfo.innerHTML = `
+      <div>Plan started: ${startDate.toLocaleDateString()}</div>
+      <div>Unlocked days: ${unlocked + 1}/7</div>
+      <div>Last saved: ${lastSaved}</div>
+    `;
+  } else { 
+    savedInfo.innerHTML = "No saved plan. Generate and save a plan to get started."; 
+  }
 }
 
 function getUrlParams() {
@@ -1643,9 +1748,6 @@ function applyUrlParams() {
     document.getElementById('dietSelect').value = dietValue;
   }
   if (urlParams.protein) document.getElementById('proteinSelect').value = urlParams.protein;
-  if (Object.keys(urlParams).length > 0) {
-    setTimeout(() => { document.getElementById('generateBtn').click(); }, 500);
-  }
 }
 
 function initTheme() {
@@ -1802,19 +1904,63 @@ document.addEventListener('DOMContentLoaded', function() {
   applyUrlParams();
   
   document.getElementById('generateBtn').addEventListener('click', async function() {
-    const tdee = document.getElementById('tdeeInput').value; const age = document.getElementById('ageInput').value;
-    const goal = document.getElementById('goalSelect').value; const diet = document.getElementById('dietSelect').value;
+    const tdee = document.getElementById('tdeeInput').value; 
+    const age = document.getElementById('ageInput').value;
+    const goal = document.getElementById('goalSelect').value; 
+    const diet = document.getElementById('dietSelect').value;
     const protein = document.getElementById('proteinSelect').value;
-    if (!tdee) { alert("Please enter your TDEE"); return; }
-    const opts = { tdee: parseInt(tdee), age: parseInt(age), goal, diet, protein, inputIsAlreadyAdjusted: true };
+    
+    if (!tdee) { 
+      alert("Please enter your TDEE"); 
+      return; 
+    }
+    
+    const opts = { 
+      tdee: parseInt(tdee), 
+      age: parseInt(age), 
+      goal, 
+      diet, 
+      protein, 
+      inputIsAlreadyAdjusted: true 
+    };
+    
     try {
       const plan = await generatePlanAsync(opts); 
       currentPlan = plan; // Store the generated plan in currentPlan
+      isPreviewMode = true; // Enter preview mode
       renderPlan(plan, new Date().toISOString());
-      const modal = document.getElementById('previewModal'); const previewBox = document.getElementById('previewBox');
-      previewBox.innerHTML = `<h3>7-Day Meal Plan Preview</h3><p>Plan generated successfully! Click "Accept & Save" to save this plan.</p>`;
-      modal.style.display = 'flex'; modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
-    } catch (error) { console.error("Error generating plan:", error); alert("Error generating plan. Please try again."); }
+      
+      const modal = document.getElementById('previewModal'); 
+      const previewBox = document.getElementById('previewBox');
+      previewBox.innerHTML = `
+        <h3>7-Day Meal Plan Preview</h3>
+        <div class="alert alert-info">
+          <strong>This is a template!</strong> You can customize it by:
+          <ul>
+            <li>Adjusting portion sizes with + / - buttons</li>
+            <li>Replacing foods using dropdown or "Replace Food"</li>
+            <li>Adding more foods with "Add Food" button</li>
+            <li>Search USDA database for additional foods</li>
+          </ul>
+          Click "Accept & Save" when you're happy with your customized plan.
+        </div>
+        <div style="text-align: right; margin-top: 16px;">
+          <button id="closePreview" class="btn">Got it!</button>
+        </div>
+      `;
+      
+      document.getElementById('closePreview').onclick = function() {
+        modal.style.display = 'none';
+      };
+      
+      modal.style.display = 'flex'; 
+      modal.addEventListener('click', function(e) { 
+        if (e.target === modal) modal.style.display = 'none'; 
+      });
+    } catch (error) { 
+      console.error("Error generating plan:", error); 
+      alert("Error generating plan. Please try again."); 
+    }
   });
   
   // FIXED: Save the currentPlan (with all modifications) instead of generating a new one
@@ -1825,22 +1971,49 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     savePlan(currentPlan, new Date().toISOString()); 
+    isPreviewMode = false; // Exit preview mode
     updateSavedInfo(); 
-    // No need to re-render since currentPlan already has all modifications
+    // Re-render to show the saved state (non-editable)
+    renderPlan(currentPlan, new Date().toISOString());
     document.getElementById('previewModal').style.display = 'none'; 
-    alert("Plan saved successfully!");
+    
+    // Show success message
+    const successAlert = document.createElement('div');
+    successAlert.className = 'alert alert-success';
+    successAlert.innerHTML = '<strong>✓ Plan Saved!</strong> Your meal plan has been saved and will persist across browser sessions. Future days will unlock automatically.';
+    successAlert.style.marginTop = '12px';
+    
+    const mainInner = document.getElementById('mainInner');
+    if (mainInner.firstChild) {
+      mainInner.insertBefore(successAlert, mainInner.firstChild);
+    }
   });
   
   document.getElementById('exportDayBtn').addEventListener('click', exportCurrentDayToPDF);
+  
+  // Reset plan functionality
+  document.getElementById('resetPlanBtn').addEventListener('click', function() {
+    if (confirm("Are you sure you want to reset your current plan? This will delete your saved plan and allow you to create a new one.")) {
+      localStorage.removeItem(KEY);
+      currentPlan = null;
+      isPreviewMode = false;
+      updateSavedInfo();
+      document.getElementById('mainInner').innerHTML = '';
+      document.getElementById('initialState').style.display = 'block';
+      document.getElementById('userGuidance').style.display = 'none';
+      alert("Plan reset. You can now generate a new plan.");
+    }
+  });
   
   // Load saved plan on startup
   const stored = loadPlan(); 
   if (stored && stored.plan) { 
     currentPlan = stored.plan; // Set currentPlan to the saved plan
+    isPreviewMode = false; // Start in saved mode (non-editable)
     renderPlan(stored.plan, stored.startDate); 
   }
   updateSavedInfo();
 });
 </script>
 </body>
-</html>
+  </html>
