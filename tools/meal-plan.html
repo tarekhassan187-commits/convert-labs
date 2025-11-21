@@ -304,6 +304,13 @@ const DATA_USDA = "/assets/usda_food_nutrition.json";
 const KEY = "convertlabs_mealplan_v4";
 
 /* =============================
+   STATE MANAGEMENT
+   ============================= */
+let currentDietData = [];
+let usdaData = [];
+let currentPlan = null; // This will track the CURRENT plan with all modifications
+
+/* =============================
    PRE-DEFINED SENSIBLE MEAL COMBINATIONS
    ============================= */
 const MEAL_TEMPLATES = {
@@ -514,9 +521,6 @@ const FOOD_NAME_MAPPINGS = {
 /* =============================
    Data Loaders for Diet-Specific Files - WITH CALORIES FIX
    ============================= */
-let currentDietData = [];
-let usdaData = [];
-let currentPreviewPlan = null; // Store the current preview plan
 
 async function safeFetchJSON(url){
   try {
@@ -1166,12 +1170,14 @@ function renderPlan(plan, startDate) {
   }
 }
 
+/* =============================
+   PLAN MODIFICATION FUNCTIONS - UPDATED TO WORK WITH currentPlan
+   ============================= */
+
 function replaceMealWithFood(day, mealKey, foodItem) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
+  if (!currentPlan) return;
   
-  const plan = stored.plan;
-  const dayPlan = plan.find(d => d.day === day);
+  const dayPlan = currentPlan.find(d => d.day === day);
   if (!dayPlan || !dayPlan[mealKey]) return;
   
   // Calculate appropriate grams for this meal
@@ -1190,9 +1196,53 @@ function replaceMealWithFood(day, mealKey, foodItem) {
   const nutrition = calculateMealNutrition(dayPlan[mealKey].parts);
   dayPlan[mealKey].kcal = nutrition.kcal;
   
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
+  // Re-render with updated plan
+  renderPlan(currentPlan, new Date().toISOString());
+}
+
+function deleteFoodItem(day, mealKey, partIndex) {
+  if (!currentPlan) return;
+  
+  const dayPlan = currentPlan.find(d => d.day === day);
+  if (!dayPlan || !dayPlan[mealKey] || !dayPlan[mealKey].parts) return;
+  
+  // Remove the food item from the parts array
+  dayPlan[mealKey].parts.splice(partIndex, 1);
+  
+  // If no parts left, set empty array
+  if (dayPlan[mealKey].parts.length === 0) {
+    dayPlan[mealKey].parts = [];
+  }
+  
+  // Recalculate meal total kcal
+  dayPlan[mealKey].kcal = dayPlan[mealKey].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
+  
+  // Re-render with updated plan
+  renderPlan(currentPlan, new Date().toISOString());
+}
+
+function updatePortionSize(day, mealKey, partIndex, newGrams) {
+  if (!currentPlan) return;
+  
+  const dayPlan = currentPlan.find(d => d.day === day);
+  if (!dayPlan || !dayPlan[mealKey] || !dayPlan[mealKey].parts) return;
+  
+  const part = dayPlan[mealKey].parts[partIndex];
+  part.grams = newGrams;
+  
+  // Recalculate nutrition
+  const ratio = newGrams / 100;
+  const foodItem = part.source || part;
+  part.kcal = Math.round((foodItem.kcal_per_100g || part.per100 || 0) * ratio);
+  part.protein = Math.round((foodItem.protein_per_100g || foodItem.protein || 0) * ratio);
+  part.carbs = Math.round((foodItem.carbs_per_100g || foodItem.carbs || 0) * ratio);
+  part.fat = Math.round((foodItem.fat_per_100g || foodItem.fat || 0) * ratio);
+  
+  // Update meal total
+  dayPlan[mealKey].kcal = dayPlan[mealKey].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
+  
+  // Re-render with updated plan
+  renderPlan(currentPlan, new Date().toISOString());
 }
 
 function calculateDayTotals(day) {
@@ -1240,33 +1290,6 @@ function updateCurrentMacrosDisplay(day) {
       <div class="macro-bar"><div class="macro-fill fat-fill" style="width: ${Math.min(100, (totals.fat/targets.fat)*100)}%"></div></div>
     </div>
   `;
-}
-
-/* =============================
-   Delete Food Item Function
-   ============================= */
-function deleteFoodItem(day, mealKey, partIndex) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
-  
-  const plan = stored.plan;
-  const dayPlan = plan.find(d => d.day === day);
-  if (!dayPlan || !dayPlan[mealKey] || !dayPlan[mealKey].parts) return;
-  
-  // Remove the food item from the parts array
-  dayPlan[mealKey].parts.splice(partIndex, 1);
-  
-  // If no parts left, set empty array
-  if (dayPlan[mealKey].parts.length === 0) {
-    dayPlan[mealKey].parts = [];
-  }
-  
-  // Recalculate meal total kcal
-  dayPlan[mealKey].kcal = dayPlan[mealKey].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
-  
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
 }
 
 /* =============================
@@ -1494,11 +1517,9 @@ function renderReplaceList(results) {
 
 // FIXED: Proper kcal calculation when adding items
 function applyAddToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
+  if (!currentPlan) return;
   
-  const plan = stored.plan;
-  const day = plan[currentDayForModal];
+  const day = currentPlan[currentDayForModal];
   
   if (!day || !day[currentMealForModal]) return;
   
@@ -1527,20 +1548,17 @@ function applyAddToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, f
   
   day[currentMealForModal].kcal = day[currentMealForModal].parts.reduce((sum, part) => sum + (part.kcal || 0), 0);
   
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
+  // Re-render with updated plan
+  renderPlan(currentPlan, new Date().toISOString());
   
   document.getElementById("usdaPopup").style.display = 'none';
 }
 
 // FIXED: Proper kcal calculation when replacing items
 function applyReplacementToPlan(name, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
+  if (!currentPlan) return;
   
-  const plan = stored.plan;
-  const day = plan[currentDayForModal];
+  const day = currentPlan[currentDayForModal];
   
   if (!day || !day[currentMealForModal] || !day[currentMealForModal].parts) return;
 
@@ -1568,38 +1586,10 @@ function applyReplacementToPlan(name, kcal_per_100g, protein_per_100g, carbs_per
   // Update total meal kcal
   day[currentMealForModal].kcal = day[currentMealForModal].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
 
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
+  // Re-render with updated plan
+  renderPlan(currentPlan, new Date().toISOString());
 
   document.getElementById("usdaPopup").style.display = 'none';
-}
-
-function updatePortionSize(day, mealKey, partIndex, newGrams) {
-  const stored = loadPlan();
-  if (!stored || !stored.plan) return;
-  
-  const plan = stored.plan;
-  const dayPlan = plan.find(d => d.day === day);
-  if (!dayPlan || !dayPlan[mealKey] || !dayPlan[mealKey].parts) return;
-  
-  const part = dayPlan[mealKey].parts[partIndex];
-  part.grams = newGrams;
-  
-  // Recalculate nutrition
-  const ratio = newGrams / 100;
-  const foodItem = part.source || part;
-  part.kcal = Math.round((foodItem.kcal_per_100g || part.per100 || 0) * ratio);
-  part.protein = Math.round((foodItem.protein_per_100g || foodItem.protein || 0) * ratio);
-  part.carbs = Math.round((foodItem.carbs_per_100g || foodItem.carbs || 0) * ratio);
-  part.fat = Math.round((foodItem.fat_per_100g || foodItem.fat || 0) * ratio);
-  
-  // Update meal total
-  dayPlan[mealKey].kcal = dayPlan[mealKey].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
-  
-  savePlan(plan, stored.startDate);
-  renderPlan(plan, stored.startDate);
-  updateSavedInfo();
 }
 
 /* =============================
@@ -1679,14 +1669,16 @@ function exportCurrentDayToPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   
-  const stored = loadPlan();
-  if (!stored || !stored.plan || stored.plan.length === 0) {
+  // Use the currentPlan if available, otherwise load from localStorage
+  const planToExport = currentPlan || (loadPlan() ? loadPlan().plan : null);
+  
+  if (!planToExport || planToExport.length === 0) {
     alert("No meal plan found to export. Please generate and save a plan first.");
     return;
   }
   
   // Use the first day (Day 1) as the current plan to export
-  const todayPlan = stored.plan[0];
+  const todayPlan = planToExport[0];
   
   if (!todayPlan) {
     alert("No meal plan available for export.");
@@ -1817,7 +1809,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const opts = { tdee: parseInt(tdee), age: parseInt(age), goal, diet, protein, inputIsAlreadyAdjusted: true };
     try {
       const plan = await generatePlanAsync(opts); 
-      currentPreviewPlan = plan; // Store the preview plan
+      currentPlan = plan; // Store the generated plan in currentPlan
       renderPlan(plan, new Date().toISOString());
       const modal = document.getElementById('previewModal'); const previewBox = document.getElementById('previewBox');
       previewBox.innerHTML = `<h3>7-Day Meal Plan Preview</h3><p>Plan generated successfully! Click "Accept & Save" to save this plan.</p>`;
@@ -1825,24 +1817,30 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) { console.error("Error generating plan:", error); alert("Error generating plan. Please try again."); }
   });
   
-  // FIXED: Save the current preview plan instead of generating a new one
+  // FIXED: Save the currentPlan (with all modifications) instead of generating a new one
   document.getElementById('acceptBtn').addEventListener('click', function() {
-    if (!currentPreviewPlan) {
+    if (!currentPlan) {
       alert("Please generate a preview first by clicking 'Generate Preview'");
       return;
     }
     
-    savePlan(currentPreviewPlan, new Date().toISOString()); 
+    savePlan(currentPlan, new Date().toISOString()); 
     updateSavedInfo(); 
-    renderPlan(currentPreviewPlan, new Date().toISOString());
+    // No need to re-render since currentPlan already has all modifications
     document.getElementById('previewModal').style.display = 'none'; 
     alert("Plan saved successfully!");
   });
   
   document.getElementById('exportDayBtn').addEventListener('click', exportCurrentDayToPDF);
-  const stored = loadPlan(); if (stored && stored.plan) { renderPlan(stored.plan, stored.startDate); }
+  
+  // Load saved plan on startup
+  const stored = loadPlan(); 
+  if (stored && stored.plan) { 
+    currentPlan = stored.plan; // Set currentPlan to the saved plan
+    renderPlan(stored.plan, stored.startDate); 
+  }
   updateSavedInfo();
 });
 </script>
 </body>
-  </html>
+</html>
