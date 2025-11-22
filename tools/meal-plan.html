@@ -353,154 +353,88 @@ let currentPlan = null;
 let isPreviewMode = false;
 
 /* =============================
-   COMPLETE FALLBACK FOOD DATABASE
-   ============================= */
-const COMPLETE_FOOD_DATABASE = {
-  balanced: [
-    { name: "Chicken Breast", kcal_per_100g: 165, protein_per_100g: 31, carbs_per_100g: 0, fat_per_100g: 3.6 },
-    { name: "Brown Rice", kcal_per_100g: 111, protein_per_100g: 2.6, carbs_per_100g: 23, fat_per_100g: 0.9 },
-    { name: "Broccoli", kcal_per_100g: 34, protein_per_100g: 2.8, carbs_per_100g: 7, fat_per_100g: 0.4 },
-    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
-    { name: "Whole Wheat Bread", kcal_per_100g: 265, protein_per_100g: 13, carbs_per_100g: 51, fat_per_100g: 3.2 },
-    { name: "Greek Yogurt", kcal_per_100g: 59, protein_per_100g: 10, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Banana", kcal_per_100g: 89, protein_per_100g: 1.1, carbs_per_100g: 23, fat_per_100g: 0.3 },
-    { name: "Almonds", kcal_per_100g: 579, protein_per_100g: 21, carbs_per_100g: 22, fat_per_100g: 50 },
-    { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 },
-    { name: "Sweet Potato", kcal_per_100g: 86, protein_per_100g: 1.6, carbs_per_100g: 20, fat_per_100g: 0.1 },
-    { name: "Spinach", kcal_per_100g: 23, protein_per_100g: 2.9, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Avocado", kcal_per_100g: 160, protein_per_100g: 2, carbs_per_100g: 9, fat_per_100g: 15 },
-    { name: "Oatmeal", kcal_per_100g: 68, protein_per_100g: 2.4, carbs_per_100g: 12, fat_per_100g: 1.4 },
-    { name: "Apple", kcal_per_100g: 52, protein_per_100g: 0.3, carbs_per_100g: 14, fat_per_100g: 0.2 },
-    { name: "Ground Beef", kcal_per_100g: 250, protein_per_100g: 26, carbs_per_100g: 0, fat_per_100g: 15 },
-    { name: "Turkey Breast", kcal_per_100g: 135, protein_per_100g: 30, carbs_per_100g: 0, fat_per_100g: 1 },
-    { name: "Quinoa", kcal_per_100g: 120, protein_per_100g: 4.4, carbs_per_100g: 21, fat_per_100g: 1.9 }
-  ],
-  keto: [
-    { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 },
-    { name: "Avocado", kcal_per_100g: 160, protein_per_100g: 2, carbs_per_100g: 9, fat_per_100g: 15 },
-    { name: "Bacon", kcal_per_100g: 541, protein_per_100g: 37, carbs_per_100g: 1.4, fat_per_100g: 42 },
-    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
-    { name: "Spinach", kcal_per_100g: 23, protein_per_100g: 2.9, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Cheese", kcal_per_100g: 402, protein_per_100g: 25, carbs_per_100g: 1.3, fat_per_100g: 33 },
-    { name: "Olive Oil", kcal_per_100g: 884, protein_per_100g: 0, carbs_per_100g: 0, fat_per_100g: 100 },
-    { name: "Almonds", kcal_per_100g: 579, protein_per_100g: 21, carbs_per_100g: 22, fat_per_100g: 50 },
-    { name: "Chicken Thighs", kcal_per_100g: 209, protein_per_100g: 26, carbs_per_100g: 0, fat_per_100g: 11 },
-    { name: "Butter", kcal_per_100g: 717, protein_per_100g: 0.9, carbs_per_100g: 0.1, fat_per_100g: 81 },
-    { name: "Beef Steak", kcal_per_100g: 271, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 19 },
-    { name: "Pork Chops", kcal_per_100g: 242, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 15 }
-  ],
-  carnivore: [
-    { name: "Beef Steak", kcal_per_100g: 271, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 19 },
-    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
-    { name: "Bacon", kcal_per_100g: 541, protein_per_100g: 37, carbs_per_100g: 1.4, fat_per_100g: 42 },
-    { name: "Chicken Thighs", kcal_per_100g: 209, protein_per_100g: 26, carbs_per_100g: 0, fat_per_100g: 11 },
-    { name: "Pork Chops", kcal_per_100g: 242, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 15 },
-    { name: "Butter", kcal_per_100g: 717, protein_per_100g: 0.9, carbs_per_100g: 0.1, fat_per_100g: 81 },
-    { name: "Salmon", kcal_per_100g: 208, protein_per_100g: 20, carbs_per_100g: 0, fat_per_100g: 13 },
-    { name: "Ground Beef", kcal_per_100g: 250, protein_per_100g: 26, carbs_per_100g: 0, fat_per_100g: 15 },
-    { name: "Ribeye Steak", kcal_per_100g: 291, protein_per_100g: 25, carbs_per_100g: 0, fat_per_100g: 21 },
-    { name: "Liver", kcal_per_100g: 135, protein_per_100g: 20, carbs_per_100g: 3, fat_per_100g: 4 }
-  ],
-  vegetarian: [
-    { name: "Tofu", kcal_per_100g: 76, protein_per_100g: 8, carbs_per_100g: 1.9, fat_per_100g: 4.8 },
-    { name: "Quinoa", kcal_per_100g: 120, protein_per_100g: 4.4, carbs_per_100g: 21, fat_per_100g: 1.9 },
-    { name: "Lentils", kcal_per_100g: 116, protein_per_100g: 9, carbs_per_100g: 20, fat_per_100g: 0.4 },
-    { name: "Chickpeas", kcal_per_100g: 139, protein_per_100g: 7, carbs_per_100g: 22, fat_per_100g: 2.1 },
-    { name: "Greek Yogurt", kcal_per_100g: 59, protein_per_100g: 10, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Eggs", kcal_per_100g: 155, protein_per_100g: 13, carbs_per_100g: 1.1, fat_per_100g: 11 },
-    { name: "Mozzarella", kcal_per_100g: 280, protein_per_100g: 28, carbs_per_100g: 3.1, fat_per_100g: 17 },
-    { name: "Almonds", kcal_per_100g: 579, protein_per_100g: 21, carbs_per_100g: 22, fat_per_100g: 50 },
-    { name: "Spinach", kcal_per_100g: 23, protein_per_100g: 2.9, carbs_per_100g: 3.6, fat_per_100g: 0.4 },
-    { name: "Broccoli", kcal_per_100g: 34, protein_per_100g: 2.8, carbs_per_100g: 7, fat_per_100g: 0.4 },
-    { name: "Sweet Potato", kcal_per_100g: 86, protein_per_100g: 1.6, carbs_per_100g: 20, fat_per_100g: 0.1 },
-    { name: "Brown Rice", kcal_per_100g: 111, protein_per_100g: 2.6, carbs_per_100g: 23, fat_per_100g: 0.9 },
-    { name: "Cottage Cheese", kcal_per_100g: 98, protein_per_100g: 11, carbs_per_100g: 3.4, fat_per_100g: 4.3 }
-  ]
-};
-
-/* =============================
-   SIMPLE MEAL TEMPLATES
+   UPDATED MEAL TEMPLATES USING ACTUAL FOOD NAMES FROM YOUR JSON FILES
    ============================= */
 const MEAL_TEMPLATES = {
   balanced: {
     breakfast: [
-      { name: "Scrambled Eggs with Toast", foods: ["Eggs", "Whole Wheat Bread"] },
-      { name: "Yogurt with Fruit", foods: ["Greek Yogurt", "Banana", "Almonds"] },
-      { name: "Oatmeal Breakfast", foods: ["Oatmeal", "Apple"] }
+      { name: "Scrambled Eggs with Toast", foods: ["Scrambled Eggs", "Baladi Bread"] },
+      { name: "Yogurt with Fruit", foods: ["Greek Yogurt (plain)", "Banana", "Almonds"] },
+      { name: "Foul Medames Breakfast", foods: ["Foul Medames", "Baladi Bread"] }
     ],
     lunch: [
-      { name: "Chicken Salad", foods: ["Chicken Breast", "Spinach", "Avocado"] },
-      { name: "Rice Bowl", foods: ["Brown Rice", "Chicken Breast", "Broccoli"] },
-      { name: "Salmon Meal", foods: ["Salmon", "Sweet Potato", "Broccoli"] }
+      { name: "Chicken Salad", foods: ["Chicken Breast (grilled)", "Spinach (boiled)", "Tomatoes"] },
+      { name: "Rice Bowl", foods: ["Brown Rice (cooked)", "Chicken Breast (grilled)", "Broccoli (steamed)"] },
+      { name: "Salmon Meal", foods: ["Salmon (grilled)", "Sweet Potatoes (baked)", "Broccoli (steamed)"] }
     ],
     dinner: [
-      { name: "Beef with Rice", foods: ["Beef Steak", "Brown Rice", "Broccoli"] },
-      { name: "Chicken Dinner", foods: ["Chicken Breast", "Sweet Potato", "Spinach"] },
-      { name: "Fish Meal", foods: ["Salmon", "Brown Rice", "Avocado"] }
+      { name: "Beef with Rice", foods: ["Beef Steak (grilled, lean)", "Brown Rice (cooked)", "Broccoli (steamed)"] },
+      { name: "Chicken Dinner", foods: ["Chicken Breast (grilled)", "Sweet Potatoes (baked)", "Spinach (boiled)"] },
+      { name: "Fish Meal", foods: ["Salmon (grilled)", "Brown Rice (cooked)", "Avocado"] }
     ],
     snack: [
       { name: "Fruit Snack", foods: ["Apple", "Almonds"] },
-      { name: "Yogurt Snack", foods: ["Greek Yogurt", "Banana"] },
+      { name: "Yogurt Snack", foods: ["Greek Yogurt (plain)", "Banana"] },
       { name: "Nut Snack", foods: ["Almonds"] }
     ]
   },
   keto: {
     breakfast: [
-      { name: "Keto Eggs", foods: ["Eggs", "Bacon", "Avocado"] },
-      { name: "Keto Yogurt", foods: ["Greek Yogurt", "Almonds"] }
+      { name: "Keto Eggs", foods: ["Egg (fried)", "Bacon (fried)", "Avocado"] },
+      { name: "Keto Yogurt", foods: ["Greek Yogurt (full-fat)", "Almonds"] }
     ],
     lunch: [
-      { name: "Keto Chicken", foods: ["Chicken Thighs", "Avocado", "Spinach"] },
-      { name: "Keto Salmon", foods: ["Salmon", "Avocado"] }
+      { name: "Keto Chicken", foods: ["Chicken Thigh (skin-on, roasted)", "Avocado", "Spinach (cooked)"] },
+      { name: "Keto Salmon", foods: ["Smoked Salmon", "Avocado"] }
     ],
     dinner: [
-      { name: "Keto Steak", foods: ["Beef Steak", "Butter", "Spinach"] },
-      { name: "Keto Pork", foods: ["Pork Chops", "Cheese"] }
+      { name: "Keto Steak", foods: ["Ribeye Steak (grilled)", "Butter", "Spinach (cooked)"] },
+      { name: "Keto Pork", foods: ["Bacon (fried)", "Cheddar Cheese"] }
     ],
     snack: [
       { name: "Keto Nuts", foods: ["Almonds"] },
-      { name: "Keto Cheese", foods: ["Cheese"] }
+      { name: "Keto Cheese", foods: ["Cheddar Cheese"] }
     ]
   },
   carnivore: {
     breakfast: [
-      { name: "Carnivore Eggs", foods: ["Eggs", "Bacon"] },
-      { name: "Carnivore Steak", foods: ["Beef Steak"] }
+      { name: "Carnivore Eggs", foods: ["Egg (boiled)", "Bacon (fried)"] },
+      { name: "Carnivore Steak", foods: ["Ribeye Steak (grilled)"] }
     ],
     lunch: [
-      { name: "Carnivore Chicken", foods: ["Chicken Thighs"] },
-      { name: "Carnivore Beef", foods: ["Ground Beef"] }
+      { name: "Carnivore Chicken", foods: ["Chicken Thigh (skin-on, roasted)"] },
+      { name: "Carnivore Beef", foods: ["Beef Mince 20% Fat (cooked)"] }
     ],
     dinner: [
-      { name: "Carnivore Pork", foods: ["Pork Chops"] },
-      { name: "Carnivore Salmon", foods: ["Salmon"] }
+      { name: "Carnivore Pork", foods: ["Bacon (fried)"] },
+      { name: "Carnivore Salmon", foods: ["Salmon (grilled)"] }
     ],
     snack: [
-      { name: "Carnivore Snack", foods: ["Eggs"] }
+      { name: "Carnivore Snack", foods: ["Egg (boiled)"] }
     ]
   },
   vegetarian: {
     breakfast: [
-      { name: "Veggie Eggs", foods: ["Eggs", "Spinach"] },
-      { name: "Veggie Yogurt", foods: ["Greek Yogurt", "Almonds"] }
+      { name: "Veggie Eggs", foods: ["Scrambled Eggs", "Spinach (boiled)"] },
+      { name: "Veggie Yogurt", foods: ["Greek Yogurt (plain)", "Almonds"] }
     ],
     lunch: [
-      { name: "Veggie Bowl", foods: ["Quinoa", "Tofu", "Broccoli"] },
-      { name: "Veggie Lentils", foods: ["Lentils", "Spinach"] }
+      { name: "Veggie Bowl", foods: ["Quinoa (cooked)", "Tofu (firm)", "Broccoli (steamed)"] },
+      { name: "Veggie Lentils", foods: ["Lentils (cooked)", "Spinach (boiled)"] }
     ],
     dinner: [
-      { name: "Veggie Tofu", foods: ["Tofu", "Quinoa", "Broccoli"] },
-      { name: "Veggie Chickpeas", foods: ["Chickpeas", "Spinach"] }
+      { name: "Veggie Tofu", foods: ["Tofu (firm)", "Quinoa (cooked)", "Broccoli (steamed)"] },
+      { name: "Veggie Chickpeas", foods: ["Chickpeas (boiled)", "Spinach (boiled)"] }
     ],
     snack: [
-      { name: "Veggie Snack", foods: ["Greek Yogurt"] },
+      { name: "Veggie Snack", foods: ["Greek Yogurt (plain)"] },
       { name: "Veggie Nuts", foods: ["Almonds"] }
     ]
   }
 };
 
 /* =============================
-   IMPROVED DATA LOADERS
+   FIXED DATA LOADERS - USING CORRECT FIELD NAMES
    ============================= */
 async function safeFetchJSON(url){
   try {
@@ -511,21 +445,20 @@ async function safeFetchJSON(url){
     let data = Array.isArray(j) ? j : (Array.isArray(j.data) ? j.data : null);
     
     if (data) {
-      // Ensure all foods have the required fields
+      // Use the exact field names from your JSON files
       data = data.map(item => {
-        // Handle different field names
-        const kcal = item.kcal_per_100g || item.calories || item.kcal || 200;
-        const protein = item.protein_per_100g || item.protein || 0;
-        const carbs = item.carbs_per_100g || item.carbs || 0;
-        const fat = item.fat_per_100g || item.fat || 0;
-        const name = item.name || item.food_name || "Unknown Food";
+        const kcal = item.kcal || 200;
+        const protein = item.protein || 0;
+        const carbs = item.carbs || 0;
+        const fat = item.fat || 0;
+        const name = item.name || "Unknown Food";
         
         return {
           name: name,
-          kcal_per_100g: kcal,
-          protein_per_100g: protein,
-          carbs_per_100g: carbs,
-          fat_per_100g: fat
+          kcal: kcal,  // Using 'kcal' not 'kcal_per_100g'
+          protein: protein,
+          carbs: carbs,
+          fat: fat
         };
       });
     }
@@ -556,11 +489,38 @@ async function loadDietData(dietType) {
     console.log(`✅ Loaded ${dietType} foods from JSON:`, data.length);
     return true;
   } else {
-    // Use fallback data
-    currentDietData = COMPLETE_FOOD_DATABASE[dietType] || COMPLETE_FOOD_DATABASE.balanced;
-    console.log(`⚠️ Using fallback data for ${dietType}:`, currentDietData.length);
+    // Create minimal fallback using foods we know exist
+    currentDietData = createMinimalFallback(dietType);
+    console.log(`⚠️ Using minimal fallback for ${dietType}:`, currentDietData.length);
     return true;
   }
+}
+
+function createMinimalFallback(dietType) {
+  // Create a minimal fallback with foods we know exist in the templates
+  const fallbacks = {
+    balanced: [
+      { name: "Egg (boiled)", kcal: 78, protein: 6, carbs: 0.6, fat: 5.3 },
+      { name: "Baladi Bread", kcal: 271, protein: 9, carbs: 56, fat: 1.3 },
+      { name: "Chicken Breast (grilled)", kcal: 165, protein: 31, carbs: 0, fat: 3.6 }
+    ],
+    keto: [
+      { name: "Egg (fried)", kcal: 92, protein: 6, carbs: 0.6, fat: 7 },
+      { name: "Bacon (fried)", kcal: 541, protein: 37, carbs: 1.4, fat: 42 },
+      { name: "Avocado", kcal: 160, protein: 2, carbs: 8.5, fat: 15 }
+    ],
+    carnivore: [
+      { name: "Ribeye Steak (grilled)", kcal: 291, protein: 24, carbs: 0, fat: 21 },
+      { name: "Egg (boiled)", kcal: 78, protein: 6, carbs: 0.6, fat: 5.3 },
+      { name: "Bacon (fried)", kcal: 541, protein: 37, carbs: 1.4, fat: 42 }
+    ],
+    vegetarian: [
+      { name: "Scrambled Eggs", kcal: 148, protein: 10, carbs: 2, fat: 11 },
+      { name: "Greek Yogurt (plain)", kcal: 59, protein: 10, carbs: 3.6, fat: 0.4 },
+      { name: "Tofu (firm)", kcal: 144, protein: 17, carbs: 3, fat: 8.7 }
+    ]
+  };
+  return fallbacks[dietType] || fallbacks.balanced;
 }
 
 async function loadUSDAData() {
@@ -576,9 +536,11 @@ async function loadUSDAData() {
 }
 
 /* =============================
-   FOOD SEARCH & SELECTION
+   IMPROVED FOOD SEARCH & SELECTION
    ============================= */
-function normalize(s){ return (s||"").toString().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase(); }
+function normalize(s){ 
+  return (s||"").toString().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g, '');
+}
 
 function searchDietFoods(query, dietType) {
   const q = normalize(query);
@@ -588,6 +550,35 @@ function searchDietFoods(query, dietType) {
     const name = normalize(item.name);
     return name.includes(q);
   }).slice(0, 20);
+}
+
+/* =============================
+   IMPROVED FOOD MATCHING FUNCTION
+   ============================= */
+function findFoodByName(foodName) {
+  const normalizedTarget = normalize(foodName);
+  
+  // First try exact match
+  let found = currentDietData.find(food => normalize(food.name) === normalizedTarget);
+  if (found) return found;
+  
+  // Then try partial match
+  found = currentDietData.find(food => {
+    const foodNameNormalized = normalize(food.name);
+    return foodNameNormalized.includes(normalizedTarget) || normalizedTarget.includes(foodNameNormalized);
+  });
+  
+  // If still not found, try matching without preparation methods
+  if (!found) {
+    const simpleName = foodName.split('(')[0].trim();
+    const normalizedSimple = normalize(simpleName);
+    found = currentDietData.find(food => {
+      const foodSimple = food.name.split('(')[0].trim();
+      return normalize(foodSimple) === normalizedSimple;
+    });
+  }
+  
+  return found;
 }
 
 /* =============================
@@ -655,7 +646,7 @@ function updateMacroTargetsDisplay(tdee, diet, goal) {
 }
 
 /* =============================
-   WORKING MEAL GENERATION
+   FIXED MEAL GENERATION
    ============================= */
 function gramsForTarget(kcalPer100g, mealKcal){ 
   if(!kcalPer100g || kcalPer100g <= 0) return Math.max(50, Math.round(100 * (mealKcal / 200)));
@@ -667,10 +658,11 @@ function calculateMealNutrition(parts) {
   return parts.reduce((acc, part) => {
     const ratio = (part.grams || 0) / 100;
     const foodItem = part.source || part;
-    const kcal = Math.round((foodItem.kcal_per_100g || part.per100 || 0) * ratio);
-    const protein = Math.round((foodItem.protein_per_100g || foodItem.protein || 0) * ratio);
-    const carbs = Math.round((foodItem.carbs_per_100g || foodItem.carbs || 0) * ratio);
-    const fat = Math.round((foodItem.fat_per_100g || foodItem.fat || 0) * ratio);
+    // Use 'kcal' not 'kcal_per_100g'
+    const kcal = Math.round((foodItem.kcal || part.per100 || 0) * ratio);
+    const protein = Math.round((foodItem.protein || 0) * ratio);
+    const carbs = Math.round((foodItem.carbs || 0) * ratio);
+    const fat = Math.round((foodItem.fat || 0) * ratio);
     
     part.kcal = kcal; 
     part.protein = protein; 
@@ -686,41 +678,40 @@ function calculateMealNutrition(parts) {
   }, {kcal: 0, protein: 0, carbs: 0, fat: 0});
 }
 
-function findFoodByName(foodName) {
-  const normalizedTarget = normalize(foodName);
-  return currentDietData.find(food => {
-    const foodNameNormalized = normalize(food.name);
-    return foodNameNormalized.includes(normalizedTarget) || normalizedTarget.includes(foodNameNormalized);
-  });
-}
-
 function createSimpleMeal(diet, calories, day, mealType) {
   const templates = MEAL_TEMPLATES[diet]?.[mealType] || MEAL_TEMPLATES.balanced[mealType];
+  if (!templates || templates.length === 0) {
+    console.warn(`No templates found for ${diet}.${mealType}`);
+    return [];
+  }
+  
   const templateIndex = (day - 1) % templates.length;
   const selectedTemplate = templates[templateIndex];
   
   const parts = [];
   
-  console.log(`Creating ${mealType} for ${diet}: ${selectedTemplate.name}`);
+  console.log(`Creating ${mealType} for ${diet} day ${day}: ${selectedTemplate.name}`);
   
   // Try to add each food from the template
+  let foundCount = 0;
   selectedTemplate.foods.forEach(foodName => {
     const foodItem = findFoodByName(foodName);
     if (foodItem) {
-      // Simple calorie distribution - equal share for each food
+      // Distribute calories evenly among found foods
       const calorieShare = 1 / selectedTemplate.foods.length;
-      const grams = gramsForTarget(foodItem.kcal_per_100g, calories * calorieShare);
+      const grams = gramsForTarget(foodItem.kcal, calories * calorieShare);
       
       parts.push({
         name: foodItem.name,
-        per100: foodItem.kcal_per_100g,
+        per100: foodItem.kcal,  // Using 'kcal' not 'kcal_per_100g'
         grams: Math.max(30, grams),
         source: foodItem
       });
       
+      foundCount++;
       console.log(`  - Added ${foodItem.name}: ${grams}g`);
     } else {
-      console.log(`  - Could not find: ${foodName}`);
+      console.warn(`  - Could not find: ${foodName} in ${diet} database`);
     }
   });
   
@@ -730,22 +721,23 @@ function createSimpleMeal(diet, calories, day, mealType) {
     const fallbackFoods = currentDietData.slice(0, 2);
     fallbackFoods.forEach((food, index) => {
       const calorieShare = index === 0 ? 0.7 : 0.3;
-      const grams = gramsForTarget(food.kcal_per_100g, calories * calorieShare);
+      const grams = gramsForTarget(food.kcal, calories * calorieShare);
       
       parts.push({
         name: food.name,
-        per100: food.kcal_per_100g,
+        per100: food.kcal,
         grams: Math.max(30, grams),
         source: food
       });
     });
   }
   
+  console.log(`Successfully added ${foundCount}/${selectedTemplate.foods.length} foods for ${mealType}`);
   return parts;
 }
 
 /* =============================
-   WORKING PLAN GENERATOR
+   WORKING PLAN GENERATOR - FIXED
    ============================= */
 async function generatePlanAsync(opts){
   try {
@@ -812,7 +804,7 @@ async function generatePlanAsync(opts){
 }
 
 /* =============================
-   UI RENDERING
+   UI RENDERING (unchanged)
    ============================= */
 function renderPlan(plan, startDate) {
   const container = document.getElementById("mainInner");
@@ -1072,7 +1064,7 @@ function renderPlan(plan, startDate) {
 }
 
 /* =============================
-   PLAN MODIFICATION FUNCTIONS
+   PLAN MODIFICATION FUNCTIONS (unchanged)
    ============================= */
 function replaceMealWithFood(day, mealKey, foodItem) {
   if (!currentPlan) return;
@@ -1081,11 +1073,11 @@ function replaceMealWithFood(day, mealKey, foodItem) {
   if (!dayPlan || !dayPlan[mealKey]) return;
   
   const targetKcal = dayPlan[mealKey].kcal || 500;
-  const grams = gramsForTarget(foodItem.kcal_per_100g, targetKcal);
+  const grams = gramsForTarget(foodItem.kcal, targetKcal);
   
   dayPlan[mealKey].parts = [{
     name: foodItem.name,
-    per100: foodItem.kcal_per_100g,
+    per100: foodItem.kcal,
     grams: grams,
     source: foodItem
   }];
@@ -1124,10 +1116,10 @@ function updatePortionSize(day, mealKey, partIndex, newGrams) {
   
   const ratio = newGrams / 100;
   const foodItem = part.source || part;
-  part.kcal = Math.round((foodItem.kcal_per_100g || part.per100 || 0) * ratio);
-  part.protein = Math.round((foodItem.protein_per_100g || foodItem.protein || 0) * ratio);
-  part.carbs = Math.round((foodItem.carbs_per_100g || foodItem.carbs || 0) * ratio);
-  part.fat = Math.round((foodItem.fat_per_100g || foodItem.fat || 0) * ratio);
+  part.kcal = Math.round((foodItem.kcal || part.per100 || 0) * ratio);
+  part.protein = Math.round((foodItem.protein || 0) * ratio);
+  part.carbs = Math.round((foodItem.carbs || 0) * ratio);
+  part.fat = Math.round((foodItem.fat || 0) * ratio);
   
   dayPlan[mealKey].kcal = dayPlan[mealKey].parts.reduce((sum, p) => sum + (p.kcal || 0), 0);
   
@@ -1182,7 +1174,7 @@ function updateCurrentMacrosDisplay(day) {
 }
 
 /* =============================
-   UTILITY FUNCTIONS
+   UTILITY FUNCTIONS (unchanged)
    ============================= */
 function debounce(func, wait) {
   let timeout; return function executedFunction(...args) {
@@ -1275,7 +1267,7 @@ function toggleTheme() {
 }
 
 /* =============================
-   PDF EXPORT FUNCTION
+   PDF EXPORT FUNCTION (unchanged)
    ============================= */
 function exportCurrentDayToPDF() {
   const { jsPDF } = window.jspdf;
@@ -1541,4 +1533,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </body>
-  </html>
+        </html>
