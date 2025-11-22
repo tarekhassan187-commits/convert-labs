@@ -818,54 +818,133 @@ document.addEventListener('DOMContentLoaded', function() {
           <button class="btn" onclick="document.getElementById('previewModal').style.display='none'">Got it!</button>
         </div>
       `;
-      document.getElementById('previewModal').style.display = 'flex';
+      document.getElementById('previewModal'// EVENT LISTENERS
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize theme
+  const savedTheme = localStorage.getItem('convertlabs-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    document.documentElement.classList.add('dark');
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.textContent = '☀️';
+  }
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      this.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+    });
+  }
+
+  // Generate button
+  const generateBtn = document.getElementById('generateBtn');
+  if (generateBtn) {
+    generateBtn.addEventListener('click', function() {
+      const tdeeInput = document.getElementById('tdeeInput');
+      const dietSelect = document.getElementById('dietSelect');
+      const goalSelect = document.getElementById('goalSelect');
       
-    } catch (error) {
-      alert("Error generating plan: " + error.message);
-    }
-  });
+      if (!tdeeInput || !tdeeInput.value) {
+        alert("Please enter your TDEE");
+        return;
+      }
+
+      const tdee = parseInt(tdeeInput.value);
+      const diet = dietSelect ? dietSelect.value : 'balanced';
+      const goal = goalSelect ? goalSelect.value : 'maintain';
+
+      try {
+        currentPlan = generateMealPlan(tdee, diet, goal);
+        isPreviewMode = true;
+        renderMealPlan(currentPlan, new Date().toISOString());
+        
+        // Show success modal
+        const previewBox = document.getElementById('previewBox');
+        const previewModal = document.getElementById('previewModal');
+        if (previewBox && previewModal) {
+          previewBox.innerHTML = `
+            <h3>7-Day Meal Plan Preview</h3>
+            <div class="alert alert-success">
+              <strong>Meal plan successfully generated!</strong> You can now customize portion sizes.
+            </div>
+            <div style="text-align:right">
+              <button class="btn" onclick="document.getElementById('previewModal').style.display='none'">Got it!</button>
+            </div>
+          `;
+          previewModal.style.display = 'flex';
+        }
+        
+      } catch (error) {
+        alert("Error generating plan: " + error.message);
+      }
+    });
+  }
 
   // Accept & Save button
-  document.getElementById('acceptBtn').addEventListener('click', function() {
-    if (!currentPlan) {
-      alert("Please generate a preview first");
-      return;
-    }
-    
-    savePlan(currentPlan, new Date().toISOString());
-    isPreviewMode = false;
-    updateSavedInfo();
-    renderMealPlan(currentPlan, new Date().toISOString());
-    document.getElementById('previewModal').style.display = 'none';
-    
-    // Show success message
-    const successAlert = document.createElement('div');
-    successAlert.className = 'alert alert-success';
-    successAlert.innerHTML = '<strong>✓ Plan Saved!</strong> Your meal plan has been saved.';
-    successAlert.style.marginTop = '12px';
-    document.getElementById('mainInner').insertBefore(successAlert, document.getElementById('mainInner').firstChild);
-  });
-
-  // Export PDF button
-  document.getElementById('exportDayBtn').addEventListener('click', exportCurrentDayToPDF);
-
-  // Reset button
-  document.getElementById('resetPlanBtn').addEventListener('click', function() {
-    if (confirm("Reset your current plan?")) {
-      localStorage.removeItem(KEY);
-      currentPlan = null;
+  const acceptBtn = document.getElementById('acceptBtn');
+  if (acceptBtn) {
+    acceptBtn.addEventListener('click', function() {
+      if (!currentPlan) {
+        alert("Please generate a preview first");
+        return;
+      }
+      
+      savePlan(currentPlan, new Date().toISOString());
       isPreviewMode = false;
       updateSavedInfo();
-      document.getElementById('mainInner').innerHTML = '';
-      document.getElementById('initialState').style.display = 'block';
-      document.getElementById('userGuidance').style.display = 'none';
-    }
-  });
+      renderMealPlan(currentPlan, new Date().toISOString());
+      
+      const previewModal = document.getElementById('previewModal');
+      if (previewModal) previewModal.style.display = 'none';
+      
+      // Show success message
+      const mainInner = document.getElementById('mainInner');
+      if (mainInner) {
+        const successAlert = document.createElement('div');
+        successAlert.className = 'alert alert-success';
+        successAlert.innerHTML = '<strong>✓ Plan Saved!</strong> Your meal plan has been saved.';
+        successAlert.style.marginTop = '12px';
+        mainInner.insertBefore(successAlert, mainInner.firstChild);
+      }
+    });
+  }
+
+  // Export PDF button
+  const exportBtn = document.getElementById('exportDayBtn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', exportCurrentDayToPDF);
+  }
+
+  // Reset button
+  const resetBtn = document.getElementById('resetPlanBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      if (confirm("Reset your current plan?")) {
+        localStorage.removeItem(KEY);
+        currentPlan = null;
+        isPreviewMode = false;
+        updateSavedInfo();
+        const mainInner = document.getElementById('mainInner');
+        const initialState = document.getElementById('initialState');
+        const userGuidance = document.getElementById('userGuidance');
+        
+        if (mainInner) mainInner.innerHTML = '';
+        if (initialState) initialState.style.display = 'block';
+        if (userGuidance) userGuidance.style.display = 'none';
+      }
+    });
+  }
 
   // Modal close
-  document.getElementById('previewModal').addEventListener('click', function(e) {
-    if (e.target === this) this.style.display = 'none';
-  });
+  const previewModal = document.getElementById('previewModal');
+  if (previewModal) {
+    previewModal.addEventListener('click', function(e) {
+      if (e.target === this) this.style.display = 'none';
+    });
+  }
 
   // Load saved plan on startup
   const stored = loadPlan();
@@ -875,15 +954,177 @@ document.addEventListener('DOMContentLoaded', function() {
     renderMealPlan(stored.plan, stored.startDate);
   }
   updateSavedInfo();
-
-  // Initialize theme
-  const savedTheme = localStorage.getItem('convertlabs-theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-    document.documentElement.classList.add('dark');
-    document.getElementById('themeToggle').textContent = '☀️';
-  }
 });
+
+// Also fix the renderMealPlan function to handle null elements
+function renderMealPlan(plan, startDate) {
+  const container = document.getElementById('mainInner');
+  const initialState = document.getElementById('initialState');
+  const userGuidance = document.getElementById('userGuidance');
+  
+  if (!container) return;
+  
+  container.innerHTML = '';
+
+  // Hide initial state if it exists
+  if (initialState) initialState.style.display = 'none';
+
+  const start = startDate ? new Date(startDate) : new Date();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  // Calculate unlocked days
+  const daysSinceStart = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+  const unlockedDays = Math.min(7, Math.max(1, daysSinceStart + 1));
+
+  if (!plan || !plan.length) {
+    container.innerHTML = '<div class="card">No plan available.</div>';
+    return;
+  }
+
+  plan.forEach((dayPlan, idx) => {
+    const isLocked = idx >= unlockedDays;
+    const currentDate = new Date(start);
+    currentDate.setDate(start.getDate() + idx);
+    const dateStr = `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+
+    const dayCard = document.createElement('div');
+    dayCard.className = `card ${isLocked ? 'locked' : ''}`;
+    
+    let dayHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="margin:0">Day ${dayPlan.day} - ${dateStr}</h3>
+        <div class="muted-small">Target: ${dayPlan.meta.target} kcal</div>
+      </div>
+    `;
+
+    if (isLocked) {
+      dayHTML += `
+        <div class="alert alert-warning">
+          <strong>🔒 Locked</strong> - This day will unlock on ${dateStr}
+        </div>
+      `;
+    }
+
+    dayHTML += `<div class="meals">`;
+
+    // Render each meal
+    const meals = [
+      { key: 'breakfast', label: 'Breakfast', time: '7:00-8:00 AM' },
+      { key: 'lunch', label: 'Lunch', time: '12:00-1:00 PM' },
+      { key: 'dinner', label: 'Dinner', time: '6:00-7:00 PM' },
+      { key: 'snack', label: 'Snack', time: '3:00-4:00 PM' }
+    ];
+
+    meals.forEach(meal => {
+      const mealData = dayPlan[meal.key];
+      if (!mealData) return;
+      
+      dayHTML += `
+        <div class="meal" style="position:relative">
+          ${isLocked ? `
+            <div class="lock-overlay">
+              <div class="lock-badge">🔒 Unlocks on ${dateStr}</div>
+            </div>
+          ` : ''}
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <b>${meal.label}</b>
+            <span class="kcal">${mealData.kcal || 0} kcal</span>
+          </div>
+          <div class="meal-time">Recommended time: ${meal.time}</div>
+      `;
+
+      if (!isLocked && mealData.parts && mealData.parts.length > 0) {
+        mealData.parts.forEach((part, partIndex) => {
+          dayHTML += `
+            <div class="meal-list-item">
+              <div class="meal-item-info">
+                <div style="font-weight:600">${part.name}</div>
+                <div class="muted-small">${part.kcal || 0} kcal • P:${part.protein || 0}g C:${part.carbs || 0}g F:${part.fat || 0}g</div>
+              </div>
+              <div class="meal-item-actions">
+                ${isPreviewMode ? `
+                  <button class="btn ghost" onclick="adjustPortion(${dayPlan.day}, '${meal.key}', ${partIndex}, -10)" style="padding:4px 8px;font-size:12px">-</button>
+                  <input type="number" class="input-grams" value="${part.grams || 100}" min="10" 
+                         onchange="updatePortion(${dayPlan.day}, '${meal.key}', ${partIndex}, this.value)" 
+                         style="${!isPreviewMode ? 'display:none' : ''}">
+                  <button class="btn ghost" onclick="adjustPortion(${dayPlan.day}, '${meal.key}', ${partIndex}, 10)" style="padding:4px 8px;font-size:12px">+</button>
+                  <button class="btn ghost" onclick="deleteFood(${dayPlan.day}, '${meal.key}', ${partIndex})" style="padding:4px 8px;font-size:12px;color:var(--danger-color);border-color:var(--danger-color)">×</button>
+                ` : `
+                  <span class="muted-small">${part.grams || 100}g</span>
+                `}
+              </div>
+            </div>
+          `;
+        });
+      } else if (isLocked) {
+        dayHTML += `<div class="muted-small" style="text-align:center;padding:20px">Meal plan will be available on ${dateStr}</div>`;
+      }
+
+      dayHTML += `</div>`;
+    });
+
+    dayHTML += `</div>`;
+
+    // Day summary
+    if (!isLocked) {
+      const totals = calculateDayTotals(dayPlan);
+      const targets = dayPlan.meta.macroTarget;
+      
+      dayHTML += `
+        <div style="margin-top:12px">
+          <div class="muted-small">Daily Total: <strong>${totals.kcal}</strong> kcal</div>
+          <div class="muted-small">Protein: ${totals.protein}g / ${targets.protein}g</div>
+          <div class="macro-bar"><div class="macro-fill protein-fill" style="width: ${Math.min(100, (totals.protein/targets.protein)*100)}%"></div></div>
+          <div class="muted-small">Carbs: ${totals.carbs}g / ${targets.carbs}g</div>
+          <div class="macro-bar"><div class="macro-fill carbs-fill" style="width: ${Math.min(100, (totals.carbs/targets.carbs)*100)}%"></div></div>
+          <div class="muted-small">Fat: ${totals.fat}g / ${targets.fat}g</div>
+          <div class="macro-bar"><div class="macro-fill fat-fill" style="width: ${Math.min(100, (totals.fat/targets.fat)*100)}%"></div></div>
+        </div>
+      `;
+    }
+
+    dayCard.innerHTML = dayHTML;
+    container.appendChild(dayCard);
+  });
+
+  // Show user guidance in preview mode
+  if (userGuidance) {
+    userGuidance.style.display = isPreviewMode ? 'block' : 'none';
+  }
+  
+  // Update macro targets display
+  updateMacroTargetsDisplay(plan[0]);
+}
+
+// Also fix the updateMacroTargetsDisplay function
+function updateMacroTargetsDisplay(day) {
+  const macroTargetsInfo = document.getElementById('macroTargetsInfo');
+  if (!macroTargetsInfo || !day || !day.meta) return;
+  
+  const targets = day.meta.macroTarget;
+  const splits = day.meta.macroSplits;
+  
+  macroTargetsInfo.innerHTML = `
+    <div class="macro-targets">
+      <div class="macro-target-item">
+        <span>Protein:</span>
+        <span class="macro-percentage">${Math.round(splits.p * 100)}%</span>
+        <span>${targets.protein}g</span>
+      </div>
+      <div class="macro-target-item">
+        <span>Carbs:</span>
+        <span class="macro-percentage">${Math.round(splits.c * 100)}%</span>
+        <span>${targets.carbs}g</span>
+      </div>
+      <div class="macro-target-item">
+        <span>Fat:</span>
+        <span class="macro-percentage">${Math.round(splits.f * 100)}%</span>
+        <span>${targets.fat}g</span>
+      </div>
+    </div>
+  `;
+}
 
 console.log("Meal plan script loaded successfully!");
 </script>
