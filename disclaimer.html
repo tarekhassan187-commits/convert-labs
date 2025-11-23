@@ -81,6 +81,17 @@
       --accent: #34d399;
     }
 
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
     header {
       height: auto;
       min-height: 64px;
@@ -136,6 +147,7 @@
       cursor: pointer;
       font-weight: 600;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
 
     .btn:hover {
@@ -147,6 +159,12 @@
       background: transparent;
       border: 1px solid var(--brand);
       color: var(--brand);
+    }
+
+    /* Theme toggle container - fixed to prevent page elongation */
+    .theme-toggle-container {
+      margin-left: auto;
+      flex-shrink: 0;
     }
 
     /* Mobile responsiveness */
@@ -190,6 +208,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       line-height: 1.7;
       color: var(--text);
+      min-height: calc(100vh - 200px); /* Ensure footer stays at bottom */
     }
 
     /* Dark Mode */
@@ -205,6 +224,7 @@
     html.dark p,
     html.dark li { color: var(--text) !important; }
 
+    /* Footer with same color as header */
     footer.footer {
       background: var(--brand-2);
       color: #fff;
@@ -248,7 +268,7 @@
     <a href="https://convertlabs.online/about.html">About</a>
     <a href="https://convertlabs.online/contact.html">Contact</a>
   </nav>
-  <div style="margin-left:auto;">
+  <div class="theme-toggle-container">
     <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
   </div>
 </header>
