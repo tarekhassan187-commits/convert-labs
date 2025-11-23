@@ -72,56 +72,20 @@
 
   <!-- ✅ Inline Navbar & Footer Styles -->
   <style>
-    header.navbar {
-      background: #1e40af;
-      color: #fff;
-      padding: 10px 0;
+    :root{
+      --brand:#0a4d8c; --brand-2:#134b8b; --muted:#6c6c6c; --bg:#f5faff; --card:#fff; --accent:#2b8bd8; --radius:12px; --text:#111;
     }
-    .nav-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 90%;
-      max-width: 1100px;
-      margin: auto;
-    }
-    .logo a {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      text-decoration: none;
-      color: #fff;
-    }
-    .nav-links ul {
-      list-style: none;
-      display: flex;
-      gap: 1.2rem;
-      margin: 0;
-      padding: 0;
-    }
-    .nav-links a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-    .nav-links a:hover,
-    .nav-links .active {
-      opacity: 0.8;
-    }
-    .theme-toggle {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.4rem;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .theme-toggle:hover {
-      transform: scale(1.2);
-    }
+    html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; }
+    *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased; overflow-x: hidden;}
+    
+    /* Consistent Header Styling */
+    header{height:auto;min-height:64px;background:var(--brand-2);color:#fff;display:flex;align-items:center;padding:12px 20px;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:12px; width:100%;}
+    .brand{font-weight:700;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .nav-links{display:flex;gap:12px;margin:0 auto;flex-wrap:wrap;justify-content:center;}
+    .nav-links a{color:#fff;text-decoration:none;font-weight:500;padding:6px 10px;border-radius:6px;transition:background-color 0.2s;font-size:14px;}
+    .nav-links a:hover{background:rgba(255,255,255,0.1);}
+    .btn.ghost{background:transparent;border:1px solid var(--brand);color:var(--brand)}
+    
     main { padding-top: 1rem; }
     .hero {
       text-align: center;
@@ -184,25 +148,21 @@
 </head>
 
 <body>
-  <!-- ✅ NAVBAR -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="logo">
-        <a href="index.html">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo-img" style="height:32px;" loading="lazy">
-          <span class="brand-text">Convert Labs</span>
-        </a>
-      </div>
-      <nav class="nav-links">
-        <ul>
-          <li><a href="https://convertlabs.online/index.html" class="active">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-      <button id="themeToggle" class="theme-toggle" title="Toggle Theme">🌙</button>
+  <!-- ✅ CONSISTENT HEADER -->
+  <header>
+    <div class="brand">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+      <span>Convert Labs</span>
+    </div>
+    <nav class="nav-links">
+      <a href="https://convertlabs.online/index.html">Home</a>
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+      <a href="https://convertlabs.online/guides.html">Blog</a>
+      <a href="https://convertlabs.online/about.html">About</a>
+      <a href="https://convertlabs.online/contact.html">Contact</a>
+    </nav>
+    <div style="margin-left:auto;">
+      <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
     </div>
   </header>
 
@@ -236,18 +196,18 @@
   </p>
 
   <p style="color:#374151;margin-top:12px;">
-    If you’re searching for <strong>“grams to cups converter”</strong>, 
-    <strong>“ml to cups”</strong>, 
-    <strong>“ingredient weight to volume conversion”</strong>, 
-    <strong>“online calorie calculator with food database”</strong> or 
-    <strong>“TDEE calculator”</strong> — you’re in the right place. 
+    If you're searching for <strong>"grams to cups converter"</strong>, 
+    <strong>"ml to cups"</strong>, 
+    <strong>"ingredient weight to volume conversion"</strong>, 
+    <strong>"online calorie calculator with food database"</strong> or 
+    <strong>"TDEE calculator"</strong> — you're in the right place. 
     We designed every tool to be fast, simple, mobile-friendly and scientifically correct.
   </p>
 
   <h3 style="color:#1e40af;margin-top:28px;font-size:1.4rem;">Why Convert Labs?</h3>
   <ul style="color:#374151;margin-left:18px;">
     <li>✔ Accurate results with tested formulas</li>
-    <li>✔ Guides that explain the “why” behind conversions</li>
+    <li>✔ Guides that explain the "why" behind conversions</li>
     <li>✔ Optimized for mobile and fast loading</li>
     <li>✔ Supports both US and metric measurements</li>
     <li>✔ Free, simple and always easy to use</li>
@@ -281,7 +241,7 @@
       <h2>🆕 News & Updates</h2>
       <article>
         <h3>📅 October 2025 — New Educational Guides</h3>
-        <p>We’ve launched our <a href="guides.html">Guides & Learning Center</a> with step-by-step tutorials.</p>
+        <p>We've launched our <a href="guides.html">Guides & Learning Center</a> with step-by-step tutorials.</p>
       </article>
       <article>
         <h3>🚀 November 2025 — Website Optimization</h3>
@@ -342,19 +302,30 @@
   }
 </style>
 
+  <script>
+    // Theme toggle functionality
+    function initTheme() {
+      const savedTheme = localStorage.getItem('convertlabs-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark'); 
+        document.getElementById('themeToggle').textContent = '☀️';
+      } else { 
+        document.documentElement.classList.remove('dark'); 
+        document.getElementById('themeToggle').textContent = '🌙'; 
+      }
+    }
 
-  <script src="script.js" defer></script>
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initTheme();
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
