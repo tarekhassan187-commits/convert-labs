@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Kitchen measurements — Accurate measuring tips & conversions — Convert Labs</title>
-
   <meta name="description" content="How to measure accurately in the kitchen: grams vs cups, density effects, liquid vs dry measures, common pitfalls, conversions and real-world cooking examples." />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png">
   <link rel="stylesheet" href="https://convertlabs.online/style.css">
@@ -18,39 +17,110 @@
       --card-radius: 12px;
       --card-shadow: 0 10px 30px rgba(18,26,40,0.08);
       --footer-dark: #0e2440;
+      --brand: #0a4d8c;
+      --brand-2: #134b8b;
+      --bg: #f5faff;
+      --card: #fff;
+      --accent: #2b8bd8;
+      --radius: 12px;
+      --text: #111;
     }
-/* FORCE correct title color */
-html.light .hero-title {
-    color: #111 !important;
-}
 
-html.dark .hero-title {
-    color: #e6eef8 !important;
-}
+    html.dark {
+      --bg: #071029;
+      --card: #081226;
+      --text: #dbeafe;
+      --muted: #9aa9b8;
+      --accent: #34d399;
+    }
 
-    header.navbar {
-      background: var(--brand-blue);
-      padding: 10px 0;
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* === UNIFIED HEADER STYLES === */
+    header {
+      height: auto;
+      min-height: 64px;
+      background: var(--brand-2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
       position: sticky;
       top: 0;
-      z-index: 80;
-      box-shadow: 0 2px 6px rgba(2,6,23,0.08);
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
     }
 
-    .nav-container {
-      width: 92%;
-      max-width: var(--page-max);
+    .brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
       margin: 0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    .nav-links ul { display:flex; gap:.9rem; list-style:none; padding:0; margin:0; }
-    .nav-links a { color:#fff; font-weight:600; text-decoration:none; font-size:0.95rem; }
-    .nav-links a:hover { text-decoration:underline; opacity:.95; }
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+      font-size: 14px;
+    }
 
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn {
+      background: var(--brand);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--brand);
+      color: var(--brand);
+    }
+
+    .theme-toggle-container {
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* === EXISTING PAGE STYLES === */
     main.guide {
       max-width: var(--page-max);
       margin: 1.5rem auto;
@@ -96,32 +166,82 @@ html.dark .hero-title {
     }
 
     .guide-card {
-      background: #fff;
+      background: var(--card);
       border-radius: 12px;
       padding: 22px;
       box-shadow: var(--card-shadow);
       margin-top:18px;
+      color: var(--text);
     }
 
-    .guide-card h2{ color:#1345a8; margin-top:0; }
-    .guide-card h3{ color:#0b2a54; margin-top:1.1rem; }
+    .guide-card h2{ color:var(--brand-2); margin-top:0; }
+    .guide-card h3{ color:var(--brand-2); margin-top:1.1rem; }
 
     .muted { color: var(--muted); }
 
     pre.code { background:#0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; }
     .cheatsheet { background:#0f172a; color:#e6eef8; padding:12px; border-radius:8px; }
 
-    footer.footer { background: var(--brand-blue); color:#fff; margin-top:2.5rem; text-align:center; padding:2rem 1rem; }
+    /* === UNIFIED FOOTER STYLES === */
+    footer.footer { 
+      background: var(--brand-2); 
+      color:#fff; 
+      margin-top:2.5rem; 
+      text-align:center; 
+      padding:2rem 1rem; 
+      width: 100%;
+    }
+
+    footer.footer a { 
+      color: #f8fafc; 
+      text-decoration: none;
+    }
+
+    footer.footer a:hover { 
+      text-decoration: underline; 
+      color: #ffffff; 
+    }
 
     /* Dark-mode */
     html.dark .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color: #e6eef8; }
     html.dark .hero-sub { color:#b9c7db; }
     html.dark .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
-    html.dark .guide-card { background:#07121c; color:#dbeaf8; }
+    html.dark .guide-card { background: var(--card); color:#dbeaf8; }
     html.dark .muted{ color:#94a3b8; }
     html.dark pre.code{ background:#07121c; color:#cfe9ff; }
     html.dark .cheatsheet{ background:#0f172a; }
-    html.dark footer.footer { background: var(--footer-dark); }
+    html.dark footer.footer { background: var(--brand-2); }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 16px;
+        gap: 8px;
+      }
+      .nav-links {
+        gap: 8px;
+      }
+      .nav-links a {
+        padding: 5px 8px;
+        font-size: 13px;
+      }
+      .brand span {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 6px;
+      }
+      .nav-links a {
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+      header {
+        padding: 8px 12px;
+      }
+    }
 
     @media(max-width:720px){
       .hero-title { font-size:1.6rem; }
@@ -131,37 +251,25 @@ html.dark .hero-title {
 </head>
 
 <body class="theme-transition">
-
-  <!-- Header -->
-  <header class="navbar">
-    <div class="nav-container">
-
-      <!-- Restored logo — underline removed -->
-      <a class="brand"
-         href="https://convertlabs.online/index.html"
-         style="display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit;">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png"
-             alt="Convert Labs logo"
-             style="width:36px;height:36px;border-radius:8px;background:#fff;padding:4px;">
-        <span style="font-weight:700;color:#fff;">Convert Labs</span>
-      </a>
-
-      <nav class="nav-links">
-        <ul>
-          <li><a href="/index.html">Home</a></li>
-          <li><a href="/tools/tools.html">Tools</a></li>
-          <li><a href="/guides.html">Guides</a></li>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-
-      <button id="themeToggle" class="theme-toggle" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">🌙</button>
+  <!-- === UNIFIED HEADER === -->
+  <header role="banner">
+    <div class="brand">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+      <span>Convert Labs</span>
+    </div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="https://convertlabs.online/index.html">Home</a>
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+      <a href="https://convertlabs.online/guides.html">Blog</a>
+      <a href="https://convertlabs.online/about.html">About</a>
+      <a href="https://convertlabs.online/contact.html">Contact</a>
+    </nav>
+    <div class="theme-toggle-container">
+      <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
     </div>
   </header>
 
   <main class="guide">
-
     <!-- Hero -->
     <section class="hero">
       <h1 class="hero-title">Kitchen measurements — how to measure correctly</h1>
@@ -185,7 +293,7 @@ html.dark .hero-title {
 
       <h3>1. Why kitchen measurements are tricky</h3>
       <p>
-        Unlike water, ingredients like flour, sugar, oats and cocoa don’t have fixed density. A “cup” of flour can weigh anywhere from 100 g to 150 g depending on how it is scooped.
+        Unlike water, ingredients like flour, sugar, oats and cocoa don't have fixed density. A "cup" of flour can weigh anywhere from 100 g to 150 g depending on how it is scooped.
       </p>
 
       <h3>2. Liquid vs dry measuring — why they differ</h3>
@@ -208,7 +316,7 @@ html.dark .hero-title {
       <h3>4. Common pitfalls & how to avoid them</h3>
       <ul>
         <li>Never scoop flour directly — spoon it into the cup then level.</li>
-        <li>Don’t interchange liquid and dry cups; inaccuracies multiply.</li>
+        <li>Don't interchange liquid and dry cups; inaccuracies multiply.</li>
         <li>Use scales when precision matters (baking, doughs, chocolate work).</li>
         <li>Check your cup size: US cup = 240 mL, metric cup = 250 mL.</li>
       </ul>
@@ -243,75 +351,77 @@ console.log(grams(240, 0.52)); // ≈ 124.8 g (1 cup flour)
         <li><a href="https://convertlabs.online/guides.html">More guides & tutorials</a></li>
       </ul>
     </article>
-
   </main>
 
-  <!-- Footer -->
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <!-- === UNIFIED FOOTER === -->
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
     </div>
+    <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+      <p>✅ <strong>Domain Verification & Email Security</strong></p>
+      <p>
+        Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+        Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+        uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+      </p>
+      <p>
+        Email protection includes:
+        <ul style="list-style:none; padding:0; margin:5px 0;">
+          <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+          <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+          <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+        </ul>
+      </p>
+      <p>
+        These records confirm the legitimacy of our domain and improve deliverability,  
+        search engine trust, and AdSense approval readiness.
+      </p>
+    </section>
+  </footer>
 
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
-
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
-
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
-
- </footer>
-
-  <!-- Theme toggler -->
   <script>
-    (function(){
-      const html = document.documentElement;
-      const toggle = document.getElementById('themeToggle');
-      const stored = localStorage.getItem('site-theme');
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const initialDark = stored ? stored==="dark" : prefersDark;
-
-      function applyTheme(isDark){
-        html.classList.toggle("dark", isDark);
-        html.classList.toggle("light", !isDark);
-        toggle.textContent = isDark ? "☀️" : "🌙";
-        localStorage.setItem("site-theme", isDark ? "dark":"light");
+    // Theme toggle functionality
+    function initTheme() {
+      const savedTheme = localStorage.getItem('convertlabs-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeToggle').textContent = '☀️';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeToggle').textContent = '🌙';
       }
+    }
 
-      applyTheme(initialDark);
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+    }
 
-      toggle.addEventListener("click", ()=> applyTheme(!html.classList.contains("dark")));
-    })();
+    // Initialize theme and event listener
+    document.addEventListener('DOMContentLoaded', function() {
+      initTheme();
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    });
   </script>
-
 </body>
 </html>
