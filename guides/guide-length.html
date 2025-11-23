@@ -21,68 +21,113 @@
       --muted: #58616a;
       --footer-bg-light: #1e40af;
       --footer-bg-dark: #0e2440;
+      --brand: #0a4d8c;
+      --brand-2: #134b8b;
+      --bg: #f5faff;
+      --card: #fff;
+      --accent: #2b8bd8;
+      --radius: 12px;
     }
 
-    /* THEME */
-    body.light-mode {
-      background: var(--page-bg);
+    html.dark {
+      --bg: #071029;
+      --card: #081226;
+      --text: #dbeafe;
+      --muted: #9aa9b8;
+      --accent: #34d399;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
       color: var(--text);
-    }
-    body.dark-mode {
-      background: #07101a !important;
-      color: #e6eef8 !important;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    /* HEADER */
-    header.navbar {
-      background: var(--nav-bg);
+    /* === UNIFIED HEADER STYLES === */
+    header {
+      height: auto;
+      min-height: 64px;
+      background: var(--brand-2);
       color: #fff;
-      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
       position: sticky;
       top: 0;
-      z-index: 60;
-      box-shadow: 0 2px 6px rgba(2,6,23,0.08);
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
     }
-    .nav-container {
-      width: 92%;
-      max-width:1100px;
-      margin:auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .logo { display:flex; align-items:center; gap:10px; }
-    .logo img { height:40px; width:40px; border-radius:8px; }
-    .brand-text { font-weight:700; color: #fff; text-decoration: underline; text-underline-offset:6px; }
 
-    /* Header spacing fix */
-    .nav-links ul {
-      display:flex;
-      gap:.9rem !important;
-      margin:0;
-      padding:0;
-      list-style:none;
-      align-items:center;
+    .brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
     }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     .nav-links a {
-      color:#fff;
-      text-decoration:none;
-      padding:6px 4px;
-      font-weight:600;
-    }
-    .nav-links a:hover {
-      opacity:0.9;
-      text-decoration:underline;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+      font-size: 14px;
     }
 
-    /* MAIN */
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn {
+      background: var(--brand);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--brand);
+      color: var(--brand);
+    }
+
+    .theme-toggle-container {
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* === EXISTING PAGE STYLES === */
     main.guide {
       max-width:980px;
       margin:1.5rem auto;
       padding:1rem;
-    }
-    body.dark-mode main.guide {
-      background:#07101a !important;
     }
 
     /* HERO */
@@ -91,9 +136,6 @@
       padding-top: 4px;
       background: transparent;
       text-align:left;
-    }
-    body.dark-mode .hero {
-      background: transparent;
     }
 
     .hero-title {
@@ -107,8 +149,6 @@
       color: var(--muted);
       max-width:900px;
     }
-    body.dark-mode .hero-title { color:#e6eef8; }
-    body.dark-mode .hero-sub { color:#b9c7db; }
 
     /* BANNER */
     .banner-wrap {
@@ -130,30 +170,19 @@
       object-fit:contain;
       border-radius:8px;
     }
-    body.dark-mode .banner-wrap {
-      background:linear-gradient(180deg,#07101a,#081426) !important;
-    }
 
     /* CARDS */
     .guide-card{
-      background: var(--card-bg);
+      background: var(--card);
       border-radius:12px;
       padding:24px;
       margin-top:18px;
       box-shadow:var(--card-shadow);
+      color: var(--text);
     }
-    .guide-card h2{ color:#1345a8; margin-top:0; }
-    .guide-card h3{ color:#0b2a54; }
+    .guide-card h2{ color:var(--brand-2); margin-top:0; }
+    .guide-card h3{ color:var(--brand-2); }
     .muted { color:var(--muted); }
-
-    body.dark-mode .guide-card {
-      background:#0b1623 !important;
-      color:#dbeaf8 !important;
-      box-shadow:0 12px 32px rgba(0,0,0,0.6);
-    }
-    body.dark-mode .guide-card h2,
-    body.dark-mode .guide-card h3 { color:#9ec2ff !important; }
-    body.dark-mode .muted { color:#94a3b8 !important; }
 
     /* CODE */
     pre.code {
@@ -164,10 +193,6 @@
       overflow:auto;
       font-family: ui-monospace, Menlo, Monaco, "Roboto Mono", monospace;
     }
-    body.dark-mode pre.code {
-      background:#0f1b2b !important;
-      color:#cfe9ff !important;
-    }
 
     .cheatsheet {
       background:#0f172a;
@@ -176,49 +201,112 @@
       border-radius:8px;
     }
 
-    /* FOOTER */
-    footer.footer{
-      background:var(--footer-bg-light);
+    /* === UNIFIED FOOTER STYLES === */
+    footer.footer{ 
+      background: var(--brand-2); 
       color:#fff;
       text-align:center;
       padding:2rem 1rem;
       margin-top:2.5rem;
-    }
-    body.dark-mode footer.footer {
-      background:var(--footer-bg-dark) !important;
+      width: 100%;
     }
 
-    /* MOBILE */
+    footer.footer a { 
+      color: #f8fafc; 
+      text-decoration: none;
+    }
+
+    footer.footer a:hover { 
+      text-decoration: underline; 
+      color: #ffffff; 
+    }
+
+    /* DARK MODE */
+    html.dark .hero {
+      background: transparent;
+    }
+
+    html.dark .hero-title { color:#e6eef8; }
+    html.dark .hero-sub { color:#b9c7db; }
+
+    html.dark .banner-wrap {
+      background:linear-gradient(180deg,#07101a,#081426) !important;
+    }
+
+    html.dark .guide-card {
+      background: var(--card);
+      color:#dbeaf8;
+      box-shadow:0 12px 32px rgba(0,0,0,0.6);
+    }
+
+    html.dark .guide-card h2,
+    html.dark .guide-card h3 { color:#9ec2ff; }
+
+    html.dark .muted { color:#94a3b8; }
+
+    html.dark pre.code {
+      background:#0f1b2b;
+      color:#cfe9ff;
+    }
+
+    html.dark footer.footer {
+      background: var(--brand-2);
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 16px;
+        gap: 8px;
+      }
+      .nav-links {
+        gap: 8px;
+      }
+      .nav-links a {
+        padding: 5px 8px;
+        font-size: 13px;
+      }
+      .brand span {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 6px;
+      }
+      .nav-links a {
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+      header {
+        padding: 8px 12px;
+      }
+    }
+
     @media(max-width:720px){
       .hero-title{ font-size:1.55rem; }
       .banner-wrap img { max-height:220px; }
-      .nav-container{ width:94%; }
     }
   </style>
 </head>
 
 <body>
-  <!-- HEADER -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="logo">
-        <a href="https://convertlabs.online/index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo">
-          <span class="brand-text">Convert Labs</span>
-        </a>
-      </div>
-
-      <nav class="nav-links">
-        <ul>
-          <li><a href="https://convertlabs.online/index.html">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Guides</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-
-      <button id="themeToggle" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">🌙</button>
+  <!-- === UNIFIED HEADER === -->
+  <header role="banner">
+    <div class="brand">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+      <span>Convert Labs</span>
+    </div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="https://convertlabs.online/index.html">Home</a>
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+      <a href="https://convertlabs.online/guides.html">Blog</a>
+      <a href="https://convertlabs.online/about.html">About</a>
+      <a href="https://convertlabs.online/contact.html">Contact</a>
+    </nav>
+    <div class="theme-toggle-container">
+      <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
     </div>
   </header>
 
@@ -311,7 +399,7 @@ miles = m / 1609.344
         <li>Using rounded constants instead of exact ones</li>
         <li>Confusing mm and cm (frequent in carpentry)</li>
         <li>Rounding too early in multi-step calculations</li>
-        <li>Assuming “feet” and “inches” behave like decimals — they don’t</li>
+        <li>Assuming "feet" and "inches" behave like decimals — they don't</li>
       </ul>
 
       <h3>7. Practical measuring tips</h3>
@@ -348,76 +436,80 @@ function cmToFeetAndInches(cm){
         <li><a href="https://convertlabs.online/guides.html">All Guides</a></li>
       </ul>
 
-      <p><em>Tip: Save frequently used conversions as snippets (example: “cm → in = ÷2.54”) and avoid repeating math.</em></p>
+      <p><em>Tip: Save frequently used conversions as snippets (example: "cm → in = ÷2.54") and avoid repeating math.</em></p>
 
     </article>
   </main>
 
-  <!-- Footer -->
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <!-- === UNIFIED FOOTER === -->
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
     </div>
+    <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+      <p>✅ <strong>Domain Verification & Email Security</strong></p>
+      <p>
+        Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+        Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+        uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+      </p>
+      <p>
+        Email protection includes:
+        <ul style="list-style:none; padding:0; margin:5px 0;">
+          <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+          <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+          <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+        </ul>
+      </p>
+      <p>
+        These records confirm the legitimacy of our domain and improve deliverability,  
+        search engine trust, and AdSense approval readiness.
+      </p>
+    </section>
+  </footer>
 
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
-
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
-
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
-
-</footer>
-  <!-- THEME SCRIPT -->
   <script>
-    (function(){
-      const stored = localStorage.getItem('site-theme');
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const startDark = stored ? stored==='dark' : prefersDark;
-
-      function apply(d){
-        document.body.classList.toggle('dark-mode', d);
-        document.body.classList.toggle('light-mode', !d);
-        localStorage.setItem('site-theme', d?'dark':'light');
-        document.getElementById('themeToggle').textContent = d ? '☀️' : '🌙';
+    // Theme toggle functionality
+    function initTheme() {
+      const savedTheme = localStorage.getItem('convertlabs-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeToggle').textContent = '☀️';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeToggle').textContent = '🌙';
       }
+    }
 
-      apply(startDark);
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+    }
 
-      document.getElementById('themeToggle').addEventListener('click', () => {
-        apply(!document.body.classList.contains('dark-mode'));
-      });
-
-    })();
+    // Initialize theme and event listener
+    document.addEventListener('DOMContentLoaded', function() {
+      initTheme();
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    });
   </script>
 </body>
 </html>
