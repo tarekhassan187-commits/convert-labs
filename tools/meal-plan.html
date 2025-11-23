@@ -2077,42 +2077,17 @@ function checkTDEEOnLoad() {
     const messageContainer = document.getElementById('tdee-message-container');
     const mainContent = document.querySelector('.tool-page');
     
-    if (!userTDEE) {
+   if (!userTDEE) {
         // User doesn't have TDEE - show guidance message and hide main content
         if (messageContainer) {
             messageContainer.innerHTML = `
                 <div class="alert alert-info">
                     <h3>Welcome to Your Meal Planner!</h3>
                     <p>To generate your personalized 7-day meal plan, we first need to calculate your Daily Calorie Needs (TDEE).</p>
-                    <a href="calorie-calculator.html" class="btn-primary">Calculate Your TDEE First</a>
+                    <a href="calorie-guide.html" class="btn-primary">Calculate Your TDEE First</a>
                 </div>
             `;
         }
-        // Hide the main meal planner interface
-        if (mainContent) {
-            mainContent.style.display = 'none';
-        }
-    } else {
-        // User has TDEE - show welcome back message and ensure content is visible
-        if (messageContainer) {
-            messageContainer.innerHTML = `
-                <div class="alert alert-success">
-                    <p>Welcome back! Your plan is based on a <strong>${userTDEE} calorie</strong> target.</p>
-                </div>
-            `;
-        }
-        // Make sure the meal planner interface is visible
-        if (mainContent) {
-            mainContent.style.display = 'block';
-        }
-        
-        // Auto-fill the TDEE input field if it exists
-        const tdeeInput = document.getElementById('tdeeInput');
-        if (tdeeInput && !tdeeInput.value) {
-            tdeeInput.value = userTDEE;
-        }
-    }
-}
 // =============================
 // TDEE CHECK FOR DIRECT ACCESS
 // =============================
@@ -2128,7 +2103,7 @@ function checkTDEEOnLoad() {
                 <div class="alert alert-info">
                     <h3>Welcome to Your Meal Planner!</h3>
                     <p>To generate your personalized 7-day meal plan, we first need to calculate your Daily Calorie Needs (TDEE).</p>
-                    <a href="calorie-calculator.html" class="btn-primary">Calculate Your TDEE First</a>
+                    <a href="calorie-guide.html" class="btn-primary">Calculate Your TDEE First</a>
                 </div>
             `;
         }
@@ -2169,6 +2144,122 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // ... rest of your existing DOMContentLoaded code
 });
+        // Hide the main meal planner interface
+        if (mainContent) {
+            mainContent.style.display = 'none';
+        }
+    } else {
+        // User has TDEE - show welcome back message and ensure content is visible
+        if (messageContainer) {
+            messageContainer.innerHTML = `
+                <div class="alert alert-success">
+                    <p>Welcome back! Your plan is based on a <strong>${userTDEE} calorie</strong> target.</p>
+                </div>
+            `;
+        }
+        // Make sure the meal planner interface is visible
+        if (mainContent) {
+            mainContent.style.display = 'block';
+        }
+        
+        // Auto-fill the TDEE input field if it exists
+        const tdeeInput = document.getElementById('tdeeInput');
+        if (tdeeInput && !tdeeInput.value) {
+            tdeeInput.value = userTDEE;
+        }
+    }
+}
+// =============================
+// TDEE CHECK FOR DIRECT ACCESS
+// =============================
+function checkTDEEOnLoad() {
+    const userTDEE = localStorage.getItem('userTDEE');
+    const messageContainer = document.getElementById('tdee-message-container');
+    const mainContent = document.querySelector('.tool-page');
+    
+    if (!userTDEE) {
+        // User doesn't have TDEE - show guidance message and hide main content
+        if (messageContainer) {
+            messageContainer.innerHTML = `
+                <div class="alert alert-info">
+                    <h3>Welcome to Your Meal Planner!</h3>
+                    <p>To generate your personalized 7-day meal plan, we first need to calculate your Daily Calorie Needs (TDEE).</p>
+                    <a href="calorie-guide.html" class="btn-primary">Calculate Your TDEE First</a>
+                </div>
+            `;
+        }
+        // Hide the main meal planner interface
+        if (mainContent) {
+            mainContent.style.display = 'none';
+        }
+    } else {
+        // User has TDEE - show welcome back message and ensure content is visible
+        if (messageContainer) {
+            messageContainer.innerHTML = `
+                <div class="alert alert-success">
+                    <p>Welcome back! Your plan is based on a <strong>${userTDEE} calorie</strong> target.</p>
+                </div>
+            `;
+        }
+        // Make sure the meal planner interface is visible
+        if (mainContent) {
+            mainContent.style.display = 'block';
+        }
+        
+        // Auto-fill the TDEE input field if it exists
+        const tdeeInput = document.getElementById('tdeeInput');
+        if (tdeeInput && !tdeeInput.value) {
+            tdeeInput.value = userTDEE;
+        }
+    }
+}
+
+// =============================
+// TDEE CHECK FOR DIRECT ACCESS
+// =============================
+function checkTDEEOnLoad() {
+    const userTDEE = localStorage.getItem('userTDEE');
+    const messageContainer = document.getElementById('tdee-message-container');
+    const mainContent = document.querySelector('.tool-page');
+    
+    if (!userTDEE) {
+        // User doesn't have TDEE - show guidance message and hide main content
+        if (messageContainer) {
+            messageContainer.innerHTML = `
+                <div class="alert alert-info">
+                    <h3>Welcome to Your Meal Planner!</h3>
+                    <p>To generate your personalized 7-day meal plan, we first need to calculate your Daily Calorie Needs (TDEE).</p>
+                    <a href="calorie-guide.html" class="btn-primary">Calculate Your TDEE First</a>
+                </div>
+            `;
+        }
+        // Hide the main meal planner interface
+        if (mainContent) {
+            mainContent.style.display = 'none';
+        }
+    } else {
+        // User has TDEE - show welcome back message and ensure content is visible
+        if (messageContainer) {
+            messageContainer.innerHTML = `
+                <div class="alert alert-success">
+                    <p>Welcome back! Your plan is based on a <strong>${userTDEE} calorie</strong> target.</p>
+                </div>
+            `;
+        }
+        // Make sure the meal planner interface is visible
+        if (mainContent) {
+            mainContent.style.display = 'block';
+        }
+        
+        // Auto-fill the TDEE input field if it exists
+        const tdeeInput = document.getElementById('tdeeInput');
+        if (tdeeInput && !tdeeInput.value) {
+            tdeeInput.value = userTDEE;
+        }
+    }
+}
+
+
 </script>
 </body>
 </html>
