@@ -60,200 +60,347 @@
 
   <!-- Page Styles (Dark Theme Support) -->
   <style>
-    header.navbar {
-      background:#1e40af;
-      color:#fff;
-      padding:10px 0;
+    /* === CONSISTENT HEADER STYLES FROM MEAL-PLAN.HTML === */
+    :root {
+      --brand: #0a4d8c;
+      --brand-2: #134b8b;
+      --muted: #6c6c6c;
+      --bg: #f5faff;
+      --card: #fff;
+      --accent: #2b8bd8;
+      --radius: 12px;
+      --text: #111;
     }
 
-    .nav-container {
-      width:90%;
-      max-width:1100px;
-      margin:auto;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
+    html.dark {
+      --bg: #071029;
+      --card: #081226;
+      --text: #dbeafe;
+      --muted: #9aa9b8;
+      --accent: #34d399;
     }
 
-    .nav-links ul {
-      display:flex;
-      list-style:none;
-      gap:1.2rem;
-      margin:0;padding:0;
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    header {
+      height: auto;
+      min-height: 64px;
+      background: var(--brand-2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .nav-links a {
-      color:#fff;
-      text-decoration:none;
-      font-weight:500;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+      font-size: 14px;
     }
 
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn {
+      background: var(--brand);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--brand);
+      color: var(--brand);
+    }
+
+    /* Theme toggle container - fixed to prevent page elongation */
+    .theme-toggle-container {
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 16px;
+        gap: 8px;
+      }
+      .nav-links {
+        gap: 8px;
+      }
+      .nav-links a {
+        padding: 5px 8px;
+        font-size: 13px;
+      }
+      .brand span {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 6px;
+      }
+      .nav-links a {
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+      header {
+        padding: 8px 12px;
+      }
+    }
+
+    /* === EXISTING PAGE STYLES === */
     main {
-      max-width:900px;
-      margin:2rem auto;
-      padding:1.5rem;
-      line-height:1.7;
-      background:#f9fafc;
-      border-radius:10px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.08);
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      line-height: 1.7;
+      background: var(--card);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    h1,h2 { color:#111; }
-    ul { padding-left:1.5rem; }
+    h1, h2 { color: var(--brand-2); }
+    ul { padding-left: 1.5rem; }
 
     /* DARK MODE */
-    html.dark main,
-    body.dark main {
-      background:#1b2435 !important;
-      color:#e6eef8 !important;
-      border:1px solid #2c3b53 !important;
-      box-shadow:0 10px 26px rgba(0,0,0,0.6) !important;
+    html.dark main {
+      background: var(--card) !important;
+      color: var(--text) !important;
+      border: 1px solid #2c3b53 !important;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.6) !important;
     }
 
-    html.dark h1, body.dark h1 { color:#93c5fd !important; }
-    html.dark h2, body.dark h2 { color:#a5c8ff !important; }
-    html.dark p, html.dark li { color:#cbd5e1 !important; }
+    html.dark h1 { color: #93c5fd !important; }
+    html.dark h2 { color: #a5c8ff !important; }
+    html.dark p, html.dark li { color: var(--text) !important; }
 
+    /* Footer with same color as header */
     footer.footer {
-      background:#1e40af;
-      color:#fff;
-      text-align:center;
-      padding:2rem 1rem;
-      margin-top:3rem;
+      background: var(--brand-2);
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      width: 100%;
     }
-    footer.footer a { color:#f8fafc; }
+
+    footer.footer a { 
+      color: #f8fafc; 
+      text-decoration: none;
+    }
+
+    footer.footer a:hover { 
+      text-decoration: underline; 
+      color: #ffffff; 
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+    }
   </style>
 </head>
 
 <body>
 
-<!-- Header -->
-<header class="navbar">
-  <div class="nav-container">
-    <a href="https://convertlabs.online/index.html" class="logo" style="display:flex;gap:8px;align-items:center;text-decoration:none;color:white;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" style="height:32px;">
+  <!-- === CONSISTENT HEADER FROM MEAL-PLAN.HTML === -->
+  <header>
+    <div class="brand">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
       <span>Convert Labs</span>
-    </a>
-
-    <nav class="nav-links">
-      <ul>
-        <li><a href="https://convertlabs.online/index.html">Home</a></li>
-        <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-        <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-        <li><a href="https://convertlabs.online/about.html">About</a></li>
-        <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-      </ul>
-    </nav>
-
-    <button id="themeToggle" class="theme-toggle">🌙</button>
-  </div>
-</header>
-
-<!-- Main Content -->
-<main>
-  <h1>Terms of Use</h1>
-  <p><strong>Last updated:</strong> November 2025</p>
-
-  <p>By using <strong>Convert Labs</strong> (<a href="https://convertlabs.online">convertlabs.online</a>), you agree to these Terms of Use. If you do not agree, please stop using the site.</p>
-
-  <h2>1. Purpose of This Website</h2>
-  <p>Convert Labs offers calculators, converters, and educational utilities designed for general and informational use only.  
-  The site does <strong>not</strong> provide professional engineering, scientific, medical, legal, or financial advice.</p>
-
-  <h2>2. Accuracy of Tools</h2>
-  <p>We strive for accuracy and rely on reputable public data sources, but results may vary due to rounding, formula differences, or external factors.</p>
-  <p><strong>You should independently verify critical or professional calculations.</strong></p>
-
-  <h2>3. Data Sources</h2>
-  <p>Examples of data sources include:</p>
-  <ul>
-    <li>ISO & NIST conversion standards</li>
-    <li><a href="https://exchangerate.host/" target="_blank">Exchangerate.host</a> & <a href="https://open.er-api.com/" target="_blank">Open Exchange Rates API</a></li>
-    <li>Scientific and educational references</li>
-  </ul>
-
-  <h2>4. Disclaimer of Warranties</h2>
-  <p>All content is provided “as is” without warranties of any kind.  
-  We cannot guarantee accuracy, reliability, availability, or uninterrupted service.</p>
-
-  <h2>5. Limitation of Liability</h2>
-  <p>Convert Labs is not responsible for any damages, issues, or losses resulting from:</p>
-  <ul>
-    <li>Incorrect calculations</li>
-    <li>Data errors</li>
-    <li>Temporary downtime</li>
-    <li>Use of conversion or estimation results</li>
-  </ul>
-
-  <h2>6. External Links</h2>
-  <p>Links to third-party websites are provided for convenience.  
-  Convert Labs has no control over external content or policies.</p>
-
-  <h2>7. Advertising & Cookies</h2>
-  <p>Convert Labs uses Google AdSense and Google Analytics.  
-  Cookies may be used for ad personalization and usage insights.</p>
-  <p>You may manage ad preferences at:  
-    <a href="https://www.google.com/settings/ads" target="_blank">Google Ads Settings</a>.
-  </p>
-
-  <h2>8. Acceptable Use</h2>
-  <p>You agree not to attempt to hack, reverse-engineer, overload, copy, or exploit our tools or servers.</p>
-
-  <h2>9. Modifications</h2>
-  <p>We may update these Terms at any time. Updates will be posted on this page with an updated revision date.</p>
-
-  <h2>10. Contact</h2>
-  <p>If you have any questions about these Terms, contact us at:  
-    <a href="mailto:contact@convertlabs.online">contact@convertlabs.online</a>
-  </p>
-</main>
-
-<!-- Footer -->
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
     </div>
-
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
-
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
-
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+    <nav class="nav-links">
+      <a href="https://convertlabs.online/index.html">Home</a>
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+      <a href="https://convertlabs.online/guides.html">Blog</a>
+      <a href="https://convertlabs.online/about.html">About</a>
+      <a href="https://convertlabs.online/contact.html">Contact</a>
     </nav>
-  </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
+    <div class="theme-toggle-container">
+      <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
+    </div>
+  </header>
 
-</footer>
-<script src="https://convertlabs.online/script.js" defer></script>
+  <!-- Main Content -->
+  <main>
+    <h1>Terms of Use</h1>
+    <p><strong>Last updated:</strong> November 2025</p>
+
+    <p>By using <strong>Convert Labs</strong> (<a href="https://convertlabs.online">convertlabs.online</a>), you agree to these Terms of Use. If you do not agree, please stop using the site.</p>
+
+    <h2>1. Purpose of This Website</h2>
+    <p>Convert Labs offers calculators, converters, and educational utilities designed for general and informational use only.  
+    The site does <strong>not</strong> provide professional engineering, scientific, medical, legal, or financial advice.</p>
+
+    <h2>2. Accuracy of Tools</h2>
+    <p>We strive for accuracy and rely on reputable public data sources, but results may vary due to rounding, formula differences, or external factors.</p>
+    <p><strong>You should independently verify critical or professional calculations.</strong></p>
+
+    <h2>3. Data Sources</h2>
+    <p>Examples of data sources include:</p>
+    <ul>
+      <li>ISO & NIST conversion standards</li>
+      <li><a href="https://exchangerate.host/" target="_blank">Exchangerate.host</a> & <a href="https://open.er-api.com/" target="_blank">Open Exchange Rates API</a></li>
+      <li>Scientific and educational references</li>
+    </ul>
+
+    <h2>4. Disclaimer of Warranties</h2>
+    <p>All content is provided "as is" without warranties of any kind.  
+    We cannot guarantee accuracy, reliability, availability, or uninterrupted service.</p>
+
+    <h2>5. Limitation of Liability</h2>
+    <p>Convert Labs is not responsible for any damages, issues, or losses resulting from:</p>
+    <ul>
+      <li>Incorrect calculations</li>
+      <li>Data errors</li>
+      <li>Temporary downtime</li>
+      <li>Use of conversion or estimation results</li>
+    </ul>
+
+    <h2>6. External Links</h2>
+    <p>Links to third-party websites are provided for convenience.  
+    Convert Labs has no control over external content or policies.</p>
+
+    <h2>7. Advertising & Cookies</h2>
+    <p>Convert Labs uses Google AdSense and Google Analytics.  
+    Cookies may be used for ad personalization and usage insights.</p>
+    <p>You may manage ad preferences at:  
+      <a href="https://www.google.com/settings/ads" target="_blank">Google Ads Settings</a>.
+    </p>
+
+    <h2>8. Acceptable Use</h2>
+    <p>You agree not to attempt to hack, reverse-engineer, overload, copy, or exploit our tools or servers.</p>
+
+    <h2>9. Modifications</h2>
+    <p>We may update these Terms at any time. Updates will be posted on this page with an updated revision date.</p>
+
+    <h2>10. Contact</h2>
+    <p>If you have any questions about these Terms, contact us at:  
+      <a href="mailto:contact@convertlabs.online">contact@convertlabs.online</a>
+    </p>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
+    </div>
+    <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+      <p>✅ <strong>Domain Verification & Email Security</strong></p>
+      <p>
+        Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+        Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+        uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+      </p>
+      <p>
+        Email protection includes:
+        <ul style="list-style:none; padding:0; margin:5px 0;">
+          <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+          <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+          <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+        </ul>
+      </p>
+      <p>
+        These records confirm the legitimacy of our domain and improve deliverability,  
+        search engine trust, and AdSense approval readiness.
+      </p>
+    </section>
+  </footer>
+
+  <script>
+    // Theme toggle functionality
+    function initTheme() {
+      const savedTheme = localStorage.getItem('convertlabs-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeToggle').textContent = '☀️';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeToggle').textContent = '🌙';
+      }
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+    }
+
+    // Initialize theme and event listener
+    document.addEventListener('DOMContentLoaded', function() {
+      initTheme();
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    });
+  </script>
 
 </body>
 </html>
-
