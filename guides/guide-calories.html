@@ -10,6 +10,144 @@
 
   <!-- Page-specific styles (keeps layout consistent with other guides) -->
   <style>
+    /* === CONSISTENT HEADER STYLES FROM MEAL-PLAN.HTML === */
+    :root {
+      --brand: #0a4d8c;
+      --brand-2: #134b8b;
+      --muted: #6c6c6c;
+      --bg: #f5faff;
+      --card: #fff;
+      --accent: #2b8bd8;
+      --radius: 12px;
+      --text: #111;
+    }
+
+    html.dark {
+      --bg: #071029;
+      --card: #081226;
+      --text: #dbeafe;
+      --muted: #9aa9b8;
+      --accent: #34d399;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    header {
+      height: auto;
+      min-height: 64px;
+      background: var(--brand-2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn {
+      background: var(--brand);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--brand);
+      color: var(--brand);
+    }
+
+    /* Theme toggle container - fixed to prevent page elongation */
+    .theme-toggle-container {
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 16px;
+        gap: 8px;
+      }
+      .nav-links {
+        gap: 8px;
+      }
+      .nav-links a {
+        padding: 5px 8px;
+        font-size: 13px;
+      }
+      .brand span {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 6px;
+      }
+      .nav-links a {
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+      header {
+        padding: 8px 12px;
+      }
+    }
+
+    /* === EXISTING PAGE STYLES === */
     :root{
       --page-max: 980px;
       --brand-blue: #1e40af;
@@ -20,32 +158,6 @@
       --card-bg: #ffffff;
       --footer-dark: #0e2440;
     }
-
-    /* Header */
-    header.navbar {
-      background: var(--brand-blue);
-      padding: 10px 0;
-      position: sticky;
-      top: 0;
-      z-index: 80;
-      box-shadow: 0 2px 6px rgba(2,6,23,0.08);
-    }
-    .nav-container {
-      width: 92%;
-      max-width: var(--page-max);
-      margin: 0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
-    .brand img { width:36px; height:36px; border-radius:8px; background:#fff; padding:4px; display:block; }
-    .brand-text { color:#fff; font-weight:700; text-decoration:none; /* remove underline */ }
-
-    .nav-links ul { display:flex; gap:.9rem; margin:0; padding:0; list-style:none; align-items:center; }
-    .nav-links a { color:#fff; text-decoration:none; padding:6px 4px; font-weight:600; font-size:0.95rem; }
-    .nav-links a:hover { opacity:.95; text-decoration:underline; }
 
     main.guide {
       max-width: var(--page-max);
@@ -69,7 +181,7 @@
       line-height: 1.05;
       margin: 6px 0;
       font-weight: 800;
-      color: var(--text-color);
+      color: var(--text);
     }
     .hero-sub { color: var(--muted); margin-bottom: 12px; max-width:980px; }
 
@@ -99,20 +211,45 @@
 
     /* Guide card */
     .guide-card {
-      background: var(--card-bg);
+      background: var(--card);
       border-radius: 12px;
       box-shadow: var(--card-shadow);
       padding: 22px;
       margin-top: 18px;
     }
-    .guide-card h2{ color:#1345a8; margin-top:0; }
-    .guide-card h3{ color:#0b2a54; margin-top:1.1rem; }
+    .guide-card h2{ color: var(--brand-2); margin-top:0; }
+    .guide-card h3{ color: var(--brand-2); margin-top:1.1rem; }
     .muted { color: var(--muted); }
 
     pre.code { background:#0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
     .cheatsheet { background:#0f172a; color:#e6eef8; padding:12px; border-radius:8px; font-family:mono; }
 
-    footer.footer { background: var(--brand-blue); color:#fff; text-align:center; padding:2rem 1rem; margin-top:2.5rem; }
+    /* Footer with same color as header */
+    footer.footer { 
+      background: var(--brand-2); 
+      color:#fff; 
+      text-align:center; 
+      padding:2rem 1rem; 
+      margin-top:2.5rem; 
+      width: 100%;
+    }
+
+    footer.footer a { 
+      color: #f8fafc; 
+      text-decoration: none;
+    }
+
+    footer.footer a:hover { 
+      text-decoration: underline; 
+      color: #ffffff; 
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+    }
 
     /* Dark-mode overrides (html.dark) */
     html.dark {
@@ -122,38 +259,33 @@
     html.dark .hero { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
     html.dark .hero-sub { color: #b9c7db; }
     html.dark .banner-wrap { background: linear-gradient(180deg,#07101a,#081426); }
-    html.dark .guide-card { background: #07121c; color: #dbeaf8; box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
+    html.dark .guide-card { background: var(--card); color: var(--text); box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
     html.dark pre.code { background:#07121c; color:#cfe9ff; }
-    html.dark .muted { color:#94a3b8; }
-    html.dark footer.footer { background: var(--footer-dark); }
+    html.dark .muted { color: var(--muted); }
+    html.dark footer.footer { background: var(--brand-2); }
 
     @media (max-width:720px){
       .hero-title { font-size:1.6rem; }
       .banner-wrap img { max-height: 240px; object-fit: cover; }
-      .nav-container { width:94%; }
     }
   </style>
 </head>
 <body class="theme-transition">
-  <!-- Header -->
-  <header class="navbar" role="banner">
-    <div class="nav-container">
-      <a class="brand" href="https://convertlabs.online/index.html" aria-label="Convert Labs home">
-        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo">
-        <span class="brand-text">Convert Labs</span>
-      </a>
-
-      <nav aria-label="Main navigation" class="nav-links">
-        <ul>
-          <li><a href="https://convertlabs.online/index.html">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Guides</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-
-      <button id="themeToggle" class="theme-toggle" title="Switch theme" aria-label="Switch theme" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">🌙</button>
+  <!-- === CONSISTENT HEADER FROM MEAL-PLAN.HTML === -->
+  <header role="banner">
+    <div class="brand">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+      <span>Convert Labs</span>
+    </div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="https://convertlabs.online/index.html">Home</a>
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+      <a href="https://convertlabs.online/guides.html">Blog</a>
+      <a href="https://convertlabs.online/about.html">About</a>
+      <a href="https://convertlabs.online/contact.html">Contact</a>
+    </nav>
+    <div class="theme-toggle-container">
+      <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
     </div>
   </header>
 
@@ -176,7 +308,7 @@
       <h2 id="guide-h2">Quick summary — what this guide covers</h2>
       <p class="muted">Accurate definitions of kilocalories and kilojoules, how energy values in food are measured/estimated, conversions and rounding rules, label-reading & portioning tips, using density for recipe scaling, and copy-ready calculator logic for developers.</p>
 
-      <h3>1. What exactly is a “calorie” on food labels?</h3>
+      <h3>1. What exactly is a "calorie" on food labels?</h3>
       <p>
         In nutrition the "calorie" displayed is actually a kilocalorie (kcal): the energy required to raise 1 kilogram of water by 1°C. In SI units you'll also see kilojoules (kJ). Exact conversion: <strong>1 kcal = 4.184 kJ</strong>. Food databases record energy per 100 g or per serving — use those base values for precise calculations.
       </p>
@@ -295,42 +427,31 @@ console.log(perServing(150, 250)); // 375 kcal
   </section>
   </footer>
 
-  <!-- Theme toggle script: applies html.dark / html.light and persists preference -->
   <script>
-    (function(){
-      const html = document.documentElement;
-      const toggle = document.getElementById('themeToggle');
-
-      const stored = localStorage.getItem('site-theme'); // 'dark' or 'light' or null
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialDark = stored ? (stored === 'dark') : prefersDark;
-
-      function applyTheme(isDark){
-        if(isDark){
-          html.classList.add('dark');
-          html.classList.remove('light');
-          toggle.textContent = '☀️';
-        } else {
-          html.classList.add('light');
-          html.classList.remove('dark');
-          toggle.textContent = '🌙';
-        }
-        localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+    // Theme toggle functionality
+    function initTheme() {
+      const savedTheme = localStorage.getItem('convertlabs-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeToggle').textContent = '☀️';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeToggle').textContent = '🌙';
       }
+    }
 
-      applyTheme(initialDark);
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+    }
 
-      toggle.addEventListener('click', () => {
-        applyTheme(!html.classList.contains('dark'));
-      });
-
-      if(window.matchMedia){
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-          const storedPref = localStorage.getItem('site-theme');
-          if(!storedPref) applyTheme(e.matches);
-        });
-      }
-    })();
+    // Initialize theme and event listener
+    document.addEventListener('DOMContentLoaded', function() {
+      initTheme();
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    });
   </script>
 </body>
 </html>
