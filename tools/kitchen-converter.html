@@ -597,6 +597,65 @@
       }
     }
 
+    // Ingredient density data (grams per cup)
+    const ingredientDensities = {
+      // Baking Staples
+      "all-purpose flour": 125,
+      "bread flour": 127,
+      "cake flour": 114,
+      "granulated sugar": 200,
+      "brown sugar packed": 220,
+      "powdered sugar": 120,
+      "salt (table)": 292,
+      "baking powder": 230,
+      "baking soda": 220,
+      "cocoa powder": 100,
+      "cornstarch": 128,
+      
+      // Dairy & Fats
+      "butter": 227,
+      "milk (whole)": 240,
+      "cream cheese": 227,
+      "yogurt (plain)": 245,
+      "cheese (grated)": 113,
+      "mayonnaise": 230,
+      
+      // Oils & Syrups
+      "olive oil": 216,
+      "maple syrup": 312,
+      "honey": 340,
+      "molasses": 340,
+      "corn syrup": 328,
+      
+      // Nuts & Flours
+      "almond flour": 96,
+      "coconut flour": 112,
+      "peanut butter": 258,
+      
+      // Miscellaneous
+      "rice (uncooked)": 185,
+      "oats (rolled)": 90,
+      "yeast (active dry)": 150,
+      "water": 240
+    };
+
+    // Unit conversion factors (relative to cups)
+    const unitFactors = {
+      // Volume units
+      "cup": 1,
+      "tablespoon": 1/16,
+      "teaspoon": 1/48,
+      "liter": 4.22675,
+      "milliliter": 0.00422675,
+      "fluid_ounce": 0.125,
+      
+      // Weight units
+      "gram": null, // Will be calculated based on ingredient density
+      "kilogram": null, // Will be calculated based on ingredient density
+      "pound": null, // Will be calculated based on ingredient density
+      "ounce": null // Will be calculated based on ingredient density
+    };
+
     function convertKitchen() {
       const input = document.getElementById("kitchenInput");
       const from = document.getElementById("kitchenFrom");
@@ -613,18 +672,63 @@
       // Send analytics event
       sendToolEvent('kitchen_converter');
 
-      // Conversion logic would go here
-      // This is a simplified version - you would need to implement the actual conversion logic
-      // based on ingredient densities and unit conversions
+      const fromUnit = from.value;
+      const toUnit = to.value;
+      const ingredientName = ingredient.value;
+      const fromUnitText = from.options[from.selectedIndex].text;
+      const toUnitText = to.options[to.selectedIndex].text;
+      const ingredientText = ingredient.options[ingredient.selectedIndex].text;
+
+      // Get ingredient density
+      const density = ingredientDensities[ingredientName];
+      if (!density) {
+        result.textContent = "Density data not available for this ingredient.";
+        return;
+      }
+
+      // Convert to cups first (common base unit)
+      let cups;
       
-      const fromUnit = from.options[from.selectedIndex].text;
-      const toUnit = to.options[to.selectedIndex].text;
-      const ingredientName = ingredient.options[ingredient.selectedIndex].text;
+      if (unitFactors[fromUnit] !== null) {
+        // Volume to volume conversion
+        cups = amount * unitFactors[fromUnit];
+      } else {
+        // Weight to volume conversion
+        cups = amount / density;
+      }
+
+      // Convert from cups to target unit
+      let converted;
       
+      if (unitFactors[toUnit] !== null) {
+        // Volume to volume conversion
+        converted = cups / unitFactors[toUnit];
+      } else {
+        // Volume to weight conversion
+        converted = cups * density;
+        
+        // Handle unit conversions within weight units
+        if (toUnit === "kilogram") {
+          converted = converted / 1000;
+        } else if (toUnit === "pound") {
+          converted = converted / 453.592;
+        } else if (toUnit === "ounce") {
+          converted = converted / 28.3495;
+        }
+        // "gram" unit is already in grams
+      }
+
+      // Format the result
+      let precision = 2;
+      if (Math.abs(converted) < 0.1) precision = 4;
+      else if (Math.abs(converted) < 1) precision = 3;
+      else if (Math.abs(converted) < 10) precision = 2;
+      else precision = 1;
+
       result.innerHTML = `
-        <strong>${amount} ${fromUnit}</strong> of ${ingredientName} = 
-        <strong>${(amount * 2.5).toFixed(2)} ${toUnit}</strong><br>
-        <small>Note: This is a simplified conversion. Actual conversion would use ingredient-specific densities.</small>
+        <strong>${amount} ${fromUnitText}</strong> of ${ingredientText} = 
+        <strong>${converted.toFixed(precision)} ${toUnitText}</strong><br>
+        <small>Based on density: ${density}g per cup</small>
       `;
     }
 
