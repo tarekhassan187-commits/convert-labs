@@ -52,6 +52,8 @@
 
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
+  
+  <!-- Global CSS (site-wide) -->
   <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
   <!-- ✅ Google AdSense -->
@@ -66,188 +68,392 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- ✅ INLINE STYLE FIXES -->
+  <!-- Page-specific styles -->
   <style>
-    main.tool-page {
-      max-width: 1100px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+    :root {
+      --page-max: 1100px;
+      --card-radius: 12px;
+      --brand-blue: #1e40af;
+      --muted: #58616a;
+      --card-shadow: 0 10px 30px rgba(18, 26, 40, 0.08);
+      --footer-dark: #0e2440;
+      --brand: #0a4d8c;
+      --brand-2: #134b8b;
+      --bg: #f5faff;
+      --card: #fff;
+      --accent: #2b8bd8;
+      --radius: 12px;
+      --text: #111;
     }
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
+
+    html.dark {
+      --bg: #071029;
+      --card: #081226;
+      --text: #dbeafe;
+      --muted: #9aa9b8;
+      --accent: #34d399;
     }
-    .tool-card {
-      background: var(--card-bg, #f8fafc);
-      border-radius: 8px;
-      padding: 1rem;
-      text-decoration: none;
-      color: inherit;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .tool-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    header.navbar {
-      background: #1e40af;
-      color: #fff;
-      padding: 10px 0;
-    }
-    .nav-container {
-      width: 90%;
-      max-width: 1100px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .nav-links ul {
-      list-style: none;
-      display: flex;
-      gap: 1.2rem;
+
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
       margin: 0;
-      padding: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
+
+    /* === UNIFIED HEADER STYLES === */
+    header {
+      height: auto;
+      min-height: 64px;
+      background: var(--brand-2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     .nav-links a {
       color: #fff;
       text-decoration: none;
       font-weight: 500;
-      transition: opacity 0.2s;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+      font-size: 14px;
     }
-    .nav-links a:hover, .nav-links .active { opacity: 0.8; }
-    .theme-toggle {
-      background: none;
-      border: none;
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn {
+      background: var(--brand);
       color: #fff;
-      font-size: 1.4rem;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 0;
       cursor: pointer;
-      transition: transform 0.2s;
+      font-weight: 600;
+      transition: all 0.2s;
+      flex-shrink: 0;
     }
-    .theme-toggle:hover { transform: scale(1.2); }
-    footer.footer {
-      background: #1e40af;
-      color: #fff;
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--brand);
+      color: var(--brand);
+    }
+
+    .theme-toggle-container {
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* === UNIFIED FOOTER STYLES === */
+    footer.footer { 
+      background: var(--brand-2); 
+      color:#fff; 
+      text-align:center; 
+      padding:2rem 1rem; 
+      margin-top:2.5rem; 
+      width: 100%;
+    }
+
+    footer.footer a { 
+      color: #f8fafc; 
+      text-decoration: none;
+    }
+
+    footer.footer a:hover { 
+      text-decoration: underline; 
+      color: #ffffff; 
+    }
+
+    /* Main tool styles */
+    main.tool-page {
+      max-width: var(--page-max);
+      margin: 1.5rem auto;
+      padding: 0 1rem;
       text-align: center;
-      padding: 2rem 1rem;
-      margin-top: 3rem;
     }
-    footer.footer a { color: #fff; text-decoration: none; }
-    footer.footer a:hover { text-decoration: underline; }
+
+    h1 {
+      color: var(--brand-2);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      color: var(--brand-2);
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .tool-card {
+      background: var(--card);
+      border-radius: var(--card-radius);
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .tool-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(18, 26, 40, 0.15);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .tool-card h3 {
+      color: var(--brand-2);
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-card p {
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Dark mode overrides */
+    html.dark h1,
+    html.dark h2,
+    html.dark .tool-card h3 {
+      color: #93c5fd;
+    }
+
+    html.dark .tool-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    html.dark .tool-card p {
+      color: #9ca3af;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 16px;
+        gap: 8px;
+      }
+      .nav-links {
+        gap: 8px;
+      }
+      .nav-links a {
+        padding: 5px 8px;
+        font-size: 13px;
+      }
+      .brand span {
+        font-size: 14px;
+      }
+      .tool-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      main.tool-page {
+        margin: 1.5rem 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 6px;
+      }
+      .nav-links a {
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+      header {
+        padding: 8px 12px;
+      }
+      .tool-card {
+        padding: 1rem;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <!-- ✅ NAVBAR -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="logo">
-        <a href="https://convertlabs.online/" aria-label="Convert Labs Home">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo-img" style="height:32px;" loading="lazy">
-          <span class="brand-text">Convert Labs</span>
-        </a>
-      </div>
-      <nav class="nav-links">
-        <ul>
-          <li><a href="https://convertlabs.online/">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html" class="active">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+  <!-- === UNIFIED HEADER === -->
+  <header role="banner">
+    <div class="brand">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+      <span>Convert Labs</span>
+    </div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="https://convertlabs.online/index.html">Home</a>
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+      <a href="https://convertlabs.online/guides.html">Blog</a>
+      <a href="https://convertlabs.online/about.html">About</a>
+      <a href="https://convertlabs.online/contact.html">Contact</a>
+    </nav>
+    <div class="theme-toggle-container">
+      <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
     </div>
   </header>
 
   <!-- ✅ MAIN CONTENT -->
-  <main class="tool-page" style="text-align:center;">
+  <main class="tool-page" role="main">
     <h1>All Conversion Tools</h1>
-    <p style="max-width:700px;margin:auto;">
+    <p style="max-width:700px;margin:auto;color:var(--muted);">
       Welcome to the <strong>Convert Labs Tools Hub</strong> — your one-stop destination for accurate, free, and educational converters.
       Explore our entire collection below, covering daily life, study, travel, cooking, and design needs.
     </p>
 
     <section class="tool-grid">
-        <a href="https://convertlabs.online/tools/calorie-calculator.html" class="tool-card"><h3>🔥 Calorie Calculator</h3><p>Estimate meal calories using food names and serving weights.</p></a>
-      <a href="https://convertlabs.online/tools/kitchen-converter.html" class="tool-card"><h3>🥣 Kitchen Converter</h3><p>Convert ingredients between grams, cups, tablespoons, and teaspoons.</p></a>
-      <a href="https://convertlabs.online/tools/length-converter.html" class="tool-card"><h3>📏 Length Converter</h3><p>Convert meters, centimeters, inches, feet, and miles instantly.</p></a>
-      <a href="https://convertlabs.online/tools/temperature-converter.html" class="tool-card"><h3>🌡 Temperature Converter</h3><p>Switch easily between Celsius, Fahrenheit, Kelvin, and more.</p></a>
-      <a href="https://convertlabs.online/tools/volume-converter.html" class="tool-card"><h3>🧴 Volume Converter</h3><p>Convert liters, milliliters, gallons (US/UK), and cubic units.</p></a>
-      <a href="https://convertlabs.online/tools/container-calculator.html" class="tool-card"><h3>📦 Container Volume Calculator</h3><p>Estimate box or cylinder volumes and mass with liquid densities.</p></a>
-      <a href="https://convertlabs.online/tools/currency-converter.html" class="tool-card"><h3>💱 Currency Converter</h3><p>Check real-time exchange rates for global currencies (USD, EUR, AED, EGP, etc.).</p></a>
-      <a href="https://convertlabs.online/tools/image-converter.html" class="tool-card"><h3>🖼 Image Converter</h3><p>Convert images between JPG, PNG, WEBP, and GIF formats — safely in your browser.</p></a>
-    
+      <a href="https://convertlabs.online/tools/calorie-calculator.html" class="tool-card">
+        <h3>🔥 Calorie Calculator</h3>
+        <p>Estimate meal calories using food names and serving weights.</p>
+      </a>
+      <a href="https://convertlabs.online/tools/kitchen-converter.html" class="tool-card">
+        <h3>🥣 Kitchen Converter</h3>
+        <p>Convert ingredients between grams, cups, tablespoons, and teaspoons.</p>
+      </a>
+      <a href="https://convertlabs.online/tools/length-converter.html" class="tool-card">
+        <h3>📏 Length Converter</h3>
+        <p>Convert meters, centimeters, inches, feet, and miles instantly.</p>
+      </a>
+      <a href="https://convertlabs.online/tools/temperature-converter.html" class="tool-card">
+        <h3>🌡 Temperature Converter</h3>
+        <p>Switch easily between Celsius, Fahrenheit, Kelvin, and more.</p>
+      </a>
+      <a href="https://convertlabs.online/tools/volume-converter.html" class="tool-card">
+        <h3>🧴 Volume Converter</h3>
+        <p>Convert liters, milliliters, gallons (US/UK), and cubic units.</p>
+      </a>
+      <a href="https://convertlabs.online/tools/container-calculator.html" class="tool-card">
+        <h3>📦 Container Volume Calculator</h3>
+        <p>Estimate box or cylinder volumes and mass with liquid densities.</p>
+      </a>
+      <a href="https://convertlabs.online/tools/currency-converter.html" class="tool-card">
+        <h3>💱 Currency Converter</h3>
+        <p>Check real-time exchange rates for global currencies (USD, EUR, AED, EGP, etc.).</p>
+      </a>
+      <a href="https://convertlabs.online/tools/image-converter.html" class="tool-card">
+        <h3>🖼 Image Converter</h3>
+        <p>Convert images between JPG, PNG, WEBP, and GIF formats — safely in your browser.</p>
+      </a>
     </section>
 
-    <section style="margin-top:3rem;max-width:800px;margin:auto;text-align:left;">
+    <section style="margin-top:3rem;max-width:800px;margin:3rem auto 0;text-align:left;color:var(--muted);">
       <h2>💡 About Our Tools</h2>
       <p>Each converter is designed for accuracy, simplicity, and transparency. Every tool includes examples, formulas, and educational notes, so you not only calculate — you understand how it works.</p>
-      <p>Whether you’re cooking, studying, traveling, or designing, Convert Labs offers tools that make daily calculations faster and smarter.</p>
+      <p>Whether you're cooking, studying, traveling, or designing, Convert Labs offers tools that make daily calculations faster and smarter.</p>
     </section>
   </main>
 
-   <!-- Footer -->
- <footer class="footer">
-  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
-    <div class="footer-brand" style="margin-bottom:10px;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
-      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+  <!-- === UNIFIED FOOTER === -->
+  <footer class="footer">
+    <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+      <div class="footer-brand" style="margin-bottom:10px;">
+        <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+        <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+      </div>
+
+      <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+      <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+      <nav class="footer-links" style="margin-top:8px;">
+        <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+        <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+        <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+        <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+        <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+        <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+        <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+      </nav>
     </div>
+    <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+      <p>✅ <strong>Domain Verification & Email Security</strong></p>
+      <p>
+        Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+        Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+        uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+      </p>
+      <p>
+        Email protection includes:
+        <ul style="list-style:none; padding:0; margin:5px 0;">
+          <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+          <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+          <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+        </ul>
+      </p>
+      <p>
+        These records confirm the legitimacy of our domain and improve deliverability,  
+        search engine trust, and AdSense approval readiness.
+      </p>
+    </section>
+  </footer>
 
-    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+  <!-- Theme Toggle Script -->
+  <script>
+    // Theme toggle functionality
+    function initTheme() {
+      const savedTheme = localStorage.getItem('convertlabs-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeToggle').textContent = '☀️';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeToggle').textContent = '🌙';
+      }
+    }
 
-    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+    }
 
-    <nav class="footer-links" style="margin-top:8px;">
-      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
-      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
-      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
-      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
-      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
-      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
-      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
-    </nav>
-  </div>
-   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-  <p>✅ <strong>Domain Verification & Email Security</strong></p>
-  <p>
-    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-  </p>
-  <p>
-    Email protection includes:
-    <ul style="list-style:none; padding:0; margin:5px 0;">
-      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
-      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
-      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
-    </ul>
-  </p>
-  <p>
-    These records confirm the legitimacy of our domain and improve deliverability,  
-    search engine trust, and AdSense approval readiness.
-  </p>
-</section>
-
-</footer>
-
-<style>
-  footer.footer a:hover { 
-    text-decoration: underline; 
-    color: #ffffff; 
-  }
-</style>
-
-
-  <script src="https://convertlabs.online/script.js" defer></script>
+    // Initialize theme and event listener
+    document.addEventListener('DOMContentLoaded', function() {
+      initTheme();
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    });
+  </script>
 </body>
-</html>
-
-
-
-
-
+      </html>
