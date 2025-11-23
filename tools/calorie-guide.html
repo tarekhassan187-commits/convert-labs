@@ -16,6 +16,10 @@
   <!-- canonical -->
   <link rel="canonical" href="https://convertlabs.online/tools/calorie-guide.html" />
   <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <meta name="theme-color" content="#1e40af" />
+  
+  <!-- Global CSS (site-wide) -->
+  <link rel="stylesheet" href="https://convertlabs.online/style.css" />
 
   <!-- AdSense & Analytics (kept as requested) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
@@ -27,60 +31,149 @@
     gtag('config', 'G-Z88B03WV7P');
   </script>
 
-  <!-- Minimal page-level styles (overrides + component styles) -->
+  <!-- Page-specific styles: calculator, animations, and dark mode -->
   <style>
-    :root{
+    :root {
+      --page-max: 980px;
+      --card-radius: 12px;
+      --brand-blue: #1e40af;
+      --muted: #58616a;
+      --card-shadow: 0 10px 30px rgba(18, 26, 40, 0.08);
+      --footer-dark: #0e2440;
+      --brand: #0a4d8c;
+      --brand-2: #134b8b;
+      --bg: #f5faff;
+      --card: #fff;
+      --accent: #2b8bd8;
+      --radius: 12px;
+      --text: #111;
       --blue-600: #2563eb;
       --blue-700: #1e40af;
       --nav-blue: #1e3a8a;
-      --bg: #f8fafc;
       --card-bg: #fff;
-      --text: #0f172a;
-      --muted: #6b7280;
       --dark-bg: #0b1220;
       --card-dark: #1b2435;
       --inner-card: #0f172a;
-      --accent: #3b82f6;
-      /* CTA gradient colors (mixed: blue + green) */
       --cta-from: #10b981;
       --cta-to: #3b82f6;
     }
-    /* Reset + global */
-    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
-    a{color:var(--blue-600);text-decoration:none}
-    .site-width{width:90%;max-width:1100px;margin:0 auto;}
 
-    /* Header */
-    header.navbar{
-      background:var(--nav-blue);
-      color:#fff;
-      padding:10px 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    html.dark {
+      --bg: #071029;
+      --card: #081226;
+      --text: #dbeafe;
+      --muted: #9aa9b8;
+      --accent: #34d399;
+      --blue-600: #3b82f6;
+      --blue-700: #60a5fa;
+      --nav-blue: #1e293b;
+      --card-bg: #0f172a;
+      --dark-bg: #020617;
+      --card-dark: #1e293b;
+      --inner-card: #0f172a;
     }
-    .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;align-items:center;gap:10px}
-    .brand img{width:36px;height:36px}
-    .brand .brand-text{font-weight:700;color:#fff}
-    nav.nav-links ul{display:flex;gap:16px;list-style:none;margin:0;padding:0}
-    nav.nav-links a{color:#f1f5f9;font-weight:600}
 
-    .theme-toggle{background:none;border:none;color:#fff;font-size:18px;padding:6px 8px;border-radius:8px;cursor:pointer}
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* === UNIFIED HEADER STYLES === */
+    header {
+      height: auto;
+      min-height: 64px;
+      background: var(--brand-2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn {
+      background: var(--brand);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--brand);
+      color: var(--brand);
+    }
+
+    .theme-toggle-container {
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
     /* Main area */
     main{
-      max-width:980px;
-      margin:48px auto 96px; /* reduced top spacing per request */
-      color:var(--text);
-      padding:0 16px;
+      max-width: var(--page-max);
+      margin: 1.5rem auto;
+      color: var(--text);
+      padding: 0 16px;
     }
 
     .hero-card{
-      border-radius:14px;
-      padding:36px;
-      background: linear-gradient(145deg,#ffffff,#f1f5ff);
-      box-shadow: 0 12px 30px rgba(16,24,40,0.06);
+      border-radius: 14px;
+      padding: 36px;
+      background: var(--card);
+      box-shadow: var(--card-shadow);
     }
-    .page-title{font-size:32px;margin:0 0 12px;color:var(--nav-blue);font-weight:800}
+    .page-title{font-size:32px;margin:0 0 12px;color:var(--brand-2);font-weight:800}
     .lead{color:var(--muted);line-height:1.6;margin:0 0 20px}
 
     /* Calculator card */
@@ -88,86 +181,101 @@
       margin-top:24px;
       border-radius:12px;
       padding:22px;
-      background:#f1f7fb;
-      box-shadow: 0 10px 24px rgba(16,24,40,0.05);
+      background: var(--card);
+      box-shadow: var(--card-shadow);
       border:1px solid rgba(30,58,138,0.04);
     }
     .calc-card h3{margin:0 0 16px;color:var(--blue-700)}
     .field{margin:10px 0;display:block}
-    label.field-label{display:block;color:#475569;font-size:14px;margin-bottom:6px}
+    label.field-label{display:block;color:var(--muted);font-size:14px;margin-bottom:6px}
     input[type="number"], select, input[type="text"]{
       width:270px;max-width:100%;
-      padding:10px 12px;border-radius:8px;border:1px solid #e6eef8;background:#fff;color:var(--text);
+      padding:10px 12px;border-radius:8px;border:1px solid #e6eef8;background:var(--card);color:var(--text);
       box-sizing:border-box;
     }
     select{appearance:auto}
     .small{width:160px}
 
     .actions{margin-top:14px}
-    .btn{
+    .calc-btn{
       display:inline-block;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;
       background:var(--blue-600);color:#fff;
       box-shadow: 0 6px 16px rgba(37,99,235,0.12);
     }
-    .muted{color:#6b7280;margin-top:10px;font-size:14px}
+    .muted{color:var(--muted);margin-top:10px;font-size:14px}
 
     /* Result box */
     .result-box{
-      margin-top:18px;padding:14px;border-radius:10px;background:#fff;border:1px solid rgba(16,24,40,0.04);
+      margin-top:18px;padding:14px;border-radius:10px;background:var(--card);border:1px solid rgba(16,24,40,0.04);
       box-shadow: 0 8px 20px rgba(16,24,40,0.04);
     }
     .result-row{display:flex;gap:12px;align-items:center;margin:8px 0}
-    .result-label{min-width:160px;color:#475569;font-weight:600}
+    .result-label{min-width:160px;color:var(--muted);font-weight:600}
 
     /* Advice */
-    .advice{margin-top:10px;padding:12px;border-radius:8px;background:linear-gradient(90deg,#eef2ff,#fff);border:1px solid rgba(59,130,246,0.06)}
+    .advice{margin-top:10px;padding:12px;border-radius:8px;background:var(--card);border:1px solid rgba(59,130,246,0.06)}
 
     /* Back button */
     .back-btn{display:inline-block;margin-top:18px;padding:12px 18px;background:var(--blue-600);color:#fff;border-radius:10px;text-decoration:none;font-weight:700}
 
-    /* Footer */
-    footer.footer{background:var(--nav-blue);color:#fff;padding:28px 0;margin-top:40px}
-    .footer-inner{text-align:center}
-    .footer-links{margin-top:8px}
-    .footer-links a{color:#bfdbfe;margin:0 8px;font-weight:600}
-
-    /* Responsive */
-    @media(max-width:700px){
-      nav.nav-links ul{display:none}
-      .site-width{width:92%}
-      input[type="number"], select, input[type="text"]{width:100%}
+    /* === UNIFIED FOOTER STYLES === */
+    footer.footer { 
+      background: var(--brand-2); 
+      color:#fff; 
+      text-align:center; 
+      padding:2rem 1rem; 
+      margin-top:2.5rem; 
+      width: 100%;
     }
 
-    /* ---------------- Dark Mode ---------------- */
-    body.dark{
-      background: linear-gradient(180deg,#020617, #081224);
-      color:#dbeafe;
+    footer.footer a { 
+      color: #f8fafc; 
+      text-decoration: none;
     }
-    body.dark header.navbar{background:#0f172a}
-    body.dark .hero-card{background:linear-gradient(145deg,#0f172a,#111827);box-shadow: 0 8px 26px rgba(0,0,0,0.7)}
-    body.dark .page-title{color:#93c5fd}
-    body.dark .lead{color:#cbd5e1}
-    body.dark .calc-card{background:#0b1220;border:1px solid #263447;box-shadow:0 14px 30px rgba(0,0,0,0.6)}
-    body.dark input[type="number"], body.dark select, body.dark input[type="text"]{
-      background:#0f172a;border:1px solid #2c3b53;color:#e6eef8
+
+    footer.footer a:hover { 
+      text-decoration: underline; 
+      color: #ffffff; 
     }
-    body.dark .calc-card h3{color:#60a5fa}
-    body.dark .result-box{background:#0f172a;border:1px solid #263447;color:#e6eef8}
-    body.dark .btn{box-shadow:0 6px 20px rgba(59,130,246,0.12)}
-    body.dark .advice{background:linear-gradient(90deg,#0b1220,#0f172a);border:1px solid rgba(99,102,241,0.06)}
-    body.dark footer.footer{background:#07102a;color:#e2e8f0}
+
+    /* Dark-mode overrides */
+    html.dark .hero-card{ background: var(--card); }
+    html.dark .page-title{ color:#93c5fd; }
+    html.dark .lead{ color:#cbd5e1; }
+    html.dark .calc-card{ background: var(--card); border:1px solid #263447; }
+    html.dark input[type="number"], html.dark select, html.dark input[type="text"]{
+      background:var(--card);border:1px solid #2c3b53;color:var(--text);
+    }
+    html.dark .calc-card h3{ color:#60a5fa; }
+    html.dark .result-box{ background:var(--card); border:1px solid #263447; }
+    html.dark .calc-btn{ box-shadow:0 6px 20px rgba(59,130,246,0.12); }
+    html.dark .advice{ background:var(--card); border:1px solid rgba(99,102,241,0.06); }
+    html.dark footer.footer { background: var(--brand-2); }
 
     /* tiny */
     .muted small {
-      color: #475569;
-    }
-    body.dark .muted small {
-      color: #9ca3af;
+      color: var(--muted);
     }
 
     /* Strong override for disclaimer in dark mode */
-    body.dark .nutrition-disclaimer { background: #1c253a !important; color: #e7e7e7 !important; border-left: 4px solid #6aa0ff !important; }
-    body.dark .nutrition-disclaimer a { color: #cfe3ff !important; }
+    .nutrition-disclaimer { 
+      margin-top:30px;
+      padding:18px;
+      background:#f7f7f7;
+      border-left:4px solid #4A90E2;
+      border-radius:6px;
+      font-size:15px;
+      line-height:1.6;
+      color:#222;
+    }
+    html.dark .nutrition-disclaimer { 
+      background: #1c253a !important; 
+      color: #e7e7e7 !important; 
+      border-left: 4px solid #6aa0ff !important; 
+    }
+    html.dark .nutrition-disclaimer a { 
+      color: #cfe3ff !important; 
+    }
 
     /* ------------------ CTA animations (base) ------------------ */
     @keyframes fadeSlideUp {
@@ -194,7 +302,7 @@
     #goMealPlanBtn:hover { transform: scale(1.05); filter: brightness(1.02); }
 
     .recommended-label { font-size:14px; color:var(--blue-700); margin-bottom:6px; opacity:0; animation: fadeSlideUp 0.4s ease-out forwards; }
-    body.dark .recommended-label { color:#63b3ff; }
+    html.dark .recommended-label { color:#63b3ff; }
 
     /* ===== Enhanced Boosted Animations ===== */
     @keyframes pulseRingAnim {
@@ -209,7 +317,7 @@
 
     @keyframes floatArrow { 0%{opacity:0; transform:translateY(8px)} 30%{opacity:1; transform:translateY(0)} 100%{opacity:1; transform:translateY(-6px)} }
     .arrow-hint { opacity:0; animation: floatArrow 1.6s ease-out forwards 0.4s; font-size:22px; color:var(--blue-700); margin-bottom:6px; }
-    body.dark .arrow-hint { color:#63b3ff; }
+    html.dark .arrow-hint { color:#63b3ff; }
 
     /* Ripple effect */
     .ripple {
@@ -247,33 +355,71 @@
 
     /* Confetti canvas sits on top */
     canvas#confettiCanvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2000; display:none; }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 16px;
+        gap: 8px;
+      }
+      .nav-links {
+        gap: 8px;
+      }
+      .nav-links a {
+        padding: 5px 8px;
+        font-size: 13px;
+      }
+      .brand span {
+        font-size: 14px;
+      }
+      .hero-card {
+        padding: 24px;
+      }
+      .page-title {
+        font-size: 1.6rem;
+      }
+      input[type="number"], select, input[type="text"] {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 6px;
+      }
+      .nav-links a {
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+      header {
+        padding: 8px 12px;
+      }
+      .hero-card {
+        padding: 18px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="navbar">
-    <div class="site-width nav-inner">
-      <div class="brand">
-        <a href="/index.html" style="display:flex;align-items:center;text-decoration:none;color:inherit">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" />
-          <span class="brand-text">Convert Labs</span>
-        </a>
-      </div>
-      <nav class="nav-links" aria-label="Main">
-        <ul>
-          <li><a href="https://convertlabs.online/index.html">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+  <!-- === UNIFIED HEADER === -->
+  <header role="banner">
+    <div class="brand">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+      <span>Convert Labs</span>
+    </div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="https://convertlabs.online/index.html">Home</a>
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+      <a href="https://convertlabs.online/guides.html">Blog</a>
+      <a href="https://convertlabs.online/about.html">About</a>
+      <a href="https://convertlabs.online/contact.html">Contact</a>
+    </nav>
+    <div class="theme-toggle-container">
+      <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
     </div>
   </header>
 
-  <main class="site-width">
+  <main role="main">
     <div class="hero-card">
       <h1 class="page-title">Calorie & Nutrition Guide</h1>
       <p class="lead">Use this guide and the calculator below to determine your <strong>BMR</strong> (Basal Metabolic Rate), <strong>TDEE</strong> (Total Daily Energy Expenditure), and <strong>BMI</strong> (Body Mass Index). Then get clear, practical advice to lose, gain, or maintain weight.</p>
@@ -348,7 +494,7 @@
         </div>
 
         <div class="actions">
-          <button id="calcBtn" class="btn">Calculate</button>
+          <button id="calcBtn" class="calc-btn">Calculate</button>
         </div>
 
         <div id="results" class="result-box" style="display:none;">
@@ -365,7 +511,7 @@
             <div id="arrowHint" class="arrow-hint" style="display:none;">⬇️</div>
             <div id="pulseRing" class="pulse-ring" style="display:none;"></div>
 
-            <button id="goMealPlanBtn" class="btn" style="display:none;position:relative;z-index:10;background:linear-gradient(90deg,var(--cta-from),var(--cta-to));">
+            <button id="goMealPlanBtn" class="calc-btn" style="display:none;position:relative;z-index:10;background:linear-gradient(90deg,var(--cta-from),var(--cta-to));">
               Generate My Meal Plan →
             </button>
           </div>
@@ -377,7 +523,7 @@
         </p>
       </div>
 
-      <div class="nutrition-disclaimer" style="margin-top:30px;padding:18px;background:#f7f7f7;border-left:4px solid #4A90E2;border-radius:6px;font-size:15px;line-height:1.6;color:#222;">
+      <div class="nutrition-disclaimer">
         <strong>Nutrition Data Notice:</strong><br>
         All nutrition values provided on this website come exclusively from the 
         <strong>USDA FoodData Central</strong> public-domain database.<br>
@@ -395,7 +541,7 @@
   <!-- Confetti Canvas (hidden until triggered) -->
   <canvas id="confettiCanvas"></canvas>
 
-  <!-- Footer -->
+  <!-- === UNIFIED FOOTER === -->
   <footer class="footer">
     <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
       <div class="footer-brand" style="margin-bottom:10px;">
@@ -417,47 +563,55 @@
         <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
       </nav>
     </div>
-     <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
-    <p>✅ <strong>Domain Verification & Email Security</strong></p>
-    <p>
-      Convert Labs is officially verified for secure DNS and authenticated email delivery.  
-      Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
-      uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
-    </p>
-  </section>
+    <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+      <p>✅ <strong>Domain Verification & Email Security</strong></p>
+      <p>
+        Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+        Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+        uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+      </p>
+      <p>
+        Email protection includes:
+        <ul style="list-style:none; padding:0; margin:5px 0;">
+          <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+          <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+          <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+        </ul>
+      </p>
+      <p>
+        These records confirm the legitimacy of our domain and improve deliverability,  
+        search engine trust, and AdSense approval readiness.
+      </p>
+    </section>
   </footer>
-
-  <style>
-    footer.footer a:hover { text-decoration: underline; color:#ffffff; }
-  </style>
 
   <!-- Calculator logic + theme persistence + CTA wiring + confetti + audio -->
   <script>
     // ----------------------------
-    // Theme toggle + persistence
+    // Theme toggle + persistence (updated to match unified structure)
     // ----------------------------
-    const themeToggle = document.getElementById('themeToggle');
-    function setTheme(mode){
-      if(mode === 'dark'){
-        document.body.classList.add('dark');
-        themeToggle.textContent = '☀️';
+    function initTheme() {
+      const savedTheme = localStorage.getItem('convertlabs-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeToggle').textContent = '☀️';
       } else {
-        document.body.classList.remove('dark');
-        themeToggle.textContent = '🌙';
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeToggle').textContent = '🌙';
       }
-      try{ localStorage.setItem('cl_theme', mode); } catch(e){}
     }
-    (function initTheme(){
-      try{
-        const saved = localStorage.getItem('cl_theme');
-        if(saved) { setTheme(saved); return; }
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        setTheme(prefersDark ? 'dark' : 'light');
-      }catch(e){ setTheme('light'); }
-    })();
-    themeToggle.addEventListener('click', ()=>{
-      const isDark = document.body.classList.contains('dark');
-      setTheme(isDark ? 'light' : 'dark');
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+    }
+
+    // Initialize theme and event listener
+    document.addEventListener('DOMContentLoaded', function() {
+      initTheme();
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
     });
 
     // ----------------------------
