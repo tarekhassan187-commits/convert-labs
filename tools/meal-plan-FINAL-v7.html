@@ -15,6 +15,8 @@
     :root{
       --brand:#0a4d8c; --brand-2:#134b8b; --muted:#6c6c6c; --bg:#f5faff; --card:#fff; --accent:#2b8bd8; --radius:12px; --text:#111;
       --danger-color: #f44336;
+      --success-color: #10b981; /* Green for accept button */
+      --warning-color: #f59e0b; /* Orange for new plan button */
     }
     html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; --danger-color: #ef4444; }
     *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased; overflow-x: hidden;}
@@ -29,6 +31,15 @@
     .btn{background:var(--brand);color:#fff;padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600;transition:all 0.2s;}
     .btn:hover{opacity:0.9;transform:translateY(-1px);}
     .btn.ghost{background:transparent;border:1px solid var(--brand);color:var(--brand)}
+    
+    /* Success button (green) for Accept & Save */
+    .btn.success{background:var(--success-color);border:1px solid var(--success-color);color:#fff;}
+    .btn.success.ghost{background:transparent;color:var(--success-color);}
+    
+    /* Warning button (orange) for Start New Plan */
+    .btn.warning{background:var(--warning-color);border:1px solid var(--warning-color);color:#fff;}
+    .btn.warning.ghost{background:transparent;color:var(--warning-color);}
+    
     .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
     @media(max-width:1000px){.grid{grid-template-columns:1fr}}
     .meals{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
@@ -128,7 +139,11 @@
             <div class="small-muted">TDEE input should be already adjusted (do not apply goal again if copying from calorie tool).</div>
           </div>
           <div style="min-width:260px;text-align:right">
-            <div style="margin-bottom:6px"><button id="generateBtn" class="btn">Generate Preview</button> <button id="acceptBtn" class="btn ghost">Accept & Save</button> <button id="newPlanBtn" class="btn ghost">Start New Plan</button></div>
+            <div style="margin-bottom:6px">
+              <button id="generateBtn" class="btn">Generate Preview</button> 
+              <button id="acceptBtn" class="btn success">Accept & Save</button> 
+              <button id="newPlanBtn" class="btn warning">Start New Plan</button>
+            </div>
             <div class="small-muted">Saved plan unlocks one day every 24 hours.</div>
           </div>
         </div>
@@ -299,6 +314,10 @@ let usdaData = [];
 let currentDayForModal = null;
 let currentMealForModal = null;
 let currentDietForModal = null;
+
+// Global variable to track the current plan
+window.currentPlan = null;
+window.currentPlanStartDate = null;
 
 // =============================
 // MEAL TEMPLATES AND FOOD MAPPINGS
@@ -1224,66 +1243,164 @@ const FOOD_CATEGORIES = {
 function savePlan(plan, startDate) {
   const data = { plan, startDate: startDate || new Date().toISOString(), version: "v4" };
   localStorage.setItem(KEY, JSON.stringify(data));
+  // Update global state
+  window.currentPlan = plan;
+  window.currentPlanStartDate = startDate || new Date().toISOString();
 }
 
 function loadPlan() {
-  const stored = localStorage.getItem(KEY); if (!stored) return null;
-  try { return JSON.parse(stored); } catch (e) { console.error("Failed to parse stored plan", e); return null; }
+  const stored = localStorage.getItem(KEY); 
+  if (!stored) return null;
+  try { 
+    const data = JSON.parse(stored);
+    // Update global state
+    window.currentPlan = data.plan;
+    window.currentPlanStartDate = data.startDate;
+    return data;
+  } catch (e) { 
+    console.error("Failed to parse stored plan", e); 
+    return null; 
+  }
 }
 
 function updateSavedInfo() {
-  const savedInfo = document.getElementById("savedInfo"); const stored = loadPlan();
+  const savedInfo = document.getElementById("savedInfo"); 
+  const stored = loadPlan();
   if (stored && stored.plan) {
-    const startDate = new Date(stored.startDate); const now = new Date();
+    const startDate = new Date(stored.startDate); 
+    const now = new Date();
     const days = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()))/86400000);
     const unlocked = Math.max(0, Math.min(6, days));
     savedInfo.innerHTML = `<div>Plan started: ${startDate.toLocaleDateString()}</div><div>Unlocked days: ${unlocked + 1}/7</div>`;
-  } else { savedInfo.textContent = "No saved plan."; }
+  } else { 
+    savedInfo.textContent = "No saved plan."; 
+  }
 }
 
 // =============================
 // FOOD ITEM MANAGEMENT
 // =============================
 function _getActivePlanContext() {
+  // First check if we have a current plan in global state
+  if (window.currentPlan) {
+    return {
+      plan: window.currentPlan, 
+      startDate: window.currentPlanStartDate || new Date().toISOString(), 
+      isStored: true
+    };
+  }
+  
+  // Fallback to localStorage
   const stored = loadPlan();
-  if (stored && stored.plan) return {plan: stored.plan, startDate: stored.startDate, isStored: true};
-  if (window.previewPlan) return {plan: window.previewPlan, startDate: new Date().toISOString(), isStored: false};
+  if (stored && stored.plan) {
+    return {
+      plan: stored.plan, 
+      startDate: stored.startDate, 
+      isStored: true
+    };
+  }
+  
+  // Finally check preview plan
+  if (window.previewPlan) {
+    return {
+      plan: window.previewPlan, 
+      startDate: new Date().toISOString(), 
+      isStored: false
+    };
+  }
+  
   return null;
 }
 
 function replaceMealWithFood(day, mealKey, foodItem) {
-  const ctx=_getActivePlanContext(); if(!ctx)return;
+  const ctx=_getActivePlanContext(); 
+  if(!ctx) {
+    alert("No active plan found. Please generate a plan first.");
+    return;
+  }
+  
   const plan=ctx.plan, start=ctx.startDate;
-  const dayPlan=plan.find(d=>d.day===day); if(!dayPlan||!dayPlan[mealKey])return;
+  const dayPlan=plan.find(d=>d.day===day); 
+  if(!dayPlan||!dayPlan[mealKey])return;
+  
   const target=dayPlan[mealKey].kcal||500;
   const grams=Math.round((target/(foodItem.kcal_per_100g||200))*100);
-  dayPlan[mealKey].parts=[{name:foodItem.name||foodItem.food_name, per100:foodItem.kcal_per_100g||200, grams, source:foodItem}];
+  dayPlan[mealKey].parts=[{
+    name:foodItem.name||foodItem.food_name, 
+    per100:foodItem.kcal_per_100g||200, 
+    grams, 
+    source:foodItem
+  }];
   dayPlan[mealKey].kcal=Math.round((foodItem.kcal_per_100g||200)*(grams/100));
-  if(ctx.isStored) savePlan(plan,start); else window.previewPlan=plan;
-  renderPlan(plan,start); updateSavedInfo();
+  
+  // Update global state
+  window.currentPlan = plan;
+  
+  if(ctx.isStored) {
+    savePlan(plan,start);
+  } else {
+    window.previewPlan = plan;
+  }
+  
+  renderPlan(plan,start); 
+  updateSavedInfo();
 }
 
 function deleteFoodItem(day, mealKey, partIndex){
-  const ctx=_getActivePlanContext(); if(!ctx)return;
+  const ctx=_getActivePlanContext(); 
+  if(!ctx) {
+    alert("No active plan found. Please generate a plan first.");
+    return;
+  }
+  
   const plan=ctx.plan, start=ctx.startDate;
-  const dp=plan.find(d=>d.day===day); if(!dp||!dp[mealKey])return;
+  const dp=plan.find(d=>d.day===day); 
+  if(!dp||!dp[mealKey])return;
+  
   dp[mealKey].parts.splice(partIndex,1);
   dp[mealKey].kcal=dp[mealKey].parts.reduce((a,p)=>a+(p.kcal||0),0);
-  if(ctx.isStored) savePlan(plan,start); else window.previewPlan=plan;
-  renderPlan(plan,start); updateSavedInfo();
+  
+  // Update global state
+  window.currentPlan = plan;
+  
+  if(ctx.isStored) {
+    savePlan(plan,start);
+  } else {
+    window.previewPlan = plan;
+  }
+  
+  renderPlan(plan,start); 
+  updateSavedInfo();
 }
 
 function updatePortionSize(day, mealKey, partIndex, grams){
-  const ctx=_getActivePlanContext(); if(!ctx)return;
+  const ctx=_getActivePlanContext(); 
+  if(!ctx) {
+    alert("No active plan found. Please generate a plan first.");
+    return;
+  }
+  
   const plan=ctx.plan, start=ctx.startDate;
-  const dp=plan.find(d=>d.day===day); if(!dp||!dp[mealKey])return;
+  const dp=plan.find(d=>d.day===day); 
+  if(!dp||!dp[mealKey])return;
+  
   const part=dp[mealKey].parts[partIndex];
   const f=part.source||part, ratio=grams/100;
   part.grams=grams;
   part.kcal=Math.round((f.kcal_per_100g||part.per100)*ratio);
   dp[mealKey].kcal=dp[mealKey].parts.reduce((a,p)=>a+(p.kcal||0),0);
-  if(ctx.isStored) savePlan(plan,start); else window.previewPlan=plan;
-  renderPlan(plan,start); updateSavedInfo();
+  
+  // Update global state
+  window.currentPlan = plan;
+  
+  if(ctx.isStored) {
+    savePlan(plan,start);
+  } else {
+    window.previewPlan = plan;
+  }
+  
+  renderPlan(plan,start); 
+  updateSavedInfo();
 }
 
 // =============================
@@ -1506,31 +1623,81 @@ function renderReplaceList(results) {
 }
 
 function applyAddToPlan(name,k,p,c,f){
-  const ctx=_getActivePlanContext(); if(!ctx)return;
+  const ctx=_getActivePlanContext(); 
+  if(!ctx) {
+    alert("No active plan found. Please generate a plan first.");
+    return;
+  }
+  
   const plan=ctx.plan, start=ctx.startDate;
   const day=plan[currentDayForModal], meal=day[currentMealForModal];
-  const newPart={name,per100:k,grams:100,source:{name,kcal_per_100g:k,protein_per_100g:p,carbs_per_100g:c,fat_per_100g:f},
-    kcal:k,protein:p,carbs:c,fat:f};
+  const newPart={
+    name,
+    per100:k,
+    grams:100,
+    source:{name,kcal_per_100g:k,protein_per_100g:p,carbs_per_100g:c,fat_per_100g:f},
+    kcal:k,
+    protein:p,
+    carbs:c,
+    fat:f
+  };
+  
+  if (!meal.parts) {
+    meal.parts = [];
+  }
+  
   meal.parts.push(newPart);
   meal.kcal=meal.parts.reduce((a,p)=>a+(p.kcal||0),0);
-  if(ctx.isStored) savePlan(plan,start); else window.previewPlan=plan;
-  renderPlan(plan,start); updateSavedInfo();
+  
+  // Update global state
+  window.currentPlan = plan;
+  
+  if(ctx.isStored) {
+    savePlan(plan,start);
+  } else {
+    window.previewPlan = plan;
+  }
+  
+  renderPlan(plan,start); 
+  updateSavedInfo();
   document.getElementById("usdaPopup").style.display="none";
 }
 
 function applyReplacementToPlan(name,k,p,c,f){
-  const ctx=_getActivePlanContext(); if(!ctx)return;
+  const ctx=_getActivePlanContext(); 
+  if(!ctx) {
+    alert("No active plan found. Please generate a plan first.");
+    return;
+  }
+  
   const plan=ctx.plan, start=ctx.startDate;
   const day=plan[currentDayForModal], meal=day[currentMealForModal];
+  
+  if (!meal.parts || meal.parts.length === 0) {
+    alert("No food items to replace in this meal.");
+    return;
+  }
+  
   const part=meal.parts[0], grams=part.grams||100, ratio=grams/100;
-  part.name=name; part.per100=k;
+  part.name=name; 
+  part.per100=k;
   part.kcal=Math.round(k*ratio);
   part.protein=Math.round(p*ratio);
   part.carbs=Math.round(c*ratio);
   part.fat=Math.round(f*ratio);
   meal.kcal=meal.parts.reduce((a,p)=>a+(p.kcal||0),0);
-  if(ctx.isStored) savePlan(plan,start); else window.previewPlan=plan;
-  renderPlan(plan,start); updateSavedInfo(); 
+  
+  // Update global state
+  window.currentPlan = plan;
+  
+  if(ctx.isStored) {
+    savePlan(plan,start);
+  } else {
+    window.previewPlan = plan;
+  }
+  
+  renderPlan(plan,start); 
+  updateSavedInfo(); 
   document.getElementById("usdaPopup").style.display="none";
 }
 
@@ -1586,14 +1753,22 @@ function exportCurrentDayToPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   
-  const stored = loadPlan();
-  if (!stored || !stored.plan || stored.plan.length === 0) {
-    alert("No meal plan found to export. Please generate and save a plan first.");
-    return;
+  // Use global state first, then fallback to localStorage
+  let planToExport = window.currentPlan;
+  let startDateToExport = window.currentPlanStartDate;
+  
+  if (!planToExport) {
+    const stored = loadPlan();
+    if (!stored || !stored.plan || stored.plan.length === 0) {
+      alert("No meal plan found to export. Please generate and save a plan first.");
+      return;
+    }
+    planToExport = stored.plan;
+    startDateToExport = stored.startDate;
   }
   
   // Use the first day (Day 1) as the current plan to export
-  const todayPlan = stored.plan[0];
+  const todayPlan = planToExport[0];
   
   if (!todayPlan) {
     alert("No meal plan available for export.");
@@ -1730,8 +1905,11 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('newPlanBtn').addEventListener('click', function(){
     if(confirm('Start a new 7-day plan? This will delete your saved plan.')){
       localStorage.removeItem(KEY);
+      window.currentPlan = null;
+      window.currentPlanStartDate = null;
       window.previewPlan = null;
-      window.location.href = window.location.pathname;
+      document.getElementById('mainInner').innerHTML = "<div class='card'>No plan generated yet.</div>";
+      updateSavedInfo();
     }
   });
   
@@ -1770,7 +1948,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     try {
       const plan = await generatePlanAsync(opts); 
-      window.previewPlan = plan; 
+      window.currentPlan = plan;
+      window.currentPlanStartDate = new Date().toISOString();
+      window.previewPlan = plan;
+      
       renderPlan(plan, new Date().toISOString());
       
       const modal = document.getElementById('previewModal'); 
@@ -1786,34 +1967,35 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Accept & Save button handler
+  // Accept & Save button handler - FIXED
   document.getElementById('acceptBtn').addEventListener('click', function() {
-    const preview = window.previewPlan;
-    const stored = loadPlan();
+    // Use global state first
+    let planToSave = window.currentPlan;
+    let startDateToSave = window.currentPlanStartDate;
     
-    if (preview && preview.plan) {
-        const planToSave = preview.plan || preview;
-        const startDate = new Date().toISOString();
-        savePlan(planToSave, startDate);
-        updateSavedInfo();
-        renderPlan(planToSave, startDate);
-    } else if (stored && stored.plan) {
-        savePlan(stored.plan, stored.startDate || new Date().toISOString());
-        updateSavedInfo();
-        renderPlan(stored.plan, stored.startDate || new Date().toISOString());
-    } else {
-        alert("Please generate a preview first");
-        return;
+    if (!planToSave) {
+      // Fallback to preview plan
+      planToSave = window.previewPlan;
+      startDateToSave = new Date().toISOString();
     }
     
-    const modal = document.getElementById('previewModal'); 
-    if(modal) modal.style.display = 'none';
-    alert("Plan saved successfully!");
-    
-    setTimeout(()=>{ 
-      const first = document.querySelector('.card[data-day="1"]'); 
-      if(first) first.scrollIntoView({behavior:'smooth'}); 
-    },200);
+    if (planToSave) {
+      savePlan(planToSave, startDateToSave);
+      updateSavedInfo();
+      renderPlan(planToSave, startDateToSave);
+      
+      const modal = document.getElementById('previewModal'); 
+      if(modal) modal.style.display = 'none';
+      alert("Plan saved successfully!");
+      
+      setTimeout(()=>{ 
+        const first = document.querySelector('.card[data-day="1"]'); 
+        if(first) first.scrollIntoView({behavior:'smooth'}); 
+      },200);
+    } else {
+      alert("Please generate a preview first");
+      return;
+    }
   });
 
   document.getElementById('exportDayBtn').addEventListener('click', exportCurrentDayToPDF);
@@ -1825,6 +2007,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const existingPlan = loadPlan();
   if (existingPlan && existingPlan.plan) {
     renderPlan(existingPlan.plan, existingPlan.startDate);
+  } else {
+    document.getElementById('mainInner').innerHTML = "<div class='card'>No plan generated yet. Click 'Generate Preview' to create a meal plan.</div>";
   }
   updateSavedInfo();
 });
