@@ -61,67 +61,195 @@
 
   <!-- Page-level styles (including dark mode support) -->
   <style>
-    header.navbar {
-      background:#1e40af;
-      color:#fff;
-      padding:10px 0;
-    }
-    .nav-container {
-      width:90%;max-width:1100px;margin:auto;
-      display:flex;justify-content:space-between;align-items:center;
-    }
-    .nav-links ul {
-      list-style:none;display:flex;gap:1.2rem;margin:0;padding:0;
-    }
-    .nav-links a {
-      color:#fff;text-decoration:none;font-weight:500;
+    /* === HEADER STYLES FROM MEAL-PLAN.HTML === */
+    :root {
+      --brand: #0a4d8c;
+      --brand-2: #134b8b;
+      --muted: #6c6c6c;
+      --bg: #f5faff;
+      --card: #fff;
+      --accent: #2b8bd8;
+      --radius: 12px;
+      --text: #111;
     }
 
+    html.dark {
+      --bg: #071029;
+      --card: #081226;
+      --text: #dbeafe;
+      --muted: #9aa9b8;
+      --accent: #34d399;
+    }
+
+    header {
+      height: auto;
+      min-height: 64px;
+      background: var(--brand-2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .brand {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn {
+      background: var(--brand);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--brand);
+      color: var(--brand);
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 16px;
+        gap: 8px;
+      }
+      .nav-links {
+        gap: 8px;
+      }
+      .nav-links a {
+        padding: 5px 8px;
+        font-size: 13px;
+      }
+      .brand span {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links {
+        gap: 6px;
+      }
+      .nav-links a {
+        padding: 4px 6px;
+        font-size: 12px;
+      }
+      header {
+        padding: 8px 12px;
+      }
+    }
+
+    /* === EXISTING PAGE STYLES === */
     main {
-      max-width:900px;margin:2rem auto;padding:1.5rem;
-      background:#f9fafc;border-radius:10px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.08);
-      line-height:1.7;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: var(--card);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      line-height: 1.7;
+      color: var(--text);
     }
 
     /* Dark Mode */
-    html.dark main, body.dark main {
-      background:#1b2435 !important;
-      color:#e6eef8 !important;
-      box-shadow:0 10px 26px rgba(0,0,0,0.6) !important;
-      border:1px solid #2c3b53 !important;
+    html.dark main {
+      background: var(--card) !important;
+      color: var(--text) !important;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.6) !important;
+      border: 1px solid #2c3b53 !important;
     }
-    html.dark h1, body.dark h1 { color:#93c5fd !important; }
-    html.dark h2, body.dark h2 { color:#a5c8ff !important; }
-    html.dark p, body.dark p,
-    html.dark li, body.dark li { color:#cbd5e1 !important; }
+
+    html.dark h1 { color: #93c5fd !important; }
+    html.dark h2 { color: #a5c8ff !important; }
+    html.dark p,
+    html.dark li { color: var(--text) !important; }
 
     footer.footer {
-      background:#1e40af;color:#fff;text-align:center;padding:2rem 1rem;margin-top:3rem;
+      background: var(--brand-2);
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      width: 100%;
     }
-    footer.footer a { color:#f8fafc; }
+
+    footer.footer a { 
+      color: #f8fafc; 
+      text-decoration: none;
+    }
+
+    footer.footer a:hover { 
+      text-decoration: underline; 
+      color: #ffffff; 
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px;
+    }
   </style>
 </head>
 
 <body>
 
-<!-- Header -->
-<header class="navbar">
-  <div class="nav-container">
-    <a href="https://convertlabs.online/index.html" class="logo" style="display:flex;align-items:center;gap:8px;color:white;text-decoration:none;">
-      <img src="https://convertlabs.online/assets/convert-labs-icon.png" style="height:32px;">
-      <span class="brand-text">Convert Labs</span>
-    </a>
-    <nav class="nav-links">
-      <ul>
-        <li><a href="https://convertlabs.online/index.html">Home</a></li>
-        <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-        <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-        <li><a href="https://convertlabs.online/about.html">About</a></li>
-        <li><a href="https://convertlabs.online/contact.html">Contact</a></li>
-      </ul>
-    </nav>
-    <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+<!-- === CONSISTENT HEADER FROM MEAL-PLAN.HTML === -->
+<header>
+  <div class="brand">
+    <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+    <span>Convert Labs</span>
+  </div>
+  <nav class="nav-links">
+    <a href="https://convertlabs.online/index.html">Home</a>
+    <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+    <a href="https://convertlabs.online/guides.html">Blog</a>
+    <a href="https://convertlabs.online/about.html">About</a>
+    <a href="https://convertlabs.online/contact.html">Contact</a>
+  </nav>
+  <div style="margin-left:auto;">
+    <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
   </div>
 </header>
 
@@ -178,7 +306,7 @@
 </main>
 
 <!-- Footer -->
- <footer class="footer">
+<footer class="footer">
   <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
     <div class="footer-brand" style="margin-bottom:10px;">
       <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
@@ -222,7 +350,32 @@
 
 </footer>
 
-<script src="https://convertlabs.online/script.js" defer></script>
+<script>
+// Theme toggle functionality
+function initTheme() {
+  const savedTheme = localStorage.getItem('convertlabs-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    document.documentElement.classList.add('dark');
+    document.getElementById('themeToggle').textContent = '☀️';
+  } else {
+    document.documentElement.classList.remove('dark');
+    document.getElementById('themeToggle').textContent = '🌙';
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+}
+
+// Initialize theme and event listener
+document.addEventListener('DOMContentLoaded', function() {
+  initTheme();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+});
+</script>
+
 </body>
 </html>
-
