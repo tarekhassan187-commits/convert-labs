@@ -6,7 +6,7 @@
   <title>Contact Us — Convert Labs</title>
 
   <!-- ✅ SEO -->
-  <meta name="description" content="Contact Convert Labs — share your feedback, ask questions, or request new tools. We’d love to hear from you!" />
+  <meta name="description" content="Contact Convert Labs — share your feedback, ask questions, or request new tools. We'd love to hear from you!" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://convertlabs.online/contact.html" />
 
@@ -50,7 +50,7 @@
   }
   </script>
 
-  <link rel="icon" href="assets/convert-labs-icon.png" />
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
   <meta name="theme-color" content="#1e40af" />
   <link rel="stylesheet" href="style.css" />
 
@@ -68,33 +68,19 @@
 
   <!-- ✅ Page Styles -->
   <style>
-    header.navbar {
-      background: #1e40af;
-      color: #fff;
-      padding: 10px 0;
+    :root{
+      --brand:#0a4d8c; --brand-2:#134b8b; --muted:#6c6c6c; --bg:#f5faff; --card:#fff; --accent:#2b8bd8; --radius:12px; --text:#111;
     }
-    .nav-container {
-      width: 90%;
-      max-width: 1100px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .nav-links ul {
-      list-style: none;
-      display: flex;
-      gap: 1.2rem;
-      margin: 0;
-      padding: 0;
-    }
-    .nav-links a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-    .nav-links a:hover, .nav-links .active { opacity: 0.8; }
+    html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; }
+    *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased; overflow-x: hidden;}
+    
+    /* Consistent Header Styling */
+    header{height:auto;min-height:64px;background:var(--brand-2);color:#fff;display:flex;align-items:center;padding:12px 20px;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:12px; width:100%;}
+    .brand{font-weight:700;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .nav-links{display:flex;gap:12px;margin:0 auto;flex-wrap:wrap;justify-content:center;}
+    .nav-links a{color:#fff;text-decoration:none;font-weight:500;padding:6px 10px;border-radius:6px;transition:background-color 0.2s;font-size:14px;}
+    .nav-links a:hover{background:rgba(255,255,255,0.1);}
+    .btn.ghost{background:transparent;border:1px solid var(--brand);color:var(--brand)}
 
     main {
       max-width: 900px;
@@ -138,7 +124,7 @@
       background: #1e3a8a;
     }
     footer.footer {
-      background: #1e40af;
+      background: #1e3a8a;
       color: #fff;
       text-align: center;
       padding: 2rem 1rem;
@@ -151,164 +137,158 @@
     footer.footer a:hover {
       text-decoration: underline;
     }
+
     /* === CONTACT PAGE DARK MODE FIX === */
+    /* Contact card container */
+    html.dark .contact-card,
+    body.dark .contact-card {
+      background: #1b2435 !important;
+      color: #e6eef8 !important;
+      border: 1px solid #263447 !important;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.6) !important;
+    }
 
-/* Contact card container */
-html.dark .contact-card,
-body.dark .contact-card {
-  background: #1b2435 !important;
-  color: #e6eef8 !important;
-  border: 1px solid #263447 !important;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.6) !important;
-}
+    /* Headings */
+    html.dark .contact-card h1,
+    html.dark .contact-card h2,
+    html.dark .contact-card h3,
+    body.dark .contact-card h1,
+    body.dark .contact-card h2,
+    body.dark .contact-card h3 {
+      color: #93c5fd !important;
+    }
 
-/* Headings */
-html.dark .contact-card h1,
-html.dark .contact-card h2,
-html.dark .contact-card h3,
-body.dark .contact-card h1,
-body.dark .contact-card h2,
-body.dark .contact-card h3 {
-  color: #93c5fd !important;
-}
+    /* Paragraphs & labels */
+    html.dark .contact-card p,
+    html.dark .contact-card label,
+    body.dark .contact-card p,
+    body.dark .contact-card label {
+      color: #cbd5e1 !important;
+    }
 
-/* Paragraphs & labels */
-html.dark .contact-card p,
-html.dark .contact-card label,
-body.dark .contact-card p,
-body.dark .contact-card label {
-  color: #cbd5e1 !important;
-}
+    /* Input fields */
+    html.dark .contact-card input,
+    html.dark .contact-card textarea,
+    body.dark .contact-card input,
+    body.dark .contact-card textarea {
+      background: #0f172a !important;
+      border: 1px solid #2c3b53 !important;
+      color: #e6eef8 !important;
+    }
 
-/* Input fields */
-html.dark .contact-card input,
-html.dark .contact-card textarea,
-body.dark .contact-card input,
-body.dark .contact-card textarea {
-  background: #0f172a !important;
-  border: 1px solid #2c3b53 !important;
-  color: #e6eef8 !important;
-}
+    /* Placeholder text */
+    html.dark .contact-card input::placeholder,
+    html.dark .contact-card textarea::placeholder,
+    body.dark .contact-card input::placeholder,
+    body.dark .contact-card textarea::placeholder {
+      color: #94a3b8 !important;
+    }
 
-/* Placeholder text */
-html.dark .contact-card input::placeholder,
-html.dark .contact-card textarea::placeholder,
-body.dark .contact-card input::placeholder,
-body.dark .contact-card textarea::placeholder {
-  color: #94a3b8 !important;
-}
+    /* Submit button */
+    html.dark .contact-card button,
+    body.dark .contact-card button {
+      background: #2563eb !important;
+      color: #fff !important;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25) !important;
+    }
 
-/* Submit button */
-html.dark .contact-card button,
-body.dark .contact-card button {
-  background: #2563eb !important;
-  color: #fff !important;
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25) !important;
-}
-<!-- CONTACT PAGE: dark-mode overrides (paste after existing CSS) -->
-<style>
-/* make header/footer dark */
-html.dark header.navbar,
-body.dark header.navbar {
-  background:#0f172a !important;
-  color:#e6eef8 !important;
-  box-shadow:0 2px 6px rgba(0,0,0,0.5) !important;
-}
-html.dark header.navbar a,
-body.dark header.navbar a { color:#e6eef8 !important; }
-html.dark #themeToggle, body.dark #themeToggle { color:#e6eef8 !important; }
+    /* CONTACT PAGE: dark-mode overrides */
+    /* make header/footer dark */
+    html.dark header,
+    body.dark header {
+      background:#0f172a !important;
+      color:#e6eef8 !important;
+      box-shadow:0 2px 6px rgba(0,0,0,0.5) !important;
+    }
+    html.dark header a,
+    body.dark header a { color:#e6eef8 !important; }
+    html.dark #themeToggle, body.dark #themeToggle { color:#e6eef8 !important; }
 
-html.dark footer.footer,
-body.dark footer.footer {
-  background:#0f172a !important;
-  color:#dbeafe !important;
-}
-html.dark footer.footer a, body.dark footer.footer a { color:#dbeafe !important; }
+    html.dark footer.footer,
+    body.dark footer.footer {
+      background:#0f172a !important;
+      color:#dbeafe !important;
+    }
+    html.dark footer.footer a, body.dark footer.footer a { color:#dbeafe !important; }
 
-/* page wrapper / card */
-html.dark .contact-section,
-body.dark .contact-section {
-  background: transparent !important; /* keeps page bg consistent */
-}
+    /* page wrapper / card */
+    html.dark .contact-section,
+    body.dark .contact-section {
+      background: transparent !important; /* keeps page bg consistent */
+    }
 
-/* Target the actual form used on the page (.contact-form) */
-html.dark form.contact-form,
-body.dark form.contact-form {
-  background: #1b2435 !important;        /* dark card */
-  color: #e6eef8 !important;
-  border: 1px solid #263447 !important;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.6) !important;
-}
+    /* Target the actual form used on the page (.contact-form) */
+    html.dark form.contact-form,
+    body.dark form.contact-form {
+      background: #1b2435 !important;        /* dark card */
+      color: #e6eef8 !important;
+      border: 1px solid #263447 !important;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.6) !important;
+    }
 
-/* headings/paragraphs inside the form */
-html.dark form.contact-form h1,
-html.dark form.contact-form h2,
-html.dark form.contact-form label,
-body.dark form.contact-form h1,
-body.dark form.contact-form h2,
-body.dark form.contact-form label {
-  color: #cbd5e1 !important;
-}
+    /* headings/paragraphs inside the form */
+    html.dark form.contact-form h1,
+    html.dark form.contact-form h2,
+    html.dark form.contact-form label,
+    body.dark form.contact-form h1,
+    body.dark form.contact-form h2,
+    body.dark form.contact-form label {
+      color: #cbd5e1 !important;
+    }
 
-/* inputs / textarea */
-html.dark form.contact-form input,
-html.dark form.contact-form textarea,
-body.dark form.contact-form input,
-body.dark form.contact-form textarea {
-  background: #0f172a !important;        /* input bg */
-  border: 1px solid #2c3b53 !important;
-  color: #e6eef8 !important;
-  box-shadow: none !important;
-}
+    /* inputs / textarea */
+    html.dark form.contact-form input,
+    html.dark form.contact-form textarea,
+    body.dark form.contact-form input,
+    body.dark form.contact-form textarea {
+      background: #0f172a !important;        /* input bg */
+      border: 1px solid #2c3b53 !important;
+      color: #e6eef8 !important;
+      box-shadow: none !important;
+    }
 
-/* placeholder color */
-html.dark form.contact-form input::placeholder,
-html.dark form.contact-form textarea::placeholder,
-body.dark form.contact-form input::placeholder,
-body.dark form.contact-form textarea::placeholder {
-  color:#94a3b8 !important;
-}
+    /* placeholder color */
+    html.dark form.contact-form input::placeholder,
+    html.dark form.contact-form textarea::placeholder,
+    body.dark form.contact-form input::placeholder,
+    body.dark form.contact-form textarea::placeholder {
+      color:#94a3b8 !important;
+    }
 
-/* send button */
-html.dark form.contact-form .send-btn,
-body.dark form.contact-form .send-btn {
-  background:#2563eb !important;
-  color:#fff !important;
-  box-shadow: 0 6px 20px rgba(37,99,235,0.25) !important;
-  border: none !important;
-}
+    /* send button */
+    html.dark form.contact-form .send-btn,
+    body.dark form.contact-form .send-btn {
+      background:#2563eb !important;
+      color:#fff !important;
+      box-shadow: 0 6px 20px rgba(37,99,235,0.25) !important;
+      border: none !important;
+    }
 
-/* small responsive tweak so edges aren't harsh on mobile */
-@media (max-width:700px) {
-  html.dark form.contact-form, body.dark form.contact-form {
-    padding: 1rem !important;
-  }
-}
-</style>
-
+    /* small responsive tweak so edges aren't harsh on mobile */
+    @media (max-width:700px) {
+      html.dark form.contact-form, body.dark form.contact-form {
+        padding: 1rem !important;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <!-- ✅ Header -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="logo">
-        <a href="https://convertlabs.online/index.html">
-          <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs logo" class="logo-img" style="height:32px;" loading="lazy">
-          <span class="brand-text">Convert Labs</span>
-        </a>
-      </div>
-      <nav class="nav-links">
-        <ul>
-          <li><a href="https://convertlabs.online/index.html">Home</a></li>
-          <li><a href="https://convertlabs.online/tools/tools.html">Tools</a></li>
-          <li><a href="https://convertlabs.online/guides.html">Blog</a></li>
-          <li><a href="https://convertlabs.online/about.html">About</a></li>
-          <li><a href="https://convertlabs.online/contact.html" class="active">Contact</a></li>
-        </ul>
-      </nav>
-      <button id="themeToggle" class="theme-toggle" title="Switch Theme">🌙</button>
+  <!-- ✅ CONSISTENT HEADER -->
+  <header>
+    <div class="brand">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+      <span>Convert Labs</span>
+    </div>
+    <nav class="nav-links">
+      <a href="https://convertlabs.online/index.html">Home</a>
+      <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+      <a href="https://convertlabs.online/guides.html">Blog</a>
+      <a href="https://convertlabs.online/about.html">About</a>
+      <a href="https://convertlabs.online/contact.html">Contact</a>
+    </nav>
+    <div style="margin-left:auto;">
+      <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
     </div>
   </header>
 
@@ -317,7 +297,7 @@ body.dark form.contact-form .send-btn {
     <h1>Contact Us</h1>
     <p><strong>Last updated:</strong> November 2025</p>
 
-    <p>We’re always happy to hear from you! Whether you have a question about one of our tools, found a bug, or have an idea for a new converter — your feedback helps us improve <strong>Convert Labs</strong>.</p>
+    <p>We're always happy to hear from you! Whether you have a question about one of our tools, found a bug, or have an idea for a new converter — your feedback helps us improve <strong>Convert Labs</strong>.</p>
 
     <h2>📧 Email</h2>
     <p>You can reach us anytime at:  
@@ -326,7 +306,7 @@ body.dark form.contact-form .send-btn {
 
     <h2>💬 Contact Form</h2>
     <p>Prefer to send your message directly through the site? Fill out the form below.  
-    (Your message will be sent securely — we don’t store or share your personal data.)</p>
+    (Your message will be sent securely — we don't store or share your personal data.)</p>
 
     <form action="https://formspree.io/f/movkgjwq" method="POST" class="contact-form" aria-label="Contact form">
       <label for="name"><strong>Your Name</strong></label>
@@ -404,15 +384,31 @@ body.dark form.contact-form .send-btn {
   }
 </style>
 
+<script>
+  // Theme toggle functionality
+  function initTheme() {
+    const savedTheme = localStorage.getItem('convertlabs-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark'); 
+      document.getElementById('themeToggle').textContent = '☀️';
+    } else { 
+      document.documentElement.classList.remove('dark'); 
+      document.getElementById('themeToggle').textContent = '🌙'; 
+    }
+  }
 
-  <script src="https://convertlabs.online/script.js" defer></script>
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    initTheme();
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  });
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
