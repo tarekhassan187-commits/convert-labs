@@ -109,6 +109,47 @@
     .macro-targets { background: var(--card); padding: 12px; border-radius: 8px; border-left: 4px solid var(--brand); }
     .macro-target-item { display: flex; justify-content: space-between; margin: 6px 0; }
     .macro-percentage { font-weight: 600; color: var(--brand); }
+    
+ /* TDEE Message Container Styles */
+#tdee-message-container {
+    margin: 20px 0;
+}
+
+.tdee-alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+    border-left: 4px solid;
+}
+
+.tdee-alert-info {
+    background-color: #d1ecf1;
+    border-color: #0c5460;
+    color: #0c5460;
+}
+
+.tdee-alert-success {
+    background-color: #d4edda;
+    border-color: #155724;
+    color: #155724;
+}
+
+.tdee-btn-primary {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.tdee-btn-primary:hover {
+    background-color: #0056b3;
+}
   </style>
 </head>
 <body>
@@ -132,6 +173,8 @@
   <div class="container">
     <main class="tool-page">
       <div id="welcomeBox" class="card" style="display:none;margin-bottom:12px;"></div>
+  <!-- TDEE Check Message Container -->
+<div id="tdee-message-container"></div>    
 <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
           <div style="flex:1">
