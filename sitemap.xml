@@ -87,11 +87,13 @@
     <loc>https://convertlabs.online/tools/calorie-guide.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://convertlabs.online/tools/meal-plan.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
   </url>
 
   <!-- Guides -->
@@ -99,46 +101,55 @@
     <loc>https://convertlabs.online/guides/guide-calories.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://convertlabs.online/guides/guide-container.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://convertlabs.online/guides/guide-currency.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://convertlabs.online/guides/guide-image.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://convertlabs.online/guides/guide-kitchen.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://convertlabs.online/guides/guide-length.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://convertlabs.online/guides/guide-mealplan-2000.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://convertlabs.online/guides/guide-temperature.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://convertlabs.online/guides/guide-volume.html</loc>
     <lastmod>2025-11-24</lastmod>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
 
 </urlset>
