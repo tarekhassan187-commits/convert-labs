@@ -633,7 +633,7 @@
     const showResults = (bmr,tdee,bmi,target,adviceHtml) => {
       document.getElementById('resBmr').textContent = Math.round(bmr) + ' kcal/day';
       document.getElementById('resTdee').textContent = Math.round(tdee) + ' kcal/day';
-     localStorage.setItem('userTDEE', Math.round(tdee));
+     localStorage.setItem('userTDEE', Math.round(target));
       document.getElementById('resBmi').textContent = bmi.toFixed(1);
       document.getElementById('resTarget').textContent = Math.round(target) + ' kcal/day';
       document.getElementById('adviceBox').innerHTML = adviceHtml;
