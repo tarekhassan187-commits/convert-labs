@@ -3,7 +3,7 @@
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <!-- Convert Labs Sitemap - Updated 2025-11-11 -->
+  <!-- Convert Labs Sitemap - Updated 2025-11-24 -->
 
   <!-- Root pages -->
   <url>
@@ -85,16 +85,60 @@
   </url>
   <url>
     <loc>https://convertlabs.online/tools/calorie-guide.html</loc>
-    <lastmod>2025-11-11</lastmod>
+    <lastmod>2025-11-24</lastmod>
     <priority>0.85</priority>
   </url>
-<url>
+  <url>
     <loc>https://convertlabs.online/tools/meal-plan.html</loc>
-    <lastmod>2025-11-11</lastmod>
+    <lastmod>2025-11-24</lastmod>
     <priority>0.85</priority>
   </url>
- </urlset>
 
+  <!-- Guides -->
+  <url>
+    <loc>https://convertlabs.online/guides/guide-calories.html</loc>
+    <lastmod>2025-11-24</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/guide-container.html</loc>
+    <lastmod>2025-11-24</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/guide-currency.html</loc>
+    <lastmod>2025-11-24</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/guide-image.html</loc>
+    <lastmod>2025-11-24</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/guide-kitchen.html</loc>
+    <lastmod>2025-11-24</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/guide-length.html</loc>
+    <lastmod>2025-11-24</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/guide-mealplan-2000.html</loc>
+    <lastmod>2025-11-24</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/guide-temperature.html</loc>
+    <lastmod>2025-11-24</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertlabs.online/guides/guide-volume.html</loc>
+    <lastmod>2025-11-24</lastmod>
+    <priority>0.8</priority>
+  </url>
 
-
-
+</urlset>
