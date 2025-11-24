@@ -1957,14 +1957,57 @@ function exportCurrentDayToPDF() {
   const fileName = `meal-plan-${dateStr.replace(/\//g, '-')}.pdf`;
   doc.save(fileName);
 }
-
+// =============================
+// TDEE CHECK FOR DIRECT ACCESS
+// =============================
+function checkTDEEOnLoad() {
+    const userTDEE = localStorage.getItem('userTDEE');
+    const messageContainer = document.getElementById('tdee-message-container');
+    const mainContent = document.querySelector('.tool-page');
+    
+    if (!userTDEE) {
+        // User doesn't have TDEE - show guidance message and hide main content
+        if (messageContainer) {
+            messageContainer.innerHTML = `
+                <div class="tdee-alert tdee-alert-info">
+                    <h3>Welcome to Your Meal Planner!</h3>
+                    <p>To generate your personalized 7-day meal plan, we first need to calculate your Daily Calorie Needs (TDEE).</p>
+                    <a href="calorie-guide.html" class="tdee-btn-primary">Calculate Your TDEE First</a>
+                </div>
+            `;
+        }
+        // Hide the main meal planner interface
+        if (mainContent) {
+            mainContent.style.display = 'none';
+        }
+    } else {
+        // User has TDEE - show welcome back message and ensure content is visible
+        if (messageContainer) {
+            messageContainer.innerHTML = `
+                <div class="tdee-alert tdee-alert-success">
+                    <p>Welcome back! Your plan is based on a <strong>${userTDEE} calorie</strong> target.</p>
+                </div>
+            `;
+        }
+        // Make sure the meal planner interface is visible
+        if (mainContent) {
+            mainContent.style.display = 'block';
+        }
+        
+        // Auto-fill the TDEE input field if it exists
+        const tdeeInput = document.getElementById('tdeeInput');
+        if (tdeeInput && !tdeeInput.value) {
+            tdeeInput.value = userTDEE;
+        }
+    }
+}
 // =============================
 // INITIALIZATION
 // =============================
 document.addEventListener('DOMContentLoaded', function() {
   initTheme();
   document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-  
+    checkTDEEOnLoad(); // Check if user has TDEE calculated
   // Start New Plan handler
   document.getElementById('newPlanBtn').addEventListener('click', function(){
     if(confirm('Start a new 7-day plan? This will delete your saved plan.')){
