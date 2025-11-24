@@ -1963,10 +1963,9 @@ function exportCurrentDayToPDF() {
 function checkTDEEOnLoad() {
     const userTDEE = localStorage.getItem('userTDEE');
     const messageContainer = document.getElementById('tdee-message-container');
-    const mainContent = document.querySelector('.tool-page');
     
     if (!userTDEE) {
-        // User doesn't have TDEE - show guidance message and hide main content
+        // User doesn't have TDEE - show guidance message
         if (messageContainer) {
             messageContainer.innerHTML = `
                 <div class="tdee-alert tdee-alert-info">
@@ -1976,12 +1975,15 @@ function checkTDEEOnLoad() {
                 </div>
             `;
         }
-        // Hide the main meal planner interface
-        if (mainContent) {
-            mainContent.style.display = 'none';
-        }
+        // Hide only the main content area, not the entire page
+        const mainInner = document.getElementById('mainInner');
+        const inputCard = document.querySelector('.card:has(#tdeeInput)');
+        
+        if (mainInner) mainInner.style.display = 'none';
+        if (inputCard) inputCard.style.display = 'none';
+        
     } else {
-        // User has TDEE - show welcome back message and ensure content is visible
+        // User has TDEE - show welcome back message
         if (messageContainer) {
             messageContainer.innerHTML = `
                 <div class="tdee-alert tdee-alert-success">
@@ -1989,10 +1991,12 @@ function checkTDEEOnLoad() {
                 </div>
             `;
         }
-        // Make sure the meal planner interface is visible
-        if (mainContent) {
-            mainContent.style.display = 'block';
-        }
+        // Ensure everything is visible
+        const mainInner = document.getElementById('mainInner');
+        const inputCard = document.querySelector('.card:has(#tdeeInput)');
+        
+        if (mainInner) mainInner.style.display = 'block';
+        if (inputCard) inputCard.style.display = 'block';
         
         // Auto-fill the TDEE input field if it exists
         const tdeeInput = document.getElementById('tdeeInput');
