@@ -544,12 +544,7 @@
         <button onclick="convertKitchen()">Convert</button>
       </div>
 
-      <p id="kitchenResult" style="margin-top:1rem;font-weight:600;"></p>
-      <div class="converter-ui">
-  <input type="number" id="kitchenInput" placeholder="Enter amount" />
-  <!-- ... your existing selects ... -->
-  <button onclick="convertKitchen()">Convert</button>
-</div>
+      
 
 <!-- ADD THIS RIGHT HERE -->
 <div class="quick-presets">
@@ -794,10 +789,17 @@
         convertKitchen();
       }
     });
-  
+  // Add this function to your existing script
+function setPreset(ingredient, fromUnit, toUnit) {
+  document.getElementById('kitchenIngredient').value = ingredient;
+  document.getElementById('kitchenFrom').value = fromUnit;
+  document.getElementById('kitchenTo').value = toUnit;
+  document.getElementById('kitchenInput').focus();
+}
   </script>
 </body>
 </html>
+
 
 
 
