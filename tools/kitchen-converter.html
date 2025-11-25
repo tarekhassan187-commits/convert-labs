@@ -544,7 +544,12 @@
         <button onclick="convertKitchen()">Convert</button>
       </div>
 
-      
+      <p id="kitchenResult" style="margin-top:1rem;font-weight:600;"></p>
+      <div class="converter-ui">
+  <input type="number" id="kitchenInput" placeholder="Enter amount" />
+  <!-- ... your existing selects ... -->
+  <button onclick="convertKitchen()">Convert</button>
+</div>
 
 <!-- ADD THIS RIGHT HERE -->
 <div class="quick-presets">
@@ -799,6 +804,7 @@ function setPreset(ingredient, fromUnit, toUnit) {
   </script>
 </body>
 </html>
+
 
 
 
