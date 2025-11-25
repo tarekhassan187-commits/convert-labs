@@ -984,8 +984,6 @@ function renderPlan(plan, startDate) {
   if (!plan || !plan.length) {
     container.innerHTML = "<div class='card'>No plan generated yet.</div>";
     return;
-    // Update current day macros display
-updateCurrentMacrosDisplay();
   }
   
   const start = new Date(startDate);
@@ -1104,9 +1102,7 @@ updateCurrentMacrosDisplay();
               replaceMealWithFood(d.day, meal.key, selectedFood);
             }
             this.value = ""; // Reset dropdown
-        updateCurrentMacrosDisplay();
           }
-        
         });
         
         mealBlock.appendChild(dropdown);
@@ -1142,7 +1138,6 @@ updateCurrentMacrosDisplay();
           gramInput.min = "10";
           gramInput.addEventListener('change', (e) => {
             updatePortionSize(d.day, meal.key, partIndex, parseInt(e.target.value));
-            updateCurrentMacrosDisplay();
           });
           
           // Adjust buttons
@@ -1155,7 +1150,6 @@ updateCurrentMacrosDisplay();
             const newGrams = Math.max(10, (part.grams || 100) - 10);
             gramInput.value = newGrams;
             updatePortionSize(d.day, meal.key, partIndex, newGrams);
-            updateCurrentMacrosDisplay();
           };
           
           const plusBtn = document.createElement("button");
@@ -1167,7 +1161,6 @@ updateCurrentMacrosDisplay();
             const newGrams = (part.grams || 100) + 10;
             gramInput.value = newGrams;
             updatePortionSize(d.day, meal.key, partIndex, newGrams);
-            updateCurrentMacrosDisplay();
           };
           
           // DELETE BUTTON
@@ -1180,7 +1173,6 @@ updateCurrentMacrosDisplay();
           deleteBtn.style.borderColor = "var(--danger-color)";
           deleteBtn.onclick = () => {
             deleteFoodItem(d.day, meal.key, partIndex);
-            updateCurrentMacrosDisplay();
           };
           
           partActions.appendChild(minusBtn);
@@ -1255,7 +1247,26 @@ updateCurrentMacrosDisplay();
     container.appendChild(card);
   });
   
-  function updateCurrentMacrosDisplay() {
+  // Update current day macros display
+  updateCurrentMacrosDisplay();
+}
+
+function calculateDayTotals(day) {
+  const breakfast = day.breakfast.parts ? calculateMealNutrition(day.breakfast.parts) : {kcal:0, protein:0, carbs:0, fat:0};
+  const lunch = day.lunch.parts ? calculateMealNutrition(day.lunch.parts) : {kcal:0, protein:0, carbs:0, fat:0};
+  const dinner = day.dinner.parts ? calculateMealNutrition(day.dinner.parts) : {kcal:0, protein:0, carbs:0, fat:0};
+  const snack = day.snack.parts ? calculateMealNutrition(day.snack.parts) : {kcal:0, protein:0, carbs:0, fat:0};
+  
+  return {
+    kcal: breakfast.kcal + lunch.kcal + dinner.kcal + snack.kcal,
+    protein: breakfast.protein + lunch.protein + dinner.protein + snack.protein,
+    carbs: breakfast.carbs + lunch.carbs + dinner.carbs + snack.carbs,
+    fat: breakfast.fat + lunch.fat + dinner.fat + snack.fat
+  };
+}
+
+// FIXED: Updated function to show current day macros
+function updateCurrentMacrosDisplay() {
   const dayMacros = document.getElementById("dayMacros");
   const macroBars = document.getElementById("macroBars");
   
@@ -1304,6 +1315,7 @@ updateCurrentMacrosDisplay();
     </div>
   `;
 }
+
 // =============================
 // FOOD CATEGORIES
 // =============================
@@ -1423,8 +1435,7 @@ function replaceMealWithFood(day, mealKey, foodItem) {
   
   renderPlan(plan,start); 
   updateSavedInfo();
-  // Update current day macros display
-updateCurrentMacrosDisplay();
+  updateCurrentMacrosDisplay(); // ADDED: Update macros display
 }
 
 function deleteFoodItem(day, mealKey, partIndex){
@@ -1432,7 +1443,6 @@ function deleteFoodItem(day, mealKey, partIndex){
   if(!ctx) {
     alert("No active plan found. Please generate a plan first.");
     return;
-    updateCurrentMacrosDisplay();
   }
   
   const plan=ctx.plan, start=ctx.startDate;
@@ -1453,8 +1463,7 @@ function deleteFoodItem(day, mealKey, partIndex){
   
   renderPlan(plan,start); 
   updateSavedInfo();
-  // Update current day macros display
-updateCurrentMacrosDisplay();
+  updateCurrentMacrosDisplay(); // ADDED: Update macros display
 }
 
 function updatePortionSize(day, mealKey, partIndex, grams){
@@ -1462,7 +1471,6 @@ function updatePortionSize(day, mealKey, partIndex, grams){
   if(!ctx) {
     alert("No active plan found. Please generate a plan first.");
     return;
-    updateCurrentMacrosDisplay();
   }
   
   const plan=ctx.plan, start=ctx.startDate;
@@ -1486,8 +1494,7 @@ function updatePortionSize(day, mealKey, partIndex, grams){
   
   renderPlan(plan,start); 
   updateSavedInfo();
-  // Update current day macros display
-updateCurrentMacrosDisplay();
+  updateCurrentMacrosDisplay(); // ADDED: Update macros display
 }
 
 // =============================
@@ -1543,7 +1550,6 @@ function openAddItemModal(dayIdx, mealKey) {
           fat_per_100g: parseFloat(selectedOption.getAttribute('data-fat'))
         };
         applyAddToPlan(foodItem.name, foodItem.kcal_per_100g, foodItem.protein_per_100g, foodItem.carbs_per_100g, foodItem.fat_per_100g);
-        updateCurrentMacrosDisplay();
       }
     });
     
@@ -1617,7 +1623,6 @@ function openReplaceModal(dayIdx, mealKey) {
           fat_per_100g: parseFloat(selectedOption.getAttribute('data-fat'))
         };
         applyReplacementToPlan(foodItem.name, foodItem.kcal_per_100g, foodItem.protein_per_100g, foodItem.carbs_per_100g, foodItem.fat_per_100g);
-        updateCurrentMacrosDisplay();
       }
     });
     
@@ -1664,7 +1669,6 @@ function renderAddList(results) {
         <div style="font-weight: 700">${escapeHtml(name)}</div>
         <div class="muted-small">
           ${kcal} kcal • P: ${protein}g • C: ${carbs}g • F: ${fat}g per 100g
-          updateCurrentMacrosDisplay();
         </div>
       </div>
     `;
@@ -1703,7 +1707,6 @@ function renderReplaceList(results) {
         <div style="font-weight:700">${escapeHtml(name)}</div>
         <div class="muted-small">
           ${kcal} kcal • P ${protein}g • C ${carbs}g • F ${fat}g per 100g
-          updateCurrentMacrosDisplay();
         </div>
       </div>
     `;
@@ -1718,7 +1721,6 @@ function applyAddToPlan(name,k,p,c,f){
   if(!ctx) {
     alert("No active plan found. Please generate a plan first.");
     return;
-    updateCurrentMacrosDisplay();
   }
   
   const plan=ctx.plan, start=ctx.startDate;
@@ -1752,8 +1754,7 @@ function applyAddToPlan(name,k,p,c,f){
   
   renderPlan(plan,start); 
   updateSavedInfo();
-  // Update current day macros display
-updateCurrentMacrosDisplay();
+  updateCurrentMacrosDisplay(); // ADDED: Update macros display
   document.getElementById("usdaPopup").style.display="none";
 }
 
@@ -1762,7 +1763,6 @@ function applyReplacementToPlan(name,k,p,c,f){
   if(!ctx) {
     alert("No active plan found. Please generate a plan first.");
     return;
-    updateCurrentMacrosDisplay();
   }
   
   const plan=ctx.plan, start=ctx.startDate;
@@ -1793,8 +1793,7 @@ function applyReplacementToPlan(name,k,p,c,f){
   
   renderPlan(plan,start); 
   updateSavedInfo(); 
-  // Update current day macros display
-updateCurrentMacrosDisplay();
+  updateCurrentMacrosDisplay(); // ADDED: Update macros display
   document.getElementById("usdaPopup").style.display="none";
 }
 
@@ -1998,7 +1997,8 @@ function exportCurrentDayToPDF() {
   const fileName = `meal-plan-day-${currentDayPlan.day}-${dateStr.replace(/\//g, '-')}.pdf`;
   doc.save(fileName);
 }
-  // =============================
+
+// =============================
 // TDEE CHECK FOR DIRECT ACCESS
 // =============================
 function checkTDEEOnLoad() {
@@ -2046,13 +2046,15 @@ function checkTDEEOnLoad() {
         }
     }
 }
+
 // =============================
 // INITIALIZATION
 // =============================
 document.addEventListener('DOMContentLoaded', function() {
   initTheme();
   document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-    checkTDEEOnLoad(); // Check if user has TDEE calculated
+  checkTDEEOnLoad(); // Check if user has TDEE calculated
+  
   // Start New Plan handler
   document.getElementById('newPlanBtn').addEventListener('click', function(){
     if(confirm('Start a new 7-day plan? This will delete your saved plan.')){
@@ -2062,6 +2064,7 @@ document.addEventListener('DOMContentLoaded', function() {
       window.previewPlan = null;
       document.getElementById('mainInner').innerHTML = "<div class='card'>No plan generated yet.</div>";
       updateSavedInfo();
+      updateCurrentMacrosDisplay(); // Clear macros display
     }
   });
   
@@ -2074,8 +2077,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('welcomeBox').innerHTML = '<h3>👋 Welcome back!</h3><p>Your saved 7-day plan has been loaded. Use Start New Plan to generate a fresh plan.</p>';
     renderPlan(stored.plan, stored.startDate);
     updateSavedInfo();
-    // Update current day macros display
-updateCurrentMacrosDisplay();
+    updateCurrentMacrosDisplay(); // Update macros for current day
   }
   
   // Generate Preview button handler - FIXED
@@ -2107,6 +2109,7 @@ updateCurrentMacrosDisplay();
       window.previewPlan = plan;
       
       renderPlan(plan, new Date().toISOString());
+      updateCurrentMacrosDisplay(); // ADDED: Update macros display
       
       const modal = document.getElementById('previewModal'); 
       const previewBox = document.getElementById('previewBox');
@@ -2114,8 +2117,6 @@ updateCurrentMacrosDisplay();
       modal.style.display = 'flex'; 
       modal.addEventListener('click', function(e) { 
         if (e.target === modal) modal.style.display = 'none'; 
-        // Update current day macros display
-updateCurrentMacrosDisplay();
       });
     } catch (error) { 
       console.error("Error generating plan:", error); 
@@ -2139,12 +2140,11 @@ updateCurrentMacrosDisplay();
       savePlan(planToSave, startDateToSave);
       updateSavedInfo();
       renderPlan(planToSave, startDateToSave);
+      updateCurrentMacrosDisplay(); // ADDED: Update macros display
       
       const modal = document.getElementById('previewModal'); 
       if(modal) modal.style.display = 'none';
       alert("Plan saved successfully!");
-      // Update current day macros display
-updateCurrentMacrosDisplay();
       
       setTimeout(()=>{ 
         const first = document.querySelector('.card[data-day="1"]'); 
@@ -2165,13 +2165,12 @@ updateCurrentMacrosDisplay();
   const existingPlan = loadPlan();
   if (existingPlan && existingPlan.plan) {
     renderPlan(existingPlan.plan, existingPlan.startDate);
+    updateCurrentMacrosDisplay(); // Update macros for current day
   } else {
     document.getElementById('mainInner').innerHTML = "<div class='card'>No plan generated yet. Click 'Generate Preview' to create a meal plan.</div>";
   }
   updateSavedInfo();
-  // Update current day macros display
-updateCurrentMacrosDisplay();
 });
 </script>
 </body>
-  </html>
+</html>
