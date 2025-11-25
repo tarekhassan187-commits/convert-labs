@@ -1272,18 +1272,35 @@ function updateCurrentMacrosDisplay() {
   
   // Get the current active day (first unlocked day)
   const ctx = _getActivePlanContext();
-  if (!ctx || !ctx.plan) return;
+  if (!ctx || !ctx.plan) {
+    dayMacros.innerHTML = "—";
+    macroBars.innerHTML = "";
+    return;
+  }
   
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const startDate = new Date(ctx.startDate);
+  startDate.setHours(0, 0, 0, 0);
   
   // Calculate which day is currently active (0-indexed)
   const daysDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
   const currentDayIndex = Math.max(0, Math.min(daysDiff, 6)); // Cap at day 7
   
+  console.log("Macros Display Debug:", {
+    today: today.toDateString(),
+    startDate: startDate.toDateString(),
+    daysDiff: daysDiff,
+    currentDayIndex: currentDayIndex,
+    currentDayNumber: currentDayIndex + 1
+  });
+  
   const currentDay = ctx.plan[currentDayIndex];
-  if (!currentDay || !currentDay.meta) return;
+  if (!currentDay || !currentDay.meta) {
+    dayMacros.innerHTML = "—";
+    macroBars.innerHTML = "";
+    return;
+  }
   
   const totals = calculateDayTotals(currentDay);
   const targets = currentDay.meta.macroTarget;
@@ -1315,7 +1332,6 @@ function updateCurrentMacrosDisplay() {
     </div>
   `;
 }
-
 // =============================
 // FOOD CATEGORIES
 // =============================
