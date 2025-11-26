@@ -545,6 +545,7 @@
           <div class="platform-option" data-value="tiktok">🎵 TikTok</div>
           <div class="platform-option" data-value="product">🛍️ Product Page</div>
           <div class="platform-option" data-value="local">🏢 Local Business</div>
+          <div class="platform-option" data-value="email">📧 Email Campaign</div>
         </div>
         <input type="hidden" id="platform" value="">
       </div>
@@ -696,7 +697,7 @@
 </footer>
 
 <script>
-  // COMPLETE template data structure with ALL platforms and languages
+  // COMPLETE template data structure with ALL platforms and ALL languages
   const templates = {
     blog: {
       en: [
@@ -1080,8 +1081,79 @@ ${data.cta}
 
 #${data.primary_keyword.replace(/\s+/g, '')} #${data.post_topic.replace(/\s+/g, '')} #${data.brand_name.replace(/\s+/g, '')} #نصائح #وسائل_التواصل_الاجتماعي`
         }
+      ],
+      fr: [
+        {
+          title: "Modèle SEO pour Instagram",
+          fields: ["post_topic", "primary_keyword", "brand_name", "cta"],
+          template: (data) => `Légende Instagram :
+
+${data.post_topic} vient de devenir plus facile ! ✨
+
+Découvrez le secret des résultats incroyables de ${data.primary_keyword} qui transformeront votre approche.
+
+Voici ce que vous devez savoir :
+✅ Point 1 sur ${data.primary_keyword}
+✅ Point 2 sur ${data.post_topic}
+✅ Point 3 pour les meilleurs résultats
+
+${data.cta}
+
+Double-tapez si vous avez trouvé cela utile ! ❤️
+
+Suivez @${data.brand_name.replace(/\s+/g, '')} pour des conseils quotidiens !
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.post_topic.replace(/\s+/g, '')} #${data.brand_name.replace(/\s+/g, '')} #Conseils #RéseauxSociaux`
+        }
+      ],
+      de: [
+        {
+          title: "SEO-Vorlage für Instagram",
+          fields: ["post_topic", "primary_keyword", "brand_name", "cta"],
+          template: (data) => `Instagram-Beschriftung:
+
+${data.post_topic} wurde gerade einfacher! ✨
+
+Entdecken Sie das Geheimnis erstaunlicher ${data.primary_keyword}-Ergebnisse, die Ihren Ansatz verändern werden.
+
+Hier ist, was Sie wissen müssen:
+✅ Punkt 1 über ${data.primary_keyword}
+✅ Punkt 2 über ${data.post_topic}
+✅ Punkt 3 für beste Ergebnisse
+
+${data.cta}
+
+Doppelt tippen, wenn Sie das hilfreich fanden! ❤️
+
+Folgen Sie @${data.brand_name.replace(/\s+/g, '')} für tägliche Tipps!
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.post_topic.replace(/\s+/g, '')} #${data.brand_name.replace(/\s+/g, '')} #Tipps #SozialeMedien`
+        }
+      ],
+      es: [
+        {
+          title: "Plantilla SEO para Instagram",
+          fields: ["post_topic", "primary_keyword", "brand_name", "cta"],
+          template: (data) => `Pie de foto de Instagram:
+
+¡${data.post_topic} se ha vuelto más fácil! ✨
+
+Descubre el secreto de los increíbles resultados de ${data.primary_keyword} que transformarán tu enfoque.
+
+Esto es lo que necesitas saber:
+✅ Punto 1 sobre ${data.primary_keyword}
+✅ Punto 2 sobre ${data.post_topic}
+✅ Punto 3 para mejores resultados
+
+${data.cta}
+
+¡Toca dos veces si te resultó útil! ❤️
+
+¡Sigue a @${data.brand_name.replace(/\s+/g, '')} para consejos diarios!
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.post_topic.replace(/\s+/g, '')} #${data.brand_name.replace(/\s+/g, '')} #Consejos #RedesSociales`
+        }
       ]
-      // Add other languages similarly...
     },
 
     pinterest: {
@@ -1106,8 +1178,95 @@ Click through to read the full guide on our website!
 
 #${data.primary_keyword.replace(/\s+/g, '')} #${data.pin_topic.replace(/\s+/g, '')} #DIY #Tips #${data.brand_name.replace(/\s+/g, '')}`
         }
+      ],
+      ar: [
+        {
+          title: "قالب SEO لبينتيريست",
+          fields: ["pin_topic", "primary_keyword", "brand_name", "benefit"],
+          template: (data) => `عنوان البينت: الدليل الشامل لـ ${data.pin_topic}
+
+وصف البينت:
+اكتشف كيفية تحقيق ${data.benefit} مع دليلنا الكامل لـ ${data.pin_topic}! يغطي هذا المورد الشامل كل ما تحتاج لمعرفته حول ${data.primary_keyword}.
+
+🌟 الميزات الرئيسية المضمنة:
+• تعليمات خطوة بخطوة
+• نصائح احترافية
+• أفضل الممارسات
+• الأخطاء الشائعة التي يجب تجنبها
+
+مثالي للمبتدئين والخبراء على حد سواء! احفظ هذا البينت لوقت لاحق واتبع ${data.brand_name} للمزيد من المحتوى المذهل.
+
+انقر لقراءة الدليل الكامل على موقعنا!
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.pin_topic.replace(/\s+/g, '')} #اصنع_بنفسك #نصائح #${data.brand_name.replace(/\s+/g, '')}`
+        }
+      ],
+      fr: [
+        {
+          title: "Modèle SEO pour Pinterest",
+          fields: ["pin_topic", "primary_keyword", "brand_name", "benefit"],
+          template: (data) => `Titre de l'Épinglé : Guide Ultime de ${data.pin_topic}
+
+Description de l'Épinglé :
+Découvrez comment atteindre ${data.benefit} avec notre guide complet de ${data.pin_topic} ! Cette ressource complète couvre tout ce que vous devez savoir sur ${data.primary_keyword}.
+
+🌟 Fonctionnalités clés incluses :
+• Instructions étape par étape
+• Conseils professionnels
+• Meilleures pratiques
+• Erreurs courantes à éviter
+
+Parfait pour les débutants et les experts ! Enregistrez cette épingle pour plus tard et suivez ${data.brand_name} pour plus de contenu incroyable.
+
+Cliquez pour lire le guide complet sur notre site web !
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.pin_topic.replace(/\s+/g, '')} #DIY #Conseils #${data.brand_name.replace(/\s+/g, '')}`
+        }
+      ],
+      de: [
+        {
+          title: "SEO-Vorlage für Pinterest",
+          fields: ["pin_topic", "primary_keyword", "brand_name", "benefit"],
+          template: (data) => `Pin-Titel: Ultimativer Leitfaden zu ${data.pin_topic}
+
+Pin-Beschreibung:
+Entdecken Sie, wie Sie ${data.benefit} mit unserem komplettes ${data.pin_topic}-Leitfaden erreichen! Diese umfassende Ressource deckt alles ab, was Sie über ${data.primary_keyword} wissen müssen.
+
+🌟 Wichtige Funktionen enthalten:
+• Schritt-für-Schritt-Anleitungen
+• Professionelle Tipps
+• Best Practices
+• Häufige Fehler zu vermeiden
+
+Perfekt für Anfänger und Experten gleichermaßen! Speichern Sie diesen Pin für später und folgen Sie ${data.brand_name} für mehr erstaunliche Inhalte.
+
+Klicken Sie durch, um den vollständigen Leitfaden auf unserer Website zu lesen!
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.pin_topic.replace(/\s+/g, '')} #DIY #Tipps #${data.brand_name.replace(/\s+/g, '')}`
+        }
+      ],
+      es: [
+        {
+          title: "Plantilla SEO para Pinterest",
+          fields: ["pin_topic", "primary_keyword", "brand_name", "benefit"],
+          template: (data) => `Título del Pin: Guía Definitiva de ${data.pin_topic}
+
+Descripción del Pin:
+¡Descubre cómo lograr ${data.benefit} con nuestra guía completa de ${data.pin_topic}! Este recurso integral cubre todo lo que necesitas saber sobre ${data.primary_keyword}.
+
+🌟 Características clave incluidas:
+• Instrucciones paso a paso
+• Consejos profesionales
+• Mejores prácticas
+• Errores comunes a evitar
+
+¡Perfecto para principiantes y expertos por igual! Guarda este pin para después y sigue a ${data.brand_name} para más contenido increíble.
+
+¡Haz clic para leer la guía completa en nuestro sitio web!
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.pin_topic.replace(/\s+/g, '')} #DIY #Consejos #${data.brand_name.replace(/\s+/g, '')}`
+        }
       ]
-      // Add other languages similarly...
     },
 
     tiktok: {
@@ -1130,8 +1289,87 @@ Follow for more ${data.video_topic} tips! 🔥
 
 #${data.primary_keyword.replace(/\s+/g, '')} #${data.video_topic.replace(/\s+/g, '')} #LearnOnTikTok #Tips #Viral`
         }
+      ],
+      ar: [
+        {
+          title: "قالب SEO لتيك توك",
+          fields: ["video_topic", "primary_keyword", "hook", "cta"],
+          template: (data) => `النص على الشاشة: ${data.hook}
+
+وصف الفيديو:
+هذا غير كل شيء لـ ${data.video_topic}! 🤯
+
+انتظر حتى ترى كيف يمكن أن يكون ${data.primary_keyword} سهلاً عندما تعرف هذه الحيلة.
+
+اسحب لأعلى للدرس الكامل! 👆
+
+${data.cta}
+
+اتبع للمزيد من نصائح ${data.video_topic}! 🔥
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.video_topic.replace(/\s+/g, '')} #تعلم_على_تيك_توك #نصائح #فيروسي`
+        }
+      ],
+      fr: [
+        {
+          title: "Modèle SEO pour TikTok",
+          fields: ["video_topic", "primary_keyword", "hook", "cta"],
+          template: (data) => `Texte à l'écran : ${data.hook}
+
+Description de la vidéo :
+Cela a tout changé pour ${data.video_topic} ! 🤯
+
+Attendez de voir à quel point ${data.primary_keyword} peut être facile quand vous connaissez cette astuce.
+
+Glissez vers le haut pour le tutoriel complet ! 👆
+
+${data.cta}
+
+Suivez pour plus de conseils ${data.video_topic} ! 🔥
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.video_topic.replace(/\s+/g, '')} #ApprendreSurTikTok #Conseils #Viral`
+        }
+      ],
+      de: [
+        {
+          title: "SEO-Vorlage für TikTok",
+          fields: ["video_topic", "primary_keyword", "hook", "cta"],
+          template: (data) => `Bildschirmtext: ${data.hook}
+
+Video-Beschreibung:
+Das hat alles für ${data.video_topic} verändert! 🤯
+
+Warten Sie, bis Sie sehen, wie einfach ${data.primary_keyword} sein kann, wenn Sie diesen einen Trick kennen.
+
+Wischen Sie nach oben für das vollständige Tutorial! 👆
+
+${data.cta}
+
+Folgen Sie für mehr ${data.video_topic}-Tipps! 🔥
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.video_topic.replace(/\s+/g, '')} #LernenAufTikTok #Tipps #Viral`
+        }
+      ],
+      es: [
+        {
+          title: "Plantilla SEO para TikTok",
+          fields: ["video_topic", "primary_keyword", "hook", "cta"],
+          template: (data) => `Texto en pantalla: ${data.hook}
+
+Descripción del video:
+¡Esto lo cambió todo para ${data.video_topic}! 🤯
+
+Espera a ver lo fácil que puede ser ${data.primary_keyword} cuando conoces este truco.
+
+¡Desliza hacia arriba para el tutorial completo! 👆
+
+${data.cta}
+
+¡Sigue para más consejos de ${data.video_topic}! 🔥
+
+#${data.primary_keyword.replace(/\s+/g, '')} #${data.video_topic.replace(/\s+/g, '')} #AprendeEnTikTok #Consejos #Viral`
+        }
       ]
-      // Add other languages similarly...
     },
 
     product: {
@@ -1166,8 +1404,127 @@ Follow for more ${data.video_topic} tips! 🔥
 
 <strong>Order now and get free shipping!</strong>`
         }
+      ],
+      ar: [
+        {
+          title: "قالب SEO لصفحة المنتج",
+          fields: ["product_name", "primary_keyword", "brand_name", "key_feature", "color"],
+          template: (data) => `قالب SEO لصفحة المنتج:
+
+<title>اشتري ${data.product_name} - ${data.key_feature} | ${data.brand_name}</title>
+<meta name="description" content="تسوق أفضل ${data.product_name} يتميز بـ ${data.key_feature}. متوفر بلون ${data.color}. شحن مجاني وإرجاع. اشتر الآن!">
+<meta name="keywords" content="${data.product_name}, ${data.primary_keyword}, ${data.key_feature}">
+<link rel="canonical" href="https://yourwebsite.com/ar/products/${data.product_name.replace(/\s+/g, '-')}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="اشتري ${data.product_name} - ${data.key_feature} | ${data.brand_name}" />
+<meta property="og:description" content="تسوق أفضل ${data.product_name} يتميز بـ ${data.key_feature}. متوفر بلون ${data.color}." />
+
+<h1>${data.product_name} - ${data.key_feature}</h1>
+
+<p>اكتشف ${data.product_name} الثوري الذي سيحول تجربتك مع ${data.primary_keyword}. مصمم لأداء وموثوقية استثنائية.</p>
+
+<h2>الميزات الرئيسية</h2>
+<ul>
+<li>تقنية ${data.key_feature} المتقدمة</li>
+<li>تشطيب ${data.color} متميز</li>
+<li>أداء بمستوى احترافي</li>
+<li>سهل الاستخدام والصيانة</li>
+</ul>
+
+<strong>اطلب الآن واحصل على شحن مجاني!</strong>`
+        }
+      ],
+      fr: [
+        {
+          title: "Modèle SEO pour Page Produit",
+          fields: ["product_name", "primary_keyword", "brand_name", "key_feature", "color"],
+          template: (data) => `Modèle SEO pour Page Produit :
+
+<title>Acheter ${data.product_name} - ${data.key_feature} | ${data.brand_name}</title>
+<meta name="description" content="Achetez le meilleur ${data.product_name} avec ${data.key_feature}. Disponible en ${data.color}. Livraison gratuite & retours. Achetez maintenant !">
+<meta name="keywords" content="${data.product_name}, ${data.primary_keyword}, ${data.key_feature}">
+<link rel="canonical" href="https://yourwebsite.com/fr/products/${data.product_name.replace(/\s+/g, '-')}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Acheter ${data.product_name} - ${data.key_feature} | ${data.brand_name}" />
+<meta property="og:description" content="Achetez le meilleur ${data.product_name} avec ${data.key_feature}. Disponible en ${data.color}." />
+
+<h1>${data.product_name} - ${data.key_feature}</h1>
+
+<p>Découvrez le ${data.product_name} révolutionnaire qui transformera votre expérience avec ${data.primary_keyword}. Conçu pour des performances et une fiabilité exceptionnelles.</p>
+
+<h2>Caractéristiques Principales</h2>
+<ul>
+<li>Technologie ${data.key_feature} avancée</li>
+<li>Finition ${data.color} premium</li>
+<li>Performances de qualité professionnelle</li>
+<li>Facile à utiliser et entretenir</li>
+</ul>
+
+<strong>Commandez maintenant et obtenez la livraison gratuite !</strong>`
+        }
+      ],
+      de: [
+        {
+          title: "SEO-Vorlage für Produktseite",
+          fields: ["product_name", "primary_keyword", "brand_name", "key_feature", "color"],
+          template: (data) => `SEO-Vorlage für Produktseite:
+
+<title>Kaufen Sie ${data.product_name} - ${data.key_feature} | ${data.brand_name}</title>
+<meta name="description" content="Kaufen Sie das beste ${data.product_name} mit ${data.key_feature}. Erhältlich in ${data.color}. Kostenloser Versand & Rückgabe. Jetzt kaufen!">
+<meta name="keywords" content="${data.product_name}, ${data.primary_keyword}, ${data.key_feature}">
+<link rel="canonical" href="https://yourwebsite.com/de/products/${data.product_name.replace(/\s+/g, '-')}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Kaufen Sie ${data.product_name} - ${data.key_feature} | ${data.brand_name}" />
+<meta property="og:description" content="Kaufen Sie das beste ${data.product_name} mit ${data.key_feature}. Erhältlich in ${data.color}." />
+
+<h1>${data.product_name} - ${data.key_feature}</h1>
+
+<p>Entdecken Sie das revolutionäre ${data.product_name}, das Ihr Erlebnis mit ${data.primary_keyword} verändern wird. Entwickelt für außergewöhnliche Leistung und Zuverlässigkeit.</p>
+
+<h2>Hauptmerkmale</h2>
+<ul>
+<li>Fortschrittliche ${data.key_feature}-Technologie</li>
+<li>Premium ${data.color}-Finish</li>
+<li>Leistung auf professionellem Niveau</li>
+<li>Einfach zu verwenden und zu warten</li>
+</ul>
+
+<strong>Jetzt bestellen und kostenlosen Versand erhalten!</strong>`
+        }
+      ],
+      es: [
+        {
+          title: "Plantilla SEO para Página de Producto",
+          fields: ["product_name", "primary_keyword", "brand_name", "key_feature", "color"],
+          template: (data) => `Plantilla SEO para Página de Producto:
+
+<title>Comprar ${data.product_name} - ${data.key_feature} | ${data.brand_name}</title>
+<meta name="description" content="Compra el mejor ${data.product_name} con ${data.key_feature}. Disponible en ${data.color}. Envío gratis y devoluciones. ¡Compra ahora!">
+<meta name="keywords" content="${data.product_name}, ${data.primary_keyword}, ${data.key_feature}">
+<link rel="canonical" href="https://yourwebsite.com/es/products/${data.product_name.replace(/\s+/g, '-')}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Comprar ${data.product_name} - ${data.key_feature} | ${data.brand_name}" />
+<meta property="og:description" content="Compra el mejor ${data.product_name} con ${data.key_feature}. Disponible en ${data.color}." />
+
+<h1>${data.product_name} - ${data.key_feature}</h1>
+
+<p>Descubre el revolucionario ${data.product_name} que transformará tu experiencia con ${data.primary_keyword}. Diseñado para un rendimiento y confiabilidad excepcionales.</p>
+
+<h2>Características Principales</h2>
+<ul>
+<li>Tecnología ${data.key_feature} avanzada</li>
+<li>Acabado ${data.color} premium</li>
+<li>Rendimiento de grado profesional</li>
+<li>Fácil de usar y mantener</li>
+</ul>
+
+<strong>¡Ordena ahora y obtén envío gratis!</strong>`
+        }
       ]
-      // Add other languages similarly...
     },
 
     local: {
@@ -1200,8 +1557,315 @@ Follow for more ${data.video_topic} tips! 🔥
 
 <strong>Call ${data.phone} today for your free consultation!</strong>`
         }
+      ],
+      ar: [
+        {
+          title: "قالب SEO للأعمال المحلية",
+          fields: ["business_name", "primary_service", "city", "phone", "year"],
+          template: (data) => `قالب SEO للأعمال المحلية:
+
+<title>${data.primary_service} في ${data.city} | ${data.business_name} منذ ${data.year}</title>
+<meta name="description" content="${data.business_name} - خدمات ${data.primary_service} احترافية في ${data.city}. اتصل ${data.phone} للحصول على استشارة مجانية وعروض أسعار. نخدم منطقة ${data.city} منذ ${data.year}.">
+<meta name="keywords" content="${data.primary_service} ${data.city}, ${data.business_name}, خدمات ${data.city}">
+<link rel="canonical" href="https://yourwebsite.com/ar/locations/${data.city}/${data.primary_service.replace(/\s+/g, '-')}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="${data.primary_service} في ${data.city} | ${data.business_name}" />
+<meta property="og:description" content="خدمات ${data.primary_service} احترافية في ${data.city}. اتصل ${data.phone} للحصول على استشارة مجانية." />
+
+<h1>${data.primary_service} احترافي في ${data.city}</h1>
+
+<p>مرحبًا بكم في ${data.business_name}، خبراء ${data.primary_service} الموثوقين الذين يخدمون مجتمع ${data.city} منذ ${data.year}.</p>
+
+<h2>خدمات ${data.primary_service} لدينا</h2>
+<ul>
+<li>حلول ${data.primary_service} شاملة</li>
+<li>خدمات الطوارئ متاحة</li>
+<li>تقديرات واستشارات مجانية</li>
+<li>محترفون مرخصون ومؤمنون</li>
+</ul>
+
+<strong>اتصل ${data.phone} اليوم للحصول على استشارتك المجانية!</strong>`
+        }
+      ],
+      fr: [
+        {
+          title: "Modèle SEO pour Entreprise Locale",
+          fields: ["business_name", "primary_service", "city", "phone", "year"],
+          template: (data) => `Modèle SEO pour Entreprise Locale :
+
+<title>${data.primary_service} à ${data.city} | ${data.business_name} Depuis ${data.year}</title>
+<meta name="description" content="${data.business_name} - Services professionnels de ${data.primary_service} à ${data.city}. Appelez ${data.phone} pour consultation gratuite et devis. Desservant la région de ${data.city} depuis ${data.year}.">
+<meta name="keywords" content="${data.primary_service} ${data.city}, ${data.business_name}, services ${data.city}">
+<link rel="canonical" href="https://yourwebsite.com/fr/locations/${data.city}/${data.primary_service.replace(/\s+/g, '-')}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="${data.primary_service} à ${data.city} | ${data.business_name}" />
+<meta property="og:description" content="Services professionnels de ${data.primary_service} à ${data.city}. Appelez ${data.phone} pour consultation gratuite." />
+
+<h1>${data.primary_service} Professionnel à ${data.city}</h1>
+
+<p>Bienvenue chez ${data.business_name}, vos experts de confiance en ${data.primary_service} desservant la communauté de ${data.city} depuis ${data.year}.</p>
+
+<h2>Nos Services de ${data.primary_service}</h2>
+<ul>
+<li>Solutions complètes de ${data.primary_service}</li>
+<li>Services d'urgence disponibles</li>
+<li>Devis et consultations gratuits</li>
+<li>Professionnels agréés et assurés</li>
+</ul>
+
+<strong>Appelez ${data.phone} aujourd'hui pour votre consultation gratuite !</strong>`
+        }
+      ],
+      de: [
+        {
+          title: "SEO-Vorlage für Lokales Geschäft",
+          fields: ["business_name", "primary_service", "city", "phone", "year"],
+          template: (data) => `SEO-Vorlage für Lokales Geschäft:
+
+<title>${data.primary_service} in ${data.city} | ${data.business_name} Seit ${data.year}</title>
+<meta name="description" content="${data.business_name} - Professionelle ${data.primary_service}-Dienstleistungen in ${data.city}. Rufen Sie ${data.phone} für kostenlose Beratung & Angebote an. Bedient die Region ${data.city} seit ${data.year}.">
+<meta name="keywords" content="${data.primary_service} ${data.city}, ${data.business_name}, ${data.city} Dienstleistungen">
+<link rel="canonical" href="https://yourwebsite.com/de/locations/${data.city}/${data.primary_service.replace(/\s+/g, '-')}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="${data.primary_service} in ${data.city} | ${data.business_name}" />
+<meta property="og:description" content="Professionelle ${data.primary_service}-Dienstleistungen in ${data.city}. Rufen Sie ${data.phone} für kostenlose Beratung an." />
+
+<h1>Professionelle ${data.primary_service} in ${data.city}</h1>
+
+<p>Willkommen bei ${data.business_name}, Ihren vertrauenswürdigen ${data.primary_service}-Experten, die die Gemeinschaft von ${data.city} seit ${data.year} bedienen.</p>
+
+<h2>Unsere ${data.primary_service}-Dienstleistungen</h2>
+<ul>
+<li>Umfassende ${data.primary_service}-Lösungen</li>
+<li>Notdienste verfügbar</li>
+<li>Kostenlose Schätzungen und Beratungen</li>
+<li>Lizenzierte und versicherte Fachleute</li>
+</ul>
+
+<strong>Rufen Sie noch heute ${data.phone} für Ihre kostenlose Beratung an!</strong>`
+        }
+      ],
+      es: [
+        {
+          title: "Plantilla SEO para Negocio Local",
+          fields: ["business_name", "primary_service", "city", "phone", "year"],
+          template: (data) => `Plantilla SEO para Negocio Local:
+
+<title>${data.primary_service} en ${data.city} | ${data.business_name} Desde ${data.year}</title>
+<meta name="description" content="${data.business_name} - Servicios profesionales de ${data.primary_service} en ${data.city}. Llame a ${data.phone} para consulta gratuita y presupuestos. Sirviendo el área de ${data.city} desde ${data.year}.">
+<meta name="keywords" content="${data.primary_service} ${data.city}, ${data.business_name}, servicios ${data.city}">
+<link rel="canonical" href="https://yourwebsite.com/es/locations/${data.city}/${data.primary_service.replace(/\s+/g, '-')}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="${data.primary_service} en ${data.city} | ${data.business_name}" />
+<meta property="og:description" content="Servicios profesionales de ${data.primary_service} en ${data.city}. Llame a ${data.phone} para consulta gratuita." />
+
+<h1>${data.primary_service} Profesional en ${data.city}</h1>
+
+<p>Bienvenido a ${data.business_name}, sus expertos de confianza en ${data.primary_service} que sirven a la comunidad de ${data.city} desde ${data.year}.</p>
+
+<h2>Nuestros Servicios de ${data.primary_service}</h2>
+<ul>
+<li>Soluciones integrales de ${data.primary_service}</li>
+<li>Servicios de emergencia disponibles</li>
+<li>Estimaciones y consultas gratuitas</li>
+<li>Profesionales licenciados y asegurados</li>
+</ul>
+
+<strong>¡Llame a ${data.phone} hoy para su consulta gratuita!</strong>`
+        }
       ]
-      // Add other languages similarly...
+    },
+
+    email: {
+      en: [
+        {
+          title: "Email Campaign SEO Template",
+          fields: ["email_subject", "primary_keyword", "brand_name", "offer", "cta"],
+          template: (data) => `Email Campaign SEO Template:
+
+Subject Line: ${data.email_subject}
+
+Preview Text: Discover our exclusive ${data.offer} and transform your ${data.primary_keyword} results!
+
+Email Body:
+
+Hi [Name],
+
+Are you looking to improve your ${data.primary_keyword} strategy? We have something special for you!
+
+At ${data.brand_name}, we're excited to offer you an exclusive ${data.offer} that will help you achieve better results with ${data.primary_keyword}.
+
+Here's what you'll get:
+✅ Benefit 1 related to ${data.primary_keyword}
+✅ Benefit 2 for enhanced performance
+✅ Benefit 3 delivering measurable results
+
+${data.cta}
+
+But hurry - this special ${data.offer} is only available for a limited time!
+
+Best regards,
+The ${data.brand_name} Team
+
+P.S. Don't miss this opportunity to transform your ${data.primary_keyword} approach!
+
+Footer:
+You're receiving this email because you subscribed to ${data.brand_name} updates.
+Unsubscribe | Update Preferences`
+        }
+      ],
+      ar: [
+        {
+          title: "قالب SEO لحملة البريد الإلكتروني",
+          fields: ["email_subject", "primary_keyword", "brand_name", "offer", "cta"],
+          template: (data) => `قالب SEO لحملة البريد الإلكتروني:
+
+سطر الموضوع: ${data.email_subject}
+
+نص المعاينة: اكتشف ${data.offer} الحصري لدينا وحول نتائج ${data.primary_keyword} الخاصة بك!
+
+نص البريد الإلكتروني:
+
+مرحبًا [الاسم]،
+
+هل تبحث عن تحسين استراتيجية ${data.primary_keyword} الخاصة بك؟ لدينا شيء خاص لك!
+
+في ${data.brand_name}، نحن متحمسون لتقديم ${data.offer} حصري سيساعدك في تحقيق نتائج أفضل مع ${data.primary_keyword}.
+
+إليك ما ستحصل عليه:
+✅ فائدة 1 متعلقة بـ ${data.primary_keyword}
+✅ فائدة 2 لأداء محسن
+✅ فائدة 3 تقدم نتائج قابلة للقياس
+
+${data.cta}
+
+لكن أسرع - ${data.offer} الخاص هذا متاح لفترة محدودة فقط!
+
+أطيب التحيات،
+فريق ${data.brand_name}
+
+ملاحظة: لا تفوت هذه الفرصة لتحويل نهج ${data.primary_keyword} الخاص بك!
+
+التذييل:
+أنت تتلقى هذا البريد الإلكتروني لأنك اشتركت في تحديثات ${data.brand_name}.
+إلغاء الاشتراك | تحديث التفضيلات`
+        }
+      ],
+      fr: [
+        {
+          title: "Modèle SEO pour Campagne Email",
+          fields: ["email_subject", "primary_keyword", "brand_name", "offer", "cta"],
+          template: (data) => `Modèle SEO pour Campagne Email :
+
+Objet : ${data.email_subject}
+
+Texte d'aperçu : Découvrez notre ${data.offer} exclusif et transformez vos résultats ${data.primary_keyword} !
+
+Corps de l'email :
+
+Bonjour [Nom],
+
+Cherchez-vous à améliorer votre stratégie ${data.primary_keyword} ? Nous avons quelque chose de spécial pour vous !
+
+Chez ${data.brand_name}, nous sommes ravis de vous offrir un ${data.offer} exclusif qui vous aidera à obtenir de meilleurs résultats avec ${data.primary_keyword}.
+
+Voici ce que vous obtiendrez :
+✅ Avantage 1 lié à ${data.primary_keyword}
+✅ Avantage 2 pour des performances améliorées
+✅ Avantage 3 offrant des résultats mesurables
+
+${data.cta}
+
+Mais dépêchez-vous - cette ${data.offer} spéciale n'est disponible que pour un temps limité !
+
+Cordialement,
+L'équipe ${data.brand_name}
+
+P.S. Ne manquez pas cette occasion de transformer votre approche ${data.primary_keyword} !
+
+Pied de page :
+Vous recevez cet email car vous vous êtes abonné aux mises à jour de ${data.brand_name}.
+Se désabonner | Mettre à jour les préférences`
+        }
+      ],
+      de: [
+        {
+          title: "SEO-Vorlage für E-Mail-Kampagne",
+          fields: ["email_subject", "primary_keyword", "brand_name", "offer", "cta"],
+          template: (data) => `SEO-Vorlage für E-Mail-Kampagne:
+
+Betreff: ${data.email_subject}
+
+Vorschautext: Entdecken Sie unser exklusives ${data.offer} und transformieren Sie Ihre ${data.primary_keyword}-Ergebnisse!
+
+E-Mail-Text:
+
+Hallo [Name],
+
+Suchen Sie nach Möglichkeiten, Ihre ${data.primary_keyword}-Strategie zu verbessern? Wir haben etwas Besonderes für Sie!
+
+Bei ${data.brand_name} freuen wir uns, Ihnen ein exklusives ${data.offer} anzubieten, das Ihnen hilft, bessere Ergebnisse mit ${data.primary_keyword} zu erzielen.
+
+Hier ist, was Sie erhalten:
+✅ Vorteil 1 im Zusammenhang mit ${data.primary_keyword}
+✅ Vorteil 2 für verbesserte Leistung
+✅ Vorteil 3 mit messbaren Ergebnissen
+
+${data.cta}
+
+Aber beeilen Sie sich - dieses spezielle ${data.offer} ist nur für begrenzte Zeit verfügbar!
+
+Mit freundlichen Grüßen,
+Das ${data.brand_name}-Team
+
+P.S. Verpassen Sie nicht diese Gelegenheit, Ihren ${data.primary_keyword}-Ansatz zu transformieren!
+
+Fußzeile:
+Sie erhalten diese E-Mail, weil Sie sich für ${data.brand_name}-Updates angemeldet haben.
+Abbestellen | Einstellungen aktualisieren`
+        }
+      ],
+      es: [
+        {
+          title: "Plantilla SEO para Campaña de Email",
+          fields: ["email_subject", "primary_keyword", "brand_name", "offer", "cta"],
+          template: (data) => `Plantilla SEO para Campaña de Email:
+
+Asunto: ${data.email_subject}
+
+Texto de vista previa: ¡Descubre nuestra ${data.offer} exclusiva y transforma tus resultados de ${data.primary_keyword}!
+
+Cuerpo del email:
+
+Hola [Nombre],
+
+¿Estás buscando mejorar tu estrategia de ${data.primary_keyword}? ¡Tenemos algo especial para ti!
+
+En ${data.brand_name}, estamos emocionados de ofrecerte una ${data.offer} exclusiva que te ayudará a lograr mejores resultados con ${data.primary_keyword}.
+
+Esto es lo que obtendrás:
+✅ Beneficio 1 relacionado con ${data.primary_keyword}
+✅ Beneficio 2 para un rendimiento mejorado
+✅ Beneficio 3 que ofrece resultados medibles
+
+${data.cta}
+
+¡Pero date prisa - esta ${data.offer} especial solo está disponible por tiempo limitado!
+
+Atentamente,
+El equipo de ${data.brand_name}
+
+PD: ¡No pierdas esta oportunidad de transformar tu enfoque de ${data.primary_keyword}!
+
+Pie de página:
+Estás recibiendo este correo electrónico porque te suscribiste a las actualizaciones de ${data.brand_name}.
+Cancelar suscripción | Actualizar preferencias`
+        }
+      ]
     }
   };
 
@@ -1227,7 +1891,9 @@ Follow for more ${data.video_topic} tips! 🔥
       primary_service: "Primary Service",
       city: "City",
       phone: "Phone Number",
-      year: "Year Established"
+      year: "Year Established",
+      email_subject: "Email Subject",
+      offer: "Special Offer"
     },
     ar: {
       primary_keyword: "الكلمة الرئيسية الأساسية",
@@ -1249,7 +1915,9 @@ Follow for more ${data.video_topic} tips! 🔥
       primary_service: "الخدمة الأساسية",
       city: "المدينة",
       phone: "رقم الهاتف",
-      year: "سنة التأسيس"
+      year: "سنة التأسيس",
+      email_subject: "موضوع البريد الإلكتروني",
+      offer: "عرض خاص"
     },
     fr: {
       primary_keyword: "Mot-clé Principal",
@@ -1271,7 +1939,9 @@ Follow for more ${data.video_topic} tips! 🔥
       primary_service: "Service Principal",
       city: "Ville",
       phone: "Numéro de Téléphone",
-      year: "Année de Création"
+      year: "Année de Création",
+      email_subject: "Objet de l'Email",
+      offer: "Offre Spéciale"
     },
     de: {
       primary_keyword: "Hauptkeyword",
@@ -1293,7 +1963,9 @@ Follow for more ${data.video_topic} tips! 🔥
       primary_service: "Hauptdienstleistung",
       city: "Stadt",
       phone: "Telefonnummer",
-      year: "Gründungsjahr"
+      year: "Gründungsjahr",
+      email_subject: "E-Mail-Betreff",
+      offer: "Sonderangebot"
     },
     es: {
       primary_keyword: "Palabra Clave Principal",
@@ -1315,7 +1987,9 @@ Follow for more ${data.video_topic} tips! 🔥
       primary_service: "Servicio Principal",
       city: "Ciudad",
       phone: "Número de Teléfono",
-      year: "Año de Establecimiento"
+      year: "Año de Establecimiento",
+      email_subject: "Asunto del Email",
+      offer: "Oferta Especial"
     }
   };
 
@@ -1324,6 +1998,7 @@ Follow for more ${data.video_topic} tips! 🔥
   let currentPlatform = '';
   let currentLanguage = '';
   let currentFormData = {};
+  let regenerationCount = 0;
 
   // Theme toggle functionality
   function initTheme() {
@@ -1449,6 +2124,7 @@ Follow for more ${data.video_topic} tips! 🔥
     currentPlatform = platform;
     currentLanguage = language;
     currentTemplateIndex = 0;
+    regenerationCount = 0;
     
     // Collect form data
     currentFormData = {};
@@ -1503,11 +2179,7 @@ Follow for more ${data.video_topic} tips! 🔥
     const regenerateBtn = document.querySelector('.btn-regenerate');
     if (regenerateBtn) {
       regenerateBtn.style.display = 'inline-flex';
-      if (variationIndex < templateVariations.length - 1) {
-        regenerateBtn.innerHTML = '<span>🔄 Try Different Variation</span>';
-      } else {
-        regenerateBtn.innerHTML = '<span>🔄 Back to First Variation</span>';
-      }
+      regenerateBtn.innerHTML = '<span>🔄 Try Different Variation</span>';
     }
     
     // Scroll to output
@@ -1521,12 +2193,69 @@ Follow for more ${data.video_topic} tips! 🔥
     const templateVariations = templates[currentPlatform]?.[currentLanguage];
     if (!templateVariations) return;
     
-    let nextIndex = currentTemplateIndex + 1;
-    if (nextIndex >= templateVariations.length) {
-      nextIndex = 0; // Loop back to first variation
+    regenerationCount++;
+    
+    // FIXED: Now properly cycles through ALL variations
+    let nextIndex = (currentTemplateIndex + 1) % templateVariations.length;
+    
+    // If we've cycled through all variations, create a new dynamic variation
+    if (regenerationCount >= templateVariations.length) {
+      generateDynamicVariation();
+      return;
     }
     
     generateTemplateVariation(nextIndex);
+  }
+
+  // NEW FUNCTION: Generate dynamic variations when all predefined ones are used
+  function generateDynamicVariation() {
+    const templateVariations = templates[currentPlatform]?.[currentLanguage];
+    if (!templateVariations) return;
+    
+    // Get a random template to modify
+    const baseTemplate = templateVariations[Math.floor(Math.random() * templateVariations.length)];
+    
+    // Create a dynamic variation by modifying the template
+    const dynamicTemplate = {
+      title: `Dynamic Variation ${regenerationCount - templateVariations.length + 1}`,
+      fields: baseTemplate.fields,
+      template: (data) => {
+        let baseOutput = baseTemplate.template(data);
+        
+        // Add some dynamic modifications to make each regeneration unique
+        const modifications = [
+          "🚀 **Pro Tip**: Focus on user intent for better engagement!",
+          "💡 **Expert Insight**: Test different approaches to find what works best for your audience.",
+          "⭐ **Best Practice**: Always include a clear call-to-action in your content.",
+          "🎯 **Strategy**: Use A/B testing to optimize your results over time.",
+          "🔥 **Hot Tip**: Update your content regularly to maintain relevance.",
+          "📈 **Growth Hack**: Leverage analytics to track performance and make data-driven decisions.",
+          "💫 **Success Secret**: Consistency is key - maintain regular posting schedules.",
+          "🌟 **Pro Advice**: Build relationships with your audience through genuine engagement."
+        ];
+        
+        const randomModification = modifications[Math.floor(Math.random() * modifications.length)];
+        
+        // Insert modification at a random position or append
+        const lines = baseOutput.split('\n');
+        const insertPosition = Math.floor(Math.random() * Math.max(1, lines.length - 3)) + 1;
+        lines.splice(insertPosition, 0, `\n${randomModification}\n`);
+        
+        return lines.join('\n');
+      }
+    };
+    
+    // Use the dynamic template
+    const output = dynamicTemplate.template(currentFormData);
+    
+    document.getElementById('template-output').value = output;
+    document.getElementById('output').style.display = 'block';
+    
+    // Update the output header
+    const outputHeader = document.querySelector('.output-header h3');
+    if (outputHeader) {
+      outputHeader.innerHTML = `🎯 Your Generated Template <span style="font-size: 0.8em; color: var(--muted);">(Dynamic Variation ${regenerationCount - templateVariations.length + 1})</span>`;
+    }
   }
 
   function copyToClipboard() {
@@ -1568,7 +2297,8 @@ Follow for more ${data.video_topic} tips! 🔥
       pinterest: 'Pinterest',
       tiktok: 'TikTok',
       product: 'Product',
-      local: 'LocalBusiness'
+      local: 'LocalBusiness',
+      email: 'EmailCampaign'
     };
     
     const languageNames = {
@@ -1579,7 +2309,12 @@ Follow for more ${data.video_topic} tips! 🔥
       es: 'Spanish'
     };
     
-    const filename = `SEO-Template-${platformNames[platform]}-${languageNames[language]}-V${currentTemplateIndex + 1}.txt`;
+    const variationType = regenerationCount >= (templates[currentPlatform]?.[currentLanguage]?.length || 0) ? 'Dynamic' : 'Variation';
+    const variationNumber = regenerationCount >= (templates[currentPlatform]?.[currentLanguage]?.length || 0) 
+      ? regenerationCount - (templates[currentPlatform]?.[currentLanguage]?.length || 0) + 1 
+      : currentTemplateIndex + 1;
+    
+    const filename = `SEO-Template-${platformNames[platform]}-${languageNames[language]}-${variationType}${variationNumber}.txt`;
     
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -1602,4 +2337,4 @@ Follow for more ${data.video_topic} tips! 🔥
 </script>
 
 </body>
-</html>
+  </html>
