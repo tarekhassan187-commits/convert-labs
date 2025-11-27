@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Tools — Convert Labs</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Convert Labs — AI tools: Text→Image, Text→Video, Image→Video (powered via DeAPI). Create images and short videos from prompts or images." />
+  <meta name="keywords" content="Convert Labs, AI tools, text to image, text to video, image to video, DeAPI" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://convertlabs.online/tools/ai-tools.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="AI Tools — Convert Labs" />
+  <meta property="og:description" content="Try Text→Image, Text→Video, and Image→Video AI tools directly on Convert Labs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://convertlabs.online/tools/ai-tools.html" />
+  <meta property="og:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <meta property="og:site_name" content="Convert Labs" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI Tools — Convert Labs" />
+  <meta name="twitter:description" content="Try Text→Image, Text→Video, and Image→Video AI tools directly on Convert Labs." />
+  <meta name="twitter:image" content="https://convertlabs.online/assets/convert-labs-icon.png" />
+
+  <link rel="icon" href="https://convertlabs.online/assets/convert-labs-icon.png" />
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2490597435056272" crossorigin="anonymous"></script>
+
+  <!-- Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z88B03WV7P"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-Z88B03WV7P");
+  </script>
+
+  <!-- Page styles (kept inline so the page looks identical to your site) -->
+  <style>
+    :root{
+      --brand:#0a4d8c; --brand-2:#134b8b; --muted:#6c6c6c; --bg:#f5faff; --card:#fff; --accent:#2b8bd8; --radius:12px; --text:#111;
+    }
+    html.dark{ --bg:#071029; --card:#081226; --text:#dbeafe; --muted:#9aa9b8; --accent:#34d399; }
+    *{box-sizing:border-box} html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased; overflow-x: hidden;}
+    header{height:auto;min-height:64px;background:var(--brand-2);color:#fff;display:flex;align-items:center;padding:12px 20px;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:12px; width:100%;}
+    .brand{font-weight:700;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .nav-links{display:flex;gap:12px;margin:0 auto;flex-wrap:wrap;justify-content:center;}
+    .nav-links a{color:#fff;text-decoration:none;font-weight:500;padding:6px 10px;border-radius:6px;transition:background-color 0.2s;font-size:14px;}
+    .nav-links a:hover{background:rgba(255,255,255,0.1);}
+    .btn.ghost{background:transparent;border:1px solid var(--brand);color:var(--brand)}
+    main { max-width:1100px; margin:2.5rem auto; padding:2rem; background:#f9fafc; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); line-height:1.7; }
+    main h1, main h2 { color:#111; }
+    html.dark main, body.dark main { background:#1b2435 !important; color:#e6eef8 !important; border:1px solid #2c3b53 !important; box-shadow:0 10px 26px rgba(0,0,0,0.6) !important; }
+    html.dark h1,body.dark h1 { color:#93c5fd !important; }
+    footer.footer { background:#1e3a8a; color:#fff; text-align:center; padding:2rem 1rem; margin-top:3rem; }
+    footer.footer a { color:#f8fafc; }
+
+    /* AI tools layout */
+    .tools-grid { display:grid; grid-template-columns: 1fr; gap:18px; }
+    @media(min-width:980px){ .tools-grid { grid-template-columns: 1fr 1fr; } }
+
+    .card { background:var(--card); border-radius:12px; padding:16px; box-shadow: 0 6px 18px rgba(3,10,43,0.06); min-height:150px; display:flex; flex-direction:column; gap:12px; }
+    .card h3 { margin:0; font-size:18px; }
+    label { font-weight:600; font-size:14px; display:block; margin-bottom:6px; }
+    textarea.prompt { width:100%; min-height:100px; padding:12px; border-radius:8px; border:1px solid #e6eef8; font-size:14px; resize:vertical; }
+    .controls-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .btn-primary { background:var(--accent); color:white; border:none; padding:10px 12px; border-radius:8px; cursor:pointer; }
+    .btn-ghost { background:transparent; border:1px solid #e6eef8; padding:8px 10px; border-radius:8px; cursor:pointer; }
+    .small { font-size:13px; color:var(--muted); }
+    .result-media { margin-top:8px; display:block; max-width:100%; border-radius:8px; }
+    .placeholder { background:linear-gradient(90deg,#f3f4f6,#eef2ff); height:220px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#94a3b8; }
+
+    /* progress */
+    .progress { height:10px; background:#e6eef8; border-radius:10px; overflow:hidden; width:100%; }
+    .progress > i { display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent), #0ea5a4); transition: width 300ms ease; }
+
+    .full-width { width:100%; }
+    .muted { color:var(--muted); font-size:13px; }
+
+    /* small layout tweaks for one-column controls on small screens */
+    .controls-col { display:flex; gap:8px; flex-direction:column; align-items:stretch; }
+    @media(min-width:680px){ .controls-col { flex-direction:row; } }
+
+    .meta-note { font-size:13px; color:var(--muted); margin-top:6px; }
+  </style>
+</head>
+
+<body>
+
+<!-- Header (copied from your page) -->
+<header>
+  <div class="brand">
+    <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:32px;height:32px;">
+    <span>Convert Labs</span>
+  </div>
+  <nav class="nav-links">
+    <a href="https://convertlabs.online/index.html">Home</a>
+    <a href="https://convertlabs.online/tools/tools.html">Tools</a>
+    <a href="https://convertlabs.online/guides.html">Blog</a>
+    <a href="https://convertlabs.online/about.html">About</a>
+    <a href="https://convertlabs.online/contact.html">Contact</a>
+  </nav>
+  <div style="margin-left:auto;">
+    <button id="themeToggle" class="btn ghost" style="min-width:44px;">🌙</button>
+  </div>
+</header>
+
+<!-- Main content -->
+<main>
+  <h1>AI Tools — Text→Image · Text→Video · Image→Video</h1>
+  <p class="muted">Powered by DeAPI (Flux & Runway). Generated media may be subject to quotas and cost — consider gating video generation for heavy traffic.</p>
+
+  <!-- Controls grid -->
+  <section class="tools-grid" aria-live="polite">
+
+    <!-- TEXT → IMAGE -->
+    <div class="card" id="card-text-image" role="region" aria-label="Text to Image">
+      <h3>Text → Image</h3>
+      <label for="t2i-prompt">Prompt</label>
+      <textarea id="t2i-prompt" class="prompt" placeholder="e.g. A photorealistic red fox wearing a leather jacket, cinematic lighting"></textarea>
+
+      <div class="controls-row controls-col" style="margin-top:6px;">
+        <button id="t2i-generate" class="btn-primary">Generate Image</button>
+        <button id="t2i-clear" class="btn-ghost">Clear</button>
+        <div style="margin-left:auto;text-align:right;">
+          <div class="small muted">Max 1 prompt per 10s (recommended)</div>
+        </div>
+      </div>
+
+      <div id="t2i-loading" class="meta-note" style="display:none;">Generating image…</div>
+
+      <div id="t2i-result" style="margin-top:8px; display:none;">
+        <img id="t2i-img" class="result-media" alt="Generated image preview" />
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <a id="t2i-download" class="btn-ghost" download="convertlabs-image.png">Download</a>
+          <button id="t2i-open" class="btn-ghost">Open in new tab</button>
+        </div>
+      </div>
+
+      <div id="t2i-placeholder" class="placeholder" style="margin-top:8px;">Your generated image will appear here</div>
+    </div>
+
+    <!-- TEXT → VIDEO -->
+    <div class="card" id="card-text-video" role="region" aria-label="Text to Video">
+      <h3>Text → Video</h3>
+      <label for="t2v-prompt">Prompt (describe the scene, duration, motion)</label>
+      <textarea id="t2v-prompt" class="prompt" placeholder="e.g. Slow 8s camera pan over a misty forest, dreamy particles, cinematic color grade"></textarea>
+
+      <div class="controls-row controls-col" style="margin-top:6px;">
+        <button id="t2v-generate" class="btn-primary">Generate Video</button>
+        <button id="t2v-clear" class="btn-ghost">Clear</button>
+        <select id="t2v-duration" style="padding:8px;border-radius:8px;">
+          <option value="4">4s</option>
+          <option value="6" selected>6s</option>
+          <option value="8">8s</option>
+        </select>
+      </div>
+
+      <div id="t2v-loading" style="display:none;margin-top:8px;">
+        <div class="meta-note">Processing video… this can take longer than images.</div>
+        <div class="progress" aria-hidden="true"><i id="t2v-progress"></i></div>
+        <div id="t2v-job" class="meta-note"></div>
+      </div>
+
+      <div id="t2v-result" style="margin-top:8px; display:none;">
+        <video id="t2v-video" class="result-media" controls></video>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <a id="t2v-download" class="btn-ghost" download="convertlabs-video.mp4">Download</a>
+          <button id="t2v-open" class="btn-ghost">Open in new tab</button>
+        </div>
+      </div>
+
+      <div id="t2v-placeholder" class="placeholder" style="margin-top:8px;">Generated video will appear here</div>
+      <div class="meta-note">Tip: If the backend returns a job id, this tool will poll job status until completion (requires `GET /api/job-status/:id`).</div>
+    </div>
+
+    <!-- IMAGE → VIDEO -->
+    <div class="card" id="card-image-video" role="region" aria-label="Image to Video">
+      <h3>Image → Video</h3>
+      <label for="i2v-image">Upload image</label>
+      <input id="i2v-image" type="file" accept="image/*" />
+
+      <label for="i2v-prompt" style="margin-top:8px;">Motion / Style Prompt</label>
+      <textarea id="i2v-prompt" class="prompt" placeholder="e.g. Gentle zoom out + parallax, floating dust particles, 6s"></textarea>
+
+      <div class="controls-row controls-col" style="margin-top:6px;">
+        <button id="i2v-generate" class="btn-primary">Generate Video</button>
+        <button id="i2v-clear" class="btn-ghost">Clear</button>
+        <div style="margin-left:auto;" class="small muted">Recommended: JPG/PNG, < 8MB</div>
+      </div>
+
+      <div id="i2v-loading" style="display:none;margin-top:8px;">
+        <div class="meta-note">Processing video…</div>
+        <div class="progress" aria-hidden="true"><i id="i2v-progress"></i></div>
+        <div id="i2v-job" class="meta-note"></div>
+      </div>
+
+      <div id="i2v-result" style="margin-top:8px; display:none;">
+        <video id="i2v-video" class="result-media" controls></video>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <a id="i2v-download" class="btn-ghost" download="convertlabs-video.mp4">Download</a>
+          <button id="i2v-open" class="btn-ghost">Open in new tab</button>
+        </div>
+      </div>
+
+      <div id="i2v-placeholder" class="placeholder" style="margin-top:8px;">Upload an image and generate a short video</div>
+      <div class="meta-note">Tip: Videos may be watermarked or low-resolution on free tiers; consider gating for paid users.</div>
+    </div>
+
+  </section>
+
+  <!-- Small legal / safety note -->
+  <section style="margin-top:18px;" class="small muted">
+    <strong>Content safety:</strong> Do not generate content that is pornographic, violent, hateful, or otherwise illegal. Generated images and videos must comply with our <a href="/privacy.html">privacy</a> and <a href="/terms.html">terms</a>.
+  </section>
+</main>
+
+<!-- Footer (copied) -->
+<footer class="footer">
+  <div class="container" style="max-width:1100px;margin:0 auto;text-align:center;padding:20px;">
+    <div class="footer-brand" style="margin-bottom:10px;">
+      <img src="https://convertlabs.online/assets/convert-labs-icon.png" alt="Convert Labs" style="width:24px;height:24px;vertical-align:middle;">
+      <span style="margin-left:6px;font-weight:600;">Convert Labs</span>
+    </div>
+
+    <p style="color:#ffffff;margin-bottom:10px;">© 2025 Convert Labs. All rights reserved.</p>
+
+    <div style="width:100%;max-width:700px;height:1px;background:rgba(255,255,255,0.2);margin:0 auto 10px auto;"></div>
+
+    <nav class="footer-links" style="margin-top:8px;">
+      <a href="https://convertlabs.online/about.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">About</a> |
+      <a href="https://convertlabs.online/tools/tools.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Tools</a> |
+      <a href="https://convertlabs.online/guides.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Blog</a> |
+      <a href="https://convertlabs.online/privacy.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Privacy</a> |
+      <a href="https://convertlabs.online/disclaimer.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Disclaimer</a> |
+      <a href="https://convertlabs.online/terms.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Terms</a> |
+      <a href="https://convertlabs.online/contact.html" style="color:#f8fafc;text-decoration:none;margin:0 6px;">Contact</a>
+    </nav>
+  </div>
+   <section class="site-verification" style="font-size:14px; color:#f1f1f1; text-align:center; margin-top:25px; line-height:1.6;">
+  <p>✅ <strong>Domain Verification & Email Security</strong></p>
+  <p>
+    Convert Labs is officially verified for secure DNS and authenticated email delivery.  
+    Our domain (<a href="https://convertlabs.online" target="_blank" style="color:#9dc6ff;">convertlabs.online</a>)  
+    uses trusted <strong>Cloudflare</strong> infrastructure with validated DNS records.
+  </p>
+  <p>
+    Email protection includes:
+    <ul style="list-style:none; padding:0; margin:5px 0;">
+      <li>✔ <strong>SPF</strong> – Approved senders: Cloudflare & Outlook Mail servers</li>
+      <li>✔ <strong>DKIM</strong> – 2048-bit RSA signature verified (<em>selector: cf2024-1</em>)</li>
+      <li>✔ <strong>DMARC</strong> – Active monitoring for spoofing and spam prevention</li>
+    </ul>
+  </p>
+  <p>
+    These records confirm the legitimacy of our domain and improve deliverability,  
+    search engine trust, and AdSense approval readiness.
+  </p>
+</section>
+</footer>
+
+<style>
+  footer.footer a:hover { 
+    text-decoration: underline; 
+    color: #ffffff; 
+  }
+</style>
+
+<!-- Client JS: handles calls to your backend endpoints and UI -->
+<script>
+  // Theme toggle (copied)
+  function initTheme() {
+    const savedTheme = localStorage.getItem('convertlabs-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark'); 
+      document.getElementById('themeToggle').textContent = '☀️';
+    } else { 
+      document.documentElement.classList.remove('dark'); 
+      document.getElementById('themeToggle').textContent = '🌙'; 
+    }
+  }
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('convertlabs-theme', isDark ? 'dark' : 'light');
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    initTheme();
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  });
+</script>
+
+<script>
+  // Helper: safeFetch with timeout
+  async function safeFetch(url, options = {}, timeout = 120000) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    try {
+      const resp = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(id);
+      return resp;
+    } catch (err) {
+      clearTimeout(id);
+      throw err;
+    }
+  }
+
+  // Helper: show progress bar (value 0-100)
+  function setProgress(selector, value) {
+    const el = document.querySelector(selector);
+    if (el) el.style.width = Math.max(0, Math.min(100, value)) + '%';
+  }
+
+  // TEXT -> IMAGE
+  (function setupTextToImage(){
+    const btnGen = document.getElementById('t2i-generate');
+    const btnClear = document.getElementById('t2i-clear');
+    const promptEl = document.getElementById('t2i-prompt');
+    const loading = document.getElementById('t2i-loading');
+    const resultWrapper = document.getElementById('t2i-result');
+    const imgEl = document.getElementById('t2i-img');
+    const download = document.getElementById('t2i-download');
+    const openBtn = document.getElementById('t2i-open');
+    const placeholder = document.getElementById('t2i-placeholder');
+
+    btnGen.addEventListener('click', async () => {
+      const prompt = promptEl.value.trim();
+      if (!prompt) return alert('Please enter a prompt.');
+      loading.style.display = 'block';
+      placeholder.style.display = 'none';
+      resultWrapper.style.display = 'none';
+      try {
+        const resp = await safeFetch('/api/text2image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        }, 90000);
+        if (!resp.ok) throw new Error(await resp.text());
+        const json = await resp.json();
+
+        // accept either direct URL or base64
+        const url = json.image_url || json.image || json.output?.[0]?.url || json.b64 || json.image_base64 || null;
+        if (!url) throw new Error('No image returned from server.');
+
+        if (url.startsWith('data:')) {
+          imgEl.src = url;
+          download.href = url;
+        } else {
+          imgEl.src = url;
+          download.href = url;
+        }
+
+        openBtn.onclick = () => window.open(imgEl.src, '_blank');
+        resultWrapper.style.display = 'block';
+      } catch (err) {
+        console.error(err);
+        alert('Failed to generate image: ' + (err.message || err));
+        placeholder.style.display = '';
+      } finally {
+        loading.style.display = 'none';
+      }
+    });
+
+    btnClear.addEventListener('click', () => {
+      promptEl.value = '';
+      resultWrapper.style.display = 'none';
+      placeholder.style.display = '';
+    });
+  })();
+
+  // TEXT -> VIDEO (with job polling fallback)
+  (function setupTextToVideo(){
+    const btnGen = document.getElementById('t2v-generate');
+    const btnClear = document.getElementById('t2v-clear');
+    const promptEl = document.getElementById('t2v-prompt');
+    const durationEl = document.getElementById('t2v-duration');
+    const loading = document.getElementById('t2v-loading');
+    const progressBar = document.getElementById('t2v-progress');
+    const jobDiv = document.getElementById('t2v-job');
+    const resultWrapper = document.getElementById('t2v-result');
+    const videoEl = document.getElementById('t2v-video');
+    const download = document.getElementById('t2v-download');
+    const openBtn = document.getElementById('t2v-open');
+    const placeholder = document.getElementById('t2v-placeholder');
+
+    let pollHandle = null;
+    async function pollJob(jobId) {
+      jobDiv.textContent = `Job ID: ${jobId} — waiting for completion...`;
+      setProgress('#t2v-progress', 5);
+      try {
+        for (let i=0;i<60;i++){ // poll up to ~3 minutes (60 * 3s)
+          await new Promise(r => setTimeout(r, 3000));
+          // call job-status endpoint on your backend if available
+          const resp = await safeFetch(`/api/job-status/${encodeURIComponent(jobId)}`, {}, 15000).catch(()=>null);
+          if (!resp) continue;
+          if (!resp.ok) continue;
+          const j = await resp.json().catch(()=>null);
+          if (!j) continue;
+          if (j.progress) setProgress('#t2v-progress', j.progress);
+          if (j.status === 'done' && j.video_url) {
+            jobDiv.textContent = 'Completed';
+            return j.video_url;
+          }
+          if (j.status === 'error') {
+            throw new Error(j.error || 'Remote job failed');
+          }
+        }
+        throw new Error('Timeout waiting for job completion. If your backend supports webhooks, consider implementing them.');
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    btnGen.addEventListener('click', async () => {
+      const prompt = promptEl.value.trim();
+      const duration = parseInt(durationEl.value || '6', 10);
+      if (!prompt) return alert('Please enter a prompt.');
+
+      loading.style.display = 'block';
+      resultWrapper.style.display = 'none';
+      placeholder.style.display = 'none';
+      jobDiv.textContent = '';
+      setProgress('#t2v-progress', 0);
+
+      try {
+        const resp = await safeFetch('/api/text2video', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, duration })
+        }, 180000);
+        if (!resp.ok) throw new Error(await resp.text());
+        const json = await resp.json();
+
+        // If API returns video_url directly
+        if (json.video_url) {
+          videoEl.src = json.video_url;
+          download.href = json.video_url;
+          openBtn.onclick = () => window.open(json.video_url, '_blank');
+          resultWrapper.style.display = 'block';
+          setProgress('#t2v-progress', 100);
+          jobDiv.textContent = 'Completed';
+          return;
+        }
+
+        // If API returns job_id, poll for completion (requires /api/job-status/:id)
+        if (json.job_id || json.id) {
+          const jobId = json.job_id || json.id;
+          jobDiv.textContent = `Job ID: ${jobId} — polling for completion...`;
+          try {
+            const videoUrl = await pollJob(jobId);
+            videoEl.src = videoUrl;
+            download.href = videoUrl;
+            openBtn.onclick = () => window.open(videoUrl, '_blank');
+            resultWrapper.style.display = 'block';
+            setProgress('#t2v-progress', 100);
+            jobDiv.textContent = 'Completed';
+          } catch (err) {
+            throw err;
+          }
+          return;
+        }
+
+        // If no expected fields
+        throw new Error('Unexpected server response (no video URL or job id).');
+      } catch (err) {
+        console.error(err);
+        alert('Failed to generate video: ' + (err.message || err));
+        placeholder.style.display = '';
+      } finally {
+        loading.style.display = 'none';
+      }
+    });
+
+    btnClear.addEventListener('click', () => {
+      promptEl.value = '';
+      resultWrapper.style.display = 'none';
+      placeholder.style.display = '';
+      jobDiv.textContent = '';
+      setProgress('#t2v-progress', 0);
+    });
+  })();
+
+  // IMAGE -> VIDEO (with file upload)
+  (function setupImageToVideo(){
+    const fileInput = document.getElementById('i2v-image');
+    const promptEl = document.getElementById('i2v-prompt');
+    const btnGen = document.getElementById('i2v-generate');
+    const btnClear = document.getElementById('i2v-clear');
+    const loading = document.getElementById('i2v-loading');
+    const progressBar = document.getElementById('i2v-progress');
+    const jobDiv = document.getElementById('i2v-job');
+    const resultWrapper = document.getElementById('i2v-result');
+    const videoEl = document.getElementById('i2v-video');
+    const download = document.getElementById('i2v-download');
+    const openBtn = document.getElementById('i2v-open');
+    const placeholder = document.getElementById('i2v-placeholder');
+
+    async function pollJob(jobId) {
+      jobDiv.textContent = `Job ID: ${jobId} — waiting for completion...`;
+      setProgress('#i2v-progress', 5);
+      try {
+        for (let i=0;i<60;i++){
+          await new Promise(r => setTimeout(r, 3000));
+          const resp = await safeFetch(`/api/job-status/${encodeURIComponent(jobId)}`, {}, 15000).catch(()=>null);
+          if (!resp) continue;
+          if (!resp.ok) continue;
+          const j = await resp.json().catch(()=>null);
+          if (!j) continue;
+          if (j.progress) setProgress('#i2v-progress', j.progress);
+          if (j.status === 'done' && j.video_url) return j.video_url;
+          if (j.status === 'error') throw new Error(j.error || 'Remote job failed');
+        }
+        throw new Error('Timeout waiting for job completion.');
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    btnGen.addEventListener('click', async () => {
+      const file = fileInput.files[0];
+      const prompt = promptEl.value.trim();
+      if (!file) return alert('Please upload an image.');
+      if (!prompt) return alert('Please enter a prompt.');
+
+      loading.style.display = 'block';
+      placeholder.style.display = 'none';
+      resultWrapper.style.display = 'none';
+      jobDiv.textContent = '';
+      setProgress('#i2v-progress', 0);
+
+      try {
+        const form = new FormData();
+        form.append('image', file);
+        form.append('prompt', prompt);
+
+        const resp = await safeFetch('/api/image2video', {
+          method: 'POST',
+          body: form
+        }, 240000);
+        if (!resp.ok) throw new Error(await resp.text());
+        const json = await resp.json();
+
+        if (json.video_url) {
+          videoEl.src = json.video_url;
+          download.href = json.video_url;
+          openBtn.onclick = () => window.open(json.video_url, '_blank');
+          resultWrapper.style.display = 'block';
+          setProgress('#i2v-progress', 100);
+          jobDiv.textContent = 'Completed';
+          return;
+        }
+
+        if (json.job_id || json.id) {
+          const jobId = json.job_id || json.id;
+          jobDiv.textContent = `Job ID: ${jobId} — polling...`;
+          const videoUrl = await pollJob(jobId);
+          videoEl.src = videoUrl;
+          download.href = videoUrl;
+          openBtn.onclick = () => window.open(videoUrl, '_blank');
+          resultWrapper.style.display = 'block';
+          setProgress('#i2v-progress', 100);
+          jobDiv.textContent = 'Completed';
+          return;
+        }
+
+        throw new Error('Unexpected server response (no video URL or job id).');
+      } catch (err) {
+        console.error(err);
+        alert('Failed to generate video: ' + (err.message || err));
+        placeholder.style.display = '';
+      } finally {
+        loading.style.display = 'none';
+      }
+    });
+
+    btnClear.addEventListener('click', () => {
+      fileInput.value = '';
+      promptEl.value = '';
+      resultWrapper.style.display = 'none';
+      placeholder.style.display = '';
+      jobDiv.textContent = '';
+      setProgress('#i2v-progress', 0);
+    });
+  })();
+</script>
+
+</body>
+</html>
